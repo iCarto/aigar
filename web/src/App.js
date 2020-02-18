@@ -2,10 +2,11 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import NavBar from "./components/navbar/NavBar";
-import LoadPayments from "./components/loadpayments/LoadPayments";
 import LoadMeasurements from "./components/loadmeasurements/LoadMeasurements";
 import Members from "./components/members/Members";
 import Invoicing from "./components/invoicing/Invoicing";
+import ImportedDataWizard from "./components/common/importeddata/wizard/ImportedDataWizard";
+import LoadPaymentsWizard from "./components/loadpayments/LoadPaymentsWizard";
 
 import DatabaseFixture from "./fixtures/database.json";
 
@@ -41,7 +42,15 @@ function MainContent(props) {
             <Switch>
                 <Route
                     path="/cargarpagos"
-                    render={props => <LoadPayments {...props} database={database} />}
+                    render={props => (
+                        <ImportedDataWizard
+                            {...props}
+                            children={<LoadPaymentsWizard />}
+                            numberOfSteps={3}
+                            currentStep={1}
+                            database={database}
+                        />
+                    )}
                 />
                 <Route
                     path="/cargarlecturas"

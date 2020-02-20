@@ -1,14 +1,14 @@
 import React from "react";
 
-class LoadPaymentsStepper extends React.Component {
+class LoadMeasurementsStepper extends React.Component {
     stepper = [
         {
             index: 1,
-            text: "Cargar archivo de pagos",
+            text: "Cargar archivo de intercambio",
         },
         {
             index: 2,
-            text: "Revisar pagos",
+            text: "Revisar lecturas",
         },
         {
             index: 3,
@@ -41,4 +41,4 @@ class LoadPaymentsStepper extends React.Component {
     }
 }
 
-export default LoadPaymentsStepper;
+export default LoadMeasurementsStepper;

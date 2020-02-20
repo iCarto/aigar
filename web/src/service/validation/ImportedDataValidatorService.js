@@ -76,6 +76,33 @@ const ImportedDataValidatorService = {
             })
         );
     },
+
+    validateMeasurementsFile(fileObject) {
+        return this.validateFile(
+            fileObject,
+            new CSVFileValidator({
+                file: ["extension"],
+                content: [
+                    {
+                        type: "columns",
+                        param: 4,
+                    },
+                ],
+            })
+        );
+    },
+
+    validateMeasurementEntry(entryObject) {
+        return this.validateEntry(
+            entryObject,
+            new ImportedDataValidator({
+                sector: ["isNotEmpty"],
+                memberNumber: ["isNotEmpty"],
+                measurementDate: ["isNotEmpty", "isDate"],
+                currentMeasurement: ["isNotEmpty", "isDecimal2"],
+            })
+        );
+    },
 };
 
 export default ImportedDataValidatorService;

@@ -27,12 +27,19 @@ class ImportedDataTable extends React.Component {
         }));
     }
 
+    getNumberOfRecordsWithErrors() {
+        return this.state.errors.filter(
+            (error, index, self) => self.findIndex(t => t.id === error.id) === index
+        ).length;
+    }
+
     get messages() {
         if (this.state.errors.length !== 0) {
             return (
                 <div className="alert alert-danger" role="alert">
-                    Se han encontrado errores en&nbsp;
-                    <strong>{this.state.errors.length}</strong> registros.
+                    Se han encontrado&nbsp;
+                    <strong>{this.state.errors.length}</strong> errores en&nbsp;
+                    <strong>{this.getNumberOfRecordsWithErrors()}</strong> registros.
                 </div>
             );
         }

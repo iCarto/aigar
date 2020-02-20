@@ -2,11 +2,11 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import NavBar from "./components/navbar/NavBar";
-import LoadMeasurements from "./components/loadmeasurements/LoadMeasurements";
 import Members from "./components/members/Members";
 import Invoicing from "./components/invoicing/Invoicing";
 import ImportedDataWizard from "./components/common/importeddata/wizard/ImportedDataWizard";
 import LoadPaymentsWizard from "./components/loadpayments/LoadPaymentsWizard";
+import LoadMeasurementsWizard from "./components/loadmeasurements/LoadMeasurementsWizard";
 
 import DatabaseFixture from "./fixtures/database.json";
 
@@ -55,7 +55,13 @@ function MainContent(props) {
                 <Route
                     path="/cargarlecturas"
                     render={props => (
-                        <LoadMeasurements {...props} database={database} />
+                        <ImportedDataWizard
+                            {...props}
+                            children={<LoadMeasurementsWizard />}
+                            numberOfSteps={3}
+                            currentStep={1}
+                            database={database}
+                        />
                     )}
                 />
                 <Route

@@ -3,22 +3,18 @@ import ImportedDataFileUpload from "../common/importeddata/fileupload/ImportedDa
 import CSVFile from "model/CSVFile";
 import ImportedDataValidatorService from "../../service/validation/ImportedDataValidatorService";
 
-class LoadPaymentsStep1ReadFile extends React.Component {
+class LoadMeasurementsStep1ReadFile extends React.Component {
     state = {
-        selectedProvider: "Banco",
         csvFile: null,
 
         fieldErrors: {
-            selectedProvider: null,
             csvFile: null,
         },
     };
 
     constructor(props) {
         super(props);
-        // TODO: What's the place of this configuration?
-        this.providersList = ["Banco", "Tigo Money"];
-        this.handlePaymentsFileRead = this.handlePaymentsFileRead.bind(this);
+        this.handleMeasurementsFileRead = this.handleMeasurementsFileRead.bind(this);
     }
 
     isCSVFileValid() {
@@ -30,15 +26,7 @@ class LoadPaymentsStep1ReadFile extends React.Component {
     }
 
     /* HANDLERS FOR UI EVENTS */
-
-    handleSelectedProviderChange(event) {
-        let selectedProvider = event.target.value;
-        this.setState({
-            selectedProvider,
-        });
-    }
-
-    handlePaymentsFileRead(file, content) {
+    handleMeasurementsFileRead(file, content) {
         let csvFile = new CSVFile({
             file,
             content,
@@ -47,11 +35,12 @@ class LoadPaymentsStep1ReadFile extends React.Component {
             {
                 csvFile,
                 fieldErrors: {
-                    csvFile: ImportedDataValidatorService.validatePaymentsFile(csvFile),
+                    csvFile: ImportedDataValidatorService.validateMeasurementsFile(
+                        csvFile
+                    ),
                 },
             },
             () => {
-                console.log("this.state.fieldErrors.length", this.state.fieldErrors);
                 if (this.state.fieldErrors.csvFile.length === 0) {
                     this.props.afterValid(this.state.csvFile);
                 }
@@ -83,27 +72,10 @@ class LoadPaymentsStep1ReadFile extends React.Component {
         }
     }
 
-    get selectProvider() {
-        let providersListOptions = this.providersList.map(provider => (
-            <option key={provider}>{provider}</option>
-        ));
-        return (
-            <div className="form-group">
-                <label htmlFor="selectProvider">Selecciona el proveedor</label>
-                <select
-                    name="selectProvider"
-                    className="form-control"
-                    value={this.state.selectedProvider}
-                    onChange={event => this.handleSelectedProviderChange(event)}
-                >
-                    {providersListOptions}
-                </select>
-            </div>
-        );
-    }
-
     get fileUpload() {
-        return <ImportedDataFileUpload handleFileRead={this.handlePaymentsFileRead} />;
+        return (
+            <ImportedDataFileUpload handleFileRead={this.handleMeasurementsFileRead} />
+        );
     }
 
     get nextButton() {
@@ -124,7 +96,6 @@ class LoadPaymentsStep1ReadFile extends React.Component {
         return (
             <div className="col-12 row justify-content-center">
                 <form className="col-md-8 card p-3 bg-light">
-                    {this.selectProvider}
                     {this.fileUpload}
                     {this.messages}
                 </form>
@@ -134,4 +105,4 @@ class LoadPaymentsStep1ReadFile extends React.Component {
     }
 }
 
-export default LoadPaymentsStep1ReadFile;
+export default LoadMeasurementsStep1ReadFile;

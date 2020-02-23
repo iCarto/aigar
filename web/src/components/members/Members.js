@@ -8,7 +8,11 @@ class Members extends React.Component {
     }
 
     render() {
-        return <h1>Socios</h1>;
+        return (
+            <div>
+                <h1>Socios</h1>
+            </div>
+        );
     }
 }
 

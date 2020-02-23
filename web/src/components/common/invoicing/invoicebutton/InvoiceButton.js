@@ -19,14 +19,16 @@ class InvoiceButton extends React.Component {
             },
             async () => {
                 try {
+                    const data = {
+                        invoices: this.props.invoices,
+                    };
                     const invoicesDocument = await DocXPrintFileService.generateInvoicesDocument(
-                        {
-                            invoices: this.props.invoices,
-                        }
+                        data,
+                        this.props.outputFilename
                     );
                     FileService.saveDataToFile(
                         invoicesDocument,
-                        "output.docx",
+                        this.props.outputFilename + ".docx",
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     );
                     this.setState({

@@ -1,13 +1,14 @@
 import createReport from "docx-templates";
 import FileService from "./FileService";
+import BarcodeService from "./BarcodeService";
+import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
+import invoiceTemplatePath from "assets/print-templates/invoice/Modelo_Factura_ASCATLI.docx";
 
 const DocXPrintFileService = {
     async getLogoAscatli() {
         const IMAGE_WITDH = 2.4;
         const IMAGE_HEIGHT = 2.4;
-        const logo = await FileService.readPublicFileAsArrayBuffer(
-            "/print-templates/invoice/logo_ascatli.png"
-        );
+        const logo = await FileService.readPublicFileAsArrayBuffer(logoAscatliPath);
         return {
             width: IMAGE_WITDH,
             height: IMAGE_HEIGHT,
@@ -16,17 +17,34 @@ const DocXPrintFileService = {
         };
     },
 
-    async generateInvoicesDocument(data) {
+    async getInvoiceBarcode(invoiceNumber) {
+        const barcode = await BarcodeService.generateBarcodeCode39(invoiceNumber);
+        return {
+            width: 5.5,
+            height: 1.5,
+            data: barcode,
+            extension: ".png",
+        };
+    },
+
+    async generateInvoicesDocument(data, outputFilename) {
         // For browser execution template should be an ArrayBuffer
         const invoicesDocumentTemplate = await FileService.readPublicFileAsArrayBuffer(
-            "/print-templates/invoice/Modelo_Factura_ASCATLI.docx"
+            invoiceTemplatePath
         );
+
+        const logoAscatli = await this.getLogoAscatli();
         const invoicesDocument = await createReport({
             template: invoicesDocumentTemplate,
-            output: "test_output.docx",
+            output: outputFilename + ".docx",
             data,
             additionalJsContext: {
-                getLogoAscatli: this.getLogoAscatli,
+                // To avoid "this.getLogoAscatli()" function on every loop iteration
+                // The logo should be initialized before the call to createReport()
+                getLogoAscatli: () => {
+                    return logoAscatli;
+                },
+                getInvoiceBarcode: this.getInvoiceBarcode,
             },
             /*
             With the default configuration, browser usage can become slow with

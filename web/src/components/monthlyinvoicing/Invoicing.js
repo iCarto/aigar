@@ -1,5 +1,5 @@
 import React from "react";
-import InvoiceButton from "components/common/invoicing/invoicebutton/InvoiceButton";
+import InvoiceButton from "components/common/invoicing/InvoiceButton";
 
 class Invoicing extends React.Component {
     constructor(props) {

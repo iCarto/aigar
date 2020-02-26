@@ -2,9 +2,18 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import NavBar from "./components/navbar/NavBar";
-import Members from "./components/members/Members";
-import Invoicing from "./components/invoicing/Invoicing";
+
+import {ListMonthlyInvoicing} from "components/monthlyinvoicing/container";
+import {
+    EditMember,
+    CreateMember,
+    ViewMember,
+    ListMembers,
+} from "./components/member/container";
+import {ListInvoices, EditInvoice} from "components/invoice/container";
+
 import ImportedDataWizard from "./components/common/importeddata/wizard/ImportedDataWizard";
+
 import LoadPaymentsWizard from "./components/loadpayments/LoadPaymentsWizard";
 import LoadMeasurementsWizard from "./components/loadmeasurements/LoadMeasurementsWizard";
 
@@ -30,7 +39,6 @@ class App extends React.Component {
     componentDidMount() {
         Promise.resolve(DatabaseFixture).then(d => {
             this.setState({database: d});
-            console.log(d);
         });
     }
 }
@@ -65,17 +73,35 @@ function MainContent(props) {
                     )}
                 />
                 <Route
+                    path="/socios/:num_socio/modificar"
+                    render={props => <EditMember {...props} database={database} />}
+                />
+                <Route
+                    path="/socios/nuevo"
+                    render={props => <CreateMember {...props} database={database} />}
+                />
+                <Route
+                    path="/socios/:num_socio"
+                    render={props => <ViewMember {...props} database={database} />}
+                />
+                <Route
                     path="/socios"
-                    render={props => <Members {...props} database={database} />}
+                    render={props => <ListMembers {...props} database={database} />}
                 />
                 <Route
                     path="/facturacion"
-                    render={props => <Invoicing {...props} database={database} />}
+                    render={props => <ListInvoices {...props} database={database} />}
+                />
+                <Route
+                    path="/factura/:num_factura/modificar"
+                    render={props => <EditInvoice {...props} database={database} />}
                 />
                 <Route
                     exact
                     path="/"
-                    render={props => <Invoicing {...props} database={database} />}
+                    render={props => (
+                        <ListMonthlyInvoicing {...props} database={database} />
+                    )}
                 />
             </Switch>
         </main>

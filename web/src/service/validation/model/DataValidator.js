@@ -1,7 +1,7 @@
 import moment from "moment";
 import Validator from "./Validator";
 
-class ImportedDataValidator extends Validator {
+class DataValidator extends Validator {
     isNotEmpty(value) {
         if (value !== "" && value !== null && typeof value !== "undefined") {
             return null;
@@ -29,4 +29,4 @@ class ImportedDataValidator extends Validator {
     }
 }
 
-export default ImportedDataValidator;
+export default DataValidator;

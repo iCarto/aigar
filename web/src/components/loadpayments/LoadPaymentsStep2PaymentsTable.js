@@ -1,6 +1,6 @@
 import React from "react";
 import ImportedDataTable from "../common/importeddata/table/ImportedDataTable";
-import ImportedDataValidatorService from "../../service/validation/ImportedDataValidatorService";
+import {ImportedDataValidatorService} from "service/validation";
 
 class LoadPaymentsStep2PaymentsTable extends React.Component {
     constructor(props) {

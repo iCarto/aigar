@@ -3,7 +3,7 @@ import LoadPaymentsStepper from "./LoadPaymentsStepper";
 import LoadPaymentsStep1ReadFile from "./LoadPaymentsStep1ReadFile";
 import LoadPaymentsStep2PaymentsTable from "./LoadPaymentsStep2PaymentsTable";
 import LoadPaymentsStep3Results from "./LoadPaymentsStep3Results";
-import PaymentService from "service/PaymentsService";
+import {PaymentService} from "service";
 
 /*
 Higher order component that:

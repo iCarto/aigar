@@ -1,4 +1,5 @@
 import React from "react";
+import {Spinner} from "components/common";
 
 class ImportedDataFileUpload extends React.Component {
     constructor(props) {
@@ -38,11 +39,7 @@ class ImportedDataFileUpload extends React.Component {
                         onChange={e => this.handleFileChosen(e.target.files[0])}
                         aria-describedby="fileUploadHelp"
                     />
-                    {this.state.loading ? (
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="sr-only">Subiendo archivo...</span>
-                        </div>
-                    ) : null}
+                    {this.state.loading ? <Spinner message="Subiendo archivo" /> : null}
                     <small id="fileUploadHelp" className="form-text text-muted">
                         La extensión del fichero debe ser .txt o .csv
                     </small>

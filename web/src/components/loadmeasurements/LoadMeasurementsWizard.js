@@ -3,7 +3,7 @@ import LoadMeasurementsStepper from "./LoadMeasurementsStepper";
 import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
 import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
 import LoadMeasurementsStep3Results from "./LoadMeasurementsStep3Results";
-import MeasurementService from "service/MeasurementsService";
+import {MeasurementService} from "service";
 
 /*
 Higher order component that:

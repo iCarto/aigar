@@ -1,7 +1,7 @@
 import React from "react";
 import ImportedDataFileUpload from "../common/importeddata/fileupload/ImportedDataFileUpload";
-import CSVFile from "model/CSVFile";
-import ImportedDataValidatorService from "../../service/validation/ImportedDataValidatorService";
+import {CSVFile} from "model";
+import {ImportedDataValidatorService} from "service/validation";
 
 class LoadMeasurementsStep1ReadFile extends React.Component {
     state = {

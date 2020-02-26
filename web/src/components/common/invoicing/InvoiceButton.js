@@ -1,4 +1,5 @@
 import React from "react";
+import {Spinner} from "components/common";
 import DocXPrintFileService from "service/DocXPrintFileService";
 import FileService from "service/FileService";
 
@@ -71,16 +72,18 @@ class InvoiceButton extends React.Component {
     get spinner() {
         return (
             <div className="d-flex align-items-center">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="sr-only">Generando factura...</span>
-                </div>
+                <Spinner message="Generando factura" />
                 <strong className="ml-2">Generando factura...</strong>
             </div>
         );
     }
 
     get button() {
-        return <button onClick={this.generateDoc}>{this.props.buttonTitle}</button>;
+        return (
+            <button onClick={this.generateDoc} className="btn btn-primary">
+                {this.props.buttonTitle}
+            </button>
+        );
     }
 
     render() {

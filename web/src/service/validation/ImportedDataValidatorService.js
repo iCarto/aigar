@@ -1,5 +1,5 @@
 import CSVFileValidator from "./model/CSVFileValidator";
-import ImportedDataValidator from "./model/ImportedDataValidator";
+import DataValidator from "./model/DataValidator";
 
 const ImportedDataValidatorService = {
     validateFile(fileObject, validator) {
@@ -61,7 +61,7 @@ const ImportedDataValidatorService = {
     validatePaymentEntry(entryObject) {
         return this.validateEntry(
             entryObject,
-            new ImportedDataValidator({
+            new DataValidator({
                 invoice: [
                     "isNotEmpty",
                     {
@@ -95,7 +95,7 @@ const ImportedDataValidatorService = {
     validateMeasurementEntry(entryObject) {
         return this.validateEntry(
             entryObject,
-            new ImportedDataValidator({
+            new DataValidator({
                 sector: ["isNotEmpty"],
                 memberNumber: ["isNotEmpty"],
                 measurementDate: ["isNotEmpty", "isDate"],

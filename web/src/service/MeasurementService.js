@@ -1,4 +1,4 @@
-import MeasurementImportedData from "model/MeasurementImportedData";
+import {MeasurementImportedData} from "model";
 
 const MeasurementsService = {
     getMeasurementsFromCSVContent: function(content) {

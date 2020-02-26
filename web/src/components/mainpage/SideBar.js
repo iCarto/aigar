@@ -1,10 +1,13 @@
 import React from "react";
 import "./SideBar.css";
-
-function SideBar() {
+import Invoicing from "./Invoicing";
+function SideBar(props) {
     return (
         <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
+                <div>
+                    <Invoicing database={props} />
+                </div>
                 <ul className="nav flex-column">
                     <li className="nav-item">
                         <a className="nav-link active" href="#">
@@ -43,7 +46,6 @@ function SideBar() {
                                 <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
                                 <polyline points="13 2 13 9 20 9"></polyline>
                             </svg>
-                            Orders
                         </a>
                     </li>
                     <li className="nav-item">

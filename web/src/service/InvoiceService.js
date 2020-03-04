@@ -20,6 +20,9 @@ const InvoiceService = {
                         filtered =
                             filtered && invoice.numero.indexOf(filter.numero) >= 0;
                     }
+                    if (filter.num_socio) {
+                        filtered = parseInt(invoice.numero_socio) === filter.num_socio;
+                    }
                     if (filter.nombre != null) {
                         filtered =
                             filtered && invoice.nombre.indexOf(filter.nombre) >= 0;

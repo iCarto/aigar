@@ -1,6 +1,7 @@
 import React from "react";
 import {Spinner} from "components/common";
-import {MemberDetail, MemberInvoices} from "components/member/presentation";
+import {ListMemberInvoices} from "components/member/container";
+import {MemberDetail} from "components/member/presentation";
 import {MemberService} from "service";
 
 class ViewMember extends React.Component {
@@ -52,7 +53,7 @@ class ViewMember extends React.Component {
             return (
                 <div>
                     <MemberDetail member={this.state.member} />
-                    <MemberInvoices />
+                    <ListMemberInvoices num_socio={this.state.member.num_socio} />
                 </div>
             );
         } else {

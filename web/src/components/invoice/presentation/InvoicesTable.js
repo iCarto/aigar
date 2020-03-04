@@ -49,6 +49,7 @@ class InvoicesTable extends React.Component {
                 </table>
             );
         }
+        return null;
     }
 }
 

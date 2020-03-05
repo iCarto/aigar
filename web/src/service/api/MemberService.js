@@ -20,6 +20,8 @@ const MemberService = {
         });
     },
     getMember(numero_socio) {
+        // always cast numero_socio to int
+        numero_socio = parseInt(numero_socio);
         return Promise.resolve(DatabaseFixture).then(d => {
             let members = members_api_adapter(d["members"]);
             members = createMembers(members);

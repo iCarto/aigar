@@ -31,7 +31,6 @@ class App extends React.Component {
             <BrowserRouter>
                 <NavBar />
                 <MainContent database={database} />
-                <footer></footer>
             </BrowserRouter>
         );
     }
@@ -46,7 +45,7 @@ class App extends React.Component {
 function MainContent(props) {
     const {database} = props;
     return (
-        <main role="main" className="container">
+        <main role="main">
             <Switch>
                 <Route
                     path="/cargarpagos"
@@ -89,12 +88,12 @@ function MainContent(props) {
                     render={props => <ListMembers {...props} database={database} />}
                 />
                 <Route
-                    path="/facturacion"
-                    render={props => <ListInvoices {...props} database={database} />}
+                    path="/facturas/:num_factura/modificar"
+                    render={props => <EditInvoice {...props} database={database} />}
                 />
                 <Route
-                    path="/factura/:num_factura/modificar"
-                    render={props => <EditInvoice {...props} database={database} />}
+                    path="/facturas"
+                    render={props => <ListInvoices {...props} database={database} />}
                 />
                 <Route
                     exact

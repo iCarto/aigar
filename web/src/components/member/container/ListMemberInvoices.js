@@ -1,6 +1,6 @@
 import React from "react";
 import {InvoicesTable} from "components/invoice/presentation";
-import {InvoiceService} from "service";
+import {InvoiceService} from "service/api";
 
 class ListMemberInvoices extends React.Component {
     constructor(props) {

@@ -2,7 +2,7 @@ import React from "react";
 import {Spinner} from "components/common";
 import {MemberForm} from "components/member/presentation";
 import {createMember} from "model";
-import {MemberService} from "service";
+import {MemberService} from "service/api";
 import {DataValidatorService} from "service/validation";
 
 class EditMember extends React.Component {

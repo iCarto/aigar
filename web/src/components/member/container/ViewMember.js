@@ -2,7 +2,7 @@ import React from "react";
 import {Spinner} from "components/common";
 import {ListMemberInvoices} from "components/member/container";
 import {MemberDetail} from "components/member/presentation";
-import {MemberService} from "service";
+import {MemberService} from "service/api";
 
 class ViewMember extends React.Component {
     constructor(props) {

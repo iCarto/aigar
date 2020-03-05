@@ -5,7 +5,7 @@ import {
     MembersFilter,
     MemberNewButton,
 } from "components/member/presentation";
-import {MemberService} from "service";
+import {MemberService} from "service/api";
 import "components/common/SideBar.css";
 
 class ListMembers extends React.Component {

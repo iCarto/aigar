@@ -26,7 +26,7 @@ class InvoicesTable extends React.Component {
                         {this.props.invoices.map(invoice => (
                             <tr key={invoice.numero}>
                                 <td>
-                                    <Link to={`/factura/${invoice.numero}`}>
+                                    <Link to={`/facturas/${invoice.numero}/modificar`}>
                                         {invoice.numero}
                                     </Link>
                                 </td>

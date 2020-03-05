@@ -59,6 +59,15 @@ function NavBar() {
                             Socios
                         </NavLink>
                     </li>
+                    <li className="nav-item active">
+                        <NavLink
+                            to="/facturas"
+                            activeClassName="active"
+                            className="nav-link"
+                        >
+                            Facturas
+                        </NavLink>
+                    </li>
                 </ul>
             </div>
         </nav>

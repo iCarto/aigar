@@ -1,5 +1,4 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
 class MonthlyInvoicingTable extends React.Component {
     render() {
@@ -27,9 +26,16 @@ class MonthlyInvoicingTable extends React.Component {
                         {this.props.invoices.map(invoice => (
                             <tr key={invoice.numero}>
                                 <td>
-                                    <Link to={`/factura/${invoice.numero}/modificar`}>
+                                    <a
+                                        href="#"
+                                        onClick={() =>
+                                            this.props.handleSelectInvoice(
+                                                invoice.numero
+                                            )
+                                        }
+                                    >
                                         {invoice.numero}
-                                    </Link>
+                                    </a>
                                 </td>
                                 <td>{invoice.nombre}</td>
                                 <td>

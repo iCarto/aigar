@@ -1,7 +1,6 @@
 import React from "react";
 import {Spinner} from "components/common";
-import DocXPrintFileService from "service/DocXPrintFileService";
-import FileService from "service/FileService";
+import {DocXPrintFileService, FileService} from "service/file";
 
 class InvoiceButton extends React.Component {
     constructor(props) {

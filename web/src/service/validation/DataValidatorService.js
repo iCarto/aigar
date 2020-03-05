@@ -30,6 +30,16 @@ const DataValidatorService = {
             })
         );
     },
+
+    validateInvoice(entryObject) {
+        return this.validateEntry(
+            entryObject,
+            new DataValidator({
+                numero: ["isNotEmpty"],
+                consumo: ["isNotEmpty"],
+            })
+        );
+    },
 };
 
 export default DataValidatorService;

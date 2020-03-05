@@ -113,7 +113,7 @@ const createInvoice = ({
         ahorro,
         anho,
         asamblea,
-        caudal_actual,
+        caudal_actual: parseFloat(caudal_anterior) + parseFloat(consumo),
         caudal_anterior,
         comision,
         comprobar_pago_11_al_30,

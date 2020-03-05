@@ -102,7 +102,7 @@ class MonthlyInvoicingCalendar extends React.Component {
         const {selectedMonth, selectedYear} = this.state;
 
         return (
-            <form className="form-inline justify-content-center m-3">
+            <form className="form-inline d-flex justify-content-between m-3">
                 <button
                     type="button"
                     className="btn btn-primary mr-3"
@@ -111,23 +111,25 @@ class MonthlyInvoicingCalendar extends React.Component {
                 >
                     &laquo; Mes anterior
                 </button>
-                <select
-                    className="custom-select"
-                    id="inlineFormCustomSelectPref"
-                    value={selectedMonth}
-                    onChange={this.handleMonthSelected}
-                >
-                    {this.monthOptions}
-                </select>
-                <label className="">&nbsp;de&nbsp;</label>
-                <select
-                    className="custom-select"
-                    id="inlineFormCustomSelectPref"
-                    value={selectedYear}
-                    onChange={this.handleYearSelected}
-                >
-                    {this.yearOptions}
-                </select>
+                <div className="row">
+                    <select
+                        className="custom-select"
+                        id="inlineFormCustomSelectPref"
+                        value={selectedMonth}
+                        onChange={this.handleMonthSelected}
+                    >
+                        {this.monthOptions}
+                    </select>
+                    <label className="">&nbsp;de&nbsp;</label>
+                    <select
+                        className="custom-select"
+                        id="inlineFormCustomSelectPref"
+                        value={selectedYear}
+                        onChange={this.handleYearSelected}
+                    >
+                        {this.yearOptions}
+                    </select>
+                </div>
                 <button
                     type="button"
                     className="btn btn-primary ml-3"

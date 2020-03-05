@@ -1,7 +1,7 @@
 import React from "react";
 import {Spinner} from "components/common";
 import {InvoicesTable, InvoicesFilter} from "components/invoice/presentation";
-import {InvoiceService} from "service";
+import {InvoiceService} from "service/api";
 import "components/common/SideBar.css";
 
 class ListInvoices extends React.Component {
@@ -50,7 +50,7 @@ class ListInvoices extends React.Component {
                                 />
                             </div>
                         </nav>
-                        <div className="col-md">
+                        <div className="col-md-10 offset-md-2">
                             <InvoicesTable invoices={this.state.invoices} />
                         </div>
                     </div>

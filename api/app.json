@@ -1,0 +1,8 @@
+{
+    "name": "api",
+    "description": "A Django REST API",
+    "repository": "https://gitlab.com/icarto-private/aigar.git",
+    "logo": "",
+    "keywords": ["Django", "REST", "API"],
+    "addons": ["heroku-postgresql", "heroku-redis"]
+}

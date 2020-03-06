@@ -1,0 +1,49 @@
+version: "3"
+services:
+    db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: secret
+    cache:
+        image: redis
+        restart: on-failure
+    worker:
+        build: .
+        image: api
+        #env_file: .env
+        command: celery worker -A api.celery --loglevel=info --logfile=worker.log -B
+        volumes:
+            - .:/app
+        links:
+            - db
+            - cache
+    web:
+        build: .
+        image: api
+        #env_file: .env
+        restart: on-failure
+        command: gunicorn api.wsgi -c api/gunicorn.conf.py
+        #command: python manage.py runserver 0.0.0.0:8000
+        environment:
+            DATABASE_URL: psql://postgres:secret@db/postgres
+            REDIS_URL: redis://cache:6379
+        volumes:
+            - .:/app
+        ports:
+            - "8000:8000"
+        links:
+            - db
+            - cache
+    cli:
+        build: .
+        image: api
+        #env_file: .env
+        entrypoint: python3 manage.py
+        environment:
+            DATABASE_URL: psql://postgres:secret@db/postgres
+            REDIS_URL: redis://cache:6379
+        volumes:
+            - .:/app
+        links:
+            - db
+            - cache

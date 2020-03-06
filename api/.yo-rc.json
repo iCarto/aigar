@@ -1,0 +1,8 @@
+{
+    "generator-django-rest": {
+        "promptValues": {
+            "prod_branch": true,
+            "git_url": "https://gitlab.com/icarto-private/aigar.git"
+        }
+    }
+}

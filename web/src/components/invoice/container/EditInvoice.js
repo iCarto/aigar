@@ -26,7 +26,6 @@ class EditInvoice extends React.Component {
         // Store prevNumFactura in state so we can compare when props change.
         // Clear out previously-loaded data (so we don't render stale stuff).
         const num_factura = props.num_factura || props.match.params.num_factura;
-        console.log({num_factura});
         if (num_factura !== prevState.num_factura) {
             return {
                 invoice: null,

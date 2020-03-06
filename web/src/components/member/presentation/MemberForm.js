@@ -206,14 +206,19 @@ class MemberForm extends React.Component {
                     </div>
                 </div>
 
-                <Link to={this.props.cancelUrl}>
-                    <button type="button" className="btn">
+                <div className="col-md-12 mt-4 d-flex justify-content-between">
+                    <button
+                        type="button"
+                        className="btn"
+                        onClick={this.props.handleBack}
+                    >
                         Cancelar
                     </button>
-                </Link>
-                <button type="submit" className="btn btn-primary">
-                    Salvar
-                </button>
+                    <button type="submit" className="btn btn-primary">
+                        <i className="fas fa-print mr-2" />
+                        Salvar
+                    </button>
+                </div>
             </form>
         );
     }

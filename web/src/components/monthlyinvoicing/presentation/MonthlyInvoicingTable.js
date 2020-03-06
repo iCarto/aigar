@@ -2,55 +2,54 @@ import React from "react";
 
 class MonthlyInvoicingTable extends React.Component {
     render() {
-        if (this.props.invoices) {
+        if (this.props.membersMonthInfo) {
             return (
                 <table className="table table-bordered table-hover">
                     <thead className="thead-dark">
                         <tr>
-                            <th scope="col">Número</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Sector / Comunidad</th>
-                            <th scope="col">Consumo</th>
-                            <th scope="col">Caudal actual</th>
-                            <th scope="col">Caudal anterior</th>
-                            <th scope="col">Cuota fija</th>
-                            <th scope="col">Cuota variable</th>
-                            <th scope="col">Comisión</th>
-                            <th scope="col">Ahorro</th>
-                            <th scope="col">Derecho</th>
-                            <th scope="col">Reconexion</th>
-                            <th scope="col">Total</th>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Sector</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Lectura</th>
+                            <th scope="col">Importe</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Mora</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.invoices.map(invoice => (
-                            <tr key={invoice.numero}>
+                        {this.props.membersMonthInfo.map(memberMonthInfo => (
+                            <tr key={memberMonthInfo.num_socio}>
                                 <td>
-                                    <a
-                                        href="#"
+                                    <button
+                                        type="button"
+                                        className="link-button text-primary"
                                         onClick={() =>
-                                            this.props.handleSelectInvoice(
-                                                invoice.numero
+                                            this.props.handleSelectMember(
+                                                memberMonthInfo.num_socio
                                             )
                                         }
                                     >
-                                        {invoice.numero}
-                                    </a>
+                                        {memberMonthInfo.nombre_socio}
+                                    </button>
                                 </td>
-                                <td>{invoice.nombre}</td>
+                                <td>{memberMonthInfo.sector_socio}</td>
+                                <td>{memberMonthInfo.tipo_socio}</td>
                                 <td>
-                                    {invoice.sector} / {invoice.comunidad}
+                                    <button
+                                        type="button"
+                                        className="link-button text-primary"
+                                        onClick={() =>
+                                            this.props.handleSelectInvoice(
+                                                memberMonthInfo.num_factura
+                                            )
+                                        }
+                                    >
+                                        {memberMonthInfo.lectura}
+                                    </button>
                                 </td>
-                                <td>{invoice.consumo}</td>
-                                <td>{invoice.caudal_actual}</td>
-                                <td>{invoice.caudal_anterior}</td>
-                                <td>{invoice.cuota_fija}</td>
-                                <td>{invoice.cuota_variable}</td>
-                                <td>{invoice.comision}</td>
-                                <td>{invoice.ahorro}</td>
-                                <td>{invoice.derecho}</td>
-                                <td>{invoice.reconexion}</td>
-                                <td>{invoice.total}</td>
+                                <td>{memberMonthInfo.importe}</td>
+                                <td>{memberMonthInfo.estado}</td>
+                                <td>{memberMonthInfo.mora}</td>
                             </tr>
                         ))}
                     </tbody>

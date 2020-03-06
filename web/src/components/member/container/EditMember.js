@@ -10,11 +10,12 @@ class EditMember extends React.Component {
         super(props);
         this.state = {
             member: null,
-            prevNumSocio: null,
+            num_socio: null,
             errors: null,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleBack = this.handleBack.bind(this);
     }
 
     // https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#fetching-external-data-when-props-change
@@ -22,23 +23,23 @@ class EditMember extends React.Component {
     static getDerivedStateFromProps(props, prevState) {
         // Store prevNumSocio in state so we can compare when props change.
         // Clear out previously-loaded data (so we don't render stale stuff).
-        const num_socio = parseInt(props.match.params.num_socio);
-        if (num_socio !== prevState.prevNumSocio) {
+        const num_socio = parseInt(props.num_socio || props.match.params.num_socio);
+        if (num_socio !== prevState.num_socio) {
             return {
                 member: null,
-                prevNumSocio: num_socio,
+                num_socio,
             };
         }
         return null;
     }
 
     componentDidMount() {
-        this.loadMember(parseInt(this.props.match.params.num_socio));
+        this.loadMember(parseInt(this.state.num_socio));
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.member === null) {
-            this.loadMember(parseInt(this.props.match.params.num_socio));
+            this.loadMember(parseInt(this.state.num_socio));
         }
     }
 
@@ -69,16 +70,24 @@ class EditMember extends React.Component {
         this.props.history.push("/socios/" + this.props.match.params.num_socio);
     }
 
+    handleBack() {
+        this.props.handleBack
+            ? this.props.handleBack()
+            : this.props.history.push("/socios");
+    }
+
     render() {
         if (this.state.member) {
             return (
-                <MemberForm
-                    member={this.state.member}
-                    errors={this.state.errors}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                    cancelUrl={"/socios/" + this.state.member.num_socio}
-                />
+                <div className="container">
+                    <MemberForm
+                        member={this.state.member}
+                        errors={this.state.errors}
+                        handleChange={this.handleChange}
+                        handleSubmit={this.handleSubmit}
+                        handleBack={this.handleBack}
+                    />
+                </div>
             );
         } else {
             return <Spinner message="Cargando datos" />;

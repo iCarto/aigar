@@ -105,7 +105,7 @@ class MonthlyInvoicingCalendar extends React.Component {
             <form className="form-inline d-flex justify-content-between m-3">
                 <button
                     type="button"
-                    className="btn btn-primary mr-3"
+                    className="btn btn-secondary mr-3"
                     onClick={this.handleMonthChangePrevious}
                     disabled={this.isPreviousButtonDisabled()}
                 >
@@ -132,7 +132,7 @@ class MonthlyInvoicingCalendar extends React.Component {
                 </div>
                 <button
                     type="button"
-                    className="btn btn-primary ml-3"
+                    className="btn btn-secondary ml-3"
                     onClick={this.handleMonthChangeNext}
                     disabled={this.isNextButtonDisabled()}
                 >

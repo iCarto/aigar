@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
 
 /**
 Controlled component for invoice form.
@@ -51,6 +51,10 @@ class InvoiceForm extends React.Component {
             formData[invoiceField].errors = this.getFieldErrorFromProps(invoiceField);
         });
         return formData;
+    }
+
+    getOutputFilename() {
+        return "recibo_" + this.props.numero;
     }
 
     render() {
@@ -243,7 +247,7 @@ class InvoiceForm extends React.Component {
                         <div className="invalid-feedback d-block">{total.errors}</div>
                     </div>
                 </div>
-                <div className="col-md-12 mt-4 d-flex justify-content-center">
+                <div className="col-md-12 mt-4 d-flex justify-content-between">
                     <button
                         type="button"
                         className="btn"
@@ -251,7 +255,13 @@ class InvoiceForm extends React.Component {
                     >
                         Cancelar
                     </button>
+                    <InvoicePrintButton
+                        invoices={[this.props.invoice]}
+                        buttonTitle="Impresión del recibo"
+                        outputFilename={this.getOutputFilename()}
+                    />
                     <button type="submit" className="btn btn-primary">
+                        <i className="fas fa-print mr-2" />
                         Salvar
                     </button>
                 </div>

@@ -1,2 +1,0 @@
-web: gunicorn api.wsgi
-worker: celery worker -A api.celery --loglevel=info --logfile=worker.log -B

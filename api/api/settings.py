@@ -14,7 +14,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 import environ
 
-from .logger import LOGGING
+
+# from .logger import LOGGING
 
 
 env = environ.Env(  # set default values and casting
@@ -61,11 +62,11 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "rest_framework",
-    "graphene_django",
     "corsheaders",
-    "anymail",
     "debug_toolbar",
     "django_extensions",
+    "api",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -111,68 +112,23 @@ DATABASES = {
     "default": env.db()
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# Celery settings
-BROKER_URL = env("REDIS_URL")
-CELERY_RESULT_BACKEND = env("REDIS_URL")
 
 DEPLOYMENT = env("DEPLOYMENT")
 
-if DEPLOYMENT == "dev":
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    CELERY_ALWAYS_EAGER = True  # run tasks in same thread for development
-    # CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
-    ADMINS = (("admin", "admin@localhost"),)
-else:  # DEPLOYMENT == prod
-    # SECURE_SSL_REDIRECT = True
-    # add extra apps
-    # INSTALLED_APPS.append('raven.contrib.django.raven_compat')
-    pass
-
 # Media storage backend
-try:
-    BACKBLAZEB2_ACCOUNT_ID = env("BACKBLAZEB2_ACCOUNT_ID")
-    BACKBLAZEB2_APP_KEY = env("BACKBLAZEB2_APP_KEY")
-    BACKBLAZEB2_BUCKET_NAME = env("BACKBLAZEB2_BUCKET")
-    DEFAULT_FILE_STORAGE = "b2_storage.storage.B2Storage"
-    # INSTALLED_APPS.append('b2_storage.authorise')
-except ImproperlyConfigured:  # use the default file storage to disk
-    MEDIA_ROOT = root("media")
-    MEDIA_URL = "/media/"
-
-# Email sending
-try:
-    ANYMAIL = {
-        # (exact settings here depend on your ESP...)
-        "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-        # your Mailgun domain, if needed:
-        "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
-    }
-    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
-    # or sendgrid.EmailBackend, or...
-except ImproperlyConfigured:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+MEDIA_ROOT = root("media")
+MEDIA_URL = "/media/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-SV"
 # set your local time zone to more easily analyse data on the backend
-TIME_ZONE = "Europe/Zagreb"
+TIME_ZONE = "America/El_Salvador"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -214,7 +170,4 @@ CORS_ORIGIN_WHITELIST = (
 )
 # CORS_ALLOW_CREDENTIALS = True
 
-GRAPHENE = {
-    # Where your Graphene schema lives
-    "SCHEMA": "api.schema.schema"
-}
+AUTH_USER_MODEL = "users.User"

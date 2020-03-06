@@ -20,10 +20,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-from graphene_django.views import GraphQLView
-
 from .api import router
-from .schema import schema
 
 
 admin.autodiscover()
@@ -36,8 +33,6 @@ urlpatterns = [
     # Django REST Framework urls
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    #  GraphQL urls
-    path("graphql/", GraphQLView.as_view(graphiql=True, schema=schema)),
     # other views still work too
     path("admin/", admin.site.urls),
 ]

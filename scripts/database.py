@@ -14,6 +14,27 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def create_django_fixtures(database):
+    fixtures = []
+    for m in database["members"]:
+        fixture_member = {
+            "model": "api.Member",
+            "pk": int(m["numero_socio"]),
+            "fields": {
+                "name": m["nombre"],
+                "sector": int(m["sector"]),
+                "medidor": str(m["medidor"]),
+                "solo_mecha": True if m["medidor"] == "M" else False,
+                "orden": 0 if m["ruta"] is None else int(m["ruta"]),
+                "observaciones": f"{m['observaciones_1'] or ''} {m['observaciones_2'] or ''}".strip(),
+                "consumo_maximo": 0,
+                "consumo_reduccion_fija": 0,
+            },
+        }
+        fixtures.append(fixture_member)
+    print(json.dumps(fixtures))
+
+
 def create_database(fileindex, pretty_print, hack):
     dispatch = {
         "invoices": parse_invoice_spreadsheet,
@@ -55,6 +76,7 @@ def create_database(fileindex, pretty_print, hack):
         json.dump(database, f, **json_options)
     logger.info(f"Created: {database_file_path}")
     logger.warning("No se está limpiando la BD. Puede haber elementos nulos")
+    return database
 
 
 if __name__ == "__main__":
@@ -78,4 +100,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    create_database(args.fileindex, args.pretty_print, args.hack)
+    db = create_database(args.fileindex, args.pretty_print, args.hack)
+    create_django_fixtures(db)

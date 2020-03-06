@@ -1,0 +1,5 @@
+honcho
+ipython
+ipdb
+Werkzeug
+django-debug-toolbar

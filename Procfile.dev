@@ -1,0 +1,2 @@
+api: (cd api; python manage.py runserver_plus)
+frontend: (cd web; npm start)

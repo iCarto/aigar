@@ -12,24 +12,6 @@ And start developing
 ./scripts/start.sh
 ```
 
-## Docker
-
-You can run the entire web app with all the necessary services inside Docker:
-
-```shell
-docker-compose up
-```
-
-To run `python manage.py` commands use `docker-compose run cli` instead:
-
-```shell
-docker-compose run cli migrate
-docker-compose run cli createsuperuser
-```
-
-If you want to run Django with runserver for better debug output,
-update the _docker-compose.yml_ file.
-
 ## Frontend details
 
 When you call _./deploy.sh_ everything gets compiled into a _prod/_ folder,
@@ -104,30 +86,3 @@ dokku run api python manage.py migrate
 ```
 
 That's it! Your app should be live on https://api.dokku.me 🚀
-
-# Upgrading the scaffolding
-
-The scaffolding for this Django project was built using
-[generator-django-rest][]. To upgrade your project with the latest version
-of generator-django-rest install `node` and get these npm package:
-
-```shell
-npm install -g yo generator-django-rest
-```
-
-If you use `yarn` instead do:
-
-```shell
-yarn global add yo generator-django-rest
-yarn global upgrade yo generator-django-rest
-```
-
-Then from within the root of your project (the path containing this file) run:
-
-```shell
-yo django-rest
-```
-
-And resolve any conflicts using the interactive prompts.
-
-[generator-django-rest]: https://github.com/metakermit/generator-django-rest

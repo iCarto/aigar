@@ -3,11 +3,12 @@ set -e
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     sudo apt install software-properties-common python-software-properties
-    sudo add-apt-repository ppa:pypa/ppa
-    sudo apt update
-    sudo apt-get install python3 pipenv libpq-dev redis-server
+    sudo apt-get install python3.6 nodejs npm
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    brew install python3 pipenv postgresql redis
+    brew install python3.6 nodejs npm
 fi
+
+sudo npm cache clean -f
+sudo npm install -g n
 
 exit

@@ -1,4 +1,4 @@
-declare -a programs=("python3" "pipenv" "redis-server" "postgres")
+declare -a programs=("python3.6" "npm")
 
 ## now loop through the above array
 for program in "${programs[@]}"; do

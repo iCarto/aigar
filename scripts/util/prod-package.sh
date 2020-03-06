@@ -4,8 +4,8 @@ source ./scripts/util/env.sh
 
 # build the frontend
 (
-    cd $FRONTEND_NAME
-    npm build
+    cd $FRONTEND_PATH
+    npm run build
 )
 
 # clean out files
@@ -22,17 +22,17 @@ fi
 
 # copy all of the backend and only the build frontend
 rsync -avm \
-    --include=$FRONTEND_NAME/build \
+    --include=$FRONTEND_PATH/build \
     --exclude-from=./.gitignore \
     --exclude=.git \
-    --exclude=$PROJECT_NAME/static \
+    --exclude=$BACKEND_PATH/static \
     --exclude=scripts \
-    --exclude="$FRONTEND_NAME/*" \
+    --exclude="$FRONTEND_PATH/*" \
     . prod
 
 # move the frontend to its place
-mv prod/$FRONTEND_NAME/build prod/$PROJECT_NAME/static
-rmdir prod/$FRONTEND_NAME
+mv prod/$(basename $FRONTEND_PATH)/build prod/$BACKEND_PATH/static
+rmdir prod/$(basename $FRONTEND_PATH)
 
 # add a production gitignore
 cp ./scripts/util/prod-gitignore prod/.gitignore

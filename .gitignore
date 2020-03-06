@@ -24,3 +24,7 @@ node_modules/
 
 # Project
 fixtures
+/prod
+**/migrations/0*.py
+api/api/static
+fixtures.json

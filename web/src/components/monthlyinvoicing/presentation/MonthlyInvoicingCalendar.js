@@ -102,14 +102,14 @@ class MonthlyInvoicingCalendar extends React.Component {
         const {selectedMonth, selectedYear} = this.state;
 
         return (
-            <form className="form-inline d-flex justify-content-between m-3">
+            <form className="form-inline d-flex justify-content-between m-1">
                 <button
                     type="button"
-                    className="btn btn-secondary mr-3"
+                    className="btn mr-1"
                     onClick={this.handleMonthChangePrevious}
                     disabled={this.isPreviousButtonDisabled()}
                 >
-                    &laquo; Mes anterior
+                    &laquo;
                 </button>
                 <div className="row">
                     <select
@@ -120,7 +120,6 @@ class MonthlyInvoicingCalendar extends React.Component {
                     >
                         {this.monthOptions}
                     </select>
-                    <label className="">&nbsp;de&nbsp;</label>
                     <select
                         className="custom-select"
                         id="inlineFormCustomSelectPref"
@@ -132,11 +131,11 @@ class MonthlyInvoicingCalendar extends React.Component {
                 </div>
                 <button
                     type="button"
-                    className="btn btn-secondary ml-3"
+                    className="btn ml-1"
                     onClick={this.handleMonthChangeNext}
                     disabled={this.isNextButtonDisabled()}
                 >
-                    Mes Siguiente &raquo;
+                    &raquo;
                 </button>
             </form>
         );

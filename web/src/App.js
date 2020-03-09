@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import NavBar from "./components/navbar/NavBar";
 
-import {ListMonthlyInvoicing} from "components/monthlyinvoicing/container";
+import {ViewMemberMonthInfo} from "components/monthlyinvoicing/container";
 import {
     EditMember,
     CreateMember,
@@ -99,7 +99,7 @@ function MainContent(props) {
                     exact
                     path="/"
                     render={props => (
-                        <ListMonthlyInvoicing {...props} database={database} />
+                        <ViewMemberMonthInfo {...props} database={database} />
                     )}
                 />
             </Switch>

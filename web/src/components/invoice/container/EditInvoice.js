@@ -89,7 +89,6 @@ class EditInvoice extends React.Component {
                         errors={this.state.errors}
                         handleChange={this.handleChange}
                         handleSubmit={this.handleSubmit}
-                        handleBack={this.handleBack}
                     />
                 </div>
             );

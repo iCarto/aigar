@@ -56,6 +56,7 @@ class MonthlyInvoicingTable extends React.Component {
                 </table>
             );
         }
+        return null;
     }
 }
 

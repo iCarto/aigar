@@ -53,10 +53,6 @@ class InvoiceForm extends React.Component {
         return formData;
     }
 
-    getOutputFilename() {
-        return "recibo_" + this.props.numero;
-    }
-
     render() {
         // These fields are not stored in state because the component doesn't modify them.
         // They are always modified at the high order component and this component only render their values.
@@ -247,19 +243,7 @@ class InvoiceForm extends React.Component {
                         <div className="invalid-feedback d-block">{total.errors}</div>
                     </div>
                 </div>
-                <div className="col-md-12 mt-4 d-flex justify-content-between">
-                    <button
-                        type="button"
-                        className="btn"
-                        onClick={this.props.handleBack}
-                    >
-                        Cancelar
-                    </button>
-                    <InvoicePrintButton
-                        invoices={[this.props.invoice]}
-                        buttonTitle="Impresión del recibo"
-                        outputFilename={this.getOutputFilename()}
-                    />
+                <div className="col-md-12 mt-4 d-flex justify-content-center">
                     <button type="submit" className="btn btn-primary">
                         <i className="fas fa-print mr-2" />
                         Salvar

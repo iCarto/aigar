@@ -1,6 +1,7 @@
 import React from "react";
 import {Spinner} from "components/common";
 import {DocXPrintFileService, FileService} from "service/file";
+import {InvoiceService} from "service/api";
 
 class InvoicePrintButton extends React.Component {
     constructor(props) {
@@ -18,9 +19,14 @@ class InvoicePrintButton extends React.Component {
                 loading: true,
             },
             async () => {
+                console.log(this.props.invoices);
                 try {
+                    const invoices = await InvoiceService.getInvoices({
+                        num_factura_list: this.props.invoices,
+                    });
+                    console.log(invoices);
                     const data = {
-                        invoices: this.props.invoices,
+                        invoices,
                     };
                     const invoicesDocument = await DocXPrintFileService.generateInvoicesDocument(
                         data,

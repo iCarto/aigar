@@ -44,15 +44,6 @@ class ViewMember extends React.Component {
         }
     }
 
-    loadMember(num_socio) {
-        if (num_socio) {
-            MemberService.getMember(num_socio).then(member => {
-                console.log("member", member);
-                this.setState({member});
-            });
-        }
-    }
-
     handleBack() {
         this.props.handleBack
             ? this.props.handleBack()

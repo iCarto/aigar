@@ -31,6 +31,11 @@ const InvoiceService = {
                         filtered =
                             filtered && invoice.sector === parseInt(filter.sector);
                     }
+                    if (filter.num_factura_list != null) {
+                        filtered =
+                            filtered &&
+                            filter.num_factura_list.includes(invoice.numero);
+                    }
                 }
                 return filtered;
             });

@@ -22,6 +22,7 @@ env = environ.Env(  # set default values and casting
     DEBUG=(bool, False),
     DEPLOYMENT=(str, "prod"),
     SECRET_KEY=(str, "h4@c1x9okapu5^#iurp21i(vn14s5c#1lqx!$k-#^v%rd#rn!b"),
+    HTTPS=(str, "off"),
 )
 
 # Build paths inside the project like this: base('desired/local/path')
@@ -49,7 +50,11 @@ SECRET_KEY = env("SECRET_KEY")  # default used if not in os.environ
 DEBUG = env("DEBUG")  # False if not in os.environ
 
 # Allow all host headers
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+CSRF_COOKIE_SECURE = env("HTTPS") == "on"
+SESSION_COOKIE_SECURE = env("HTTPS") == "on"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS") == "on"
 
 # Application definition
 
@@ -156,6 +161,28 @@ REST_FRAMEWORK = {
     ]
 }
 
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": (
+#         "rest_framework.authentication.SessionAuthentication",
+#         "rest_framework.authentication.BasicAuthentication",
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+#     ),
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.IsAuthenticated",
+#         "rest_framework.permissions.DjangoModelPermissions",
+#     ],
+#     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+# }
+
+
+# from datetime import timedelta
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
+#     "USER_ID_FIELD": "username",
+#     "USER_ID_CLAIM": "username",
+# }
+
+
 # Django debug toolbar
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -171,3 +198,5 @@ CORS_ORIGIN_WHITELIST = (
 # CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = "users.User"
+# LOGIN_URL = "/login/"
+# LOGIN_REDIRECT_URL = "/"

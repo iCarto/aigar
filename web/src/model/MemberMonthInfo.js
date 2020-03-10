@@ -32,7 +32,6 @@ const createMemberMonthInfo = ({
         tipo_socio,
         lectura,
         importe,
-        importe,
         estado,
         resumen_3_meses,
     };

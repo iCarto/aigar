@@ -15,6 +15,7 @@
         "react-dom": "^16.12.0",
         "react-router-dom": "5.1.2",
         "react-scripts": "3.3.0",
+        "react-table": "^7.0.0-rc.16",
         "storyboard": "^3.1.4",
         "storyboard-listener-console": "^3.1.4"
     },

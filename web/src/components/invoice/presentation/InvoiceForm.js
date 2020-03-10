@@ -1,5 +1,4 @@
 import React from "react";
-import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
 
 /**
 Controlled component for invoice form.
@@ -58,7 +57,6 @@ class InvoiceForm extends React.Component {
         // They are always modified at the high order component and this component only render their values.
         const {
             numero,
-            nombre,
             consumo,
             caudal_actual,
             caudal_anterior,

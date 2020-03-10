@@ -24,6 +24,7 @@ class MonthlyInvoicingFilter extends React.Component {
                         type="text"
                         className="form-control"
                         name="nombre"
+                        value={this.props.filter.nombre}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -32,6 +33,7 @@ class MonthlyInvoicingFilter extends React.Component {
                     <select
                         className="form-control"
                         name="sector"
+                        value={this.props.filter.sector}
                         onChange={this.handleChange}
                     >
                         <option></option>
@@ -47,6 +49,7 @@ class MonthlyInvoicingFilter extends React.Component {
                     <select
                         className="form-control"
                         name="tipo_socio"
+                        value={this.props.filter.tipo_socio}
                         onChange={this.handleChange}
                     >
                         <option></option>
@@ -62,6 +65,7 @@ class MonthlyInvoicingFilter extends React.Component {
                     <select
                         className="form-control"
                         name="estado"
+                        value={this.props.filter.estado}
                         onChange={this.handleChange}
                     >
                         <option></option>

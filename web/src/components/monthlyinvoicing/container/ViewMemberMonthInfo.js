@@ -14,10 +14,20 @@ class ViewMemberMonthInfo extends React.Component {
         super(props);
         this.state = {
             membersMonthInfo: null,
+            tablePageIndex: 0,
+            filter: {
+                month: moment().month(),
+                year: moment().year(),
+                nombre: "",
+                sector: 0,
+                tipo_socio: 0,
+                estado: 0,
+            },
             selectedInvoice: null,
             selectedMember: null,
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
         this.handleSelectInvoice = this.handleSelectInvoice.bind(this);
         this.handleSelectMember = this.handleSelectMember.bind(this);
         this.handleBackFromInvoice = this.handleBackFromInvoice.bind(this);
@@ -25,39 +35,34 @@ class ViewMemberMonthInfo extends React.Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadDataWithStateFilter();
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.membersMonthInfo === null) {
-            this.loadData();
+            this.loadDataWithStateFilter();
         }
     }
 
-    loadData(filter = null) {
-        if (!filter) {
-            filter = {};
-            filter.month = moment().month();
-            filter.year = moment().year();
-        }
-        MemberService.getMembersMonthInfo(filter).then(membersMonthInfo => {
+    loadDataWithStateFilter() {
+        MemberService.getMembersMonthInfo(this.state.filter).then(membersMonthInfo => {
             console.log("membersMonthInfo", membersMonthInfo);
             this.setState({membersMonthInfo: membersMonthInfo});
         });
     }
 
-    getOutputFilename() {
-        return (
-            "recibo_" +
-            this.state.invoiceYear +
-            "_" +
-            this.state.invoiceMonth +
-            "_todos"
+    handleFilterChange(newFilter) {
+        this.setState(
+            {filter: Object.assign(this.state.filter, newFilter), tablePageIndex: 0},
+            () => {
+                this.loadDataWithStateFilter();
+            }
         );
     }
 
-    handleFilterChange(filter) {
-        this.loadData(filter);
+    handleChangePageIndex(tablePageIndex) {
+        console.log("handleChangePageIndex", {tablePageIndex});
+        this.setState({tablePageIndex});
     }
 
     handleSelectInvoice(numero) {
@@ -102,6 +107,7 @@ class ViewMemberMonthInfo extends React.Component {
         }
         return (
             <ViewMemberMonthInfoListSidebar
+                filter={this.state.filter}
                 membersMonthInfo={this.state.membersMonthInfo}
                 handleFilterChange={this.handleFilterChange}
             />
@@ -130,6 +136,8 @@ class ViewMemberMonthInfo extends React.Component {
         return (
             <MonthlyInvoicingTable
                 membersMonthInfo={this.state.membersMonthInfo}
+                selectedPageIndex={this.state.tablePageIndex}
+                handleChangePageIndex={this.handleChangePageIndex}
                 handleSelectInvoice={this.handleSelectInvoice}
                 handleSelectMember={this.handleSelectMember}
             />

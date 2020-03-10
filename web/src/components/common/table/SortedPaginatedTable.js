@@ -1,8 +1,13 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useTable, useSortBy, usePagination} from "react-table";
 import PaginatedTableNavigator from "./PaginatedTableNavigator";
 
-const SortedPaginatedTable = ({columns, data, initialPage}) => {
+const SortedPaginatedTable = ({
+    columns,
+    data,
+    selectedPageIndex,
+    handleChangePageIndex,
+}) => {
     const {
         getTableProps,
         getTableBodyProps,
@@ -23,12 +28,17 @@ const SortedPaginatedTable = ({columns, data, initialPage}) => {
             data,
             initialState: {
                 pageSize: 10,
-                pageIndex: initialPage || 0,
+                pageIndex: selectedPageIndex,
             },
         },
         useSortBy,
         usePagination
     );
+
+    // Listening for changes in pagination and lifting up them
+    useEffect(() => {
+        handleChangePageIndex(pageIndex);
+    }, [pageIndex, handleChangePageIndex]);
 
     return (
         <>

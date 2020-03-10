@@ -59,6 +59,8 @@ class MonthlyInvoicingTable extends React.Component {
                 <SortedPaginatedTable
                     columns={columns}
                     data={this.props.membersMonthInfo}
+                    selectedPageIndex={this.props.selectedPageIndex}
+                    handleChangePageIndex={this.props.handleChangePageIndex}
                 />
             );
         }

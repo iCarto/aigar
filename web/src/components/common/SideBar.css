@@ -21,6 +21,15 @@
     top: 0;
 }
 
+.sidebar-group {
+    border: 1px solid #bbb;
+    padding: 10px;
+}
+
+.sidebar-group label {
+    font-weight: bold;
+}
+
 @supports ((position: -webkit-sticky) or (position: sticky)) {
     .sidebar-sticky {
         position: -webkit-sticky;

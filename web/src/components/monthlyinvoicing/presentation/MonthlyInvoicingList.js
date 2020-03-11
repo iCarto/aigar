@@ -1,7 +1,7 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
 
-class MonthlyInvoicingTable extends React.Component {
+class MonthlyInvoicingList extends React.Component {
     render() {
         if (this.props.membersMonthInfo) {
             const columns = [
@@ -68,4 +68,4 @@ class MonthlyInvoicingTable extends React.Component {
     }
 }
 
-export default MonthlyInvoicingTable;
+export default MonthlyInvoicingList;

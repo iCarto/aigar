@@ -6,27 +6,16 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            selectedMonth: null,
-            selectedYear: null,
-        };
         this.handleMonthChangePrevious = this.handleMonthChangePrevious.bind(this);
         this.handleMonthChangeNext = this.handleMonthChangeNext.bind(this);
         this.handleMonthSelected = this.handleMonthSelected.bind(this);
         this.handleYearSelected = this.handleYearSelected.bind(this);
     }
 
-    static getDerivedStateFromProps(props, prevState) {
-        return {
-            selectedMonth: props.month,
-            selectedYear: props.year,
-        };
-    }
-
     handleMonthChangePrevious() {
         const selectedDate = moment()
-            .year(this.state.selectedYear)
-            .month(this.state.selectedMonth)
+            .year(this.props.year)
+            .month(this.props.month)
             .date(1)
             .add(-1, "month");
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -34,8 +23,8 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     handleMonthChangeNext() {
         const selectedDate = moment()
-            .year(this.state.selectedYear)
-            .month(this.state.selectedMonth)
+            .year(this.props.year)
+            .month(this.props.month)
             .date(1)
             .add(1, "month");
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -43,7 +32,7 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     handleMonthSelected(event) {
         const selectedDate = moment()
-            .year(this.state.selectedYear)
+            .year(this.props.year)
             .month(event.target.value)
             .date(1);
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -52,7 +41,7 @@ class MonthlyInvoicingCalendar extends React.Component {
     handleYearSelected(event) {
         const selectedDate = moment()
             .year(event.target.value)
-            .month(this.state.selectedMonth)
+            .month(this.props.month)
             .date(1);
         this.props.handleChange(selectedDate.year(), selectedDate.month());
     }
@@ -60,19 +49,13 @@ class MonthlyInvoicingCalendar extends React.Component {
     isPreviousButtonDisabled() {
         const firstMonth = 0;
         const firstYear = this.FIRST_YEAR;
-        return (
-            firstMonth === this.state.selectedMonth &&
-            firstYear === this.state.selectedYear
-        );
+        return firstMonth === this.props.month && firstYear === this.props.year;
     }
 
     isNextButtonDisabled() {
         const currentMonth = moment().month();
         const currentYear = moment().year();
-        return (
-            currentMonth === this.state.selectedMonth &&
-            currentYear === this.state.selectedYear
-        );
+        return currentMonth === this.props.month && currentYear === this.props.year;
     }
 
     get monthOptions() {
@@ -99,45 +82,48 @@ class MonthlyInvoicingCalendar extends React.Component {
     }
 
     render() {
-        const {selectedMonth, selectedYear} = this.state;
+        const {month, year} = this.props;
 
         return (
-            <form className="form-inline d-flex justify-content-between m-1">
-                <button
-                    type="button"
-                    className="btn mr-1"
-                    onClick={this.handleMonthChangePrevious}
-                    disabled={this.isPreviousButtonDisabled()}
-                >
-                    &laquo;
-                </button>
-                <div className="row">
-                    <select
-                        className="custom-select"
-                        id="inlineFormCustomSelectPref"
-                        value={selectedMonth}
-                        onChange={this.handleMonthSelected}
+            <div className="text-center">
+                <h4 className="mb-3">Hoy es: {moment().format("DD/MM/YYYY")}</h4>
+                <form className="form-inline d-flex justify-content-between m-1">
+                    <button
+                        type="button"
+                        className="btn mr-1"
+                        onClick={this.handleMonthChangePrevious}
+                        disabled={this.isPreviousButtonDisabled()}
                     >
-                        {this.monthOptions}
-                    </select>
-                    <select
-                        className="custom-select"
-                        id="inlineFormCustomSelectPref"
-                        value={selectedYear}
-                        onChange={this.handleYearSelected}
+                        &laquo;
+                    </button>
+                    <div className="row">
+                        <select
+                            className="custom-select"
+                            id="inlineFormCustomSelectPref"
+                            value={month}
+                            onChange={this.handleMonthSelected}
+                        >
+                            {this.monthOptions}
+                        </select>
+                        <select
+                            className="custom-select"
+                            id="inlineFormCustomSelectPref"
+                            value={year}
+                            onChange={this.handleYearSelected}
+                        >
+                            {this.yearOptions}
+                        </select>
+                    </div>
+                    <button
+                        type="button"
+                        className="btn ml-1"
+                        onClick={this.handleMonthChangeNext}
+                        disabled={this.isNextButtonDisabled()}
                     >
-                        {this.yearOptions}
-                    </select>
-                </div>
-                <button
-                    type="button"
-                    className="btn ml-1"
-                    onClick={this.handleMonthChangeNext}
-                    disabled={this.isNextButtonDisabled()}
-                >
-                    &raquo;
-                </button>
-            </form>
+                        &raquo;
+                    </button>
+                </form>
+            </div>
         );
     }
 }

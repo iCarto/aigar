@@ -27,7 +27,7 @@ const SortedPaginatedTable = ({
             columns,
             data,
             initialState: {
-                pageSize: 10,
+                pageSize: 15,
                 pageIndex: selectedPageIndex,
             },
         },

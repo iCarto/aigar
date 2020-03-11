@@ -2,14 +2,14 @@ import React from "react";
 import {MemberService} from "service/api";
 import "components/common/SideBar.css";
 import moment from "moment";
+import {MonthlyInvoicingList} from "../presentation";
 import {EditInvoice} from "components/invoice/container";
 import {ViewMember} from "components/member/container";
-import ViewMemberMonthInfoListSidebar from "./ViewMemberMonthInfoListSidebar";
-import {MonthlyInvoicingTable} from "../presentation";
+import ViewMemberMonthInfoListSidebar from "./ViewMonthlyInvoicingSidebar";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import ViewMemberSidebar from "./ViewMemberSidebar";
 
-class ViewMemberMonthInfo extends React.Component {
+class ViewMonthlyInvoicing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -134,7 +134,7 @@ class ViewMemberMonthInfo extends React.Component {
             );
         }
         return (
-            <MonthlyInvoicingTable
+            <MonthlyInvoicingList
                 membersMonthInfo={this.state.membersMonthInfo}
                 selectedPageIndex={this.state.tablePageIndex}
                 handleChangePageIndex={this.handleChangePageIndex}
@@ -160,4 +160,4 @@ class ViewMemberMonthInfo extends React.Component {
     }
 }
 
-export default ViewMemberMonthInfo;
+export default ViewMonthlyInvoicing;

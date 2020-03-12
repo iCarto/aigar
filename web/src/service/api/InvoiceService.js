@@ -1,52 +1,47 @@
-import DatabaseFixture from "fixtures/database.json";
-import {createInvoices, invoices_api_adapter} from "model";
+import {
+    createInvoice,
+    invoice_api_adapter,
+    createInvoices,
+    invoices_api_adapter,
+} from "model";
+import ApiService from "./ApiService";
 
 const InvoiceService = {
-    getInvoices(filter) {
-        console.log({filter});
-        return Promise.resolve(DatabaseFixture).then(d => {
-            const invoices = createInvoices(invoices_api_adapter(d["invoices"]));
-            return invoices.filter(invoice => {
-                var filtered = true;
-                if (filter) {
-                    if (filter.year) {
-                        filtered = invoice.anho === filter.year;
-                    }
-                    if (filter.month != null) {
-                        filtered =
-                            filtered && invoice.mes_facturado === filter.month + 1;
-                    }
-                    if (filter.numero != null) {
-                        filtered =
-                            filtered && invoice.numero.indexOf(filter.numero) >= 0;
-                    }
-                    if (filter.num_socio) {
-                        filtered = parseInt(invoice.numero_socio) === filter.num_socio;
-                    }
-                    if (filter.nombre != null) {
-                        filtered =
-                            filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
-                    }
-                    if (filter.sector != null) {
-                        filtered =
-                            filtered && invoice.sector === parseInt(filter.sector);
-                    }
-                    if (filter.num_factura_list != null) {
-                        filtered =
-                            filtered &&
-                            filter.num_factura_list.includes(invoice.numero);
-                    }
-                }
-                return filtered;
-            });
+    getInvoices() {
+        return ApiService.get("/invoices").then(response => {
+            return createInvoices(invoices_api_adapter(response));
         });
     },
-    getInvoice(num_factura) {
-        return Promise.resolve(DatabaseFixture).then(d => {
-            let invoices = invoices_api_adapter(d["invoices"]);
-            invoices = createInvoices(invoices);
-            return invoices.getInvoice(num_factura);
+
+    getInvoicesForMember(num_socio) {
+        return ApiService.get("/invoices/?num_socio=" + num_socio).then(response => {
+            return createInvoices(invoices_api_adapter(response));
         });
+    },
+
+    getInvoice(id_factura) {
+        // always cast numero_socio to int
+        id_factura = parseInt(id_factura);
+        return ApiService.get("/invoices/" + id_factura + "/").then(response => {
+            let invoice = invoice_api_adapter(response);
+            return createInvoice(invoice);
+        });
+    },
+
+    createInvoice(invoice) {
+        return ApiService.post("/invoices/", invoice).then(response => {
+            let invoice = invoice_api_adapter(response);
+            return createInvoice(invoice);
+        });
+    },
+
+    updateInvoice(invoice) {
+        return ApiService.put("/invoices/" + invoice.num_socio + "/", invoice).then(
+            response => {
+                let invoice = invoice_api_adapter(response);
+                return createInvoice(invoice);
+            }
+        );
     },
 };
 

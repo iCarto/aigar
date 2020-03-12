@@ -5,7 +5,7 @@ class BackToMonthInfo extends React.Component {
         return (
             <button onClick={this.props.handleBack} className="btn btn-secondary">
                 <i className="fas fa-arrow-circle-left mr-2" />
-                Volver al listado
+                Volver
             </button>
         );
     }

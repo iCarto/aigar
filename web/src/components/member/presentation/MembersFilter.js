@@ -12,7 +12,7 @@ class MembersFilter extends React.Component {
             event.target.type === "checkbox"
                 ? event.target.checked
                 : event.target.value;
-        this.props.handleChange(name, value);
+        this.props.handleChange({[name]: value});
     }
 
     render() {
@@ -24,6 +24,7 @@ class MembersFilter extends React.Component {
                         type="text"
                         className="form-control"
                         name="name"
+                        value={this.props.filter.name}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -32,6 +33,7 @@ class MembersFilter extends React.Component {
                     <select
                         className="form-control"
                         name="sector"
+                        value={this.props.filter.sector}
                         onChange={this.handleChange}
                     >
                         <option></option>

@@ -4,6 +4,7 @@ import {MemberForm} from "components/member/presentation";
 import {createMember} from "model";
 import {MemberService} from "service/api";
 import {DataValidatorService} from "service/validation";
+import EditMemberSidebar from "./EditMemberSidebar";
 
 class EditMember extends React.Component {
     constructor(props) {
@@ -67,30 +68,58 @@ class EditMember extends React.Component {
 
     handleSubmit() {
         console.log("EditMember.handleSubmit", this.state);
-        this.props.history.push("/socios/" + this.props.match.params.num_socio);
+        MemberService.updateMember(this.state.member).then(updatedMember => {
+            this.props.handleSubmit(updatedMember);
+        });
+
+        //this.props.history.push("/socios/" + this.props.match.params.num_socio);
     }
 
     handleBack() {
-        this.props.handleBack
-            ? this.props.handleBack()
-            : this.props.history.push("/socios");
+        console.log("EditMember.handleBack");
+        if (this.props.handleBack) {
+            this.props.handleBack();
+        } else {
+            this.props.history.push("/socios/" + this.state.member.num_socio);
+        }
+    }
+
+    get sidebar() {
+        return <EditMemberSidebar handleBack={this.handleBack} />;
+    }
+
+    get content() {
+        return (
+            <MemberForm
+                member={this.state.member}
+                errors={this.state.errors}
+                handleChange={this.handleChange}
+                handleSubmit={this.handleSubmit}
+                handleBack={this.handleBack}
+            />
+        );
     }
 
     render() {
         if (this.state.member) {
             return (
-                <div className="container">
-                    <MemberForm
-                        member={this.state.member}
-                        errors={this.state.errors}
-                        handleChange={this.handleChange}
-                        handleSubmit={this.handleSubmit}
-                        handleBack={this.handleBack}
-                    />
+                <div className="h-100">
+                    <div className="row h-100">
+                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                            {this.sidebar}
+                        </nav>
+                        <div className="col-md-10 offset-md-2">
+                            <div className="container">{this.content}</div>
+                        </div>
+                    </div>
                 </div>
             );
         } else {
-            return <Spinner message="Cargando datos" />;
+            return (
+                <div className="h-100 text-center">
+                    <Spinner message="Cargando datos" />
+                </div>
+            );
         }
     }
 }

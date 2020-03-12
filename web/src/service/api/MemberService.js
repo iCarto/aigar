@@ -1,33 +1,44 @@
 import DatabaseFixture from "fixtures/database.json";
-import {createMembers, members_api_adapter, createMemberMonthInfo} from "model";
-import InvoiceService from "./InvoiceService";
+import {
+    createMember,
+    member_api_adapter,
+    createMembers,
+    members_api_adapter,
+    createMemberMonthInfo,
+} from "model";
+import InvoiceServiceOld from "./InvoiceService_old";
+import ApiService from "./ApiService";
 
 const MemberService = {
-    getMembers(filter) {
-        return Promise.resolve(DatabaseFixture).then(d => {
-            const members = createMembers(members_api_adapter(d["members"]));
-            return members.filter(member => {
-                var filtered = true;
-                if (filter) {
-                    if (filter.name) {
-                        filtered = member.name.indexOf(filter.name) >= 0;
-                    }
-                    if (filter.sector) {
-                        filtered = member.sector === parseInt(filter.sector);
-                    }
-                }
-                return filtered;
-            });
+    getMembers() {
+        return ApiService.get("/members").then(response => {
+            return createMembers(members_api_adapter(response));
         });
     },
-    getMember(numero_socio) {
+
+    getMember(num_socio) {
         // always cast numero_socio to int
-        numero_socio = parseInt(numero_socio);
-        return Promise.resolve(DatabaseFixture).then(d => {
-            let members = members_api_adapter(d["members"]);
-            members = createMembers(members);
-            return members.getSocio(numero_socio);
+        num_socio = parseInt(num_socio);
+        return ApiService.get("/members/" + num_socio + "/").then(response => {
+            let member = member_api_adapter(response);
+            return createMember(member);
         });
+    },
+
+    createMember(member) {
+        return ApiService.post("/members/", member).then(response => {
+            let member = member_api_adapter(response);
+            return createMember(member);
+        });
+    },
+
+    updateMember(member) {
+        return ApiService.put("/members/" + member.num_socio + "/", member).then(
+            response => {
+                let member = member_api_adapter(response);
+                return createMember(member);
+            }
+        );
     },
 
     getMembersMonthInfo(filter) {
@@ -35,7 +46,7 @@ const MemberService = {
         const membersPromise = Promise.resolve(DatabaseFixture).then(d => {
             return createMembers(members_api_adapter(d["members"]));
         });
-        const invoicesPromise = InvoiceService.getInvoices({
+        const invoicesPromise = InvoiceServiceOld.getInvoices({
             year: filter.year,
             month: filter.month,
         });

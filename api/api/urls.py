@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from api.views.invoice import InvoiceViewSet
 from api.views.member import MemberViewSet
 from rest_framework import routers
 
@@ -27,6 +28,7 @@ admin.autodiscover()
 
 router = routers.DefaultRouter()
 router.register(r"members", MemberViewSet)
+router.register(r"invoices", InvoiceViewSet, basename="invoice")
 
 
 urlpatterns = [

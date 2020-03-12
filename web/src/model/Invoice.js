@@ -37,27 +37,22 @@ const invoice_api_adapter = m => {
     m["mes_facturado"] = Number(m["mes_facturado"]);
     m["mes_limite"] = Number(m["mes_limite"]);
     m["mora"] = Number(m["mora"]) || 0;
-    m["nombre"] = m["nombre"];
-    m["numero_socio"] = m["numero_socio"];
-    m["observaciones"] = m["observaciones"];
     m["pago_11_al_30"] = Number(m["pago_11_al_30"]) || 0;
     m["pago_1_al_11"] = Number(m["pago_1_al_11"]) || 0;
     m["reconexion"] = Number(m["reconexion"]) || 0;
     m["saldo_anterior"] = Number(m["saldo_anterior"]) || 0;
     m["saldo_pendiente"] = Number(m["saldo_pendiente"]) || 0;
-    m["sector"] = m["sector"];
     m["total"] = Number(m["total"]) || 0;
     m["traspaso"] = Number(m["traspaso"]) || 0;
     return m;
 };
 
 const invoices_api_adapter = invoices => {
-    let result = [];
+    /*let result = [];
     Object.keys(invoices).forEach(year => {
         Object.keys(invoices[year]).forEach(month => {
             let monthInvoices = invoices[year][month].map(invoice => {
                 invoice = invoice_api_adapter(invoice);
-                invoice.anho = parseInt(year);
                 invoice.numero =
                     invoice.numero_socio.toString() +
                     invoice.anho.toString() +
@@ -68,7 +63,16 @@ const invoices_api_adapter = invoices => {
             result.push(...monthInvoices);
         });
     });
-    return result;
+    return result;*/
+    return invoices.map(invoice => {
+        invoice = invoice_api_adapter(invoice);
+        invoice.numero =
+            invoice.num_socio.toString() +
+            invoice.anho.toString() +
+            invoice.mes_facturado.toString() +
+            "01";
+        return invoice;
+    });
 };
 
 const createInvoices = (data = []) => {
@@ -148,4 +152,9 @@ const createInvoice = ({
     return Object.freeze(publicApi);
 };
 
-export {createInvoice as default, createInvoices, invoices_api_adapter};
+export {
+    createInvoice as default,
+    invoice_api_adapter,
+    createInvoices,
+    invoices_api_adapter,
+};

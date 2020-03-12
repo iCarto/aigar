@@ -1,5 +1,4 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
 class MemberDetail extends React.Component {
     render() {
@@ -38,16 +37,6 @@ class MemberDetail extends React.Component {
                         <div className="p-3">
                             <label className="p-1">Orden:</label>
                             <span className="p-1">{orden}</span>
-                        </div>
-                        <div className="p-3">
-                            <Link to={"/socios/" + num_socio + "/modificar"}>
-                                <button
-                                    className="btn btn-primary center"
-                                    type="button"
-                                >
-                                    Cambiar datos <i className="fas fa-edit"></i>
-                                </button>
-                            </Link>
                         </div>
                     </div>
                     <div className="col-6">

@@ -1,12 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
 class MemberNewButton extends React.Component {
     render() {
         return (
-            <Link to="/socios/nuevo" className="btn btn-primary">
-                Nuevo Socio
-            </Link>
+            <button
+                onClick={this.props.handleClickCreateMember}
+                className="btn btn-primary"
+            >
+                <i className="fas fa-plus" /> Nuevo Socio
+            </button>
         );
     }
 }

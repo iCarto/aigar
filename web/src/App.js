@@ -8,7 +8,7 @@ import {
     EditMember,
     CreateMember,
     ViewMember,
-    ListMembers,
+    ManageMembers,
 } from "./components/member/container";
 import {ListInvoices, EditInvoice} from "components/invoice/container";
 
@@ -83,10 +83,7 @@ function MainContent(props) {
                     path="/socios/:num_socio"
                     render={props => <ViewMember {...props} database={database} />}
                 />
-                <Route
-                    path="/socios"
-                    render={props => <ListMembers {...props} database={database} />}
-                />
+                <Route path="/socios" render={props => <ManageMembers {...props} />} />
                 <Route
                     path="/facturas/:num_factura/modificar"
                     render={props => <EditInvoice {...props} database={database} />}

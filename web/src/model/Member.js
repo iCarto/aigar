@@ -43,25 +43,11 @@ const dataFromMyRESTAPI = [
 
 */
 
-class Members extends Array {
-    getSocio(num_socio) {
-        const members = this.filter(m => m["num_socio"] === num_socio);
-        if (members.length === 1) {
-            return members[0];
-        }
-        throw new Error("No hay socios con ese número");
-    }
-}
+class Members extends Array {}
 
 const member_api_adapter = m => {
-    m["num_socio"] = parseInt(m["numero_socio"]);
-    m["name"] = m["nombre"];
-    m["observaciones"] = `${m["observaciones_1"] || ""} ${m["observaciones_2"] ||
-        ""}`.trim();
     m["solo_mecha"] = m["medidor"] === "M" ? true : false;
     m["medidor"] = m["medidor"] === "M" ? -1 : m["medidor"];
-    m["orden"] = m["ruta"] ? m["ruta"] : -1;
-    // delete m["numero_socio"];
     return m;
 };
 
@@ -138,4 +124,9 @@ const createMember = ({
     return Object.freeze(publicApi);
 };
 
-export {createMember as default, createMembers, members_api_adapter};
+export {
+    createMember as default,
+    createMembers,
+    member_api_adapter,
+    members_api_adapter,
+};

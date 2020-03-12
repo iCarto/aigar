@@ -32,6 +32,47 @@ def create_django_fixtures(database):
             },
         }
         fixtures.append(fixture_member)
+    i = 10
+    for year, year_invoices in database["invoices"].items():
+        for month, month_invoices in year_invoices.items():
+            for invoice in month_invoices:
+                fixture_invoice = {
+                    "model": "api.Invoice",
+                    "pk": None,
+                    "fields": {
+                        "anho": int(year),
+                        "num_socio": int(invoice["num_socio"]),
+                        "nombre": invoice["nombre"],
+                        "sector": int(invoice["sector"]),
+                        "ahorro": float(invoice.get("ahorro", 0) or 0),
+                        "asamblea": float(invoice.get("asamblea", 0) or 0),
+                        "caudal_actual": int(invoice.get("caudal_actual", 0) or 0),
+                        "caudal_anterior": int(invoice.get("caudal_anterior", 0) or 0),
+                        "comision": float(invoice.get("comision", 0) or 0),
+                        # "comprobar_pago_11_al_30": float(m["comprobar_pago_11_al_30", 0)),
+                        # "comprobar_pago_1_al_11": float(m["comprobar_pago_1_al_11", 0)),
+                        "consumo": int(invoice.get("consumo", 0) or 0),
+                        "cuota_fija": float(invoice.get("cuota_fija", 0) or 0),
+                        "cuota_variable": float(invoice.get("cuota_variable", 0) or 0),
+                        "derecho": float(invoice.get("derecho", 0) or 0),
+                        "entrega": True if invoice.get("entrega") == "Si" else False,
+                        "mes_facturado": int(invoice.get("mes_facturado") or 0),
+                        "mes_limite": int(invoice.get("mes_limite") or 0),
+                        "mora": float(invoice.get("mora", 0) or 0),
+                        "pago_11_al_30": float(invoice.get("pago_11_al_30", 0) or 0),
+                        "pago_1_al_11": float(invoice.get("pago_1_al_11", 0) or 0),
+                        "reconexion": float(invoice.get("reconexion", 0) or 0),
+                        "saldo_anterior": float(invoice.get("saldo_anterior", 0) or 0),
+                        "saldo_pendiente": float(
+                            invoice.get("saldo_pendiente", 0) or 0
+                        ),
+                        "total": float(invoice.get("total", 0) or 0),
+                        "traspaso": float(invoice.get("traspaso", 0) or 0),
+                        "observaciones": invoice.get("observaciones"),
+                    },
+                }
+                fixtures.append(fixture_invoice)
+                i += 1
     print(json.dumps(fixtures))
 
 

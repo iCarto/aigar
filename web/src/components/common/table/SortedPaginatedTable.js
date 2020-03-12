@@ -28,21 +28,24 @@ const SortedPaginatedTable = ({
             data,
             initialState: {
                 pageSize: 15,
-                pageIndex: selectedPageIndex,
+                pageIndex: selectedPageIndex || 0,
             },
         },
         useSortBy,
         usePagination
     );
+    console.log("SortedPaginatedTable.render", {selectedPageIndex});
 
     // Listening for changes in pagination and lifting up them
     useEffect(() => {
-        handleChangePageIndex(pageIndex);
+        if (handleChangePageIndex) {
+            handleChangePageIndex(pageIndex);
+        }
     }, [pageIndex, handleChangePageIndex]);
 
     return (
         <>
-            <table {...getTableProps()} className="table table-bordered">
+            <table {...getTableProps()} className="table table-bordered table-hover">
                 <thead className="thead-dark">
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>

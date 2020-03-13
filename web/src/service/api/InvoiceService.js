@@ -36,7 +36,7 @@ const InvoiceService = {
     },
 
     updateInvoice(invoice) {
-        return ApiService.put("/invoices/" + invoice.num_socio + "/", invoice).then(
+        return ApiService.put("/invoices/" + invoice.id_factura + "/", invoice).then(
             response => {
                 let invoice = invoice_api_adapter(response);
                 return createInvoice(invoice);

@@ -12,7 +12,7 @@ class InvoicesFilter extends React.Component {
             event.target.type === "checkbox"
                 ? event.target.checked
                 : event.target.value;
-        this.props.handleChange(name, value);
+        this.props.handleChange({[name]: value});
     }
 
     render() {
@@ -24,6 +24,7 @@ class InvoicesFilter extends React.Component {
                         type="text"
                         className="form-control"
                         name="numero"
+                        value={this.props.filter.numero}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -33,6 +34,7 @@ class InvoicesFilter extends React.Component {
                         type="text"
                         className="form-control"
                         name="nombre"
+                        value={this.props.filter.nombre}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -41,6 +43,7 @@ class InvoicesFilter extends React.Component {
                     <select
                         className="form-control"
                         name="sector"
+                        value={this.props.filter.sector}
                         onChange={this.handleChange}
                     >
                         <option></option>

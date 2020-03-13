@@ -5,6 +5,7 @@ const LinkCellTable = ({row, column, cell}) => (
         type="button"
         className="link-button text-primary"
         onClick={() => {
+            console.log(row.original);
             column.getProps().handleClick(row.original[column.getProps().linkAccessor]);
         }}
     >

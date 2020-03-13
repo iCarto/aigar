@@ -1,6 +1,6 @@
 import React from "react";
 
-class BackToMonthInfo extends React.Component {
+class BackButton extends React.Component {
     render() {
         return (
             <button onClick={this.props.handleBack} className="btn btn-secondary">
@@ -11,4 +11,4 @@ class BackToMonthInfo extends React.Component {
     }
 }
 
-export default BackToMonthInfo;
+export default BackButton;

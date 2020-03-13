@@ -1,6 +1,6 @@
 import React from "react";
 import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
-import BackToMonthInfo from "components/common/invoicing/BackToMonthInfo";
+import {BackButton} from "components/common";
 
 class ViewInvoiceSidebar extends React.Component {
     getOutputFilename() {
@@ -13,7 +13,7 @@ class ViewInvoiceSidebar extends React.Component {
                 <div className="sidebar-group">
                     <div className="d-flex flex-column text-center">
                         <div className="mt-1 mb-1">
-                            <BackToMonthInfo handleBack={this.props.handleBack} />
+                            <BackButton handleBack={this.props.handleBack} />
                         </div>
                     </div>
                 </div>

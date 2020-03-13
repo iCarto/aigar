@@ -1,5 +1,5 @@
 import React from "react";
-import BackToMonthInfo from "components/common/invoicing/BackToMonthInfo";
+import {BackButton} from "components/common";
 
 class EditMemberSidebar extends React.Component {
     render() {
@@ -8,7 +8,7 @@ class EditMemberSidebar extends React.Component {
                 <div className="sidebar-group">
                     <div className="d-flex flex-column text-center">
                         <div className="mt-1 mb-1">
-                            <BackToMonthInfo handleBack={this.props.handleBack} />
+                            <BackButton handleBack={this.props.handleBack} />
                         </div>
                     </div>
                 </div>

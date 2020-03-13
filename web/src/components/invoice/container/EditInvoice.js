@@ -5,12 +5,13 @@ import {createInvoice} from "model";
 import {InvoiceService, MemberService} from "service/api";
 import {DataValidatorService} from "service/validation";
 import {MemberDetailShort} from "components/member/presentation";
+import EditInvoiceSidebar from "./EditInvoiceSidebar";
 
 class EditInvoice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            num_factura: null,
+            id_factura: null,
             invoice: null,
             member: null,
             errors: null,
@@ -25,34 +26,32 @@ class EditInvoice extends React.Component {
     static getDerivedStateFromProps(props, prevState) {
         // Store prevNumFactura in state so we can compare when props change.
         // Clear out previously-loaded data (so we don't render stale stuff).
-        const num_factura = props.num_factura || props.match.params.num_factura;
-        if (num_factura !== prevState.num_factura) {
+        const id_factura = props.id_factura || props.match.params.id_factura;
+        if (id_factura !== prevState.id_factura) {
             return {
                 invoice: null,
-                num_factura,
+                id_factura,
             };
         }
         return null;
     }
 
     componentDidMount() {
-        this.loadInvoice(this.state.num_factura);
+        this.loadInvoice();
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.invoice === null) {
-            this.loadInvoice(this.state.num_factura);
+            this.loadInvoice();
         }
     }
 
-    loadInvoice(num_factura) {
-        if (num_factura) {
-            InvoiceService.getInvoice(num_factura).then(invoice => {
-                MemberService.getMember(invoice.numero_socio).then(member => {
-                    this.setState({invoice, member});
-                });
+    loadInvoice() {
+        InvoiceService.getInvoice(this.state.id_factura).then(invoice => {
+            MemberService.getMember(invoice.num_socio).then(member => {
+                this.setState({invoice, member});
             });
-        }
+        });
     }
 
     handleChange(name, value) {
@@ -69,32 +68,59 @@ class EditInvoice extends React.Component {
     }
 
     handleSubmit() {
-        console.log("EditInvoice.handleSubmit", this.state);
-        this.props.history.push("/");
+        console.log("EditMember.handleSubmit", this.state);
+        InvoiceService.updateInvoice(this.state.invoice).then(updatedInvoice => {
+            if (this.props.handleSubmit) {
+                this.props.handleSubmit(updatedInvoice);
+            } else {
+                this.handleBack();
+            }
+        });
     }
 
     handleBack() {
-        this.props.handleBack
-            ? this.props.handleBack()
-            : this.props.history.push("/facturas");
+        console.log("EditMember.handleBack");
+        if (this.props.handleBack) {
+            this.props.handleBack();
+        } else {
+            this.props.history.push("/facturas/");
+        }
+    }
+
+    get sidebar() {
+        return <EditInvoiceSidebar handleBack={this.handleBack} />;
+    }
+
+    get content() {
+        return (
+            <>
+                <MemberDetailShort member={this.state.member} />
+                <InvoiceForm
+                    invoice={this.state.invoice}
+                    errors={this.state.errors}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                />
+            </>
+        );
     }
 
     render() {
-        if (this.state.invoice) {
+        if (this.state.member) {
             return (
-                <div className="container">
-                    <MemberDetailShort member={this.state.member} />
-                    <InvoiceForm
-                        invoice={this.state.invoice}
-                        errors={this.state.errors}
-                        handleChange={this.handleChange}
-                        handleSubmit={this.handleSubmit}
-                    />
+                <div className="h-100">
+                    <div className="row h-100">
+                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                            {this.sidebar}
+                        </nav>
+                        <div className="col-md-10 offset-md-2">
+                            <div className="container">{this.content}</div>
+                        </div>
+                    </div>
                 </div>
             );
-        } else {
-            return <Spinner message="Cargando datos" />;
         }
+        return <Spinner message="Cargando datos" />;
     }
 }
 

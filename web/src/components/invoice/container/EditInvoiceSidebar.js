@@ -1,7 +1,7 @@
 import React from "react";
 import {BackButton} from "components/common";
 
-class CreateMemberSidebar extends React.Component {
+class EditInvoiceSidebar extends React.Component {
     render() {
         return (
             <div className="sidebar-sticky d-flex flex-column">
@@ -17,4 +17,4 @@ class CreateMemberSidebar extends React.Component {
     }
 }
 
-export default CreateMemberSidebar;
+export default EditInvoiceSidebar;

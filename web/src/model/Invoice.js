@@ -21,8 +21,8 @@ class Invoices extends Array {
     }
 }
 
-const invoice_api_adapter = m => {
-    m["ahorro"] = Number(m["ahorro"]) || 0;
+const invoice_api_adapter = invoice => {
+    /*m["ahorro"] = Number(m["ahorro"]) || 0;
     m["asamblea"] = Number(m["asamblea"]) || 0;
     m["caudal_actual"] = Number(m["caudal_actual"]) || 0;
     m["caudal_anterior"] = Number(m["caudal_anterior"]) || 0;
@@ -43,8 +43,13 @@ const invoice_api_adapter = m => {
     m["saldo_anterior"] = Number(m["saldo_anterior"]) || 0;
     m["saldo_pendiente"] = Number(m["saldo_pendiente"]) || 0;
     m["total"] = Number(m["total"]) || 0;
-    m["traspaso"] = Number(m["traspaso"]) || 0;
-    return m;
+    m["traspaso"] = Number(m["traspaso"]) || 0;*/
+    invoice["numero"] =
+        invoice.num_socio.toString() +
+        invoice.anho.toString() +
+        invoice.mes_facturado.toString() +
+        "01";
+    return invoice;
 };
 
 const invoices_api_adapter = invoices => {
@@ -66,11 +71,6 @@ const invoices_api_adapter = invoices => {
     return result;*/
     return invoices.map(invoice => {
         invoice = invoice_api_adapter(invoice);
-        invoice.numero =
-            invoice.num_socio.toString() +
-            invoice.anho.toString() +
-            invoice.mes_facturado.toString() +
-            "01";
         return invoice;
     });
 };
@@ -83,6 +83,7 @@ const createInvoices = (data = []) => {
 };
 
 const createInvoice = ({
+    id_factura = -1,
     numero = "",
     ahorro = 0,
     anho = 0,
@@ -101,7 +102,7 @@ const createInvoice = ({
     mes_limite = 0,
     mora = 0,
     nombre = "",
-    numero_socio = "",
+    num_socio = -1,
     observaciones = "",
     pago_11_al_30 = 0,
     pago_1_al_11 = 0,
@@ -113,6 +114,7 @@ const createInvoice = ({
     traspaso = 0,
 } = {}) => {
     const publicApi = {
+        id_factura,
         numero,
         ahorro,
         anho,
@@ -131,7 +133,7 @@ const createInvoice = ({
         mes_limite,
         mora,
         nombre,
-        numero_socio,
+        num_socio,
         observaciones,
         pago_11_al_30,
         pago_1_al_11,

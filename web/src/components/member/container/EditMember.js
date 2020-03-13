@@ -114,13 +114,8 @@ class EditMember extends React.Component {
                     </div>
                 </div>
             );
-        } else {
-            return (
-                <div className="h-100 text-center">
-                    <Spinner message="Cargando datos" />
-                </div>
-            );
         }
+        return <Spinner message="Cargando datos" />;
     }
 }
 

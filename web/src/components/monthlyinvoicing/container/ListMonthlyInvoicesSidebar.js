@@ -58,68 +58,93 @@ class ListMonthlyInvoicesSidebar extends React.Component {
         );
     }
 
-    render() {
+    isInvoiceButtonEnabled() {
+        return this.props.invoices.length === 0;
+    }
+
+    isLoadMeasurementsButtonEnabled() {
         return (
-            <div className="sidebar-sticky d-flex flex-column">
-                <div className="sidebar-group">
-                    <label>Navegación por meses</label>
-                    <MonthlyInvoicingCalendar
-                        month={this.props.filter.month}
-                        year={this.props.filter.year}
-                        handleChange={this.handleDateChange}
-                    />
-                </div>
-                <div className="sidebar-group">
-                    <label>Filtro</label>
-                    <MonthlyInvoicingFilter
-                        sectorsDomain={this.state.domain.sectors}
-                        memberTypesDomain={this.state.domain.memberTypes}
-                        invoiceStatusDomain={this.state.domain.invoiceStatus}
-                        filter={this.props.filter}
-                        handleChange={this.handleFilterChange}
-                    />
-                </div>
-                <div className="sidebar-group mt-auto">
-                    <label>Acciones</label>
-                    <div className="d-flex flex-column text-center">
-                        <div className="mt-1 mb-1">
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(invoice => invoice.consumo == null).length !== 0
+        );
+    }
+
+    isPrintInvoiceButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(invoice => invoice.consumo == null).length === 0
+        );
+    }
+
+    isLoadPaymentsButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(
+                invoice =>
+                    invoice.estado === "emitida" ||
+                    invoice.estado === "pendiente_de_cobro"
+            ).length !== 0
+        );
+    }
+
+    render() {
+        if (this.props.invoices) {
+            return (
+                <div className="sidebar-sticky d-flex flex-column">
+                    <div className="sidebar-group">
+                        <label>Navegación por meses</label>
+                        <MonthlyInvoicingCalendar
+                            month={this.props.filter.month}
+                            year={this.props.filter.year}
+                            handleChange={this.handleDateChange}
+                        />
+                    </div>
+                    <div className="sidebar-group">
+                        <label>Filtro</label>
+                        <MonthlyInvoicingFilter
+                            sectorsDomain={this.state.domain.sectors}
+                            memberTypesDomain={this.state.domain.memberTypes}
+                            invoiceStatusDomain={this.state.domain.invoiceStatus}
+                            filter={this.props.filter}
+                            handleChange={this.handleFilterChange}
+                        />
+                    </div>
+                    <div className="sidebar-group mt-auto">
+                        <label>Acciones</label>
+                        <div className="d-flex flex-column">
                             <button
                                 type="botton"
-                                className="btn btn-secondary"
-                                disabled
+                                className="btn btn-secondary mt-2 mb-2"
+                                disabled={!this.isInvoiceButtonEnabled()}
                             >
-                                1. Cargar lecturas
+                                1. Iniciar facturación
                             </button>
-                        </div>
-                        <div className="mt-1 mb-1">
                             <button
                                 type="botton"
-                                className="btn btn-secondary"
-                                disabled
+                                className="btn btn-secondary mt-2 mb-2"
+                                disabled={!this.isLoadMeasurementsButtonEnabled()}
                             >
-                                2. Facturar mes
+                                2. Importar lecturas
                             </button>
-                        </div>
-                        <div className="mt-1 mb-1">
-                            <button
-                                type="botton"
-                                className="btn btn-secondary"
-                                disabled
-                            >
-                                3. Cargar pagos
-                            </button>
-                        </div>
-                        <div className="mt-4 mb-4">
                             <InvoicePrintButton
                                 invoices={this.props.invoices}
-                                buttonTitle="Imprimir facturas"
+                                buttonTitle="3. Imprimir facturas"
                                 outputFilename={this.getOutputFilename()}
+                                disabled={!this.isPrintInvoiceButtonEnabled()}
                             />
+                            <button
+                                type="botton"
+                                className="btn btn-secondary mt-2 mb-2"
+                                disabled={!this.isLoadPaymentsButtonEnabled()}
+                            >
+                                4. Cargar pagos
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        return null;
     }
 }
 

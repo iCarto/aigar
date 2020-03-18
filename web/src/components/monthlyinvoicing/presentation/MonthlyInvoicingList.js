@@ -38,7 +38,7 @@ class MonthlyInvoicingList extends React.Component {
         if (this.props.invoices) {
             const columns = [
                 {
-                    Header: "Listado de facturación",
+                    Header: this.props.title,
                     columns: [
                         {
                             Header: "Usuario",

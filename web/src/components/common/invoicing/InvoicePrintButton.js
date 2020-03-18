@@ -81,8 +81,11 @@ class InvoicePrintButton extends React.Component {
 
     get button() {
         return (
-            <button onClick={this.generateDoc} className="btn btn-secondary">
-                <i className="fas fa-print mr-2" />
+            <button
+                onClick={this.generateDoc}
+                className="btn btn-secondary mt-2 mb-2"
+                disabled={this.props.disabled}
+            >
                 {this.props.buttonTitle}
             </button>
         );
@@ -90,10 +93,10 @@ class InvoicePrintButton extends React.Component {
 
     render() {
         return (
-            <div className="column">
+            <>
                 {this.state.loading ? this.spinner : this.button}
                 {this.message}
-            </div>
+            </>
         );
     }
 }

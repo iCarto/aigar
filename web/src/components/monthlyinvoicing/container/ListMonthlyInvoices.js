@@ -4,6 +4,8 @@ import {InvoiceService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
 import {MonthlyInvoicingList} from "../presentation";
+import moment from "moment";
+import {DateUtil} from "components/util";
 
 class ListMonthlyInvoices extends React.Component {
     constructor(props) {
@@ -83,8 +85,14 @@ class ListMonthlyInvoices extends React.Component {
 
     get content() {
         if (this.state.invoices) {
+            console.log();
             return (
                 <MonthlyInvoicingList
+                    title={
+                        DateUtil.getMonthName(this.props.filter.month) +
+                        " " +
+                        this.props.filter.year
+                    }
                     invoices={this.filter(this.state.invoices, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}

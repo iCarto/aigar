@@ -84,39 +84,39 @@ class ViewMember extends React.Component {
     }
 
     get content() {
-        if (this.state.view === "edit") {
-            return (
-                <EditMember
-                    num_socio={this.state.num_socio}
-                    handleSubmit={this.handleSubmitEditMember}
-                    handleBack={this.handleBackEditMember}
-                />
-            );
-        }
-        return (
-            <>
-                <MemberDetail member={this.state.member} />
-                <ListMemberInvoices num_socio={this.state.member.num_socio} />
-            </>
-        );
-    }
-
-    render() {
         if (this.state.member) {
+            if (this.state.view === "edit") {
+                return (
+                    <EditMember
+                        num_socio={this.state.num_socio}
+                        handleSubmit={this.handleSubmitEditMember}
+                        handleBack={this.handleBackEditMember}
+                    />
+                );
+            }
             return (
-                <div className="h-100">
-                    <div className="row h-100">
-                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                            {this.sidebar}
-                        </nav>
-                        <div className="col-md-10 offset-md-2">
-                            <div className="container">{this.content}</div>
-                        </div>
-                    </div>
-                </div>
+                <>
+                    <MemberDetail member={this.state.member} />
+                    <ListMemberInvoices num_socio={this.state.member.num_socio} />
+                </>
             );
         }
         return <Spinner message="Cargando datos" />;
+    }
+
+    render() {
+        return (
+            <div className="h-100">
+                <div className="row h-100">
+                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                        {this.sidebar}
+                    </nav>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

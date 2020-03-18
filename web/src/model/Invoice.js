@@ -21,6 +21,16 @@ class Invoices extends Array {
     }
 }
 
+const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija) {
+    if (solo_mecha === true) {
+        return "con_mecha";
+    }
+    if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
+        return "con_ajuste_consumo";
+    }
+    return "normal";
+};
+
 const invoice_api_adapter = invoice => {
     /*m["ahorro"] = Number(m["ahorro"]) || 0;
     m["asamblea"] = Number(m["asamblea"]) || 0;
@@ -45,10 +55,16 @@ const invoice_api_adapter = invoice => {
     m["total"] = Number(m["total"]) || 0;
     m["traspaso"] = Number(m["traspaso"]) || 0;*/
     invoice["numero"] =
-        invoice.num_socio.toString() +
+        invoice.member.num_socio.toString() +
         invoice.anho.toString() +
         invoice.mes_facturado.toString() +
         "01";
+    invoice["num_socio"] = invoice.member.num_socio;
+    invoice["tipo_socio"] = getTipoSocio(
+        invoice.member.solo_mecha,
+        invoice.member.consumo_maximo,
+        invoice.member.consumo_reduccion_fija
+    );
     return invoice;
 };
 
@@ -76,8 +92,8 @@ const invoices_api_adapter = invoices => {
 };
 
 const createInvoices = (data = []) => {
-    const invoices = Invoices.from(data, m => {
-        return createInvoice(m);
+    const invoices = Invoices.from(data, invoice => {
+        return createInvoice(invoice);
     });
     return invoices;
 };
@@ -103,6 +119,7 @@ const createInvoice = ({
     mora = 0,
     nombre = "",
     num_socio = -1,
+    tipo_socio = "",
     observaciones = "",
     pago_11_al_30 = 0,
     pago_1_al_11 = 0,
@@ -112,6 +129,7 @@ const createInvoice = ({
     sector = "",
     total = 0,
     traspaso = 0,
+    estado = "",
 } = {}) => {
     const publicApi = {
         id_factura,
@@ -134,6 +152,7 @@ const createInvoice = ({
         mora,
         nombre,
         num_socio,
+        tipo_socio,
         observaciones,
         pago_11_al_30,
         pago_1_al_11,
@@ -143,6 +162,7 @@ const createInvoice = ({
         sector,
         total,
         traspaso,
+        estado,
     };
 
     Object.defineProperty(publicApi, "comunidad", {

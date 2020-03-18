@@ -1,23 +1,21 @@
 import React from "react";
-import {MemberService} from "service/api";
 import "components/common/SideBar.css";
-import moment from "moment";
-import {MonthlyInvoicingList} from "../presentation";
 import {EditInvoice} from "components/invoice/container";
 import {ViewMember} from "components/member/container";
-import ViewMemberMonthInfoListSidebar from "./ViewMonthlyInvoicingSidebar";
-import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
-import ViewMemberSidebar from "./ViewMemberSidebar";
+import ListMonthlyInvoices from "./ListMonthlyInvoices";
+import {InvoiceService} from "service/api";
+import {Spinner} from "components/common";
 
 class ViewMonthlyInvoicing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            membersMonthInfo: null,
-            tablePageIndex: 0,
+            pagination: {
+                pageIndex: 0,
+            },
             filter: {
-                month: moment().month(),
-                year: moment().year(),
+                month: null,
+                year: null,
                 nombre: "",
                 sector: 0,
                 tipo_socio: 0,
@@ -28,98 +26,80 @@ class ViewMonthlyInvoicing extends React.Component {
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
-        this.handleSelectInvoice = this.handleSelectInvoice.bind(this);
-        this.handleSelectMember = this.handleSelectMember.bind(this);
-        this.handleBackFromInvoice = this.handleBackFromInvoice.bind(this);
-        this.handleBackFromMember = this.handleBackFromMember.bind(this);
+        this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
+        this.handleClickViewMember = this.handleClickViewMember.bind(this);
+        this.handleBackFromEditInvoice = this.handleBackFromEditInvoice.bind(this);
+        this.handleBackFromViewMember = this.handleBackFromViewMember.bind(this);
     }
 
     componentDidMount() {
-        this.loadDataWithStateFilter();
+        this.loadInvoicingMonth();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.membersMonthInfo === null) {
-            this.loadDataWithStateFilter();
+        console.log("componentDidUpdate", this.state.invoices);
+        if (this.state.filter.month === null) {
+            this.loadInvoicingMonth();
         }
     }
 
-    loadDataWithStateFilter() {
-        MemberService.getMembersMonthInfo(this.state.filter).then(membersMonthInfo => {
-            console.log("membersMonthInfo", membersMonthInfo);
-            this.setState({membersMonthInfo: membersMonthInfo});
+    loadInvoicingMonth() {
+        InvoiceService.getInvoicingMonth().then(invoicingMonth => {
+            console.log("invoicingMonth", invoicingMonth);
+            this.setState({
+                filter: Object.assign(this.state.filter, invoicingMonth),
+                pagination: {pageIndex: 0},
+            });
         });
     }
 
+    handleChangePageIndex(pageIndex) {
+        console.log("handleChangePageIndex", {pageIndex});
+        this.setState({pagination: {pageIndex}});
+    }
+
     handleFilterChange(newFilter) {
-        this.setState(
-            {filter: Object.assign(this.state.filter, newFilter), tablePageIndex: 0},
-            () => {
-                this.loadDataWithStateFilter();
-            }
-        );
+        console.log("handleFilterChange", newFilter);
+        this.setState({
+            filter: Object.assign(this.state.filter, newFilter),
+            pagination: {pageIndex: 0},
+        });
     }
 
-    handleChangePageIndex(tablePageIndex) {
-        console.log("handleChangePageIndex", {tablePageIndex});
-        this.setState({tablePageIndex});
-    }
-
-    handleSelectInvoice(numero) {
+    handleClickEditInvoice(numero) {
         console.log("handleSelectInvoice", numero);
         this.setState({
             selectedInvoice: numero,
         });
     }
 
-    handleBackFromInvoice() {
+    handleBackFromEditInvoice() {
         console.log("handleBackFromInvoice");
         this.setState({
             selectedInvoice: null,
         });
     }
 
-    handleSelectMember(numero_socio) {
+    handleClickViewMember(numero_socio) {
         console.log("handleSelectMember", numero_socio);
         this.setState({
             selectedMember: numero_socio,
         });
     }
 
-    handleBackFromMember() {
+    handleBackFromViewMember() {
         console.log("handleBackFromMember");
         this.setState({
             selectedMember: null,
         });
     }
 
-    get sidebar() {
-        if (this.state.selectedInvoice) {
-            return (
-                <ViewInvoiceSidebar
-                    num_factura={this.state.selectedInvoice}
-                    handleBack={this.handleBackFromInvoice}
-                />
-            );
-        }
-        if (this.state.selectedMember) {
-            return <ViewMemberSidebar handleBack={this.handleBackFromMember} />;
-        }
-        return (
-            <ViewMemberMonthInfoListSidebar
-                filter={this.state.filter}
-                membersMonthInfo={this.state.membersMonthInfo}
-                handleFilterChange={this.handleFilterChange}
-            />
-        );
-    }
-
-    get content() {
+    render() {
         if (this.state.selectedInvoice) {
             return (
                 <EditInvoice
-                    num_factura={this.state.selectedInvoice}
-                    handleBack={this.handleBackFromInvoice}
+                    id_factura={this.state.selectedInvoice}
+                    handleBack={this.handleBackFromEditInvoice}
                 />
             );
         }
@@ -128,35 +108,24 @@ class ViewMonthlyInvoicing extends React.Component {
                 <div className="col-md-12">
                     <ViewMember
                         num_socio={this.state.selectedMember}
-                        handleBack={this.handleBackFromMember}
+                        handleBack={this.handleBackFromViewMember}
                     />
                 </div>
             );
         }
-        return (
-            <MonthlyInvoicingList
-                membersMonthInfo={this.state.membersMonthInfo}
-                selectedPageIndex={this.state.tablePageIndex}
-                handleChangePageIndex={this.handleChangePageIndex}
-                handleSelectInvoice={this.handleSelectInvoice}
-                handleSelectMember={this.handleSelectMember}
-            />
-        );
-    }
-
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2 con">
-                        <div className="container">{this.content}</div>
-                    </div>
-                </div>
-            </div>
-        );
+        if (this.state.filter.month != null) {
+            return (
+                <ListMonthlyInvoices
+                    selectedPageIndex={this.state.pagination.pageIndex}
+                    handleFilterChange={this.handleFilterChange}
+                    handleChangePageIndex={this.handleChangePageIndex}
+                    handleClickEditInvoice={this.handleClickEditInvoice}
+                    handleClickViewMember={this.handleClickViewMember}
+                    filter={this.state.filter}
+                />
+            );
+        }
+        return <Spinner message="Cargando mes de facturación" />;
     }
 }
 

@@ -1,16 +1,17 @@
 import React from "react";
 import {Spinner} from "components/common";
-import {InvoicesList} from "components/invoice/presentation";
 import {InvoiceService} from "service/api";
 import "components/common/SideBar.css";
-import ListInvoicesSidebar from "./ListInvoicesSidebar";
+import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
+import {MonthlyInvoicingList} from "../presentation";
 
-class ListInvoices extends React.Component {
+class ListMonthlyInvoices extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             invoices: null,
         };
+        this.handleFilterChange = this.handleFilterChange.bind(this);
     }
 
     componentDidMount() {
@@ -18,23 +19,36 @@ class ListInvoices extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("componentDidUpdate", this.state.invoices);
         if (this.state.invoices === null) {
             this.loadInvoices();
         }
     }
 
     loadInvoices() {
-        InvoiceService.getInvoices().then(invoices => {
+        InvoiceService.getInvoicesByYearAndMonth(
+            this.props.filter.year,
+            this.props.filter.month
+        ).then(invoices => {
             console.log("invoices", invoices);
             this.setState({invoices});
         });
     }
 
+    handleFilterChange(newFilter) {
+        console.log("handleFilterChange", newFilter);
+        if (newFilter.year != null && newFilter.month != null) {
+            this.setState({
+                invoices: null,
+            });
+        }
+        this.props.handleFilterChange(newFilter);
+    }
+
     get sidebar() {
         return (
-            <ListInvoicesSidebar
-                handleFilterChange={this.props.handleFilterChange}
-                handleClickCreateInvoice={this.props.handleClickCreateInvoice}
+            <ListMonthlyInvoicesSidebar
+                handleFilterChange={this.handleFilterChange}
                 filter={this.props.filter}
             />
         );
@@ -43,10 +57,11 @@ class ListInvoices extends React.Component {
     get content() {
         if (this.state.invoices) {
             return (
-                <InvoicesList
+                <MonthlyInvoicingList
                     invoices={this.state.invoices}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
+                    handleClickViewMember={this.props.handleClickViewMember}
                     handleClickEditInvoice={this.props.handleClickEditInvoice}
                     filter={this.props.filter}
                 />
@@ -71,4 +86,4 @@ class ListInvoices extends React.Component {
     }
 }
 
-export default ListInvoices;
+export default ListMonthlyInvoices;

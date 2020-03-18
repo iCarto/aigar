@@ -1,28 +1,35 @@
+import ApiService from "./ApiService";
+
 const DomainService = {
     getSectors() {
-        return Promise.resolve([
-            {key: 1, value: "1 - TIHUAPA NORTE"},
-            {key: 2, value: "2 - TIHUAPA NORTE"},
-            {key: 3, value: "3 - TIHUAPA NORTE"},
-            {key: 4, value: "4 - TIHUAPA NORTE"},
-            {key: 5, value: "5 - TLACUXTLI"},
-            {key: 6, value: "6 - TLACUXTLI"},
-            {key: 7, value: "7 - TLACUXTLI"},
-        ]);
+        return ApiService.get("/domains/sectores").then(response => {
+            return response.map(domainEntity => {
+                return {
+                    key: domainEntity[0],
+                    value: domainEntity[0] + " - " + domainEntity[1],
+                };
+            });
+        });
     },
+
     getMemberTypes() {
         return Promise.resolve([
-            {key: "activo", value: "Mecha activa"},
-            {key: "inactivo", value: "Mecha inactiva"},
+            {key: "normal", value: "Normal"},
+            {key: "con_mecha", value: "Con mecha"},
+            {key: "con_ajuste_consumo", value: "Ajuste de consumo"},
             {key: "desconectado", value: "Desconectado"},
         ]);
     },
+
     getInvoiceStatus() {
-        return Promise.resolve([
-            {key: "pendiente", value: "Pendiente de cobro"},
-            {key: "cobrado", value: "Cobrado"},
-            {key: "mora", value: "Mora"},
-        ]);
+        return ApiService.get("/domains/estados").then(response => {
+            return response.map(domainEntity => {
+                return {
+                    key: domainEntity[0],
+                    value: domainEntity[1],
+                };
+            });
+        });
     },
 };
 

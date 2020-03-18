@@ -15,11 +15,13 @@ Including another URLconf
 """
 
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from api.views.invoice import InvoiceViewSet
+from api.views.domain import DomainsView
+from api.views.invoice import InvoiceViewSet, InvoicingMonthView
 from api.views.member import MemberViewSet
 from rest_framework import routers
 
@@ -38,6 +40,8 @@ urlpatterns = [
     # - all /static/... files served on /...
     # Django REST Framework urls
     path("api/", include(router.urls)),
+    path("api/invoicing_month", InvoicingMonthView.as_view()),
+    path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too
     path("admin/", admin.site.urls),

@@ -1,56 +1,110 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
 
+const EstadoCellTable = ({cell}) => {
+    if (cell.value === "nueva") {
+        return "Nueva";
+    }
+    if (cell.value === "emitida") {
+        return "Emitida";
+    }
+    if (cell.value === "pendiente_cobro") {
+        return "Pendiente de cobro";
+    }
+    if (cell.value === "cobrada") {
+        return "Cobrada";
+    }
+    if (cell.value === "anulada") {
+        return "Anulada";
+    }
+    return cell.value;
+};
+
+const TipoSocioCellTable = ({cell}) => {
+    if (cell.value === "normal") {
+        return "Normal";
+    }
+    if (cell.value === "con_mecha") {
+        return "Con Mecha";
+    }
+    if (cell.value === "con_ajuste_consumo") {
+        return "Con ajuste";
+    }
+    return cell.value;
+};
+
 class MonthlyInvoicingList extends React.Component {
+    filter(invoices, filter) {
+        return invoices.filter(invoice => {
+            var filtered = true;
+            if (filter) {
+                if (filter.nombre) {
+                    filtered = filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
+                }
+                if (filter.sector) {
+                    filtered = filtered && invoice.sector === parseInt(filter.sector);
+                }
+                if (filter.tipo_socio) {
+                    filtered = filtered && invoice.tipo_socio === filter.tipo_socio;
+                }
+                if (filter.estado) {
+                    filtered = filtered && invoice.estado === filter.estado;
+                }
+            }
+            return filtered;
+        });
+    }
     render() {
-        if (this.props.membersMonthInfo) {
+        if (this.props.invoices) {
             const columns = [
                 {
                     Header: "Listado de facturación",
                     columns: [
                         {
                             Header: "Usuario",
-                            accessor: "nombre_socio",
+                            accessor: "nombre",
                             Cell: LinkCellTable,
                             getProps: () => ({
-                                handleClick: this.props.handleSelectMember,
+                                handleClick: this.props.handleClickViewMember,
                                 linkAccessor: "num_socio",
                             }),
                         },
                         {
                             Header: "Sector",
-                            accessor: "sector_socio",
+                            accessor: "sector",
                         },
                         {
                             Header: "Tipo",
                             accessor: "tipo_socio",
+                            Cell: TipoSocioCellTable,
                         },
                         {
                             Header: "Lectura",
-                            accessor: "lectura",
+                            accessor: "consumo",
                             Cell: LinkCellTable,
                             getProps: () => ({
-                                handleClick: this.props.handleSelectInvoice,
-                                linkAccessor: "num_factura",
+                                handleClick: this.props.handleClickEditInvoice,
+                                linkAccessor: "id_factura",
                             }),
                         },
                         {
                             Header: "Importe",
-                            accessor: "importe",
+                            accessor: "total",
                             Cell: LinkCellTable,
                             getProps: () => ({
-                                handleClick: this.props.handleSelectInvoice,
-                                linkAccessor: "num_factura",
+                                handleClick: this.props.handleClickEditInvoice,
+                                linkAccessor: "id_factura",
                             }),
                         },
                         {
                             Header: "Estado",
                             accessor: "estado",
+                            Cell: EstadoCellTable,
                         },
-                        {
+                        /*{
                             Header: "Mora",
                             accessor: "mora",
-                        },
+                        },*/
                     ],
                 },
             ];
@@ -58,7 +112,7 @@ class MonthlyInvoicingList extends React.Component {
             return (
                 <SortedPaginatedTable
                     columns={columns}
-                    data={this.props.membersMonthInfo}
+                    data={this.filter(this.props.invoices, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                 />

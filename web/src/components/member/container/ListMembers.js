@@ -41,33 +41,33 @@ class ListMembers extends React.Component {
     }
 
     get content() {
-        return (
-            <MembersList
-                members={this.state.members}
-                selectedPageIndex={this.props.selectedPageIndex}
-                handleChangePageIndex={this.props.handleChangePageIndex}
-                handleClickViewMember={this.props.handleClickViewMember}
-                filter={this.props.filter}
-            />
-        );
-    }
-
-    render() {
         if (this.state.members) {
             return (
-                <div className="h-100">
-                    <div className="row h-100">
-                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                            {this.sidebar}
-                        </nav>
-                        <div className="col-md-10 offset-md-2">
-                            <div className="container">{this.content}</div>
-                        </div>
-                    </div>
-                </div>
+                <MembersList
+                    members={this.state.members}
+                    selectedPageIndex={this.props.selectedPageIndex}
+                    handleChangePageIndex={this.props.handleChangePageIndex}
+                    handleClickViewMember={this.props.handleClickViewMember}
+                    filter={this.props.filter}
+                />
             );
         }
         return <Spinner message="Cargando datos" />;
+    }
+
+    render() {
+        return (
+            <div className="h-100">
+                <div className="row h-100">
+                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                        {this.sidebar}
+                    </nav>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

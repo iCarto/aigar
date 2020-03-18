@@ -37,8 +37,26 @@ class MembersFilter extends React.Component {
                         onChange={this.handleChange}
                     >
                         <option></option>
-                        {[1, 2, 3, 4, 5].map(n => (
-                            <option key={n}>{n}</option>
+                        {this.props.sectorsDomain.map(sector => (
+                            <option key={sector.key} value={sector.key}>
+                                {sector.value}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="tipo_socio">Tipo de socio</label>
+                    <select
+                        className="form-control"
+                        name="tipo_socio"
+                        value={this.props.filter.tipo_socio}
+                        onChange={this.handleChange}
+                    >
+                        <option></option>
+                        {this.props.memberTypesDomain.map(memberType => (
+                            <option key={memberType.key} value={memberType.key}>
+                                {memberType.value}
+                            </option>
                         ))}
                     </select>
                 </div>

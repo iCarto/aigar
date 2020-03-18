@@ -25,13 +25,13 @@ class RangedIntegerField(models.IntegerField):
 
 
 class Sectores(models.IntegerChoices):
-    UNO = 1
-    DOS = 2
-    TRES = 3
-    CUATRO = 4
-    CINCO = 5
-    SEIS = 6
-    SIETE = 7
+    UNO = 1, ("TIHUAPA NORTE")
+    DOS = 2, ("TIHUAPA NORTE")
+    TRES = 3, ("TIHUAPA NORTE")
+    CUATRO = 4, ("TIHUAPA NORTE")
+    CINCO = 5, ("TLACUXTLI")
+    SEIS = 6, ("TLACUXTLI")
+    SIETE = 7, ("TLACUXTLI")
 
 
 # Django recomienda usar minúsculas para los modelos y crea tablas: api_member
@@ -65,6 +65,7 @@ class Member(models.Model):
         verbose_name="Número Socio",
         help_text="El Número de socio no puede estar vacío y no debe repetirse",
     )
+
     # No deberían darse nombres iguales, pero puede tener sentido permitirlo
     name = models.CharField(
         max_length=100,

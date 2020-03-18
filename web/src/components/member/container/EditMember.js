@@ -89,33 +89,33 @@ class EditMember extends React.Component {
     }
 
     get content() {
-        return (
-            <MemberForm
-                member={this.state.member}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-                handleBack={this.handleBack}
-            />
-        );
-    }
-
-    render() {
         if (this.state.member) {
             return (
-                <div className="h-100">
-                    <div className="row h-100">
-                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                            {this.sidebar}
-                        </nav>
-                        <div className="col-md-10 offset-md-2">
-                            <div className="container">{this.content}</div>
-                        </div>
-                    </div>
-                </div>
+                <MemberForm
+                    member={this.state.member}
+                    errors={this.state.errors}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                    handleBack={this.handleBack}
+                />
             );
         }
         return <Spinner message="Cargando datos" />;
+    }
+
+    render() {
+        return (
+            <div className="h-100">
+                <div className="row h-100">
+                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                        {this.sidebar}
+                    </nav>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

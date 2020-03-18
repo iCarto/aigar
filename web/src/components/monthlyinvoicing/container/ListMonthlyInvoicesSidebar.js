@@ -3,7 +3,7 @@ import {MonthlyInvoicingCalendar, MonthlyInvoicingFilter} from "../presentation"
 import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
 import {DomainService} from "service/api";
 
-class ViewMonthlyInvoicingSidebar extends React.Component {
+class ListMonthlyInvoicesSidebar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -132,4 +132,4 @@ class ViewMonthlyInvoicingSidebar extends React.Component {
     }
 }
 
-export default ViewMonthlyInvoicingSidebar;
+export default ListMonthlyInvoicesSidebar;

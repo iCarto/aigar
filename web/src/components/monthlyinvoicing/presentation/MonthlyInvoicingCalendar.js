@@ -86,7 +86,6 @@ class MonthlyInvoicingCalendar extends React.Component {
 
         return (
             <div className="text-center">
-                <h4 className="mb-3">Hoy es: {moment().format("DD/MM/YYYY")}</h4>
                 <form className="form-inline d-flex justify-content-between m-1">
                     <button
                         type="button"

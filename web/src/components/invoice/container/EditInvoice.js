@@ -92,35 +92,35 @@ class EditInvoice extends React.Component {
     }
 
     get content() {
-        return (
-            <>
-                <MemberDetailShort member={this.state.member} />
-                <InvoiceForm
-                    invoice={this.state.invoice}
-                    errors={this.state.errors}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                />
-            </>
-        );
-    }
-
-    render() {
         if (this.state.member) {
             return (
-                <div className="h-100">
-                    <div className="row h-100">
-                        <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                            {this.sidebar}
-                        </nav>
-                        <div className="col-md-10 offset-md-2">
-                            <div className="container">{this.content}</div>
-                        </div>
-                    </div>
-                </div>
+                <>
+                    <MemberDetailShort member={this.state.member} />
+                    <InvoiceForm
+                        invoice={this.state.invoice}
+                        errors={this.state.errors}
+                        handleChange={this.handleChange}
+                        handleSubmit={this.handleSubmit}
+                    />
+                </>
             );
         }
         return <Spinner message="Cargando datos" />;
+    }
+
+    render() {
+        return (
+            <div className="h-100">
+                <div className="row h-100">
+                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                        {this.sidebar}
+                    </nav>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

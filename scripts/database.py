@@ -41,7 +41,7 @@ def create_django_fixtures(database):
                     "pk": None,
                     "fields": {
                         "anho": int(year),
-                        "num_socio": int(invoice["num_socio"]),
+                        "member": int(invoice["num_socio"]),
                         "nombre": invoice["nombre"],
                         "sector": int(invoice["sector"]),
                         "ahorro": float(invoice.get("ahorro", 0) or 0),
@@ -69,6 +69,8 @@ def create_django_fixtures(database):
                         "total": float(invoice.get("total", 0) or 0),
                         "traspaso": float(invoice.get("traspaso", 0) or 0),
                         "observaciones": invoice.get("observaciones"),
+                        # TODO Revisar como establecer un valor para el estado
+                        "estado": "nueva",
                     },
                 }
                 fixtures.append(fixture_invoice)

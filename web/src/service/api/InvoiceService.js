@@ -5,12 +5,34 @@ import {
     invoices_api_adapter,
 } from "model";
 import ApiService from "./ApiService";
+import moment from "moment";
 
 const InvoiceService = {
+    getInvoicingMonth(year, month) {
+        return ApiService.get("/invoicing_month").then(response => {
+            // In Javascript, months are zero-based (https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.4)
+            // But our API and model works are one-based months, so we need to transform
+            return {
+                year: response.year,
+                month: response.month - 1,
+            };
+        });
+    },
+
     getInvoices() {
         return ApiService.get("/invoices").then(response => {
             return createInvoices(invoices_api_adapter(response));
         });
+    },
+
+    getInvoicesByYearAndMonth(year, month) {
+        // In Javascript, months are zero-based (https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.4)
+        // But our API and model works are one-based months, so we need to transform
+        return ApiService.get("/invoices?year=" + year + "&month=" + (month + 1)).then(
+            response => {
+                return createInvoices(invoices_api_adapter(response));
+            }
+        );
     },
 
     getInvoicesForMember(num_socio) {

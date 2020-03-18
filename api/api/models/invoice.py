@@ -4,7 +4,12 @@ from django.db import models
 from .member import Sectores
 
 
-# Django recomienda usar minúsculas para los modelos y crea tablas: api_invoice
+class InvoiceStatus(models.TextChoices):
+    NUEVA = "nueva"
+    EMITIDA = "emitida"
+    PENDIENTE_DE_COBRO = "pendiente_de_cobro"
+    COBRADA = "cobrada"
+    ANULADA = "anulada"
 
 
 class Invoice(models.Model):
@@ -15,8 +20,12 @@ class Invoice(models.Model):
         help_text="El Identificador de la factura no puede estar vacío y no debe repetirse",
     )
     # No deberían darse nombres iguales, pero puede tener sentido permitirlo
-    num_socio = models.IntegerField(
-        null=False, blank=False, unique=False, verbose_name="Número socio", help_text=""
+    member = models.ForeignKey(
+        "Member",
+        null=False,
+        blank=False,
+        related_query_name="invoice",
+        on_delete=models.CASCADE,
     )
 
     nombre = models.CharField(
@@ -106,6 +115,15 @@ class Invoice(models.Model):
 
     total = models.FloatField(
         null=False, blank=False, default=0, verbose_name="Total", help_text=""
+    )
+
+    estado = models.TextField(
+        null=False,
+        blank=False,
+        choices=InvoiceStatus.choices,
+        verbose_name="Estado",
+        help_text="",
+        default=InvoiceStatus.NUEVA,
     )
 
     observaciones = models.TextField(

@@ -88,7 +88,12 @@ class EditInvoice extends React.Component {
     }
 
     get sidebar() {
-        return <EditInvoiceSidebar handleBack={this.handleBack} />;
+        return (
+            <EditInvoiceSidebar
+                handleBack={this.handleBack}
+                invoice={this.state.invoice}
+            />
+        );
     }
 
     get content() {

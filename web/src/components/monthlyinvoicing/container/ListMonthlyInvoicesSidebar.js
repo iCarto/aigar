@@ -58,15 +58,6 @@ class ListMonthlyInvoicesSidebar extends React.Component {
         );
     }
 
-    getInvoicesNumbersList() {
-        if (this.props.membersMonthInfo) {
-            return this.props.membersMonthInfo.map(
-                memberMonthInfo => memberMonthInfo.num_factura
-            );
-        }
-        return [];
-    }
-
     render() {
         return (
             <div className="sidebar-sticky d-flex flex-column">
@@ -120,7 +111,7 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                         </div>
                         <div className="mt-4 mb-4">
                             <InvoicePrintButton
-                                invoices={this.getInvoicesNumbersList()}
+                                invoices={this.props.invoices}
                                 buttonTitle="Imprimir facturas"
                                 outputFilename={this.getOutputFilename()}
                             />

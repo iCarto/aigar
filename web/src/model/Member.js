@@ -43,12 +43,27 @@ const dataFromMyRESTAPI = [
 
 */
 
+const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija) {
+    if (solo_mecha === true) {
+        return "con_mecha";
+    }
+    if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
+        return "con_ajuste_consumo";
+    }
+    return "normal";
+};
+
 class Members extends Array {}
 
-const member_api_adapter = m => {
-    m["solo_mecha"] = m["medidor"] === "M" ? true : false;
-    m["medidor"] = m["medidor"] === "M" ? -1 : m["medidor"];
-    return m;
+const member_api_adapter = member => {
+    member["solo_mecha"] = member["medidor"] === "M" ? true : false;
+    member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
+    member["tipo_socio"] = getTipoSocio(
+        member.solo_mecha,
+        member.consumo_maximo,
+        member.consumo_reduccion_fija
+    );
+    return member;
 };
 
 const members_api_adapter = members => members.map(member_api_adapter);

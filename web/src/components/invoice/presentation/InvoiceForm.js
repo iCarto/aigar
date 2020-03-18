@@ -17,6 +17,9 @@ This component doesn't manage state because the state is stored in the container
 class InvoiceForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            dirty: false,
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -28,6 +31,7 @@ class InvoiceForm extends React.Component {
                 ? event.target.checked
                 : event.target.value;
         this.props.handleChange(name, value);
+        this.setState({dirty: true});
     }
 
     handleSubmit(event) {
@@ -242,8 +246,12 @@ class InvoiceForm extends React.Component {
                     </div>
                 </div>
                 <div className="col-md-12 mt-4 d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary">
-                        <i className="fas fa-print mr-2" />
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={!this.state.dirty}
+                    >
+                        <i className="fas fa-save mr-2" />
                         Salvar
                     </button>
                 </div>

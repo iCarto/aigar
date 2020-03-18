@@ -32,7 +32,8 @@ class CreateMember extends React.Component {
     handleSubmit() {
         console.log("CreateMember.handleSubmit", this.state.member);
         MemberService.createMember(this.state.member).then(updatedMember => {
-            this.props.handleSubmitCreateMember(updatedMember.num_socio);
+            console.log(updatedMember);
+            this.props.handleSubmit(updatedMember.num_socio);
         });
     }
 

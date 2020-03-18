@@ -64,7 +64,7 @@ class ManageMembers extends React.Component {
     }
 
     handleSubmitCreateMember(num_socio) {
-        console.log("handleSubmitCreateMember");
+        console.log("handleSubmitCreateMember", num_socio);
         this.setState({
             view: "view",
             selectedMember: num_socio,

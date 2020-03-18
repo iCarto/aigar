@@ -2,21 +2,6 @@ import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
 
 class MembersList extends React.Component {
-    filter(members, filter) {
-        return members.filter(member => {
-            var filtered = true;
-            if (filter) {
-                if (filter.name) {
-                    filtered = member.name.indexOf(filter.name) >= 0;
-                }
-                if (filter.sector) {
-                    filtered = filtered && member.sector === parseInt(filter.sector);
-                }
-            }
-            return filtered;
-        });
-    }
-
     render() {
         console.log("MembersList.render");
         if (this.props.members) {
@@ -75,7 +60,7 @@ class MembersList extends React.Component {
             return (
                 <SortedPaginatedTable
                     columns={columns}
-                    data={this.filter(this.props.members, this.props.filter)}
+                    data={this.props.members}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                 />

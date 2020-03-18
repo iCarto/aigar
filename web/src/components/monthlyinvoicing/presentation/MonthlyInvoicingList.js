@@ -34,26 +34,6 @@ const TipoSocioCellTable = ({cell}) => {
 };
 
 class MonthlyInvoicingList extends React.Component {
-    filter(invoices, filter) {
-        return invoices.filter(invoice => {
-            var filtered = true;
-            if (filter) {
-                if (filter.nombre) {
-                    filtered = filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
-                }
-                if (filter.sector) {
-                    filtered = filtered && invoice.sector === parseInt(filter.sector);
-                }
-                if (filter.tipo_socio) {
-                    filtered = filtered && invoice.tipo_socio === filter.tipo_socio;
-                }
-                if (filter.estado) {
-                    filtered = filtered && invoice.estado === filter.estado;
-                }
-            }
-            return filtered;
-        });
-    }
     render() {
         if (this.props.invoices) {
             const columns = [
@@ -112,7 +92,7 @@ class MonthlyInvoicingList extends React.Component {
             return (
                 <SortedPaginatedTable
                     columns={columns}
-                    data={this.filter(this.props.invoices, this.props.filter)}
+                    data={this.props.invoices}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                 />

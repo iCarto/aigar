@@ -3,23 +3,6 @@ import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
 import {Spinner} from "components/common";
 
 class InvoicesList extends React.Component {
-    filter(invoices, filter) {
-        return invoices.filter(invoice => {
-            var filtered = true;
-            if (filter) {
-                if (filter.numero) {
-                    filtered = invoice.numero.indexOf(filter.numero) >= 0;
-                }
-                if (filter.nombre) {
-                    filtered = filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
-                }
-                if (filter.sector) {
-                    filtered = filtered && invoice.sector === parseInt(filter.sector);
-                }
-            }
-            return filtered;
-        });
-    }
     render() {
         console.log("InvoicesList.render");
         if (this.props.invoices) {
@@ -91,7 +74,7 @@ class InvoicesList extends React.Component {
             return (
                 <SortedPaginatedTable
                     columns={columns}
-                    data={this.filter(this.props.invoices, this.props.filter)}
+                    data={this.props.invoices}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                 />

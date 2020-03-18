@@ -45,11 +45,38 @@ class ListMonthlyInvoices extends React.Component {
         this.props.handleFilterChange(newFilter);
     }
 
+    filter(invoices, filter) {
+        if (invoices) {
+            return invoices.filter(invoice => {
+                var filtered = true;
+                if (filter) {
+                    if (filter.nombre) {
+                        filtered =
+                            filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
+                    }
+                    if (filter.sector) {
+                        filtered =
+                            filtered && invoice.sector === parseInt(filter.sector);
+                    }
+                    if (filter.tipo_socio) {
+                        filtered = filtered && invoice.tipo_socio === filter.tipo_socio;
+                    }
+                    if (filter.estado) {
+                        filtered = filtered && invoice.estado === filter.estado;
+                    }
+                }
+                return filtered;
+            });
+        }
+        return [];
+    }
+
     get sidebar() {
         return (
             <ListMonthlyInvoicesSidebar
                 handleFilterChange={this.handleFilterChange}
                 filter={this.props.filter}
+                invoices={this.filter(this.state.invoices, this.props.filter)}
             />
         );
     }
@@ -58,12 +85,11 @@ class ListMonthlyInvoices extends React.Component {
         if (this.state.invoices) {
             return (
                 <MonthlyInvoicingList
-                    invoices={this.state.invoices}
+                    invoices={this.filter(this.state.invoices, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                     handleClickViewMember={this.props.handleClickViewMember}
                     handleClickEditInvoice={this.props.handleClickEditInvoice}
-                    filter={this.props.filter}
                 />
             );
         }

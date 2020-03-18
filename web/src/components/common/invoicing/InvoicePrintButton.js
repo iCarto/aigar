@@ -19,14 +19,10 @@ class InvoicePrintButton extends React.Component {
                 loading: true,
             },
             async () => {
-                console.log(this.props.invoices);
                 try {
-                    const invoices = await InvoiceService.getInvoices({
-                        num_factura_list: this.props.invoices,
-                    });
-                    console.log(invoices);
+                    console.log(this.props.invoices);
                     const data = {
-                        invoices,
+                        invoices: this.props.invoices,
                     };
                     const invoicesDocument = await DocXPrintFileService.generateInvoicesDocument(
                         data,

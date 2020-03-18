@@ -30,6 +30,24 @@ class ListMembers extends React.Component {
         });
     }
 
+    filter(members, filter) {
+        return members.filter(member => {
+            var filtered = true;
+            if (filter) {
+                if (filter.name) {
+                    filtered = member.name.indexOf(filter.name) >= 0;
+                }
+                if (filter.sector) {
+                    filtered = filtered && member.sector === parseInt(filter.sector);
+                }
+                if (filter.tipo_socio) {
+                    filtered = filtered && member.tipo_socio === filter.tipo_socio;
+                }
+            }
+            return filtered;
+        });
+    }
+
     get sidebar() {
         return (
             <ListMembersSidebar
@@ -44,7 +62,7 @@ class ListMembers extends React.Component {
         if (this.state.members) {
             return (
                 <MembersList
-                    members={this.state.members}
+                    members={this.filter(this.state.members, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                     handleClickViewMember={this.props.handleClickViewMember}

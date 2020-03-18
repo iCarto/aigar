@@ -30,6 +30,24 @@ class ListInvoices extends React.Component {
         });
     }
 
+    filter(invoices, filter) {
+        return invoices.filter(invoice => {
+            var filtered = true;
+            if (filter) {
+                if (filter.numero) {
+                    filtered = invoice.numero.indexOf(filter.numero) >= 0;
+                }
+                if (filter.nombre) {
+                    filtered = filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
+                }
+                if (filter.sector) {
+                    filtered = filtered && invoice.sector === parseInt(filter.sector);
+                }
+            }
+            return filtered;
+        });
+    }
+
     get sidebar() {
         return (
             <ListInvoicesSidebar
@@ -44,7 +62,7 @@ class ListInvoices extends React.Component {
         if (this.state.invoices) {
             return (
                 <InvoicesList
-                    invoices={this.state.invoices}
+                    invoices={this.filter(this.state.invoices, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
                     handleClickEditInvoice={this.props.handleClickEditInvoice}

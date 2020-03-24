@@ -29,7 +29,7 @@ from rest_framework import routers
 admin.autodiscover()
 
 router = routers.DefaultRouter()
-router.register(r"members", MemberViewSet)
+router.register(r"members", MemberViewSet, basename="member")
 router.register(r"invoices", InvoiceViewSet, basename="invoice")
 
 

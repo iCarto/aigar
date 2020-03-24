@@ -16,3 +16,7 @@ body {
 .link-button:focus {
     text-decoration: none;
 }
+
+.modal-dialog {
+    margin: 7rem auto;
+}

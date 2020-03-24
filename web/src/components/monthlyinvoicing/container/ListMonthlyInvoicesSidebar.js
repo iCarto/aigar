@@ -1,7 +1,8 @@
 import React from "react";
 import {MonthlyInvoicingCalendar, MonthlyInvoicingFilter} from "../presentation";
-import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
 import {DomainService} from "service/api";
+import ListMonthlyInvoicesActions from "./ListMonthlyInvoicesActions";
+import moment from "moment";
 
 class ListMonthlyInvoicesSidebar extends React.Component {
     constructor(props) {
@@ -15,6 +16,8 @@ class ListMonthlyInvoicesSidebar extends React.Component {
         };
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.isInvoicingMonth = this.isInvoicingMonth.bind(this);
+        this.isNextInvoicingMonth = this.isNextInvoicingMonth.bind(this);
     }
 
     componentDidMount() {
@@ -48,43 +51,30 @@ class ListMonthlyInvoicesSidebar extends React.Component {
         this.props.handleFilterChange({[name]: value});
     }
 
-    getOutputFilename() {
+    isInvoicingMonth() {
         return (
-            "recibo_" +
-            this.props.filter.year +
-            "_" +
-            this.props.filter.month +
-            "_todos"
+            this.props.invoicingMonth.month === this.props.filter.month &&
+            this.props.invoicingMonth.year === this.props.filter.year
         );
     }
 
-    isInvoiceButtonEnabled() {
-        return this.props.invoices.length === 0;
-    }
-
-    isLoadMeasurementsButtonEnabled() {
+    isNextInvoicingMonth() {
+        const nextInvoicingMonth = moment()
+            .year(this.props.invoicingMonth.year)
+            .month(this.props.invoicingMonth.month)
+            .date(1)
+            .add(1, "month");
         return (
-            this.props.invoices.length > 0 &&
-            this.props.invoices.filter(invoice => invoice.consumo == null).length !== 0
+            nextInvoicingMonth.month() === this.props.filter.month &&
+            nextInvoicingMonth.year() === this.props.filter.year
         );
     }
 
-    isPrintInvoiceButtonEnabled() {
-        return (
-            this.props.invoices.length > 0 &&
-            this.props.invoices.filter(invoice => invoice.consumo == null).length === 0
-        );
-    }
-
-    isLoadPaymentsButtonEnabled() {
-        return (
-            this.props.invoices.length > 0 &&
-            this.props.invoices.filter(
-                invoice =>
-                    invoice.estado === "emitida" ||
-                    invoice.estado === "pendiente_de_cobro"
-            ).length !== 0
-        );
+    get actionsMonth() {
+        return {
+            month: this.props.filter.month,
+            year: this.props.filter.year,
+        };
     }
 
     render() {
@@ -97,9 +87,24 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                             month={this.props.filter.month}
                             year={this.props.filter.year}
                             handleChange={this.handleDateChange}
+                            isNextInvoicingMonth={this.isNextInvoicingMonth}
                         />
                     </div>
                     <div className="sidebar-group">
+                        <label>Acciones</label>
+                        <div className="d-flex flex-column">
+                            <ListMonthlyInvoicesActions
+                                isInvoicingMonth={this.isInvoicingMonth}
+                                isNextInvoicingMonth={this.isNextInvoicingMonth}
+                                actionsMonth={this.actionsMonth}
+                                invoices={this.props.invoices}
+                                handleClickStartInvoicingMonth={
+                                    this.props.handleClickStartInvoicingMonth
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className="sidebar-group mt-auto mb-5">
                         <label>Filtro</label>
                         <MonthlyInvoicingFilter
                             sectorsDomain={this.state.domain.sectors}
@@ -108,38 +113,6 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                             filter={this.props.filter}
                             handleChange={this.handleFilterChange}
                         />
-                    </div>
-                    <div className="sidebar-group mt-auto">
-                        <label>Acciones</label>
-                        <div className="d-flex flex-column">
-                            <button
-                                type="botton"
-                                className="btn btn-secondary mt-2 mb-2"
-                                disabled={!this.isInvoiceButtonEnabled()}
-                            >
-                                1. Iniciar facturación
-                            </button>
-                            <button
-                                type="botton"
-                                className="btn btn-secondary mt-2 mb-2"
-                                disabled={!this.isLoadMeasurementsButtonEnabled()}
-                            >
-                                2. Importar lecturas
-                            </button>
-                            <InvoicePrintButton
-                                invoices={this.props.invoices}
-                                buttonTitle="3. Imprimir facturas"
-                                outputFilename={this.getOutputFilename()}
-                                disabled={!this.isPrintInvoiceButtonEnabled()}
-                            />
-                            <button
-                                type="botton"
-                                className="btn btn-secondary mt-2 mb-2"
-                                disabled={!this.isLoadPaymentsButtonEnabled()}
-                            >
-                                4. Cargar pagos
-                            </button>
-                        </div>
                     </div>
                 </div>
             );

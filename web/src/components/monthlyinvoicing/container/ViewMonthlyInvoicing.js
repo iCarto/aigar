@@ -10,6 +10,10 @@ class ViewMonthlyInvoicing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            invoicingMonth: {
+                month: null,
+                year: null,
+            },
             pagination: {
                 pageIndex: 0,
             },
@@ -33,11 +37,11 @@ class ViewMonthlyInvoicing extends React.Component {
     }
 
     componentDidMount() {
-        this.loadInvoicingMonth();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        console.log("componentDidUpdate", this.state.invoices);
+        console.log(
+            "componentDidUpdate",
+            this.state.filter.month,
+            this.state.filter.year
+        );
         if (this.state.filter.month === null) {
             this.loadInvoicingMonth();
         }
@@ -46,9 +50,12 @@ class ViewMonthlyInvoicing extends React.Component {
     loadInvoicingMonth() {
         InvoiceService.getInvoicingMonth().then(invoicingMonth => {
             console.log("invoicingMonth", invoicingMonth);
-            this.setState({
-                filter: Object.assign(this.state.filter, invoicingMonth),
-                pagination: {pageIndex: 0},
+            this.setState((prevState, props) => {
+                return {
+                    invoicingMonth,
+                    filter: Object.assign(prevState.filter, invoicingMonth),
+                    pagination: {pageIndex: 0},
+                };
             });
         });
     }
@@ -122,6 +129,7 @@ class ViewMonthlyInvoicing extends React.Component {
                     handleClickEditInvoice={this.handleClickEditInvoice}
                     handleClickViewMember={this.handleClickViewMember}
                     filter={this.state.filter}
+                    invoicingMonth={this.state.invoicingMonth}
                 />
             );
         }

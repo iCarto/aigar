@@ -4,7 +4,6 @@ import {InvoiceService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
 import {MonthlyInvoicingList} from "../presentation";
-import moment from "moment";
 import {DateUtil} from "components/util";
 
 class ListMonthlyInvoices extends React.Component {
@@ -14,14 +13,18 @@ class ListMonthlyInvoices extends React.Component {
             invoices: null,
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleClickStartInvoicingMonth = this.handleClickStartInvoicingMonth.bind(
+            this
+        );
     }
 
     componentDidMount() {
+        console.log("ListMonthlyInvoices.componentDidMount");
         this.loadInvoices();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("componentDidUpdate", this.state.invoices);
+        console.log("ListMonthlyInvoices.componentDidUpdate", this.state.invoices);
         if (this.state.invoices === null) {
             this.loadInvoices();
         }
@@ -45,6 +48,11 @@ class ListMonthlyInvoices extends React.Component {
             });
         }
         this.props.handleFilterChange(newFilter);
+    }
+
+    handleClickStartInvoicingMonth() {
+        console.log("handleClickStartInvoicingMonth");
+        this.loadInvoices();
     }
 
     filter(invoices, filter) {
@@ -79,6 +87,8 @@ class ListMonthlyInvoices extends React.Component {
                 handleFilterChange={this.handleFilterChange}
                 filter={this.props.filter}
                 invoices={this.filter(this.state.invoices, this.props.filter)}
+                invoicingMonth={this.props.invoicingMonth}
+                handleClickStartInvoicingMonth={this.handleClickStartInvoicingMonth}
             />
         );
     }

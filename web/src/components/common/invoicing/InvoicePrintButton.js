@@ -1,7 +1,6 @@
 import React from "react";
 import {Spinner} from "components/common";
 import {DocXPrintFileService, FileService} from "service/file";
-import {InvoiceService} from "service/api";
 
 class InvoicePrintButton extends React.Component {
     constructor(props) {
@@ -92,12 +91,12 @@ class InvoicePrintButton extends React.Component {
     }
 
     render() {
-        return (
+        return !this.props.hidden ? (
             <>
                 {this.state.loading ? this.spinner : this.button}
                 {this.message}
             </>
-        );
+        ) : null;
     }
 }
 

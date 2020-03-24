@@ -55,7 +55,10 @@ class MonthlyInvoicingCalendar extends React.Component {
     isNextButtonDisabled() {
         const currentMonth = moment().month();
         const currentYear = moment().year();
-        return currentMonth === this.props.month && currentYear === this.props.year;
+        return (
+            (currentMonth === this.props.month && currentYear === this.props.year) ||
+            this.props.isNextInvoicingMonth()
+        );
     }
 
     get monthOptions() {

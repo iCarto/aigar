@@ -5,13 +5,15 @@ from rest_framework.response import Response
 
 
 class MemberViewSet(viewsets.ModelViewSet):
+    queryset = Member.objects.all()
     serializer_class = MemberSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
+    def list(self, request):
+        queryset = Member.objects.all()
         queryset = Member.objects.filter(is_active=True).all()
-
-        return queryset
+        serializer = MemberSerializer(queryset, many=True, context={"request": request})
+        return Response(serializer.data)
 
     # Override destroy method to set Member as inactive
     def destroy(self, request, *args, **kwargs):

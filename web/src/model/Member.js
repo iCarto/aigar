@@ -56,7 +56,7 @@ const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija
 class Members extends Array {}
 
 const member_api_adapter = member => {
-    member["solo_mecha"] = member["medidor"] === "M" ? true : false;
+    // member["solo_mecha"] = member["medidor"] === "M" ? true : false;
     member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
     member["tipo_socio"] = getTipoSocio(
         member.solo_mecha,
@@ -107,6 +107,7 @@ const createMember = ({
 
     consumo_maximo = 0,
     consumo_reduccion_fija = 0,
+    is_active = true,
 } = {}) => {
     const publicApi = {
         num_socio,
@@ -118,6 +119,7 @@ const createMember = ({
         observaciones,
         consumo_maximo,
         consumo_reduccion_fija,
+        is_active,
         // comunidad: SECTORES_COMUNIDADES[this.sector],
     };
 

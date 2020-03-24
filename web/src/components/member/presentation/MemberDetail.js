@@ -1,6 +1,17 @@
 import React from "react";
 
 class MemberDetail extends React.Component {
+    get message() {
+        if (!this.props.member.is_active) {
+            return (
+                <div className="alert alert-danger">
+                    Este usuario se encuentra eliminado del sistema.
+                </div>
+            );
+        }
+        return null;
+    }
+
     render() {
         const {
             num_socio,
@@ -16,6 +27,7 @@ class MemberDetail extends React.Component {
         } = this.props.member;
         return (
             <div className="card mb-3">
+                {this.message}
                 <div className="row">
                     <div className="col-6">
                         <div className="p-3">
@@ -45,8 +57,9 @@ class MemberDetail extends React.Component {
                             <span className="p-1">{medidor}</span>
                         </div>
                         <div className="p-3">
-                            <label className="p-1">Solo mecha:</label>
-                            <span className="p-1">{solo_mecha}</span>
+                            <label className="p-1">
+                                {solo_mecha ? <strong>Solo mecha</strong> : null}
+                            </label>
                         </div>
                         <div className="p-3">
                             <label className="p-1">Consumo máximo:</label>

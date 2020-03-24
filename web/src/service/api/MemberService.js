@@ -41,6 +41,22 @@ const MemberService = {
         );
     },
 
+    setMemberConnected(member, connected) {
+        const memberWithSoloMechaUpdated = createMember(
+            Object.assign({}, member, {solo_mecha: connected})
+        );
+        return this.updateMember(memberWithSoloMechaUpdated);
+    },
+
+    deleteMember(member) {
+        return ApiService.delete("/members/" + member.num_socio + "/").then(
+            response => {
+                let member = member_api_adapter(response);
+                return createMember(member);
+            }
+        );
+    },
+
     getMembersMonthInfo(filter) {
         console.log({filter});
         const membersPromise = Promise.resolve(DatabaseFixture).then(d => {

@@ -19,6 +19,11 @@ class ViewMember extends React.Component {
         this.handleClickEditMember = this.handleClickEditMember.bind(this);
         this.handleSubmitEditMember = this.handleSubmitEditMember.bind(this);
         this.handleBackEditMember = this.handleBackEditMember.bind(this);
+        this.handleSuccessDeletedMember = this.handleSuccessDeletedMember.bind(this);
+        this.handleSuccessConnectMember = this.handleSuccessConnectMember.bind(this);
+        this.handleSuccessDisconnectMember = this.handleSuccessDisconnectMember.bind(
+            this
+        );
     }
 
     static getDerivedStateFromProps(props, prevState) {
@@ -71,13 +76,31 @@ class ViewMember extends React.Component {
         this.setState({view: "view", member});
     }
 
+    handleSuccessConnectMember() {
+        this.setState({view: "view"});
+        this.loadMember();
+    }
+
+    handleSuccessDisconnectMember() {
+        this.setState({view: "view"});
+        this.loadMember();
+    }
+
+    handleSuccessDeletedMember() {
+        this.handleBack();
+    }
+
     get sidebar() {
-        if (this.state.view === "edit") {
+        if (this.state.view === "edit" || !this.state.member) {
             return null;
         }
         return (
             <ViewMemberSidebar
+                member={this.state.member}
                 handleClickEditMember={this.handleClickEditMember}
+                handleSuccessDeletedMember={this.handleSuccessDeletedMember}
+                handleSuccessConnectMember={this.handleSuccessConnectMember}
+                handleSuccessDisconnectMember={this.handleSuccessDisconnectMember}
                 handleBack={this.handleBack}
             />
         );

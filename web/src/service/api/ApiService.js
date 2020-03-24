@@ -14,6 +14,10 @@ const ApiService = {
     put(url, data) {
         return httpClientService.put(urlBase + url, data);
     },
+
+    delete(url) {
+        return httpClientService.delete(urlBase + url);
+    },
 };
 
 export default ApiService;

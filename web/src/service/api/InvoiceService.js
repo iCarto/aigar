@@ -19,6 +19,20 @@ const InvoiceService = {
         });
     },
 
+    startInvoicingMonth(invoicingMonth) {
+        const invoicingMonthToCreate = Object.assign({}, invoicingMonth, {
+            month: invoicingMonth.month + 1,
+        });
+        return ApiService.post("/invoicing_month", invoicingMonthToCreate).then(
+            response => {
+                return {
+                    year: response.year,
+                    month: response.month - 1,
+                };
+            }
+        );
+    },
+
     getInvoices() {
         return ApiService.get("/invoices").then(response => {
             return createInvoices(invoices_api_adapter(response));

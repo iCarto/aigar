@@ -34,6 +34,7 @@ class ViewMonthlyInvoicing extends React.Component {
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
         this.handleBackFromEditInvoice = this.handleBackFromEditInvoice.bind(this);
         this.handleBackFromViewMember = this.handleBackFromViewMember.bind(this);
+        this.handleChangeInvoicingMonth = this.handleChangeInvoicingMonth.bind(this);
     }
 
     componentDidMount() {
@@ -101,6 +102,10 @@ class ViewMonthlyInvoicing extends React.Component {
         });
     }
 
+    handleChangeInvoicingMonth(newInvoicingMonth) {
+        this.setState({invoicingMonth: newInvoicingMonth});
+    }
+
     render() {
         if (this.state.selectedInvoice) {
             return (
@@ -130,6 +135,7 @@ class ViewMonthlyInvoicing extends React.Component {
                     handleClickViewMember={this.handleClickViewMember}
                     filter={this.state.filter}
                     invoicingMonth={this.state.invoicingMonth}
+                    handleChangeInvoicingMonth={this.handleChangeInvoicingMonth}
                 />
             );
         }

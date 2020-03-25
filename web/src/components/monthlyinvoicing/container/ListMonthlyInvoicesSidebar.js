@@ -98,8 +98,8 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                                 isNextInvoicingMonth={this.isNextInvoicingMonth}
                                 actionsMonth={this.actionsMonth}
                                 invoices={this.props.invoices}
-                                handleClickStartInvoicingMonth={
-                                    this.props.handleClickStartInvoicingMonth
+                                handleSuccessCreateInvoices={
+                                    this.props.handleSuccessCreateInvoices
                                 }
                             />
                         </div>

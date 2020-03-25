@@ -1,10 +1,10 @@
 import React from "react";
 import {
-    StartInvoicingMonth,
     InvoicePrintButton,
     LoadPaymentsButton,
     LoadMeasurementsButton,
 } from "components/common/invoicing";
+import StartInvoicingMonthButton from "./StartInvoicingMonthButton";
 
 class ListMonthlyInvoicesActions extends React.Component {
     getOutputFilename() {
@@ -48,15 +48,13 @@ class ListMonthlyInvoicesActions extends React.Component {
 
     get invoiceButton() {
         return (
-            <StartInvoicingMonth
+            <StartInvoicingMonthButton
                 invoicingMonth={this.props.actionsMonth}
                 hidden={
                     !this.props.isInvoicingMonth() && !this.props.isNextInvoicingMonth()
                 }
                 disabled={!this.isInvoiceButtonEnabled()}
-                handleClickStartInvoicingMonth={
-                    this.props.handleClickStartInvoicingMonth
-                }
+                handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
             />
         );
     }
@@ -65,7 +63,7 @@ class ListMonthlyInvoicesActions extends React.Component {
         return (
             <LoadMeasurementsButton
                 hidden={!this.props.isInvoicingMonth()}
-                disabled={!this.isInvoiceButtonEnabled()}
+                disabled={!this.isLoadMeasurementsButtonEnabled()}
             />
         );
     }
@@ -88,12 +86,13 @@ class ListMonthlyInvoicesActions extends React.Component {
         return (
             <LoadPaymentsButton
                 hidden={!this.props.isInvoicingMonth()}
-                disabled={!this.isInvoiceButtonEnabled()}
+                disabled={!this.isLoadPaymentsButtonEnabled()}
             />
         );
     }
 
     render() {
+        console.log("ListMonthlyInvoicesActions.render", this.props);
         return (
             <>
                 {this.invoiceButton}

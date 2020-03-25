@@ -13,9 +13,7 @@ class ListMonthlyInvoices extends React.Component {
             invoices: null,
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleClickStartInvoicingMonth = this.handleClickStartInvoicingMonth.bind(
-            this
-        );
+        this.handleSuccessCreateInvoices = this.handleSuccessCreateInvoices.bind(this);
     }
 
     componentDidMount() {
@@ -50,8 +48,9 @@ class ListMonthlyInvoices extends React.Component {
         this.props.handleFilterChange(newFilter);
     }
 
-    handleClickStartInvoicingMonth() {
-        console.log("handleClickStartInvoicingMonth");
+    handleSuccessCreateInvoices(newInvoicingMonth) {
+        console.log("handleSuccessCreateInvoices");
+        this.props.handleChangeInvoicingMonth(newInvoicingMonth);
         this.loadInvoices();
     }
 
@@ -88,7 +87,7 @@ class ListMonthlyInvoices extends React.Component {
                 filter={this.props.filter}
                 invoices={this.filter(this.state.invoices, this.props.filter)}
                 invoicingMonth={this.props.invoicingMonth}
-                handleClickStartInvoicingMonth={this.handleClickStartInvoicingMonth}
+                handleSuccessCreateInvoices={this.handleSuccessCreateInvoices}
             />
         );
     }

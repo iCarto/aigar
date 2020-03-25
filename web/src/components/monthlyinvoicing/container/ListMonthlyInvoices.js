@@ -77,7 +77,7 @@ class ListMonthlyInvoices extends React.Component {
                 return filtered;
             });
         }
-        return [];
+        return null;
     }
 
     get sidebar() {
@@ -94,7 +94,6 @@ class ListMonthlyInvoices extends React.Component {
 
     get content() {
         if (this.state.invoices) {
-            console.log();
             return (
                 <MonthlyInvoicingList
                     title={

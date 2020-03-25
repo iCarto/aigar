@@ -1,6 +1,6 @@
 import React from "react";
 import {BackButton} from "components/common";
-import InvoicePrintButton from "components/common/invoicing/InvoicePrintButton";
+import {PrintInvoiceButton} from "components/monthlyinvoicing/container/actions";
 
 class EditInvoiceSidebar extends React.Component {
     getOutputFilename() {
@@ -24,7 +24,7 @@ class EditInvoiceSidebar extends React.Component {
                     <label>Acciones</label>
                     <div className="d-flex flex-column text-center">
                         <div className="mt-4 mb-4">
-                            <InvoicePrintButton
+                            <PrintInvoiceButton
                                 invoices={[this.props.invoice]}
                                 buttonTitle="Imprimir factura"
                                 outputFilename={this.getOutputFilename()}

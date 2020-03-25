@@ -1,23 +1,24 @@
 import React from "react";
 import {
-    InvoicePrintButton,
+    PrintInvoiceButton,
     LoadPaymentsButton,
     LoadMeasurementsButton,
-} from "components/common/invoicing";
-import StartInvoicingMonthButton from "./StartInvoicingMonthButton";
+    StartInvoicingMonthButton,
+} from "components/monthlyinvoicing/container/actions";
+import moment from "moment";
 
 class ListMonthlyInvoicesActions extends React.Component {
     getOutputFilename() {
         return (
             "recibo_" +
-            this.props.actionsMonth.year +
+            this.props.yearMonth.year +
             "_" +
-            this.props.actionsMonth.month +
+            this.props.yearMonth.month +
             "_todos"
         );
     }
 
-    isInvoiceButtonEnabled() {
+    isStartInvoicingEnabled() {
         return this.props.invoices.length === 0;
     }
 
@@ -46,14 +47,41 @@ class ListMonthlyInvoicesActions extends React.Component {
         );
     }
 
+    isPreviousInvoicingMonth() {
+        const currentInvoicingMonth = moment()
+            .year(this.props.invoicingMonth.year)
+            .month(this.props.invoicingMonth.month)
+            .date(1);
+        return (
+            currentInvoicingMonth.month() > this.props.yearMonth.month ||
+            currentInvoicingMonth.year() > this.props.yearMonth.year
+        );
+    }
+
+    isCurrentInvoicingMonth() {
+        return (
+            this.props.invoicingMonth.month === this.props.yearMonth.month &&
+            this.props.invoicingMonth.year === this.props.yearMonth.year
+        );
+    }
+
+    isNextInvoicingMonth() {
+        const nextInvoicingMonth = moment()
+            .year(this.props.invoicingMonth.year)
+            .month(this.props.invoicingMonth.month)
+            .date(1)
+            .add(1, "month");
+        return (
+            nextInvoicingMonth.month() === this.props.yearMonth.month &&
+            nextInvoicingMonth.year() === this.props.yearMonth.year
+        );
+    }
+
     get invoiceButton() {
         return (
             <StartInvoicingMonthButton
-                invoicingMonth={this.props.actionsMonth}
-                hidden={
-                    !this.props.isInvoicingMonth() && !this.props.isNextInvoicingMonth()
-                }
-                disabled={!this.isInvoiceButtonEnabled()}
+                invoicingMonth={this.props.yearMonth}
+                disabled={!this.isStartInvoicingEnabled()}
                 handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
             />
         );
@@ -62,7 +90,6 @@ class ListMonthlyInvoicesActions extends React.Component {
     get loadMeasurementsButton() {
         return (
             <LoadMeasurementsButton
-                hidden={!this.props.isInvoicingMonth()}
                 disabled={!this.isLoadMeasurementsButtonEnabled()}
             />
         );
@@ -70,37 +97,40 @@ class ListMonthlyInvoicesActions extends React.Component {
 
     get printInvoiceButton() {
         return (
-            <InvoicePrintButton
+            <PrintInvoiceButton
                 invoices={this.props.invoices}
-                buttonTitle={
-                    this.props.isInvoicingMonth() ? "3. Imprimir facturas" : "Imprimir"
-                }
+                buttonTitle="3. Imprimir facturas"
                 outputFilename={this.getOutputFilename()}
-                hidden={this.props.isNextInvoicingMonth()}
                 disabled={!this.isPrintInvoiceButtonEnabled()}
             />
         );
     }
 
     get loadPaymentsButton() {
-        return (
-            <LoadPaymentsButton
-                hidden={!this.props.isInvoicingMonth()}
-                disabled={!this.isLoadPaymentsButtonEnabled()}
-            />
-        );
+        return <LoadPaymentsButton disabled={!this.isLoadPaymentsButtonEnabled()} />;
     }
 
     render() {
-        console.log("ListMonthlyInvoicesActions.render", this.props);
-        return (
-            <>
-                {this.invoiceButton}
-                {this.loadMeasurementsButton}
-                {this.printInvoiceButton}
-                {this.loadPaymentsButton}
-            </>
-        );
+        if (this.props.invoices) {
+            if (this.isNextInvoicingMonth()) {
+                return this.invoiceButton;
+            }
+            if (this.isCurrentInvoicingMonth()) {
+                return (
+                    <>
+                        {this.invoiceButton}
+                        {this.loadMeasurementsButton}
+                        {this.printInvoiceButton}
+                        {this.loadPaymentsButton}
+                    </>
+                );
+            }
+            if (this.isPreviousInvoicingMonth()) {
+                return this.printInvoiceButton;
+            }
+            return null;
+        }
+        return null;
     }
 }
 

@@ -14,8 +14,8 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     handleMonthChangePrevious() {
         const selectedDate = moment()
-            .year(this.props.year)
-            .month(this.props.month)
+            .year(this.props.yearMonth.year)
+            .month(this.props.yearMonth.month)
             .date(1)
             .add(-1, "month");
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -23,8 +23,8 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     handleMonthChangeNext() {
         const selectedDate = moment()
-            .year(this.props.year)
-            .month(this.props.month)
+            .year(this.props.yearMonth.year)
+            .month(this.props.yearMonth.month)
             .date(1)
             .add(1, "month");
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -32,7 +32,7 @@ class MonthlyInvoicingCalendar extends React.Component {
 
     handleMonthSelected(event) {
         const selectedDate = moment()
-            .year(this.props.year)
+            .year(this.props.yearMonth.year)
             .month(event.target.value)
             .date(1);
         this.props.handleChange(selectedDate.year(), selectedDate.month());
@@ -41,7 +41,7 @@ class MonthlyInvoicingCalendar extends React.Component {
     handleYearSelected(event) {
         const selectedDate = moment()
             .year(event.target.value)
-            .month(this.props.month)
+            .month(this.props.yearMonth.month)
             .date(1);
         this.props.handleChange(selectedDate.year(), selectedDate.month());
     }
@@ -49,15 +49,18 @@ class MonthlyInvoicingCalendar extends React.Component {
     isPreviousButtonDisabled() {
         const firstMonth = 0;
         const firstYear = this.FIRST_YEAR;
-        return firstMonth === this.props.month && firstYear === this.props.year;
+        return (
+            firstMonth === this.props.yearMonth.month &&
+            firstYear === this.props.yearMonth.year
+        );
     }
 
     isNextButtonDisabled() {
         const currentMonth = moment().month();
         const currentYear = moment().year();
         return (
-            (currentMonth === this.props.month && currentYear === this.props.year) ||
-            this.props.isNextInvoicingMonth()
+            currentMonth === this.props.yearMonth.month &&
+            currentYear === this.props.yearMonth.year
         );
     }
 
@@ -85,7 +88,7 @@ class MonthlyInvoicingCalendar extends React.Component {
     }
 
     render() {
-        const {month, year} = this.props;
+        const {month, year} = this.props.yearMonth;
 
         return (
             <div className="text-center">

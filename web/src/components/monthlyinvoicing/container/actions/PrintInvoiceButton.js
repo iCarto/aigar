@@ -2,7 +2,7 @@ import React from "react";
 import {Spinner} from "components/common";
 import {DocXPrintFileService, FileService} from "service/file";
 
-class InvoicePrintButton extends React.Component {
+class PrintInvoiceButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -100,4 +100,4 @@ class InvoicePrintButton extends React.Component {
     }
 }
 
-export default InvoicePrintButton;
+export default PrintInvoiceButton;

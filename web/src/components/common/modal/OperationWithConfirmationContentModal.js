@@ -2,14 +2,14 @@ import React from "react";
 import {Modal, ModalHeader, ModalBody, ModalFooter} from "components/common/modal";
 import {Spinner} from "components/common";
 
-export const MemberDisconnectStatus = {
+export const OperationWithConfirmationContentModalStatus = {
     START: "start",
     PROGRESS: "progress",
     SUCCESS: "success",
     ERROR: "error",
 };
 
-class MemberDisconnectButtonModal extends React.Component {
+class OperationWithConfirmationContentModal extends React.Component {
     get closeButton() {
         return (
             <button
@@ -17,7 +17,7 @@ class MemberDisconnectButtonModal extends React.Component {
                 className="close"
                 aria-label="Close"
                 onClick={
-                    this.props.status === MemberDisconnectStatus.SUCCESS
+                    this.props.status === OperationWithConfirmationContentModal.SUCCESS
                         ? this.props.onClickFinished
                         : this.props.onClickCancel
                 }
@@ -112,13 +112,11 @@ class MemberDisconnectButtonModal extends React.Component {
         return (
             <>
                 <ModalHeader>
-                    <h3>Desconectar socio</h3>
+                    <h3>{this.props.modalTitle}</h3>
                     {this.closeButton}
                 </ModalHeader>
                 <ModalBody>
-                    <p className="alert alert-danger">
-                        Se ha producido un error y no se ha podido desconectar el socio.
-                    </p>
+                    <p className="alert alert-danger">{this.props.modalErrorText}</p>
                 </ModalBody>
                 <ModalFooter></ModalFooter>
             </>
@@ -143,4 +141,4 @@ class MemberDisconnectButtonModal extends React.Component {
     }
 }
 
-export default MemberDisconnectButtonModal;
+export default OperationWithConfirmationContentModal;

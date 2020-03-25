@@ -1,6 +1,9 @@
 import React from "react";
 import {MemberService} from "service/api";
-import {MemberDisconnectStatus, MemberDisconnectButtonModal} from "../presentation";
+import {
+    OperationWithConfirmationContentModal,
+    OperationWithConfirmationContentModalStatus,
+} from "components/common/modal";
 
 class DisconnectMemberButton extends React.Component {
     constructor(props) {
@@ -18,20 +21,27 @@ class DisconnectMemberButton extends React.Component {
 
     disconnectMember() {
         console.log("DisconnectMemberButton.disconnectMember");
-        this.setState({status: MemberDisconnectStatus.PROGRESS}, () => {
-            MemberService.setMemberConnected(this.props.member, true)
-                .then(disconnectedMember => {
-                    this.setState({status: MemberDisconnectStatus.SUCCESS});
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.setState({status: MemberDisconnectStatus.ERROR});
-                });
-        });
+        this.setState(
+            {status: OperationWithConfirmationContentModalStatus.PROGRESS},
+            () => {
+                MemberService.setMemberConnected(this.props.member, true)
+                    .then(disconnectedMember => {
+                        this.setState({
+                            status: OperationWithConfirmationContentModalStatus.SUCCESS,
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.setState({
+                            status: OperationWithConfirmationContentModalStatus.ERROR,
+                        });
+                    });
+            }
+        );
     }
 
     openModal() {
-        this.setState({status: MemberDisconnectStatus.START});
+        this.setState({status: OperationWithConfirmationContentModalStatus.START});
     }
 
     closeModal() {
@@ -76,8 +86,7 @@ class DisconnectMemberButton extends React.Component {
 
     get modal() {
         return (
-            <MemberDisconnectButtonModal
-                member={this.props.member}
+            <OperationWithConfirmationContentModal
                 modal={this.state.modal}
                 status={this.state.status}
                 modalTitle="Desconectar socio"
@@ -86,6 +95,7 @@ class DisconnectMemberButton extends React.Component {
                 modalAcceptText="Desconectar"
                 modalAcceptIcon="tint-slash"
                 spinnerMessage="Desconectando socio"
+                modalErrorText="Se ha producido un error y no se ha podido desconectar el socio."
                 onClickCancel={this.onClickCancel}
                 onClickAccept={this.onClickAccept}
                 onClickFinished={this.onClickFinished}

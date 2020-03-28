@@ -54,3 +54,26 @@ class InvoicingMonthView(ListCreateAPIView):
             invoice.sector = member.sector
             invoice.save()
         return Response({"year": year, "month": month})
+
+    def patch(self, request, *args, **kwargs):
+        measurements = request.data
+        monthly_invoices = Invoice.objects.all()
+        updated_invoices = []
+        for invoice in monthly_invoices:
+            measurement_found = [
+                measurement
+                for measurement in measurements
+                if measurement["id_factura"] == invoice.id_factura
+            ]
+            if measurement_found:
+                measurement = measurement_found[0]
+                invoice.caudal_anterior = measurement["caudal_anterior"]
+                invoice.caudal_actual = measurement["caudal_actual"]
+                invoice.consumo = invoice.caudal_actual - invoice.caudal_anterior
+                invoice.save()
+                updated_invoices.append(invoice)
+        serializer = InvoiceSerializer(
+            context={"request": request}, data=updated_invoices, many=True
+        )
+        serializer.is_valid()
+        return Response(serializer.data)

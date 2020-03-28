@@ -41,6 +41,9 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
                 },
             },
             () => {
+                this.props.setIsNextButtonEnabled(
+                    this.state.fieldErrors.csvFile.length === 0
+                );
                 if (this.state.fieldErrors.csvFile.length === 0) {
                     this.props.afterValid(this.state.csvFile);
                 }
@@ -74,21 +77,10 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
 
     get fileUpload() {
         return (
-            <ImportedDataFileUpload handleFileRead={this.handleMeasurementsFileRead} />
-        );
-    }
-
-    get nextButton() {
-        const disabled = !this.isCSVFileValid();
-        return (
-            <button
-                className="btn btn-primary"
-                type="button"
-                onClick={this.props.next}
-                disabled={disabled}
-            >
-                Verificar entradas del fichero <i className="fas fa-chevron-right"></i>
-            </button>
+            <ImportedDataFileUpload
+                handleFileRead={this.handleMeasurementsFileRead}
+                allowedFormats={[".json"]}
+            />
         );
     }
 
@@ -99,7 +91,6 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
                     {this.fileUpload}
                     {this.messages}
                 </form>
-                <div className="col-md-12 text-center mt-4">{this.nextButton}</div>
             </div>
         );
     }

@@ -15,6 +15,10 @@ const ApiService = {
         return httpClientService.put(urlBase + url, data);
     },
 
+    patch(url, data) {
+        return httpClientService.patch(urlBase + url, data);
+    },
+
     delete(url) {
         return httpClientService.delete(urlBase + url);
     },

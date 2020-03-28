@@ -1,15 +1,18 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 class LoadMeasurementsButton extends React.Component {
     get button() {
         return (
-            <button
-                onClick={this.props.handleClickLoadMeasurements}
-                className="btn btn-secondary mt-2 mb-2"
-                disabled={this.props.disabled}
+            <Link
+                to="/cargarlecturas"
+                className={
+                    "btn btn-secondary mt-2 mb-2 " +
+                    (this.props.disabled ? "disabled" : "")
+                }
             >
                 2. Importar lecturas
-            </button>
+            </Link>
         );
     }
 

@@ -1,5 +1,6 @@
 import CSVFileValidator from "./model/CSVFileValidator";
 import DataValidator from "./model/DataValidator";
+import JSONFileValidator from "./model/JSONFileValidator";
 
 const ImportedDataValidatorService = {
     validateFile(fileObject, validator) {
@@ -32,7 +33,6 @@ const ImportedDataValidatorService = {
             if (validationErrors.length > 0) {
                 validationErrors.forEach(validationError => {
                     errors.push({
-                        id: entryObject.id,
                         type: "error",
                         field: validationAttr,
                         msg: validationError,
@@ -80,14 +80,9 @@ const ImportedDataValidatorService = {
     validateMeasurementsFile(fileObject) {
         return this.validateFile(
             fileObject,
-            new CSVFileValidator({
+            new JSONFileValidator({
                 file: ["extension"],
-                content: [
-                    {
-                        type: "columns",
-                        param: 4,
-                    },
-                ],
+                content: [],
             })
         );
     },
@@ -97,9 +92,11 @@ const ImportedDataValidatorService = {
             entryObject,
             new DataValidator({
                 sector: ["isNotEmpty"],
-                memberNumber: ["isNotEmpty"],
-                measurementDate: ["isNotEmpty", "isDate"],
-                currentMeasurement: ["isNotEmpty", "isDecimal2"],
+                num_socio: ["isNotEmpty"],
+                lectura_anterior: ["isNotEmpty", "isDecimal2"],
+                lectura: ["isNotEmpty", "isDecimal2"],
+                num_contador: ["isNotEmpty", "isInteger"],
+                cambio_contador: ["isNotEmpty", "isBoolean"],
             })
         );
     },

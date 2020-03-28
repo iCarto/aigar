@@ -1,5 +1,10 @@
 export {default as CSVFile} from "./CSVFile";
-export {default as MeasurementImportedData} from "./MeasurementImportedData";
+export {
+    default as createMeasurement,
+    createMeasurements,
+    measurement_api_adapter,
+    measurements_api_adapter,
+} from "./Measurement";
 export {
     default as createMember,
     createMembers,

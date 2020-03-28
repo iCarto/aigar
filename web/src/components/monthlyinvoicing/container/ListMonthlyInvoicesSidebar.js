@@ -2,7 +2,6 @@ import React from "react";
 import {MonthlyInvoicingCalendar} from "../presentation";
 import ListMonthlyInvoicesActions from "./ListMonthlyInvoicesActions";
 import ListMonthlyInvoicesFilter from "./ListMonthlyInvoicesFilter";
-import moment from "moment";
 
 class ListMonthlyInvoicesSidebar extends React.Component {
     constructor(props) {

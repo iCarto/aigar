@@ -1,49 +1,16 @@
-import React, {useEffect} from "react";
-import {useTable, useSortBy, usePagination} from "react-table";
-import PaginatedTableNavigator from "./PaginatedTableNavigator";
+import React from "react";
+import {useTable, useSortBy} from "react-table";
 
-const SortedPaginatedTable = ({
-    columns,
-    data,
-    selectedPageIndex,
-    handleChangePageIndex,
-    updateMyData,
-}) => {
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
-        state: {pageIndex},
-    } = useTable(
+const SortedTable = ({columns, data, updateMyData}) => {
+    const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
         {
             columns,
             data,
-            initialState: {
-                pageSize: 15,
-                pageIndex: selectedPageIndex || 0,
-            },
             updateMyData,
         },
-        useSortBy,
-        usePagination
+        useSortBy
     );
-    console.log("SortedPaginatedTable.render", {selectedPageIndex});
-
-    // Listening for changes in pagination and lifting up them
-    useEffect(() => {
-        if (handleChangePageIndex) {
-            handleChangePageIndex(pageIndex);
-        }
-    }, [pageIndex, handleChangePageIndex]);
+    console.log("SortedTable.render");
 
     return (
         <>
@@ -74,7 +41,7 @@ const SortedPaginatedTable = ({
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {page.map((row, i) => {
+                    {rows.map(row => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()}>
@@ -90,18 +57,8 @@ const SortedPaginatedTable = ({
                     })}
                 </tbody>
             </table>
-            <PaginatedTableNavigator
-                canPreviousPage={canPreviousPage}
-                previousPage={previousPage}
-                canNextPage={canNextPage}
-                nextPage={nextPage}
-                gotoPage={gotoPage}
-                pageIndex={pageIndex}
-                pageCount={pageCount}
-                pageOptions={pageOptions}
-            />
         </>
     );
 };
 
-export default SortedPaginatedTable;
+export default SortedTable;

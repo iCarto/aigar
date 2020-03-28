@@ -10,19 +10,47 @@ class DataValidator extends Validator {
     }
 
     isDate(value) {
+        if (!value || value === "") {
+            return;
+        }
         if (!moment(value, "DD/MM/YYYY", true).isValid()) {
             return "El formato de fecha no es válido";
         }
     }
 
+    isBoolean(value) {
+        if (!value || value === "") {
+            return;
+        }
+        if (!typeof value === "boolean") {
+            return "El campo no tiene un formato válido";
+        }
+    }
+
+    isInteger(value) {
+        if (!value || value === "") {
+            return;
+        }
+        var decimalRegExp = /^\d+$/;
+        if (!decimalRegExp.test(value)) {
+            return "El campo no tiene un formato válido";
+        }
+    }
+
     isDecimal2(value) {
+        if (!value || value === "") {
+            return;
+        }
         var decimalRegExp = /^\d+(\.\d{1,2})?$/;
         if (!decimalRegExp.test(value)) {
-            return "El importe no tiene un formato válido";
+            return "El campo no tiene un formato válido";
         }
     }
 
     length(length, value) {
+        if (!value || value === "") {
+            return;
+        }
         if (value.length !== length) {
             return "El campo debe tener " + length + " caracteres";
         }

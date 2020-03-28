@@ -33,6 +33,13 @@ const InvoiceService = {
         );
     },
 
+    updateInvoicingMonth(invoices) {
+        return ApiService.patch("/invoicing_month", invoices).then(response => {
+            console.log(response);
+            return response;
+        });
+    },
+
     getInvoices() {
         return ApiService.get("/invoices").then(response => {
             return createInvoices(invoices_api_adapter(response));

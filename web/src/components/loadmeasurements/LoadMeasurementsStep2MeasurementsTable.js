@@ -1,105 +1,179 @@
 import React from "react";
-import ImportedDataTable from "../common/importeddata/table/ImportedDataTable";
 import {ImportedDataValidatorService} from "service/validation";
+import {
+    SortedTable,
+    EditableTextCellTable,
+    EditableSelectCellTable,
+} from "components/common/table";
+import {createMeasurement} from "model";
+import {Spinner} from "components/common";
+import ImportedDataTableFilter from "components/common/importeddata/table/ImportedDataTableFilter";
 
 class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            measurements: this.props.measurements,
-            measurementsErrors: this.validateMeasurements(this.props.measurements),
+            measurements: null,
         };
-        console.log(this.state);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.updateMyData = this.updateMyData.bind(this);
     }
 
-    validateMeasurements(measurements) {
-        return measurements
-            .map(measurement =>
-                ImportedDataValidatorService.validateMeasurementEntry(measurement)
-            )
-            .flat();
+    componentDidMount() {
+        this.setState({
+            measurements: this.props.measurements,
+        });
     }
 
-    filterMeasurement(measurement, filterText) {
-        return measurement.invoice.indexOf(filterText) >= 0;
+    getMeasurementsTotalErrors() {
+        return this.state.measurements.filter(
+            measurement => measurement.errors.length !== 0
+        ).length;
     }
 
-    isValid() {
+    filterByText(measurement, filterText) {
         return (
-            this.state.measurements != null &&
-            this.state.measurementsErrors != null &&
-            this.state.measurementsErrors.length === 0
+            measurement.nombre_socio.indexOf(filterText) >= 0 ||
+            measurement.num_socio.toString().indexOf(filterText) >= 0 ||
+            measurement.num_contador.toString().indexOf(filterText) >= 0
+        );
+    }
+
+    handleFilterChange(filterData) {
+        this.setState((prevState, props) => ({
+            measurements: props.measurements.filter(measurement => {
+                let filtered = true;
+                if (filterData.filterText != null) {
+                    filtered = this.filterByText(measurement, filterData.filterText);
+                }
+                if (filterData.showOnlyErrors) {
+                    filtered = filtered && measurement.errors.length !== 0;
+                }
+                return filtered;
+            }),
+        }));
+    }
+
+    updateMyData(rowIndex, columnId, value) {
+        // We also turn on the flag to not reset the page
+        console.log({rowIndex}, {columnId}, {value});
+        this.setState(
+            (prevState, props) => {
+                const updatedMeasurements = prevState.measurements.map((row, index) => {
+                    if (index === rowIndex) {
+                        const updatedMeasurementData = {
+                            ...prevState.measurements[rowIndex],
+                            [columnId]: value,
+                        };
+                        const updatedMeasurement = createMeasurement({
+                            ...updatedMeasurementData,
+                            errors: ImportedDataValidatorService.validateMeasurementEntry(
+                                updatedMeasurementData
+                            ),
+                        });
+                        console.log({updatedMeasurement});
+                        return updatedMeasurement;
+                    }
+                    return row;
+                });
+                return {measurements: updatedMeasurements};
+            },
+            () => {
+                this.props.setIsNextButtonEnabled(
+                    this.state.measurements != null &&
+                        this.getMeasurementsTotalErrors() === 0
+                );
+                this.props.handleChangeData(this.state.measurements);
+            }
         );
     }
 
     /* VIEW SUBCOMPONENTS */
 
     get messages() {
-        if (this.state.measurementsErrors.length !== 0) {
+        if (!this.state.measurements || this.state.measurements.length == 0) {
             return (
-                <div className="alert alert-danger" role="alert">
-                    Se han encontrado errores en&nbsp;
-                    <strong>{this.state.measurementsErrors.length}</strong> registros.
+                <div className="alert alert-warning text-center" role="alert">
+                    No existen registros.
+                </div>
+            );
+        }
+        const totalRegistersWithErrors = this.getMeasurementsTotalErrors();
+        if (totalRegistersWithErrors !== 0) {
+            return (
+                <div className="alert alert-danger text-center" role="alert">
+                    Existen <strong>{totalRegistersWithErrors}</strong> registros con
+                    error de un total de{" "}
+                    <strong>{this.state.measurements.length}</strong> registros leídos.
                 </div>
             );
         }
         return (
-            <div className="alert alert-success" role="alert">
-                No se han encontrado errores.
+            <div className="alert alert-success text-center" role="alert">
+                No existen errores.
             </div>
         );
     }
 
-    get previousButton() {
-        return (
-            <button
-                className="btn btn-secondary"
-                type="button"
-                onClick={this.props.prev}
-            >
-                <i className="fas fa-chevron-left"></i> Cargar nuevo fichero
-            </button>
-        );
-    }
-
-    get nextButton() {
-        return (
-            <button
-                className="btn btn-primary float-right"
-                type="button"
-                onClick={this.props.next}
-                disabled={!this.isValid()}
-            >
-                Actualizar facturas <i className="fas fa-chevron-right"></i>
-            </button>
-        );
+    get filter() {
+        return <ImportedDataTableFilter handleFilterChange={this.handleFilterChange} />;
     }
 
     render() {
-        const headers = ["Sector", "Nº socio", "Fecha lectura", "Lectura actual"];
-        const fields = [
-            "sector",
-            "memberNumber",
-            "measurementDate",
-            "currentMeasurement",
-        ];
-        return (
-            <div className="column">
-                <div className="col-12">
-                    <ImportedDataTable
-                        headers={headers}
-                        fields={fields}
-                        elements={this.state.measurements}
-                        errors={this.state.measurementsErrors}
-                        filterByText={this.filterMeasurement}
-                    />
+        if (this.state.measurements) {
+            const columns = [
+                {
+                    Header: "Sector",
+                    accessor: "sector",
+                },
+                {
+                    Header: "Nº socio",
+                    accessor: "num_socio",
+                },
+                {
+                    Header: "Nombre",
+                    accessor: "nombre_socio",
+                },
+                {
+                    Header: "Lectura anterior",
+                    accessor: "lectura_anterior",
+                    Cell: EditableTextCellTable,
+                },
+                {
+                    Header: "Lectura actual",
+                    accessor: "lectura",
+                    Cell: EditableTextCellTable,
+                },
+                {
+                    Header: "Nº contador",
+                    accessor: "num_contador",
+                    Cell: EditableTextCellTable,
+                },
+                {
+                    Header: "Cambio de contador",
+                    accessor: "cambio_contador",
+                    Cell: EditableSelectCellTable,
+                },
+            ];
+
+            return (
+                <div className="d-flex flex-column justify-content-around">
+                    {this.messages}
+                    {this.filter}
+                    <div
+                        className="overflow-auto border rounded"
+                        style={{maxHeight: "450px"}}
+                    >
+                        <SortedTable
+                            columns={columns}
+                            data={this.state.measurements}
+                            updateMyData={this.updateMyData}
+                        />
+                    </div>
                 </div>
-                <div className="col-12">
-                    {this.previousButton}
-                    {this.nextButton}
-                </div>
-            </div>
-        );
+            );
+        }
+        return <Spinner message="Cargando lecturas" />;
     }
 }
 

@@ -41,6 +41,17 @@ const put = (url = "", body = {}, headers = {}) =>
         },
     }).then(response => response.json());
 
+const patch = (url = "", body = {}, headers = {}) =>
+    fetch(readUrl(url), {
+        method: "PATCH",
+        body: JSON.stringify(body),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...headers,
+        },
+    }).then(response => response.json());
+
 const del = (url = "", headers = {}) =>
     fetch(readUrl(url), {
         method: "DELETE",
@@ -55,5 +66,6 @@ export default {
     get,
     post,
     put,
+    patch,
     delete: del,
 };

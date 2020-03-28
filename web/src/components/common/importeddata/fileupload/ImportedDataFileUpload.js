@@ -35,13 +35,14 @@ class ImportedDataFileUpload extends React.Component {
                         type="file"
                         id="file"
                         className="input-file"
-                        accept=".txt,.csv"
+                        accept={this.props.allowedFormats.join(",")}
                         onChange={e => this.handleFileChosen(e.target.files[0])}
                         aria-describedby="fileUploadHelp"
                     />
                     {this.state.loading ? <Spinner message="Subiendo archivo" /> : null}
                     <small id="fileUploadHelp" className="form-text text-muted">
-                        La extensión del fichero debe ser .txt o .csv
+                        La extensión del fichero debe ser{" "}
+                        {this.props.allowedFormats.join(",")}
                     </small>
                 </div>
             </div>

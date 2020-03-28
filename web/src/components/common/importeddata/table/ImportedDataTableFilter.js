@@ -1,4 +1,5 @@
 import React from "react";
+import {Util} from "components/util";
 
 class ImportedDataTableFilter extends React.Component {
     constructor(props) {
@@ -7,6 +8,9 @@ class ImportedDataTableFilter extends React.Component {
             showOnlyErrors: false,
             filterText: null,
         };
+
+        // https://lifesaver.codes/answer/debounce-and-onchange
+        this.liftUpFilterChange = Util.debounce(this.liftUpFilterChange, 250);
     }
 
     handleShowErrorsChange(event) {
@@ -16,7 +20,7 @@ class ImportedDataTableFilter extends React.Component {
             },
             // lift up state when is updated
             () => {
-                this.props.handleFilterChange(this.state);
+                this.liftUpFilterChange();
             }
         );
     }
@@ -28,20 +32,22 @@ class ImportedDataTableFilter extends React.Component {
             },
             // lift up state when is updated
             () => {
-                this.props.handleFilterChange(this.state);
+                this.liftUpFilterChange();
             }
         );
+    }
+
+    liftUpFilterChange() {
+        this.props.handleFilterChange(this.state);
     }
 
     get selectShowOnlyErrors() {
         return (
             <div className="form-group">
-                <label htmlFor="selectShowOnlyErrors" className="mr-sm-2">
-                    Mostrar
-                </label>
+                <label htmlFor="selectShowOnlyErrors">Mostrar</label>
                 <select
                     name="selectShowOnlyErrors"
-                    className="form-control"
+                    className="form-control ml-2"
                     value={this.state.showErrors}
                     onChange={event => this.handleShowErrorsChange(event)}
                 >
@@ -54,7 +60,7 @@ class ImportedDataTableFilter extends React.Component {
 
     get filterByText() {
         return (
-            <div className="form-group ml-sm-2">
+            <div className="form-group">
                 <input
                     type="text"
                     name="filterByText"
@@ -68,9 +74,9 @@ class ImportedDataTableFilter extends React.Component {
 
     render() {
         return (
-            <form className="form-inline float-sm-right">
-                {this.selectShowOnlyErrors}
+            <form className="form-inline d-flex justify-content-between mb-2">
                 {this.filterByText}
+                {this.selectShowOnlyErrors}
             </form>
         );
     }

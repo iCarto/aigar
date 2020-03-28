@@ -1,0 +1,68 @@
+.stepper .step {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.stepper .step .circle {
+    background: greenyellow;
+    border-radius: 2em;
+    color: white;
+    height: 4em;
+    line-height: 4em;
+    margin: 0 6em;
+    text-align: center;
+    width: 4em;
+}
+
+.stepper .step::before {
+    background: greenyellow;
+    content: "";
+    height: 0.4em;
+    position: absolute;
+    top: 1.9em;
+    width: 17em;
+    z-index: -1;
+}
+
+.stepper .step:first-child::before {
+    left: 10em;
+    width: 6em;
+}
+
+.stepper .step:last-child::before {
+    left: 0;
+    width: 6em;
+}
+
+.stepper .active .circle,
+.stepper .active::before {
+    background: #007bff;
+}
+
+.stepper .active ~ .step .circle,
+.stepper .active ~ .step::before {
+    background: lightgrey;
+}
+
+.step .title {
+    color: #155724;
+    font-weight: bold;
+    margin-top: 1em;
+    white-space: nowrap;
+}
+
+.stepper .active .title {
+    color: #007bff;
+}
+
+.stepper .active ~ .step .title {
+    color: lightgrey;
+}
+
+.step .help {
+    font-size: 0.8em;
+    text-align: center;
+    width: 55%;
+}

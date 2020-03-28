@@ -1,5 +1,5 @@
 import React from "react";
-import {ImportedDataValidatorService} from "service/validation";
+import {LoadDataValidatorService} from "service/validation";
 import {
     SortedTable,
     EditableTextCellTable,
@@ -7,7 +7,7 @@ import {
 } from "components/common/table";
 import {createMeasurement} from "model";
 import {Spinner} from "components/common";
-import ImportedDataTableFilter from "components/common/importeddata/table/ImportedDataTableFilter";
+import LoadDataTableFilter from "components/common/loaddata/table/LoadDataTableFilter";
 
 class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     constructor(props) {
@@ -67,7 +67,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
                         };
                         const updatedMeasurement = createMeasurement({
                             ...updatedMeasurementData,
-                            errors: ImportedDataValidatorService.validateMeasurementEntry(
+                            errors: LoadDataValidatorService.validateMeasurementEntry(
                                 updatedMeasurementData
                             ),
                         });
@@ -116,7 +116,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     }
 
     get filter() {
-        return <ImportedDataTableFilter handleFilterChange={this.handleFilterChange} />;
+        return <LoadDataTableFilter handleFilterChange={this.handleFilterChange} />;
     }
 
     render() {

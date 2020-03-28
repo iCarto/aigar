@@ -1,6 +1,6 @@
 import React from "react";
 
-class ImportedDataWizard extends React.Component {
+class LoadDataWizard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,4 +94,4 @@ class ImportedDataWizard extends React.Component {
     }
 }
 
-export default ImportedDataWizard;
+export default LoadDataWizard;

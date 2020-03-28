@@ -1,7 +1,7 @@
 import React from "react";
 import {Util} from "components/util";
 
-class ImportedDataTableFilter extends React.Component {
+class LoadDataTableFilter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,4 +82,4 @@ class ImportedDataTableFilter extends React.Component {
     }
 }
 
-export default ImportedDataTableFilter;
+export default LoadDataTableFilter;

@@ -1,5 +1,5 @@
 import {createMeasurement, measurement_api_adapter} from "model";
-import {ImportedDataValidatorService} from "service/validation";
+import {LoadDataValidatorService} from "service/validation";
 
 const MeasurementsService = {
     getMeasurementsFromJSONContent: function(content) {
@@ -20,7 +20,7 @@ const MeasurementsService = {
                 });
                 return createMeasurement({
                     ...measurementData,
-                    errors: ImportedDataValidatorService.validateMeasurementEntry(
+                    errors: LoadDataValidatorService.validateMeasurementEntry(
                         measurementData
                     ),
                 });
@@ -49,7 +49,7 @@ const MeasurementsService = {
                     });
                     const measurement = createMeasurement({
                         ...measurementData,
-                        errors: ImportedDataValidatorService.validateMeasurementEntry(
+                        errors: LoadDataValidatorService.validateMeasurementEntry(
                             measurementData
                         ),
                     });

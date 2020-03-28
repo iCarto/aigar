@@ -2,7 +2,7 @@ import CSVFileValidator from "./model/CSVFileValidator";
 import DataValidator from "./model/DataValidator";
 import JSONFileValidator from "./model/JSONFileValidator";
 
-const ImportedDataValidatorService = {
+const LoadDataValidatorService = {
     validateFile(fileObject, validator) {
         let errors = [];
         Object.keys(validator.validations).forEach(validationAttr => {
@@ -102,4 +102,4 @@ const ImportedDataValidatorService = {
     },
 };
 
-export default ImportedDataValidatorService;
+export default LoadDataValidatorService;

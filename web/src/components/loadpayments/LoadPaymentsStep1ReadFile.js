@@ -1,7 +1,7 @@
 import React from "react";
-import ImportedDataFileUpload from "../common/importeddata/fileupload/ImportedDataFileUpload";
+import LoadDataFileUpload from "../common/loaddata/fileupload/LoadDataFileUpload";
 import {CSVFile} from "model";
-import {ImportedDataValidatorService} from "service/validation";
+import {LoadDataValidatorService} from "service/validation";
 
 class LoadPaymentsStep1ReadFile extends React.Component {
     state = {
@@ -47,7 +47,7 @@ class LoadPaymentsStep1ReadFile extends React.Component {
             {
                 csvFile,
                 fieldErrors: {
-                    csvFile: ImportedDataValidatorService.validatePaymentsFile(csvFile),
+                    csvFile: LoadDataValidatorService.validatePaymentsFile(csvFile),
                 },
             },
             () => {
@@ -103,7 +103,7 @@ class LoadPaymentsStep1ReadFile extends React.Component {
     }
 
     get fileUpload() {
-        return <ImportedDataFileUpload handleFileRead={this.handlePaymentsFileRead} />;
+        return <LoadDataFileUpload handleFileRead={this.handlePaymentsFileRead} />;
     }
 
     get nextButton() {

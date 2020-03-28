@@ -1,2 +1,2 @@
 export {default as DataValidatorService} from "./DataValidatorService";
-export {default as ImportedDataValidatorService} from "./ImportedDataValidatorService";
+export {default as LoadDataValidatorService} from "./LoadDataValidatorService";

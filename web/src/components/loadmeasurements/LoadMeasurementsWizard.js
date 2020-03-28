@@ -6,9 +6,9 @@ import LoadMeasurementsSidebar from "./LoadMeasurementsSidebar";
 import {MeasurementService} from "service/file";
 import {InvoiceService} from "service/api";
 import {
-    ImportedDataWizardStepper,
-    ImportedDataWizardStepInfo,
-} from "components/common/importeddata/wizard";
+    LoadDataWizardStepInfo,
+    LoadDataWizardStepper,
+} from "components/common/loaddata/wizard";
 
 /*
 Higher order component that:
@@ -109,7 +109,7 @@ class LoadMeasurementsWizard extends React.Component {
 
     get measurementsStepper() {
         return (
-            <ImportedDataWizardStepper
+            <LoadDataWizardStepper
                 steps={this.steps}
                 currentStep={this.props.currentStep}
             />
@@ -118,7 +118,7 @@ class LoadMeasurementsWizard extends React.Component {
 
     get stepInfo() {
         return (
-            <ImportedDataWizardStepInfo
+            <LoadDataWizardStepInfo
                 step={this.steps[this.props.currentStep - 1]}
                 numberOfSteps={this.props.numberOfSteps}
             />

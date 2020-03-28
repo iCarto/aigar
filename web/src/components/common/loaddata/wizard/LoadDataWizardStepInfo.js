@@ -1,6 +1,6 @@
 import React from "react";
 
-class ImportedDataWizardStepInfo extends React.Component {
+class LoadDataWizardStepInfo extends React.Component {
     render() {
         return (
             <div className="d-flex justify-content-between bg-secondary text-white p-3 rounded-top">
@@ -17,4 +17,4 @@ class ImportedDataWizardStepInfo extends React.Component {
     }
 }
 
-export default ImportedDataWizardStepInfo;
+export default LoadDataWizardStepInfo;

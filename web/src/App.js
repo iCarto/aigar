@@ -12,7 +12,7 @@ import {
 } from "./components/member/container";
 import {EditInvoice, ManageInvoices} from "components/invoice/container";
 
-import ImportedDataWizard from "./components/common/importeddata/wizard/ImportedDataWizard";
+import LoadDataWizard from "./components/common/loaddata/wizard/LoadDataWizard";
 
 import LoadPaymentsWizard from "./components/loadpayments/LoadPaymentsWizard";
 import LoadMeasurementsWizard from "./components/loadmeasurements/LoadMeasurementsWizard";
@@ -50,7 +50,7 @@ function MainContent(props) {
                 <Route
                     path="/cargarpagos"
                     render={props => (
-                        <ImportedDataWizard
+                        <LoadDataWizard
                             {...props}
                             children={<LoadPaymentsWizard />}
                             numberOfSteps={3}
@@ -62,7 +62,7 @@ function MainContent(props) {
                 <Route
                     path="/cargarlecturas"
                     render={props => (
-                        <ImportedDataWizard
+                        <LoadDataWizard
                             {...props}
                             children={<LoadMeasurementsWizard />}
                             numberOfSteps={3}

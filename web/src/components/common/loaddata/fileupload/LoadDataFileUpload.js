@@ -1,7 +1,7 @@
 import React from "react";
 import {Spinner} from "components/common";
 
-class ImportedDataFileUpload extends React.Component {
+class LoadDataFileUpload extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,4 +50,4 @@ class ImportedDataFileUpload extends React.Component {
     }
 }
 
-export default ImportedDataFileUpload;
+export default LoadDataFileUpload;

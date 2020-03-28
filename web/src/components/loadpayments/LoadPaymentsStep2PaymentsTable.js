@@ -1,6 +1,5 @@
 import React from "react";
-import ImportedDataTable from "../common/importeddata/table/ImportedDataTable";
-import {ImportedDataValidatorService} from "service/validation";
+import {LoadDataValidatorService} from "service/validation";
 
 class LoadPaymentsStep2PaymentsTable extends React.Component {
     constructor(props) {
@@ -14,7 +13,7 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
 
     validatePayments(payments) {
         return payments
-            .map(payment => ImportedDataValidatorService.validatePaymentEntry(payment))
+            .map(payment => LoadDataValidatorService.validatePaymentEntry(payment))
             .flat();
     }
 
@@ -78,15 +77,7 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
         const fields = ["invoice", "date", "amount"];
         return (
             <div className="column">
-                <div className="col-12">
-                    <ImportedDataTable
-                        headers={headers}
-                        fields={fields}
-                        elements={this.state.payments}
-                        errors={this.state.paymentsErrors}
-                        filterByText={this.filterPayment}
-                    />
-                </div>
+                <div className="col-12"></div>
                 <div className="col-12">
                     {this.previousButton}
                     {this.nextButton}

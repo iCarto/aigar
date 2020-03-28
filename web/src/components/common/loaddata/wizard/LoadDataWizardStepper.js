@@ -1,7 +1,7 @@
 import React from "react";
-import "./ImportedDataWizardStepper.css";
+import "./LoadDataWizardStepper.css";
 
-class ImportedDataWizardStepper extends React.Component {
+class LoadDataWizardStepper extends React.Component {
     get steps() {
         return this.props.steps.map(step => {
             let activeClass = this.props.currentStep === step.index ? "active" : "";
@@ -26,4 +26,4 @@ class ImportedDataWizardStepper extends React.Component {
     }
 }
 
-export default ImportedDataWizardStepper;
+export default LoadDataWizardStepper;

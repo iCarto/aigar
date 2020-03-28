@@ -1,20 +1,22 @@
 import React from "react";
 import LoadDataFileUpload from "../common/loaddata/fileupload/LoadDataFileUpload";
-import {CSVFile} from "model";
+import {JSONFile} from "model";
 import {LoadDataValidatorService} from "service/validation";
 
 class LoadMeasurementsStep1ReadFile extends React.Component {
-    state = {
-        csvFile: null,
-
-        fieldErrors: {
-            csvFile: null,
-        },
-    };
-
     constructor(props) {
         super(props);
+        this.state = {
+            csvFile: null,
+            fieldErrors: {
+                csvFile: null,
+            },
+        };
         this.handleMeasurementsFileRead = this.handleMeasurementsFileRead.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.setIsNextButtonEnabled(false);
     }
 
     isCSVFileValid() {
@@ -27,7 +29,8 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
 
     /* HANDLERS FOR UI EVENTS */
     handleMeasurementsFileRead(file, content) {
-        let csvFile = new CSVFile({
+        console.log("handleMeasurementsFileRead");
+        let csvFile = new JSONFile({
             file,
             content,
         });
@@ -85,7 +88,7 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
     render() {
         return (
             <div className="col-12 row justify-content-center">
-                <form className="col-md-8 card p-3 bg-light">
+                <form className="col-md-8 p-3">
                     {this.fileUpload}
                     {this.messages}
                 </form>

@@ -62,13 +62,9 @@ function MainContent(props) {
                 <Route
                     path="/cargarlecturas"
                     render={props => (
-                        <LoadDataWizard
-                            {...props}
-                            children={<LoadMeasurementsWizard />}
-                            numberOfSteps={3}
-                            currentStep={1}
-                            database={database}
-                        />
+                        <LoadDataWizard {...props} numberOfSteps={3}>
+                            <LoadMeasurementsWizard />
+                        </LoadDataWizard>
                     )}
                 />
                 <Route

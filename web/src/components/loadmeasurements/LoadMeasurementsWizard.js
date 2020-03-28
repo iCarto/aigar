@@ -1,14 +1,9 @@
 import React from "react";
 import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
 import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
-import LoadMeasurementsStep3Results from "./LoadMeasurementsStep3Results";
-import LoadMeasurementsSidebar from "./LoadMeasurementsSidebar";
+import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
 import {MeasurementService} from "service/file";
 import {InvoiceService} from "service/api";
-import {
-    LoadDataWizardStepInfo,
-    LoadDataWizardStepper,
-} from "components/common/loaddata/wizard";
 
 /*
 Higher order component that:
@@ -40,19 +35,18 @@ class LoadMeasurementsWizard extends React.Component {
             {
                 index: 3,
                 text: "Resultado",
-                icon: "check-square",
+                icon: "check-circle",
                 help: "Revise el resultado de la operación.",
             },
         ];
 
-        this.handleBack = this.handleBack.bind(this);
         this.handleJSONFileLoaded = this.handleJSONFileLoaded.bind(this);
         this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
-        this.handleMeasurementsValidated = this.handleMeasurementsValidated.bind(this);
     }
 
     componentDidMount() {
         console.log("componentDidMount", this.state.invoicingMonth);
+        this.props.setSteps(this.steps);
         if (this.state.invoicingMonth === null) {
             this.loadInvoicingMonth();
         }
@@ -68,15 +62,6 @@ class LoadMeasurementsWizard extends React.Component {
                 };
             });
         });
-    }
-
-    handleBack() {
-        console.log("LoadMeasurementsWizard.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else {
-            this.props.history.push("/");
-        }
     }
 
     handleJSONFileLoaded(csvFileLoaded) {
@@ -96,36 +81,9 @@ class LoadMeasurementsWizard extends React.Component {
         });
     }
 
-    handleMeasurementsValidated(verifiedMeasurements) {
-        console.log("handleMeasurementsValidated", verifiedMeasurements);
-        this.setState({
-            measurements: verifiedMeasurements,
-        });
-        // Call to service to store data
-        // measurementsService.store(verifiedMeasurements);
-    }
-
     /* VIEW SUBCOMPONENTS */
 
-    get measurementsStepper() {
-        return (
-            <LoadDataWizardStepper
-                steps={this.steps}
-                currentStep={this.props.currentStep}
-            />
-        );
-    }
-
-    get stepInfo() {
-        return (
-            <LoadDataWizardStepInfo
-                step={this.steps[this.props.currentStep - 1]}
-                numberOfSteps={this.props.numberOfSteps}
-            />
-        );
-    }
-
-    get currentStepComponent() {
+    render() {
         switch (this.props.currentStep) {
             case 1:
                 return (
@@ -140,46 +98,24 @@ class LoadMeasurementsWizard extends React.Component {
                         measurements={this.state.measurements}
                         handleChangeData={this.handleChangeMeasurements}
                         setIsNextButtonEnabled={this.props.setIsNextButtonEnabled}
+                        setIsPreviousButtonEnabled={
+                            this.props.setIsPreviousButtonEnabled
+                        }
                     />
                 );
             case 3:
                 return (
-                    <LoadMeasurementsStep3Results
+                    <LoadMeasurementsStep3InvoicesTable
                         measurements={this.state.measurements}
                         invoicingMonth={this.state.invoicingMonth}
+                        setIsPreviousButtonEnabled={
+                            this.props.setIsPreviousButtonEnabled
+                        }
                     />
                 );
             default:
                 return null;
         }
-    }
-
-    get sidebar() {
-        return <LoadMeasurementsSidebar handleBack={this.handleBack} />;
-    }
-
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="d-flex flex-column justify-content-between">
-                            <div className="mb-4">{this.measurementsStepper}</div>
-                            <div className="rounded-top">{this.stepInfo}</div>
-                            <div className="border p-3">
-                                {this.currentStepComponent}
-                            </div>
-                            <div className="border-left border-right border-bottom rounded-bottom p-3">
-                                {this.props.buttons}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     }
 }
 

@@ -20,9 +20,15 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({
-            measurements: this.props.measurements,
-        });
+        this.setState(
+            {
+                measurements: this.props.measurements,
+            },
+            () => {
+                this.props.setIsPreviousButtonEnabled(true);
+                this.props.setIsNextButtonEnabled(this.isNextButtonEnabled());
+            }
+        );
     }
 
     getMeasurementsTotalErrors() {
@@ -54,6 +60,12 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
         }));
     }
 
+    isNextButtonEnabled() {
+        return (
+            this.state.measurements != null && this.getMeasurementsTotalErrors() === 0
+        );
+    }
+
     updateMyData(rowIndex, columnId, value) {
         // We also turn on the flag to not reset the page
         console.log({rowIndex}, {columnId}, {value});
@@ -79,10 +91,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
                 return {measurements: updatedMeasurements};
             },
             () => {
-                this.props.setIsNextButtonEnabled(
-                    this.state.measurements != null &&
-                        this.getMeasurementsTotalErrors() === 0
-                );
+                this.props.setIsNextButtonEnabled(this.isNextButtonEnabled());
                 this.props.handleChangeData(this.state.measurements);
             }
         );
@@ -91,7 +100,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     /* VIEW SUBCOMPONENTS */
 
     get messages() {
-        if (!this.state.measurements || this.state.measurements.length == 0) {
+        if (!this.state.measurements || this.state.measurements.length === 0) {
             return (
                 <div className="alert alert-warning text-center" role="alert">
                     No existen registros.

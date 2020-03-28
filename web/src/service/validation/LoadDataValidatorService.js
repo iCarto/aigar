@@ -82,7 +82,13 @@ const LoadDataValidatorService = {
             fileObject,
             new JSONFileValidator({
                 file: ["extension"],
-                content: [],
+                content: [
+                    "isJSON",
+                    {
+                        type: "mandatoryFields",
+                        param: ["num_socio"],
+                    },
+                ],
             })
         );
     },

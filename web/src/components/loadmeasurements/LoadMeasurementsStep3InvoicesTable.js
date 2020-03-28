@@ -5,16 +5,20 @@ import {createInvoice} from "model";
 import {Spinner} from "components/common";
 import {SortedTable} from "components/common/table";
 
-class LoadMeasurementsStep3Results extends React.Component {
+class LoadMeasurementsStep3InvoicesTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            updatedInvoices: null,
+            status: null,
+            invoices: null,
         };
+        this.updateInvoices = this.updateInvoices.bind(this);
     }
 
     componentDidMount() {
+        this.props.setIsPreviousButtonEnabled(true);
+        this.setState({status: "loading"});
+
         InvoiceService.getInvoicesByYearAndMonth(
             this.props.invoicingMonth.year,
             this.props.invoicingMonth.month
@@ -23,7 +27,6 @@ class LoadMeasurementsStep3Results extends React.Component {
                 const invoice = invoices.find(
                     invoice => measurement.num_socio === invoice.num_socio
                 );
-                console.log(invoice.num_socio, measurement, {measurement});
                 return createInvoice(
                     Object.assign({}, invoice, {
                         caudal_anterior: measurement.lectura_anterior,
@@ -31,22 +34,46 @@ class LoadMeasurementsStep3Results extends React.Component {
                     })
                 );
             });
-            console.log({invoicesToUpdate});
-            InvoiceService.updateInvoicingMonth(invoicesToUpdate).then(
-                updatedInvoices => {
-                    this.setState({loading: false, updatedInvoices});
-                }
-            );
+            this.setState({status: "review", invoices: invoicesToUpdate});
         });
+    }
+
+    updateInvoices() {
+        this.setState({status: "saving"});
+        InvoiceService.updateInvoicingMonth(this.state.invoices).then(
+            updatedInvoices => {
+                this.setState({status: "updated", invoices: updatedInvoices});
+            }
+        );
     }
 
     /* VIEW SUBCOMPONENTS */
 
+    get reviewDataMessages() {
+        return (
+            <div className="alert alert-danger text-center" role="alert">
+                Las facturas se han actualizado correctamente.
+            </div>
+        );
+    }
+
     get messages() {
         return (
             <div className="alert alert-success text-center" role="alert">
-                Los datos se han importado correctamente.
+                Las facturas se han actualizado correctamente.
             </div>
+        );
+    }
+
+    get updateButton() {
+        return (
+            <button
+                className="btn btn-primary center"
+                onClick={this.updateInvoices}
+                type="button"
+            >
+                Actualizar facturas <i className="fas fa-save"></i>
+            </button>
         );
     }
 
@@ -60,7 +87,7 @@ class LoadMeasurementsStep3Results extends React.Component {
         );
     }
 
-    render() {
+    get table() {
         const columns = [
             {
                 Header: "Sector",
@@ -99,28 +126,48 @@ class LoadMeasurementsStep3Results extends React.Component {
                 accessor: "total",
             },
         ];
+        return <SortedTable columns={columns} data={this.state.invoices} />;
+    }
+
+    get content() {
+        if (this.state.status === "loading") {
+            return <Spinner message="Obteniendo facturas" />;
+        }
+        if (this.state.status === "saving") {
+            return <Spinner message="Actualizando facturas" />;
+        }
+        if (this.state.status === "updated") {
+            return (
+                <>
+                    {this.messages}
+                    {this.inicioButton}
+                </>
+            );
+        }
+        if (this.state.invoices) {
+            return (
+                <>
+                    {this.reviewDataMessages}
+                    <div
+                        className="overflow-auto border rounded"
+                        style={{maxHeight: "550px"}}
+                    >
+                        {this.table}
+                    </div>
+                    <div className="mt-3">{this.updateButton}</div>
+                </>
+            );
+        }
+        return null;
+    }
+
+    render() {
         return (
             <div className="d-flex flex-column justify-content-around align-items-center">
-                {!this.state.loading ? (
-                    <>
-                        {this.messages}
-                        {this.inicioButton}
-                        <div
-                            className="overflow-auto border rounded"
-                            style={{maxHeight: "550px"}}
-                        >
-                            <SortedTable
-                                columns={columns}
-                                data={this.state.updatedInvoices}
-                            />
-                        </div>
-                    </>
-                ) : (
-                    <Spinner message="Actualizando facturas" />
-                )}
+                {this.content}
             </div>
         );
     }
 }
 
-export default LoadMeasurementsStep3Results;
+export default LoadMeasurementsStep3InvoicesTable;

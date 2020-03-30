@@ -21,7 +21,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from api.views.domain import DomainsView
-from api.views.invoice import InvoiceViewSet, InvoicingMonthView
+from api.views.invoice import InvoiceViewSet
+from api.views.invoicing_month import InvoicingMonthPreview, InvoicingMonthViewSet
 from api.views.member import MemberViewSet
 from rest_framework import routers
 
@@ -31,6 +32,7 @@ admin.autodiscover()
 router = routers.DefaultRouter()
 router.register(r"members", MemberViewSet, basename="member")
 router.register(r"invoices", InvoiceViewSet, basename="invoice")
+router.register(r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth")
 
 
 urlpatterns = [
@@ -40,7 +42,7 @@ urlpatterns = [
     # - all /static/... files served on /...
     # Django REST Framework urls
     path("api/", include(router.urls)),
-    path("api/invoicing_month", InvoicingMonthView.as_view()),
+    path("api/invoicingmonths/<str:pk>/preview", InvoicingMonthPreview.as_view()),
     path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too

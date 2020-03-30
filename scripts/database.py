@@ -32,7 +32,29 @@ def create_django_fixtures(database):
             },
         }
         fixtures.append(fixture_member)
-    i = 10
+
+    invoicing_months = []
+    fixtures_invoicing_months = []
+    for year, year_invoices in database["invoices"].items():
+        for month, month_invoices in year_invoices.items():
+            invoicing_month = str(year) + str(month)
+            if (invoicing_month) not in invoicing_months:
+                invoicing_months.append(invoicing_month)
+                fixture_invoicing_month = {
+                    "model": "api.InvoicingMonth",
+                    "pk": "id_mes_facturacion",
+                    "fields": {
+                        "id_mes_facturacion": invoicing_month,
+                        "anho": year,
+                        "mes": month,
+                        "is_open": False,
+                    },
+                }
+                fixtures_invoicing_months.append(fixture_invoicing_month)
+    # last month parsed must be opened
+    fixtures_invoicing_months[-1]["fields"]["is_open"] = True
+    fixtures = fixtures + fixtures_invoicing_months
+
     for year, year_invoices in database["invoices"].items():
         for month, month_invoices in year_invoices.items():
             for invoice in month_invoices:
@@ -40,6 +62,7 @@ def create_django_fixtures(database):
                     "model": "api.Invoice",
                     "pk": None,
                     "fields": {
+                        "mes_facturacion": str(year) + str(month),
                         "anho": int(year),
                         "member": int(invoice["num_socio"]),
                         "nombre": invoice["nombre"],
@@ -74,7 +97,6 @@ def create_django_fixtures(database):
                     },
                 }
                 fixtures.append(fixture_invoice)
-                i += 1
     print(json.dumps(fixtures))
 
 

@@ -4,6 +4,18 @@ from django.db import models
 from .member import Sectores
 
 
+fixed_values = {
+    "COMISION": 0.28,
+    "AHORRO_MANO_DE_OBRA_NORMAL": 0.25,
+    "AHORRO_MANO_DE_OBRA_SOLO_MECHA": 0,
+    "CUOTA_FIJA_NORMAL": 5.72,
+    "CUOTA_FIJA_SOLO_MECHA": 2.72,
+    "CUOTA_VARIABLE_MENOS_14": 0,
+    "CUOTA_VARIABLE_14_20": 0.75,
+    "CUOTA_VARIABLE_MAS_20": 2.5,
+}
+
+
 class InvoiceStatus(models.TextChoices):
     NUEVA = "nueva"
     EMITIDA = "emitida"
@@ -20,6 +32,15 @@ class Invoice(models.Model):
         help_text="El Identificador de la factura no puede estar vacío y no debe repetirse",
     )
     # No deberían darse nombres iguales, pero puede tener sentido permitirlo
+    mes_facturacion = models.ForeignKey(
+        "InvoicingMonth",
+        null=False,
+        blank=False,
+        related_name="invoices",
+        related_query_name="invoice",
+        on_delete=models.CASCADE,
+    )
+
     member = models.ForeignKey(
         "Member",
         null=False,
@@ -147,7 +168,7 @@ class Invoice(models.Model):
     updated_at = models.DateTimeField(null=True, auto_now=True)
 
     def __str__(self):
-        return f"{self.id_factura} - {self.num_socio} - {self.nombre} - {self.mes_facturado} - {self.anho_facturado}"
+        return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total}"
 
     def get_absolute_url(self):
         # TODO
@@ -157,3 +178,44 @@ class Invoice(models.Model):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
+
+    def update_consumo_related_fields(self):
+        self.comision = fixed_values["COMISION"]
+        self.ahorro = (
+            fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
+            if self.member.solo_mecha
+            else fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+        )
+        self.cuota_fija = (
+            fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+            if self.member.solo_mecha
+            else fixed_values["CUOTA_FIJA_NORMAL"]
+        )
+        self.consumo = self.caudal_actual - self.caudal_anterior
+        consumo_final = (
+            min(self.consumo, self.member.consumo_maximo)
+            if self.member.consumo_maximo != 0
+            else self.consumo
+        ) - self.member.consumo_reduccion_fija
+        if 0 < consumo_final <= 14:
+            self.cuota_variable = (
+                fixed_values["CUOTA_VARIABLE_MENOS_14"] * consumo_final
+            )
+        elif 14 < consumo_final <= 20:
+            self.cuota_variable = fixed_values["CUOTA_VARIABLE_14_20"] * consumo_final
+        else:
+            self.cuota_variable = fixed_values["CUOTA_VARIABLE_MAS_20"] * consumo_final
+
+        self.total = (
+            self.cuota_fija
+            + self.cuota_variable
+            + self.comision
+            + self.ahorro
+            + self.mora
+            + self.asamblea
+            + self.derecho
+            + self.reconexion
+            + self.traspaso
+            + self.saldo_anterior
+        )
+        return self

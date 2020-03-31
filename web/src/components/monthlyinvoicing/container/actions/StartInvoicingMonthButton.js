@@ -1,5 +1,5 @@
 import React from "react";
-import {InvoiceService} from "service/api";
+import {InvoicingMonthService} from "service/api";
 import {
     OperationWithConfirmationContentModal,
     OperationWithConfirmationContentModalStatus,
@@ -25,7 +25,10 @@ class StartInvoicingMonthButton extends React.Component {
         this.setState(
             {status: OperationWithConfirmationContentModalStatus.PROGRESS},
             () => {
-                InvoiceService.startInvoicingMonth(this.props.invoicingMonth, false)
+                InvoicingMonthService.startInvoicingMonth(
+                    this.props.invoicingMonth,
+                    false
+                )
                     .then(invoicingMonth => {
                         this.setState({
                             status: OperationWithConfirmationContentModalStatus.SUCCESS,
@@ -67,8 +70,8 @@ class StartInvoicingMonthButton extends React.Component {
             <p>
                 ¿Desea iniciar la facturación del mes de&nbsp;
                 <strong>
-                    {DateUtil.getMonthName(this.props.invoicingMonth.month)} -{" "}
-                    {this.props.invoicingMonth.year}
+                    {DateUtil.getMonthName(this.props.invoicingMonth.mes)} -{" "}
+                    {this.props.invoicingMonth.anho}
                 </strong>
                 ?
             </p>
@@ -80,8 +83,8 @@ class StartInvoicingMonthButton extends React.Component {
             <p className="alert alert-success">
                 Las facturas del mes de{" "}
                 <strong>
-                    {DateUtil.getMonthName(this.props.invoicingMonth.month)} -{" "}
-                    {this.props.invoicingMonth.year}
+                    {DateUtil.getMonthName(this.props.invoicingMonth.mes)} -{" "}
+                    {this.props.invoicingMonth.anho}
                 </strong>{" "}
                 se han creado correctamente.
             </p>

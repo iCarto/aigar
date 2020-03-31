@@ -6,8 +6,8 @@ import {
     members_api_adapter,
     createMemberMonthInfo,
 } from "model";
-import InvoiceServiceOld from "./InvoiceService_old";
 import ApiService from "./ApiService";
+import InvoiceService from "./InvoiceService";
 
 const MemberService = {
     getMembers() {
@@ -62,7 +62,7 @@ const MemberService = {
         const membersPromise = Promise.resolve(DatabaseFixture).then(d => {
             return createMembers(members_api_adapter(d["members"]));
         });
-        const invoicesPromise = InvoiceServiceOld.getInvoices({
+        const invoicesPromise = InvoiceService.getInvoices({
             year: filter.year,
             month: filter.month,
         });

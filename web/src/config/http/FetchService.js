@@ -17,7 +17,12 @@ const get = (url = "", headers = {}) =>
             "Content-Type": "application/json",
             ...headers,
         },
-    }).then(response => response.json());
+    }).then(response => {
+        if (response.status !== 200) {
+            throw new Error("Not 200 response");
+        }
+        return response.json();
+    });
 
 const post = (url = "", body = {}, headers = {}) =>
     fetch(readUrl(url), {
@@ -28,7 +33,12 @@ const post = (url = "", body = {}, headers = {}) =>
             "Content-Type": "application/json",
             ...headers,
         },
-    }).then(response => response.json());
+    }).then(response => {
+        if (response.status !== 200) {
+            throw new Error("Not 200 response");
+        }
+        return response.json();
+    });
 
 const put = (url = "", body = {}, headers = {}) =>
     fetch(readUrl(url), {
@@ -39,7 +49,12 @@ const put = (url = "", body = {}, headers = {}) =>
             "Content-Type": "application/json",
             ...headers,
         },
-    }).then(response => response.json());
+    }).then(response => {
+        if (response.status !== 200) {
+            throw new Error("Not 200 response");
+        }
+        return response.json();
+    });
 
 const patch = (url = "", body = {}, headers = {}) =>
     fetch(readUrl(url), {
@@ -50,7 +65,12 @@ const patch = (url = "", body = {}, headers = {}) =>
             "Content-Type": "application/json",
             ...headers,
         },
-    }).then(response => response.json());
+    }).then(response => {
+        if (response.status !== 200) {
+            throw new Error("Not 200 response");
+        }
+        return response.json();
+    });
 
 const del = (url = "", headers = {}) =>
     fetch(readUrl(url), {
@@ -60,7 +80,12 @@ const del = (url = "", headers = {}) =>
             "Content-Type": "application/json",
             ...headers,
         },
-    }).then(response => response.json());
+    }).then(response => {
+        if (response.status !== 200) {
+            throw new Error("Not 200 response");
+        }
+        return response.json();
+    });
 
 export default {
     get,

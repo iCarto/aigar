@@ -9,7 +9,7 @@ body {
     display: inline;
     margin: 0;
     padding: 0;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .link-button:hover,

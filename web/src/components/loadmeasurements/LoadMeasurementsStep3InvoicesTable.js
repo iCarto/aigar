@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {InvoiceService} from "service/api";
-import {createInvoice} from "model";
+import {InvoicingMonthService} from "service/api";
+import {createInvoice, createInvoicingMonth} from "model";
 import {Spinner} from "components/common";
 import {SortedTable} from "components/common/table";
 
@@ -10,7 +10,7 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
         super(props);
         this.state = {
             status: null,
-            invoices: null,
+            invoicingMonthToUpdate: props.invoicingMonth,
         };
         this.updateInvoices = this.updateInvoices.bind(this);
     }
@@ -19,48 +19,64 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
         this.props.setIsPreviousButtonEnabled(true);
         this.setState({status: "loading"});
 
-        InvoiceService.getInvoicesByYearAndMonth(
-            this.props.invoicingMonth.year,
-            this.props.invoicingMonth.month
-        ).then(invoices => {
-            const invoicesToUpdate = this.props.measurements.map(measurement => {
-                const invoice = invoices.find(
-                    invoice => measurement.num_socio === invoice.num_socio
-                );
-                return createInvoice(
-                    Object.assign({}, invoice, {
-                        caudal_anterior: measurement.lectura_anterior,
-                        caudal_actual: measurement.lectura,
-                    })
-                );
-            });
-            this.setState({status: "review", invoices: invoicesToUpdate});
+        const invoicesToUpdate = this.props.measurements.map(measurement => {
+            const invoice = this.props.invoicingMonth.invoices.find(
+                invoice => measurement.num_socio === invoice.num_socio
+            );
+            return createInvoice(
+                Object.assign({}, invoice, {
+                    caudal_anterior: measurement.lectura_anterior,
+                    caudal_actual: measurement.lectura,
+                })
+            );
         });
-    }
-
-    updateInvoices() {
-        this.setState({status: "saving"});
-        InvoiceService.updateInvoicingMonth(this.state.invoices).then(
-            updatedInvoices => {
-                this.setState({status: "updated", invoices: updatedInvoices});
+        const invoicingMonthToPreview = createInvoicingMonth(
+            Object.assign({}, this.props.invoicingMonth, {
+                invoices: invoicesToUpdate,
+            })
+        );
+        InvoicingMonthService.previewInvoicingMonth(invoicingMonthToPreview).then(
+            invoicingMonth => {
+                this.setState({
+                    status: "review",
+                    invoicingMonthToUpdate: invoicingMonth,
+                });
             }
         );
     }
 
+    updateInvoices() {
+        this.setState({status: "saving"});
+        InvoicingMonthService.updateInvoicingMonth(this.state.invoicingMonthToUpdate)
+            .then(updatedInvoicingMonth => {
+                this.setState({
+                    status: "ok",
+                    invoicingMonthToUpdate: updatedInvoicingMonth,
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    status: "error",
+                    invoicingMonthToUpdate: null,
+                });
+            });
+    }
+
     /* VIEW SUBCOMPONENTS */
 
-    get reviewDataMessages() {
+    get messageOk() {
         return (
-            <div className="alert alert-danger text-center" role="alert">
+            <div className="alert alert-success text-center" role="alert">
                 Las facturas se han actualizado correctamente.
             </div>
         );
     }
 
-    get messages() {
+    get messageError() {
         return (
-            <div className="alert alert-success text-center" role="alert">
-                Las facturas se han actualizado correctamente.
+            <div className="alert alert-danger text-center" role="alert">
+                Se ha producido un error durante la actualización de las facturas y no
+                se han podido guardar los datos.
             </div>
         );
     }
@@ -126,7 +142,12 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
                 accessor: "total",
             },
         ];
-        return <SortedTable columns={columns} data={this.state.invoices} />;
+        return (
+            <SortedTable
+                columns={columns}
+                data={this.state.invoicingMonthToUpdate.invoices}
+            />
+        );
     }
 
     get content() {
@@ -136,18 +157,20 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
         if (this.state.status === "saving") {
             return <Spinner message="Actualizando facturas" />;
         }
-        if (this.state.status === "updated") {
+        if (this.state.status === "ok") {
             return (
                 <>
-                    {this.messages}
+                    {this.messageOk}
                     {this.inicioButton}
                 </>
             );
         }
-        if (this.state.invoices) {
+        if (this.state.status === "error") {
+            return <>{this.messageError}</>;
+        }
+        if (this.state.invoicingMonthToUpdate) {
             return (
                 <>
-                    {this.reviewDataMessages}
                     <div
                         className="overflow-auto border rounded"
                         style={{maxHeight: "550px"}}

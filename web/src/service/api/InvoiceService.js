@@ -7,39 +7,6 @@ import {
 import ApiService from "./ApiService";
 
 const InvoiceService = {
-    getInvoicingMonth() {
-        console.log("ApiService.getInvoicingMonth");
-        return ApiService.get("/invoicing_month").then(response => {
-            // In Javascript, months are zero-based (https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.4)
-            // But our API and model works are one-based months, so we need to transform
-            return {
-                year: response.year,
-                month: response.month - 1,
-            };
-        });
-    },
-
-    startInvoicingMonth(invoicingMonth) {
-        const invoicingMonthToCreate = Object.assign({}, invoicingMonth, {
-            month: invoicingMonth.month + 1,
-        });
-        return ApiService.post("/invoicing_month", invoicingMonthToCreate).then(
-            response => {
-                return {
-                    year: response.year,
-                    month: response.month - 1,
-                };
-            }
-        );
-    },
-
-    updateInvoicingMonth(invoices) {
-        return ApiService.patch("/invoicing_month", invoices).then(response => {
-            console.log(response);
-            return response;
-        });
-    },
-
     getInvoices() {
         return ApiService.get("/invoices").then(response => {
             return createInvoices(invoices_api_adapter(response));
@@ -50,7 +17,7 @@ const InvoiceService = {
         console.log("ApiService.getInvoicesByYearAndMonth");
         // In Javascript, months are zero-based (https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.4)
         // But our API and model works are one-based months, so we need to transform
-        return ApiService.get("/invoices/?year=" + year + "&month=" + (month + 1)).then(
+        return ApiService.get("/invoices/?year=" + year + "&month=" + month).then(
             response => {
                 return createInvoices(invoices_api_adapter(response));
             }

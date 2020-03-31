@@ -43,15 +43,6 @@ function NavBar() {
                     </li>
                     <li className="nav-item active">
                         <NavLink
-                            to="/cargarlecturas"
-                            activeClassName="active"
-                            className="nav-link"
-                        >
-                            Cargar Lecturas
-                        </NavLink>
-                    </li>
-                    <li className="nav-item active">
-                        <NavLink
                             to="/socios"
                             activeClassName="active"
                             className="nav-link"

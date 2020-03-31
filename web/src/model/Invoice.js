@@ -55,7 +55,7 @@ const invoice_api_adapter = invoice => {
     m["total"] = Number(m["total"]) || 0;
     m["traspaso"] = Number(m["traspaso"]) || 0;*/
     invoice["numero"] =
-        invoice.member.num_socio.toString() +
+        invoice.member.num_socio.toString().padStart(3, "0") +
         invoice.anho.toString() +
         invoice.mes_facturado.toString() +
         "01";

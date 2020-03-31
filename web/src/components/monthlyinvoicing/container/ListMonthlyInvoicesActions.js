@@ -5,21 +5,32 @@ import {
     LoadMeasurementsButton,
     StartInvoicingMonthButton,
 } from "components/monthlyinvoicing/container/actions";
-import moment from "moment";
 
 class ListMonthlyInvoicesActions extends React.Component {
     getOutputFilename() {
         return (
             "recibo_" +
-            this.props.yearMonth.year +
+            this.props.selectedInvoicingMonth.anho +
             "_" +
-            this.props.yearMonth.month +
+            this.props.selectedInvoicingMonth.mes +
             "_todos"
         );
     }
 
+    isPreviousInvoicingMonth() {
+        return !this.props.selectedInvoicingMonth.is_open;
+    }
+
+    isCurrentInvoicingMonth() {
+        return this.props.selectedInvoicingMonth.is_open;
+    }
+
+    isNextInvoicingMonth() {
+        return this.props.selectedInvoicingMonth.id_mes_facturacion < 0;
+    }
+
     isStartInvoicingEnabled() {
-        return this.props.invoices.length === 0;
+        return this.isNextInvoicingMonth();
     }
 
     isLoadMeasurementsButtonEnabled() {
@@ -47,40 +58,10 @@ class ListMonthlyInvoicesActions extends React.Component {
         );
     }
 
-    isPreviousInvoicingMonth() {
-        const currentInvoicingMonth = moment()
-            .year(this.props.invoicingMonth.year)
-            .month(this.props.invoicingMonth.month)
-            .date(1);
-        return (
-            currentInvoicingMonth.month() > this.props.yearMonth.month ||
-            currentInvoicingMonth.year() > this.props.yearMonth.year
-        );
-    }
-
-    isCurrentInvoicingMonth() {
-        return (
-            this.props.invoicingMonth.month === this.props.yearMonth.month &&
-            this.props.invoicingMonth.year === this.props.yearMonth.year
-        );
-    }
-
-    isNextInvoicingMonth() {
-        const nextInvoicingMonth = moment()
-            .year(this.props.invoicingMonth.year)
-            .month(this.props.invoicingMonth.month)
-            .date(1)
-            .add(1, "month");
-        return (
-            nextInvoicingMonth.month() === this.props.yearMonth.month &&
-            nextInvoicingMonth.year() === this.props.yearMonth.year
-        );
-    }
-
     get invoiceButton() {
         return (
             <StartInvoicingMonthButton
-                invoicingMonth={this.props.yearMonth}
+                invoicingMonth={this.props.selectedInvoicingMonth}
                 disabled={!this.isStartInvoicingEnabled()}
                 handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
             />
@@ -90,6 +71,7 @@ class ListMonthlyInvoicesActions extends React.Component {
     get loadMeasurementsButton() {
         return (
             <LoadMeasurementsButton
+                invoicingMonth={this.props.selectedInvoicingMonth}
                 disabled={!this.isLoadMeasurementsButtonEnabled()}
             />
         );

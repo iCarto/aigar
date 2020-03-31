@@ -1,10 +1,9 @@
 import React from "react";
 import {Spinner} from "components/common";
-import {InvoiceService} from "service/api";
+import {InvoicingMonthService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
 import {MonthlyInvoicingList} from "../presentation";
-import {DateUtil} from "components/util";
 
 class ListMonthlyInvoices extends React.Component {
     constructor(props) {
@@ -12,8 +11,6 @@ class ListMonthlyInvoices extends React.Component {
         this.state = {
             invoices: null,
         };
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleSuccessCreateInvoices = this.handleSuccessCreateInvoices.bind(this);
     }
 
     componentDidMount() {
@@ -22,36 +19,28 @@ class ListMonthlyInvoices extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("ListMonthlyInvoices.componentDidUpdate", this.state.invoices);
-        if (this.state.invoices === null) {
+        console.log("ListMonthlyInvoices.componentDidUpdate");
+        if (
+            prevProps.selectedInvoicingMonth.id_mes_facturacion !==
+            this.props.selectedInvoicingMonth.id_mes_facturacion
+        ) {
             this.loadInvoices();
         }
     }
 
     loadInvoices() {
-        InvoiceService.getInvoicesByYearAndMonth(
-            this.props.filter.year,
-            this.props.filter.month
-        ).then(invoices => {
-            console.log("invoices", invoices);
-            this.setState({invoices});
+        this.setState({invoices: null}, () => {
+            InvoicingMonthService.getInvoicingMonth(
+                this.props.selectedInvoicingMonth.id_mes_facturacion
+            )
+                .then(invoicingMonth => {
+                    console.log("invoicingMonth", invoicingMonth);
+                    this.setState({invoices: invoicingMonth.invoices});
+                })
+                .catch(error => {
+                    this.setState({invoices: []});
+                });
         });
-    }
-
-    handleFilterChange(newFilter) {
-        console.log("handleFilterChange", newFilter);
-        if (newFilter.year != null && newFilter.month != null) {
-            this.setState({
-                invoices: null,
-            });
-        }
-        this.props.handleFilterChange(newFilter);
-    }
-
-    handleSuccessCreateInvoices(newInvoicingMonth) {
-        console.log("handleSuccessCreateInvoices");
-        this.props.handleChangeInvoicingMonth(newInvoicingMonth);
-        this.loadInvoices();
     }
 
     filter(invoices, filter) {
@@ -80,47 +69,46 @@ class ListMonthlyInvoices extends React.Component {
         return null;
     }
 
-    get sidebar() {
-        return (
-            <ListMonthlyInvoicesSidebar
-                handleFilterChange={this.handleFilterChange}
-                filter={this.props.filter}
-                invoices={this.filter(this.state.invoices, this.props.filter)}
-                invoicingMonth={this.props.invoicingMonth}
-                handleSuccessCreateInvoices={this.handleSuccessCreateInvoices}
-            />
-        );
-    }
-
-    get content() {
-        if (this.state.invoices) {
-            return (
-                <MonthlyInvoicingList
-                    title={
-                        DateUtil.getMonthName(this.props.filter.month) +
-                        " " +
-                        this.props.filter.year
-                    }
-                    invoices={this.filter(this.state.invoices, this.props.filter)}
-                    selectedPageIndex={this.props.selectedPageIndex}
-                    handleChangePageIndex={this.props.handleChangePageIndex}
-                    handleClickViewMember={this.props.handleClickViewMember}
-                    handleClickEditInvoice={this.props.handleClickEditInvoice}
-                />
-            );
-        }
-        return <Spinner message="Cargando datos" />;
-    }
-
     render() {
+        const invoices = this.filter(this.state.invoices, this.props.filter);
         return (
             <div className="h-100">
                 <div className="row h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
+                        <ListMonthlyInvoicesSidebar
+                            filter={this.props.filter}
+                            invoices={invoices}
+                            invoicingMonths={this.props.invoicingMonths}
+                            selectedInvoicingMonth={this.props.selectedInvoicingMonth}
+                            handleChangeInvoicingMonth={
+                                this.props.handleChangeInvoicingMonth
+                            }
+                            handleSuccessCreateInvoices={
+                                this.props.handleSuccessCreateInvoices
+                            }
+                            handleFilterChange={this.props.handleFilterChange}
+                        />
                     </nav>
                     <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
+                        <div className="container">
+                            {invoices ? (
+                                <MonthlyInvoicingList
+                                    invoices={invoices}
+                                    selectedPageIndex={this.props.selectedPageIndex}
+                                    handleChangePageIndex={
+                                        this.props.handleChangePageIndex
+                                    }
+                                    handleClickViewMember={
+                                        this.props.handleClickViewMember
+                                    }
+                                    handleClickEditInvoice={
+                                        this.props.handleClickEditInvoice
+                                    }
+                                />
+                            ) : (
+                                <Spinner message="Cargando datos" />
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

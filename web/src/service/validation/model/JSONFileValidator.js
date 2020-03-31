@@ -9,7 +9,7 @@ class JSONFileValidator extends Validator {
 
     isJSON(content) {
         try {
-            const jsonElements = JSON.parse(content);
+            JSON.parse(content);
         } catch (e) {
             console.log(e);
             return "El archivo no tiene un formato correcto.";

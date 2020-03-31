@@ -60,7 +60,7 @@ function MainContent(props) {
                     )}
                 />
                 <Route
-                    path="/cargarlecturas"
+                    path="/cargarlecturas/:id_mes_facturacion"
                     render={props => (
                         <LoadDataWizard {...props} numberOfSteps={3}>
                             <LoadMeasurementsWizard />

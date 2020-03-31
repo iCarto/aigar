@@ -5,7 +5,7 @@ class LoadMeasurementsButton extends React.Component {
     get button() {
         return (
             <Link
-                to="/cargarlecturas"
+                to={"/cargarlecturas/" + this.props.invoicingMonth.id_mes_facturacion}
                 className={
                     "btn btn-secondary mt-2 mb-2 " +
                     (this.props.disabled ? "disabled" : "")

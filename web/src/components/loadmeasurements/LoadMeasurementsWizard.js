@@ -3,7 +3,7 @@ import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
 import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
 import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
 import {MeasurementService} from "service/file";
-import {InvoiceService} from "service/api";
+import {InvoicingMonthService} from "service/api";
 
 /*
 Higher order component that:
@@ -15,8 +15,9 @@ class LoadMeasurementsWizard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            measurements: [],
+            id_mes_facturacion: null,
             invoicingMonth: null,
+            measurements: [],
         };
 
         this.steps = [
@@ -39,29 +40,46 @@ class LoadMeasurementsWizard extends React.Component {
                 help: "Revise el resultado de la operación.",
             },
         ];
+        props.setSteps(this.steps);
 
         this.handleJSONFileLoaded = this.handleJSONFileLoaded.bind(this);
         this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
     }
 
+    static getDerivedStateFromProps(props, prevState) {
+        const id_mes_facturacion =
+            props.id_mes_facturacion || props.match.params.id_mes_facturacion;
+        if (id_mes_facturacion !== prevState.id_mes_facturacion) {
+            return {
+                invoicingMonth: null,
+                id_mes_facturacion,
+            };
+        }
+        return null;
+    }
+
     componentDidMount() {
-        console.log("componentDidMount", this.state.invoicingMonth);
-        this.props.setSteps(this.steps);
-        if (this.state.invoicingMonth === null) {
+        this.loadInvoicingMonth();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.id_mes_facturacion !== this.state.id_mes_facturacion) {
             this.loadInvoicingMonth();
         }
     }
 
     loadInvoicingMonth() {
-        InvoiceService.getInvoicingMonth().then(invoicingMonth => {
-            console.log("invoicingMonth", invoicingMonth);
-            this.setState((prevState, props) => {
-                console.log({invoicingMonth});
-                return {
-                    invoicingMonth,
-                };
-            });
-        });
+        InvoicingMonthService.getInvoicingMonth(this.state.id_mes_facturacion).then(
+            invoicingMonth => {
+                console.log("invoicingMonth", invoicingMonth);
+                this.setState((prevState, props) => {
+                    console.log({invoicingMonth});
+                    return {
+                        invoicingMonth,
+                    };
+                });
+            }
+        );
     }
 
     handleJSONFileLoaded(csvFileLoaded) {

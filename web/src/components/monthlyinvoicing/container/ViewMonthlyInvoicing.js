@@ -3,30 +3,26 @@ import "components/common/SideBar.css";
 import {EditInvoice} from "components/invoice/container";
 import {ViewMember} from "components/member/container";
 import ListMonthlyInvoices from "./ListMonthlyInvoices";
-import {InvoiceService} from "service/api";
+import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 
 class ViewMonthlyInvoicing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            invoicingMonth: {
-                month: null,
-                year: null,
-            },
+            invoicingMonths: null,
+            selectedInvoicingMonth: null,
+            selectedInvoice: null,
+            selectedMember: null,
             pagination: {
                 pageIndex: 0,
             },
             filter: {
-                month: null,
-                year: null,
                 nombre: "",
                 sector: 0,
                 tipo_socio: 0,
                 estado: 0,
             },
-            selectedInvoice: null,
-            selectedMember: null,
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
@@ -35,6 +31,7 @@ class ViewMonthlyInvoicing extends React.Component {
         this.handleBackFromEditInvoice = this.handleBackFromEditInvoice.bind(this);
         this.handleBackFromViewMember = this.handleBackFromViewMember.bind(this);
         this.handleChangeInvoicingMonth = this.handleChangeInvoicingMonth.bind(this);
+        this.handleSuccessCreateInvoices = this.handleSuccessCreateInvoices.bind(this);
     }
 
     componentDidMount() {
@@ -43,21 +40,17 @@ class ViewMonthlyInvoicing extends React.Component {
             this.state.filter.month,
             this.state.filter.year
         );
-        if (this.state.filter.month === null) {
-            this.loadInvoicingMonth();
+        if (this.state.invoicingMonths === null) {
+            this.loadInvoicingMonths();
         }
     }
 
-    loadInvoicingMonth() {
-        InvoiceService.getInvoicingMonth().then(invoicingMonth => {
-            console.log("invoicingMonth", invoicingMonth);
-            this.setState((prevState, props) => {
-                return {
-                    invoicingMonth,
-                    filter: Object.assign(prevState.filter, invoicingMonth),
-                    pagination: {pageIndex: 0},
-                };
-            });
+    loadInvoicingMonths() {
+        InvoicingMonthService.getInvoicingMonths().then(invoicingMonths => {
+            const selectedInvoicingMonth = invoicingMonths.find(
+                invoicingMonth => invoicingMonth.is_open
+            );
+            this.setState({invoicingMonths, selectedInvoicingMonth});
         });
     }
 
@@ -102,8 +95,14 @@ class ViewMonthlyInvoicing extends React.Component {
         });
     }
 
-    handleChangeInvoicingMonth(newInvoicingMonth) {
-        this.setState({invoicingMonth: newInvoicingMonth});
+    handleChangeInvoicingMonth(selectedInvoicingMonth) {
+        console.log("handleChangeInvoicingMonth");
+        this.setState({selectedInvoicingMonth});
+    }
+
+    handleSuccessCreateInvoices() {
+        console.log("handleSuccessCreateInvoices");
+        this.loadInvoicingMonths();
     }
 
     render() {
@@ -125,7 +124,7 @@ class ViewMonthlyInvoicing extends React.Component {
                 </div>
             );
         }
-        if (this.state.filter.month != null) {
+        if (this.state.selectedInvoicingMonth != null) {
             return (
                 <ListMonthlyInvoices
                     selectedPageIndex={this.state.pagination.pageIndex}
@@ -134,8 +133,10 @@ class ViewMonthlyInvoicing extends React.Component {
                     handleClickEditInvoice={this.handleClickEditInvoice}
                     handleClickViewMember={this.handleClickViewMember}
                     filter={this.state.filter}
-                    invoicingMonth={this.state.invoicingMonth}
+                    invoicingMonths={this.state.invoicingMonths}
+                    selectedInvoicingMonth={this.state.selectedInvoicingMonth}
                     handleChangeInvoicingMonth={this.handleChangeInvoicingMonth}
+                    handleSuccessCreateInvoices={this.handleSuccessCreateInvoices}
                 />
             );
         }

@@ -1,5 +1,5 @@
 import React from "react";
-import {MonthlyInvoicingCalendar} from "../presentation";
+import {MonthlyInvoicingNavigator} from "../presentation";
 import ListMonthlyInvoicesActions from "./ListMonthlyInvoicesActions";
 import ListMonthlyInvoicesFilter from "./ListMonthlyInvoicesFilter";
 
@@ -10,34 +10,27 @@ class ListMonthlyInvoicesSidebar extends React.Component {
     }
 
     handleDateChange(year, month) {
-        console.log("handleDateChange", {year}, {month});
         this.props.handleFilterChange({month, year});
     }
 
-    get filterSelectedYearMonth() {
-        return {
-            year: this.props.filter.year,
-            month: this.props.filter.month,
-        };
-    }
-
     render() {
-        console.log("this.props.filter", this.props.filter);
         return (
             <div className="sidebar-sticky d-flex flex-column">
                 <div className="sidebar-group">
                     <label>Navegación por meses</label>
-                    <MonthlyInvoicingCalendar
-                        yearMonth={this.filterSelectedYearMonth}
-                        handleChange={this.handleDateChange}
+                    <MonthlyInvoicingNavigator
+                        selectedInvoicingMonth={this.props.selectedInvoicingMonth}
+                        invoicingMonths={this.props.invoicingMonths}
+                        handleChangeInvoicingMonth={
+                            this.props.handleChangeInvoicingMonth
+                        }
                     />
                 </div>
                 <div className="sidebar-group">
                     <label>Acciones</label>
                     <div className="d-flex flex-column">
                         <ListMonthlyInvoicesActions
-                            yearMonth={this.filterSelectedYearMonth}
-                            invoicingMonth={this.props.invoicingMonth}
+                            selectedInvoicingMonth={this.props.selectedInvoicingMonth}
                             invoices={this.props.invoices}
                             handleSuccessCreateInvoices={
                                 this.props.handleSuccessCreateInvoices

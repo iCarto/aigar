@@ -38,55 +38,49 @@ class MonthlyInvoicingList extends React.Component {
         if (this.props.invoices) {
             const columns = [
                 {
-                    Header: this.props.title,
-                    columns: [
-                        {
-                            Header: "Usuario",
-                            accessor: "nombre",
-                            Cell: LinkCellTable,
-                            getProps: () => ({
-                                handleClick: this.props.handleClickViewMember,
-                                linkAccessor: "num_socio",
-                            }),
-                        },
-                        {
-                            Header: "Sector",
-                            accessor: "sector",
-                        },
-                        {
-                            Header: "Tipo",
-                            accessor: "tipo_socio",
-                            Cell: TipoSocioCellTable,
-                        },
-                        {
-                            Header: "Lectura",
-                            accessor: "consumo",
-                            Cell: LinkCellTable,
-                            getProps: () => ({
-                                handleClick: this.props.handleClickEditInvoice,
-                                linkAccessor: "id_factura",
-                            }),
-                        },
-                        {
-                            Header: "Importe",
-                            accessor: "total",
-                            Cell: LinkCellTable,
-                            getProps: () => ({
-                                handleClick: this.props.handleClickEditInvoice,
-                                linkAccessor: "id_factura",
-                            }),
-                        },
-                        {
-                            Header: "Estado",
-                            accessor: "estado",
-                            Cell: EstadoCellTable,
-                        },
-                        /*{
-                            Header: "Mora",
-                            accessor: "mora",
-                        },*/
-                    ],
+                    Header: "Usuario",
+                    accessor: "nombre",
+                    Cell: LinkCellTable,
+                    getProps: () => ({
+                        handleClick: this.props.handleClickViewMember,
+                        linkAccessor: "num_socio",
+                    }),
                 },
+                {
+                    Header: "Sector",
+                    accessor: "sector",
+                },
+                {
+                    Header: "Tipo",
+                    accessor: "tipo_socio",
+                    Cell: TipoSocioCellTable,
+                },
+                {
+                    Header: "Nº Factura",
+                    accessor: "numero",
+                    Cell: LinkCellTable,
+                    getProps: () => ({
+                        handleClick: this.props.handleClickEditInvoice,
+                        linkAccessor: "id_factura",
+                    }),
+                },
+                {
+                    Header: "Lectura",
+                    accessor: "consumo",
+                },
+                {
+                    Header: "Importe",
+                    accessor: "total",
+                },
+                {
+                    Header: "Estado",
+                    accessor: "estado",
+                    Cell: EstadoCellTable,
+                },
+                /*{
+                    Header: "Mora",
+                    accessor: "mora",
+                },*/
             ];
 
             return (

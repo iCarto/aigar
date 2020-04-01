@@ -1,8 +1,8 @@
-class JSONFile {
+class LoadDataFile {
     constructor(data) {
         this.file = data.file;
         this.content = data.content;
     }
 }
 
-export default JSONFile;
+export default LoadDataFile;

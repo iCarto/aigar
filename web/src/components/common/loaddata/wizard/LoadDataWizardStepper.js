@@ -4,9 +4,10 @@ import "./LoadDataWizardStepper.css";
 class LoadDataWizardStepper extends React.Component {
     get steps() {
         return this.props.steps.map(step => {
-            let activeClass = this.props.currentStep === step.index ? "active" : "";
+            let stepClass = this.props.currentStep === step.index ? "active" : "";
+            stepClass += " " + (this.props.isValidStep === true ? "valid" : "");
             return (
-                <div className={"step " + activeClass} key={step.index}>
+                <div className={"step " + stepClass} key={step.index}>
                     <i className={"circle fa fa-" + step.icon} />
                     <div className="title">
                         {step.index}. {step.text}

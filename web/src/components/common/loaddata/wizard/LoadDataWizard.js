@@ -9,14 +9,12 @@ class LoadDataWizard extends React.Component {
         this.state = {
             steps: [],
             currentStep: this.props.currentStep || 1,
-            isPreviousButtonEnabled: true,
-            isNextButtonEnabled: true,
+            isValidStep: false,
         };
         this.setSteps = this.setSteps.bind(this);
         this.next = this.next.bind(this);
         this.prev = this.prev.bind(this);
-        this.setIsPreviousButtonEnabled = this.setIsPreviousButtonEnabled.bind(this);
-        this.setIsNextButtonEnabled = this.setIsNextButtonEnabled.bind(this);
+        this.setIsValidStep = this.setIsValidStep.bind(this);
     }
 
     setSteps(steps) {
@@ -31,21 +29,19 @@ class LoadDataWizard extends React.Component {
                 prevState.currentStep >= prevState.steps.length - 1
                     ? prevState.steps.length
                     : prevState.currentStep + 1,
+            isNextButtonEnabled: false,
         }));
     }
 
     prev() {
         this.setState(prevState => ({
             currentStep: prevState.currentStep <= 1 ? 1 : prevState.currentStep - 1,
+            isNextButtonEnabled: false,
         }));
     }
 
-    setIsPreviousButtonEnabled(isEnabled) {
-        this.setState({isPreviousButtonEnabled: isEnabled});
-    }
-
-    setIsNextButtonEnabled(isEnabled) {
-        this.setState({isNextButtonEnabled: isEnabled});
+    setIsValidStep(valid) {
+        this.setState({isValidStep: valid});
     }
 
     /* VIEW SUBCOMPONENTS */
@@ -55,6 +51,7 @@ class LoadDataWizard extends React.Component {
             <LoadDataWizardStepper
                 steps={this.state.steps}
                 currentStep={this.state.currentStep}
+                isValidStep={this.state.isValidStep}
             />
         );
     }
@@ -73,8 +70,7 @@ class LoadDataWizard extends React.Component {
             <LoadDataWizardButtons
                 currentStep={this.state.currentStep}
                 numberOfSteps={this.state.steps.length}
-                isPreviousButtonEnabled={this.state.isPreviousButtonEnabled}
-                isNextButtonEnabled={this.state.isNextButtonEnabled}
+                isValidStep={this.state.isValidStep}
                 next={this.next}
                 prev={this.prev}
             />
@@ -92,8 +88,7 @@ class LoadDataWizard extends React.Component {
                             ...this.props,
                             setSteps: this.setSteps,
                             currentStep: this.state.currentStep,
-                            setIsPreviousButtonEnabled: this.setIsPreviousButtonEnabled,
-                            setIsNextButtonEnabled: this.setIsNextButtonEnabled,
+                            setIsValidStep: this.setIsValidStep,
                         })}
                     </div>
                     <div className="border-left border-right border-bottom rounded-bottom p-3">

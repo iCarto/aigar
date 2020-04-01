@@ -1,5 +1,5 @@
 export {default as CSVFile} from "./CSVFile";
-export {default as JSONFile} from "./JSONFile";
+export {default as LoadDataFile} from "./LoadDataFile";
 export {
     default as createMeasurement,
     createMeasurements,

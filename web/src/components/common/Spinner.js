@@ -7,7 +7,9 @@ class Spinner extends React.Component {
                 <div className="spinner-border text-primary" role="status">
                     <span className="sr-only">{this.props.message}...</span>
                 </div>
-                <strong className="ml-3">{this.props.message}...</strong>
+                <strong className="ml-3">
+                    {this.props.message ? this.props.message + "..." : ""}
+                </strong>
             </div>
         );
     }

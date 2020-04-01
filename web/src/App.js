@@ -15,7 +15,7 @@ import {EditInvoice, ManageInvoices} from "components/invoice/container";
 import LoadDataWizard from "./components/common/loaddata/wizard/LoadDataWizard";
 
 import LoadPaymentsWizard from "./components/loadpayments/LoadPaymentsWizard";
-import LoadMeasurementsWizard from "./components/loadmeasurements/LoadMeasurementsWizard";
+import LoadMeasurementsWizard from "./components/loadmeasurements/container/LoadMeasurementsWizard";
 
 import DatabaseFixture from "./fixtures/database.json";
 

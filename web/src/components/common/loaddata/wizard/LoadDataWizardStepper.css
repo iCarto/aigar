@@ -32,13 +32,18 @@
 }
 
 .stepper .step:last-child::before {
-    left: 0;
-    width: 6em;
+    left: -1em;
+    width: 7em;
 }
 
 .stepper .active .circle,
 .stepper .active::before {
     background: #007bff;
+}
+
+.stepper .active.valid .circle,
+.stepper .active.valid::before {
+    background: greenyellow;
 }
 
 .stepper .active ~ .step .circle,
@@ -55,6 +60,10 @@
 
 .stepper .active .title {
     color: #007bff;
+}
+
+.stepper .active.valid .title {
+    color: #155724;
 }
 
 .stepper .active ~ .step .title {

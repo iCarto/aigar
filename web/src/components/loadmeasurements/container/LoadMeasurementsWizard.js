@@ -1,9 +1,10 @@
 import React from "react";
 import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
 import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
-import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
-import {MeasurementService} from "service/file";
+import LoadMeasurementsStep4Result from "./LoadMeasurementsStep4Result";
 import {InvoicingMonthService} from "service/api";
+import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
+import {Spinner} from "components/common";
 
 /*
 Higher order component that:
@@ -35,6 +36,12 @@ class LoadMeasurementsWizard extends React.Component {
             },
             {
                 index: 3,
+                text: "Revisar facturas",
+                icon: "file-invoice",
+                help: "Revise las facturas con los consumos aplicados.",
+            },
+            {
+                index: 4,
                 text: "Resultado",
                 icon: "check-circle",
                 help: "Revise el resultado de la operación.",
@@ -42,7 +49,6 @@ class LoadMeasurementsWizard extends React.Component {
         ];
         props.setSteps(this.steps);
 
-        this.handleJSONFileLoaded = this.handleJSONFileLoaded.bind(this);
         this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
     }
 
@@ -82,58 +88,59 @@ class LoadMeasurementsWizard extends React.Component {
         );
     }
 
-    handleJSONFileLoaded(csvFileLoaded) {
-        console.log("handleJSONFileLoaded");
-        MeasurementService.getMeasurementsFromJSONContent(csvFileLoaded.content).then(
-            measurements => {
-                this.setState({
-                    measurements,
-                });
-            }
-        );
-    }
-
     handleChangeMeasurements(measurements) {
+        console.log("handleChangeMeasurements", measurements);
         this.setState({
             measurements,
         });
     }
 
-    /* VIEW SUBCOMPONENTS */
+    handleChangeInvoicingMonth(invoicingMonth) {
+        console.log("handleChangeInvoicingMonth", invoicingMonth);
+        this.setState({
+            invoicingMonth,
+        });
+    }
 
     render() {
-        switch (this.props.currentStep) {
-            case 1:
-                return (
-                    <LoadMeasurementsStep1ReadFile
-                        afterValid={this.handleJSONFileLoaded}
-                        setIsNextButtonEnabled={this.props.setIsNextButtonEnabled}
-                    />
-                );
-            case 2:
-                return (
-                    <LoadMeasurementsStep2MeasurementsTable
-                        measurements={this.state.measurements}
-                        handleChangeData={this.handleChangeMeasurements}
-                        setIsNextButtonEnabled={this.props.setIsNextButtonEnabled}
-                        setIsPreviousButtonEnabled={
-                            this.props.setIsPreviousButtonEnabled
-                        }
-                    />
-                );
-            case 3:
-                return (
-                    <LoadMeasurementsStep3InvoicesTable
-                        measurements={this.state.measurements}
-                        invoicingMonth={this.state.invoicingMonth}
-                        setIsPreviousButtonEnabled={
-                            this.props.setIsPreviousButtonEnabled
-                        }
-                    />
-                );
-            default:
-                return null;
+        if (this.state.invoicingMonth) {
+            switch (this.props.currentStep) {
+                case 1:
+                    return (
+                        <LoadMeasurementsStep1ReadFile
+                            handleChangeMeasurements={this.handleChangeMeasurements}
+                            setIsValidStep={this.props.setIsValidStep}
+                        />
+                    );
+                case 2:
+                    return (
+                        <LoadMeasurementsStep2MeasurementsTable
+                            measurements={this.state.measurements}
+                            handleChangeMeasurements={this.handleChangeMeasurements}
+                            setIsValidStep={this.props.setIsValidStep}
+                        />
+                    );
+                case 3:
+                    return (
+                        <LoadMeasurementsStep3InvoicesTable
+                            measurements={this.state.measurements}
+                            invoicingMonth={this.state.invoicingMonth}
+                            setIsValidStep={this.props.setIsValidStep}
+                        />
+                    );
+                case 4:
+                    return (
+                        <LoadMeasurementsStep4Result
+                            measurements={this.state.measurements}
+                            invoicingMonth={this.state.invoicingMonth}
+                            setIsValidStep={this.props.setIsValidStep}
+                        />
+                    );
+                default:
+                    return null;
+            }
         }
+        return <Spinner />;
     }
 }
 

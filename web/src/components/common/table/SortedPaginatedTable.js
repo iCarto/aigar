@@ -7,7 +7,7 @@ const SortedPaginatedTable = ({
     data,
     selectedPageIndex,
     handleChangePageIndex,
-    updateMyData,
+    onUpdateData,
 }) => {
     const {
         getTableProps,
@@ -31,7 +31,7 @@ const SortedPaginatedTable = ({
                 pageSize: 15,
                 pageIndex: selectedPageIndex || 0,
             },
-            updateMyData,
+            onUpdateData,
         },
         useSortBy,
         usePagination

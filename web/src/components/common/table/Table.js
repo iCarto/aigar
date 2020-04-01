@@ -1,9 +1,9 @@
 import React from "react";
 import {useTable} from "react-table";
 
-const Table = ({columns, data, updateMyData}) => {
+const Table = ({columns, data, onUpdateData}) => {
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
-        {columns, data, updateMyData}
+        {columns, data, onUpdateData}
     );
 
     return (

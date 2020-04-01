@@ -1,17 +1,27 @@
 import React from "react";
 import {Spinner} from "components/common";
+import {LoadDataFile} from "model";
 
 class LoadDataFileUpload extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
+            errors: [],
         };
         this.fileReader = null;
     }
 
     handleFileRead(evt, file) {
-        this.props.handleFileRead(file, this.fileReader.result);
+        let loadDataFile = new LoadDataFile({
+            file,
+            content: this.fileReader.result,
+        });
+        const errors = this.props.validator(loadDataFile);
+        this.setState({errors});
+        if (errors.length === 0) {
+            this.props.handleFileRead(loadDataFile);
+        }
     }
 
     handleFileChosen(fileToRead) {
@@ -24,6 +34,10 @@ class LoadDataFileUpload extends React.Component {
             };
         })(fileToRead).bind(this);
         this.fileReader.readAsText(fileToRead);
+    }
+
+    get messageError() {
+        return this.state.errors.map(error => error.msg).join(<br />);
     }
 
     render() {
@@ -41,9 +55,9 @@ class LoadDataFileUpload extends React.Component {
                     />
                     {this.state.loading ? <Spinner message="Subiendo archivo" /> : null}
                     <small id="fileUploadHelp" className="form-text text-muted">
-                        La extensión del fichero debe ser{" "}
-                        {this.props.allowedFormats.join(",")}
+                        Extensiones permitidas ({this.props.allowedFormats.join(",")})
                     </small>
+                    <div className="invalid-feedback d-block">{this.messageError}</div>
                 </div>
             </div>
         );

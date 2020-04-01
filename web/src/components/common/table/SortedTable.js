@@ -1,12 +1,12 @@
 import React from "react";
 import {useTable, useSortBy} from "react-table";
 
-const SortedTable = ({columns, data, updateMyData}) => {
+const SortedTable = ({columns, data, onUpdateData}) => {
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
         {
             columns,
             data,
-            updateMyData,
+            onUpdateData,
         },
         useSortBy
     );

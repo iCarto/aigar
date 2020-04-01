@@ -3,12 +3,7 @@ import React from "react";
 class LoadDataWizardButtons extends React.Component {
     get previousButton() {
         return (
-            <button
-                className="btn"
-                type="button"
-                onClick={this.props.prev}
-                disabled={!this.props.isPreviousButtonEnabled}
-            >
+            <button className="btn" type="button" onClick={this.props.prev}>
                 &laquo; Anterior
             </button>
         );
@@ -17,12 +12,10 @@ class LoadDataWizardButtons extends React.Component {
     get nextButton() {
         return (
             <button
-                className={
-                    "btn " + (this.props.isNextButtonEnabled ? "btn-primary" : "")
-                }
+                className={"btn " + (this.props.isValidStep ? "btn-primary" : "")}
                 type="button"
                 onClick={this.props.next}
-                disabled={!this.props.isNextButtonEnabled}
+                disabled={!this.props.isValidStep}
             >
                 Siguiente &raquo;
             </button>

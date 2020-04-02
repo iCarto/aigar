@@ -55,9 +55,9 @@ const invoice_api_adapter = invoice => {
     m["total"] = Number(m["total"]) || 0;
     m["traspaso"] = Number(m["traspaso"]) || 0;*/
     invoice["numero"] =
-        invoice.member.num_socio.toString().padStart(3, "0") +
+        invoice.member.num_socio.toString().padStart(4, "0") +
         invoice.anho.toString() +
-        invoice.mes_facturado.toString() +
+        invoice.mes_facturado.toString().padStart(2, "0") +
         "01";
     invoice["num_socio"] = invoice.member.num_socio;
     invoice["tipo_socio"] = getTipoSocio(
@@ -65,6 +65,7 @@ const invoice_api_adapter = invoice => {
         invoice.member.consumo_maximo,
         invoice.member.consumo_reduccion_fija
     );
+    invoice["total_pagado"] = invoice.pago_1_al_11 + invoice.pago_11_al_30;
     return invoice;
 };
 
@@ -127,6 +128,7 @@ const createInvoice = ({
     saldo_anterior = 0,
     saldo_pendiente = 0,
     sector = "",
+    total_pagado = 0,
     total = 0,
     traspaso = 0,
     estado = "",
@@ -160,6 +162,7 @@ const createInvoice = ({
         saldo_anterior,
         saldo_pendiente,
         sector,
+        total_pagado,
         total,
         traspaso,
         estado,

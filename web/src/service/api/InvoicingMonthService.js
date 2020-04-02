@@ -3,6 +3,13 @@ import {
     createInvoicingMonths,
     invoicing_months_api_adapter,
     invoicing_month_api_adapter,
+    invoices_api_adapter,
+    createInvoices,
+    measurements_api_adapter,
+    createMeasurements,
+    createPayments,
+    payments_front_adapter,
+    payments_api_adapter,
 } from "model";
 import ApiService from "./ApiService";
 
@@ -46,27 +53,56 @@ const InvoicingMonthService = {
         );
     },
 
+    getInvoicingMonthInvoices(id_mes_facturacion) {
+        return ApiService.get(
+            "/invoicingmonths/" + id_mes_facturacion + "/invoices/"
+        ).then(response => {
+            return createInvoices(invoices_api_adapter(response));
+        });
+    },
+
     startInvoicingMonth(invoicingMonth) {
         return ApiService.post("/invoicingmonths/", invoicingMonth).then(response => {
             return createInvoicingMonth(invoicing_month_api_adapter(response));
         });
     },
 
-    previewInvoicingMonth(invoicingMonth) {
+    previewInvoicesWithMeasurements(id_mes_facturacion, measurements) {
         return ApiService.post(
-            "/invoicingmonths/" + invoicingMonth.id_mes_facturacion + "/preview",
-            invoicingMonth
+            "/invoicingmonths/" + id_mes_facturacion + "/measurements/previewinvoices",
+            measurements
         ).then(response => {
-            return createInvoicingMonth(invoicing_month_api_adapter(response));
+            return createInvoices(invoices_api_adapter(response));
         });
     },
 
-    updateInvoicingMonth(invoicingMonth) {
-        return ApiService.patch(
-            "/invoicingmonths/" + invoicingMonth.id_mes_facturacion + "/",
-            invoicingMonth
+    saveMeasurements(id_mes_facturacion, measurements) {
+        return ApiService.post(
+            "/invoicingmonths/" + id_mes_facturacion + "/measurements/",
+            measurements
         ).then(response => {
-            return createInvoicingMonth(invoicing_month_api_adapter(response));
+            return createMeasurements(measurements_api_adapter(response));
+        });
+    },
+
+    previewInvoicesWithPayments(id_mes_facturacion, payments) {
+        const paymentsToApi = payments_api_adapter(payments);
+        console.log(paymentsToApi);
+        return ApiService.post(
+            "/invoicingmonths/" + id_mes_facturacion + "/payments/previewinvoices",
+            paymentsToApi
+        ).then(response => {
+            return createInvoices(invoices_api_adapter(response));
+        });
+    },
+
+    savePayments(id_mes_facturacion, payments) {
+        const paymentsToApi = payments_api_adapter(payments);
+        return ApiService.post(
+            "/invoicingmonths/" + id_mes_facturacion + "/payments/",
+            paymentsToApi
+        ).then(response => {
+            return createPayments(payments_front_adapter(response));
         });
     },
 };

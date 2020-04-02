@@ -3,12 +3,13 @@ import {
     SortedTable,
     EditableSelectCellTable,
     EditableTextCellTable,
+    EditableDateCellTable,
 } from "components/common/table";
 import {LoadDataTableFilter} from "components/common/loaddata/table";
 
-class LoadMeasurementsList extends React.Component {
+class LoadPaymentsList extends React.Component {
     render() {
-        if (this.props.measurements) {
+        if (this.props.payments) {
             const columns = [
                 {
                     Header: "Sector",
@@ -23,18 +24,19 @@ class LoadMeasurementsList extends React.Component {
                     accessor: "nombre_socio",
                 },
                 {
-                    Header: "Lectura anterior",
-                    accessor: "caudal_anterior",
+                    Header: "Nº Factura",
+                    accessor: "num_factura",
                     Cell: EditableTextCellTable,
                 },
                 {
-                    Header: "Lectura actual",
-                    accessor: "caudal_actual",
-                    Cell: EditableTextCellTable,
+                    Header: "Fecha",
+                    accessor: "fecha",
+                    Cell: EditableDateCellTable,
                 },
                 {
-                    Header: "Consumo",
-                    accessor: "consumo",
+                    Header: "Monto",
+                    accessor: "monto",
+                    Cell: EditableTextCellTable,
                 },
             ];
 
@@ -45,8 +47,8 @@ class LoadMeasurementsList extends React.Component {
                 >
                     <SortedTable
                         columns={columns}
-                        data={this.props.measurements}
-                        onUpdateData={this.props.onUpdateMeasurement}
+                        data={this.props.payments}
+                        onUpdateData={this.props.onUpdatePayment}
                     />
                 </div>
             );
@@ -55,4 +57,4 @@ class LoadMeasurementsList extends React.Component {
     }
 }
 
-export default LoadMeasurementsList;
+export default LoadPaymentsList;

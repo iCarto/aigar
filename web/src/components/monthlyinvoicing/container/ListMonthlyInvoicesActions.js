@@ -48,14 +48,15 @@ class ListMonthlyInvoicesActions extends React.Component {
     }
 
     isLoadPaymentsButtonEnabled() {
-        return (
+        return true;
+        /*return (
             this.props.invoices.length > 0 &&
             this.props.invoices.filter(
                 invoice =>
                     invoice.estado === "emitida" ||
                     invoice.estado === "pendiente_de_cobro"
             ).length !== 0
-        );
+        );*/
     }
 
     get invoiceButton() {
@@ -89,7 +90,12 @@ class ListMonthlyInvoicesActions extends React.Component {
     }
 
     get loadPaymentsButton() {
-        return <LoadPaymentsButton disabled={!this.isLoadPaymentsButtonEnabled()} />;
+        return (
+            <LoadPaymentsButton
+                invoicingMonth={this.props.selectedInvoicingMonth}
+                disabled={!this.isLoadPaymentsButtonEnabled()}
+            />
+        );
     }
 
     render() {

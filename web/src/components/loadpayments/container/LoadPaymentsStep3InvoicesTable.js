@@ -1,13 +1,13 @@
 import React from "react";
 import {InvoicingMonthService} from "service/api";
-import {createInvoice, createInvoicingMonth, createMeasurement} from "model";
+import {createInvoice, createInvoicingMonth, createPayment} from "model";
 import {Spinner} from "components/common";
 import {
     LoadDataInvoicesTableFilter,
     InvoicesListPreview,
 } from "components/common/loaddata/table";
 
-class LoadMeasurementsStep3InvoicesTable extends React.Component {
+class LoadPaymentsStep3InvoicesTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,9 +19,9 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
     }
 
     componentDidMount() {
-        InvoicingMonthService.previewInvoicesWithMeasurements(
+        InvoicingMonthService.previewInvoicesWithPayments(
             this.props.id_mes_facturacion,
-            this.props.measurements
+            this.props.payments
         )
             .then(invoices => {
                 this.props.handleChangeInvoices(invoices);
@@ -70,7 +70,7 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
                         />
                         <InvoicesListPreview
                             invoices={filteredInvoices}
-                            invoicesTableType="measurements"
+                            invoicesTableType="payments"
                         />
                     </>
                 ) : (
@@ -81,4 +81,4 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
     }
 }
 
-export default LoadMeasurementsStep3InvoicesTable;
+export default LoadPaymentsStep3InvoicesTable;

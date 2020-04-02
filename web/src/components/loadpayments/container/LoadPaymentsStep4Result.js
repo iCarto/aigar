@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 
-class LoadMeasurementsStep4Result extends React.Component {
+class LoadPaymentsStep4Result extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,9 +12,9 @@ class LoadMeasurementsStep4Result extends React.Component {
     }
 
     componentDidMount() {
-        InvoicingMonthService.saveMeasurements(
+        InvoicingMonthService.savePayments(
             this.props.id_mes_facturacion,
-            this.props.measurements
+            this.props.payments
         )
             .then(invoicesUpdated => {
                 this.setState({
@@ -71,4 +71,4 @@ class LoadMeasurementsStep4Result extends React.Component {
     }
 }
 
-export default LoadMeasurementsStep4Result;
+export default LoadPaymentsStep4Result;

@@ -44,14 +44,14 @@ const LoadDataValidatorService = {
     },
 
     validatePaymentsFile(fileObject) {
-        return this.validateFile(
+        return LoadDataValidatorService.validateFile(
             fileObject,
             new CSVFileValidator({
                 file: ["extension", "filename"],
                 content: [
                     {
                         type: "columns",
-                        param: 5,
+                        param: [5, 10],
                     },
                 ],
             })
@@ -59,26 +59,25 @@ const LoadDataValidatorService = {
     },
 
     validatePaymentEntry(entryObject) {
-        return this.validateEntry(
+        return LoadDataValidatorService.validateEntry(
             entryObject,
             new DataValidator({
-                invoice: [
+                num_factura: [
                     "isNotEmpty",
                     {
                         type: "length",
                         param: 12,
                     },
                 ],
-                date: ["isNotEmpty", "isDate"],
-                amount: ["isNotEmpty", "isDecimal2"],
-                branchOffice: ["isNotEmpty"],
-                location: ["isNotEmpty"],
+                fecha: ["isNotEmpty", "isDate"],
+                monto: ["isNotEmpty", "isDecimal2"],
+                nombre_socio: ["isNotEmpty"],
             })
         );
     },
 
     validateMeasurementsFile(fileObject) {
-        return this.validateFile(
+        return LoadDataValidatorService.validateFile(
             fileObject,
             new JSONFileValidator({
                 file: ["extension"],
@@ -94,15 +93,13 @@ const LoadDataValidatorService = {
     },
 
     validateMeasurementEntry(entryObject) {
-        return this.validateEntry(
+        return LoadDataValidatorService.validateEntry(
             entryObject,
             new DataValidator({
                 sector: ["isNotEmpty"],
                 num_socio: ["isNotEmpty"],
-                lectura_anterior: ["isNotEmpty", "isDecimal2"],
-                lectura: ["isNotEmpty", "isDecimal2"],
-                num_contador: ["isNotEmpty", "isInteger"],
-                cambio_contador: ["isNotEmpty", "isBoolean"],
+                caudal_anterior: ["isNotEmpty", "isDecimal2"],
+                caudal_actual: ["isNotEmpty", "isDecimal2"],
             })
         );
     },

@@ -3,7 +3,7 @@ import {LoadDataValidatorService} from "service/validation";
 import {createMeasurement} from "model";
 import {Spinner} from "components/common";
 import {LoadMeasurementsList} from "../presentation";
-import {LoadDataMeasurementsTableFilter} from "components/common/loaddata/table";
+import {LoadDataTableFilter} from "components/common/loaddata/table";
 
 class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     constructor(props) {
@@ -24,8 +24,19 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     }
 
     componentDidMount() {
+        this.reviewMeasurements(this.props.measurements);
+    }
+
+    reviewMeasurements(measurements) {
+        const measurementsWithErrors = measurements.map(measurement => {
+            return createMeasurement({
+                ...measurement,
+                errors: LoadDataValidatorService.validateMeasurementEntry(measurement),
+            });
+        });
+        this.props.handleChangeMeasurements(measurementsWithErrors);
         this.props.setIsValidStep(
-            this.getMeasurementsTotalErrors(this.props.measurements) === 0
+            this.getMeasurementsTotalErrors(measurementsWithErrors) === 0
         );
     }
 
@@ -59,24 +70,15 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
     onUpdateMeasurement(rowIndex, columnId, value) {
         const updatedMeasurements = this.props.measurements.map((row, index) => {
             if (index === rowIndex) {
-                const updatedMeasurementData = {
+                const updatedMeasurement = createMeasurement({
                     ...this.props.measurements[rowIndex],
                     [columnId]: value,
-                };
-                const updatedMeasurement = createMeasurement({
-                    ...updatedMeasurementData,
-                    errors: LoadDataValidatorService.validateMeasurementEntry(
-                        updatedMeasurementData
-                    ),
                 });
                 return updatedMeasurement;
             }
             return row;
         });
-        this.props.handleChangeMeasurements(updatedMeasurements);
-        this.props.setIsValidStep(
-            this.getMeasurementsTotalErrors(updatedMeasurements) === 0
-        );
+        this.reviewMeasurements(updatedMeasurements);
     }
 
     /* VIEW SUBCOMPONENTS */
@@ -103,7 +105,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
             return (
                 <div className="d-flex flex-column justify-content-around">
                     {this.messagesError}
-                    <LoadDataMeasurementsTableFilter
+                    <LoadDataTableFilter
                         filter={this.state.filter}
                         handleChange={this.handleFilterChange}
                     />

@@ -20,16 +20,16 @@ class CSVFileValidator extends Validator {
         }
     }
 
-    columns(numberOfColumns, content) {
+    columns(possibleNumberOfColumns, content) {
         let lines = content.split(/\r\n|\r|\n/g);
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].trim() !== "") {
                 let paymentRead = lines[i].trim().split(";");
-                if (paymentRead.length !== numberOfColumns) {
+                if (!possibleNumberOfColumns.includes(paymentRead.length)) {
                     return (
-                        "Alguna de las entradas del fichero no tiene las " +
-                        numberOfColumns +
-                        " columnas necesarias"
+                        "Alguna de las entradas del fichero no tiene las columnas necesarias [" +
+                        possibleNumberOfColumns.join(",") +
+                        "]"
                     );
                 }
             }

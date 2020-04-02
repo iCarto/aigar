@@ -30,12 +30,12 @@ class ListMonthlyInvoices extends React.Component {
 
     loadInvoices() {
         this.setState({invoices: null}, () => {
-            InvoicingMonthService.getInvoicingMonth(
+            InvoicingMonthService.getInvoicingMonthInvoices(
                 this.props.selectedInvoicingMonth.id_mes_facturacion
             )
-                .then(invoicingMonth => {
-                    console.log("invoicingMonth", invoicingMonth);
-                    this.setState({invoices: invoicingMonth.invoices});
+                .then(invoices => {
+                    console.log("invoices", invoices);
+                    this.setState({invoices});
                 })
                 .catch(error => {
                     this.setState({invoices: []});
@@ -70,14 +70,14 @@ class ListMonthlyInvoices extends React.Component {
     }
 
     render() {
-        const invoices = this.filter(this.state.invoices, this.props.filter);
+        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
         return (
             <div className="h-100">
                 <div className="row h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         <ListMonthlyInvoicesSidebar
                             filter={this.props.filter}
-                            invoices={invoices}
+                            invoices={filteredInvoices}
                             invoicingMonths={this.props.invoicingMonths}
                             selectedInvoicingMonth={this.props.selectedInvoicingMonth}
                             handleChangeInvoicingMonth={
@@ -91,9 +91,9 @@ class ListMonthlyInvoices extends React.Component {
                     </nav>
                     <div className="col-md-10 offset-md-2">
                         <div className="container">
-                            {invoices ? (
+                            {filteredInvoices ? (
                                 <MonthlyInvoicingList
-                                    invoices={invoices}
+                                    invoices={filteredInvoices}
                                     selectedPageIndex={this.props.selectedPageIndex}
                                     handleChangePageIndex={
                                         this.props.handleChangePageIndex

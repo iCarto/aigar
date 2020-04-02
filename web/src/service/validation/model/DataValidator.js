@@ -1,5 +1,6 @@
 import moment from "moment";
 import Validator from "./Validator";
+import {DateUtil} from "components/util";
 
 class DataValidator extends Validator {
     isNotEmpty(value) {
@@ -13,7 +14,7 @@ class DataValidator extends Validator {
         if (!value || value === "") {
             return;
         }
-        if (!moment(value, "DD/MM/YYYY", true).isValid()) {
+        if (!DateUtil.isValidForDataLoad(value)) {
             return "El formato de fecha no es válido";
         }
     }

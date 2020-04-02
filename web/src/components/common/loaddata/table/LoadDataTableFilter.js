@@ -1,7 +1,7 @@
 import React from "react";
 import {Util} from "components/util";
 
-class LoadDataMeasurementsTableFilter extends React.Component {
+class LoadDataTableFilter extends React.Component {
     constructor(props) {
         super(props);
 
@@ -70,4 +70,4 @@ class LoadDataMeasurementsTableFilter extends React.Component {
     }
 }
 
-export default LoadDataMeasurementsTableFilter;
+export default LoadDataTableFilter;

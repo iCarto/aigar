@@ -23,7 +23,7 @@ const DataValidatorService = {
     },
 
     validateMember(entryObject) {
-        return this.validateEntry(
+        return DataValidatorService.validateEntry(
             entryObject,
             new DataValidator({
                 name: ["isNotEmpty"],
@@ -32,7 +32,7 @@ const DataValidatorService = {
     },
 
     validateInvoice(entryObject) {
-        return this.validateEntry(
+        return DataValidatorService.validateEntry(
             entryObject,
             new DataValidator({
                 numero: ["isNotEmpty"],

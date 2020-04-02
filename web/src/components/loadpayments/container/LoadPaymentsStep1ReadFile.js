@@ -1,9 +1,9 @@
 import React from "react";
 import {LoadDataValidatorService} from "service/validation";
 import {LoadDataFileUpload} from "components/common/loaddata/fileupload";
-import {MeasurementService} from "service/file";
+import {PaymentService} from "service/file";
 
-class LoadMeasurementsStep1ReadFile extends React.Component {
+class LoadPaymentsStep1ReadFile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,15 +11,16 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
         };
         this.handleLoadedDataFile = this.handleLoadedDataFile.bind(this);
         this.handleRemoveDataFile = this.handleRemoveDataFile.bind(this);
-        this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
+        this.handleChangePayments = this.handleChangePayments.bind(this);
     }
 
     componentDidMount() {
         this.props.setIsValidStep(false);
     }
 
+    /* HANDLERS FOR UI EVENTS */
     handleLoadedDataFile(dataFile) {
-        dataFile.errors = LoadDataValidatorService.validateMeasurementsFile(dataFile);
+        dataFile.errors = LoadDataValidatorService.validatePaymentsFile(dataFile);
         this.setState(
             prevState => {
                 const dataFiles = prevState.dataFiles;
@@ -29,7 +30,7 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
                 };
             },
             () => {
-                this.handleChangeMeasurements();
+                this.handleChangePayments();
             }
         );
     }
@@ -47,23 +48,21 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
                 };
             },
             () => {
-                this.handleChangeMeasurements();
+                this.handleChangePayments();
             }
         );
     }
 
-    handleChangeMeasurements() {
+    handleChangePayments() {
         const hasErrors = this.state.dataFiles.some(
             dataFile => dataFile.errors.length !== 0
         );
         if (!hasErrors) {
-            const content = MeasurementService.mergeFileContents(
+            const content = PaymentService.mergeFileContents(
                 this.state.dataFiles.map(dataFile => dataFile.content)
             );
-            MeasurementService.getMeasurementsFromJSONContent(
-                JSON.stringify(content)
-            ).then(measurements => {
-                this.props.handleChangeMeasurements(measurements);
+            PaymentService.getPaymentsFromCSVContent(content).then(payments => {
+                this.props.handleChangePayments(payments);
             });
         }
         this.props.setIsValidStep(this.state.dataFiles.length !== 0 && !hasErrors);
@@ -77,7 +76,7 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
                 dataFiles={this.state.dataFiles}
                 handleLoadedDataFile={this.handleLoadedDataFile}
                 handleRemoveDataFile={this.handleRemoveDataFile}
-                allowedFormats={[".json"]}
+                allowedFormats={[".csv", ".txt"]}
             />
         );
     }
@@ -91,4 +90,4 @@ class LoadMeasurementsStep1ReadFile extends React.Component {
     }
 }
 
-export default LoadMeasurementsStep1ReadFile;
+export default LoadPaymentsStep1ReadFile;

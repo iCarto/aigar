@@ -1,10 +1,6 @@
 class Measurements extends Array {}
 
 const measurement_api_adapter = measurement => {
-    /*measurement["nombre_socio"] = getNombreSocio(
-        measurement.num_socio
-    );*/
-    measurement["id"] = measurement.num_socio;
     return measurement;
 };
 
@@ -20,24 +16,23 @@ const createMeasurements = (data = []) => {
 
 const createMeasurement = ({
     id = -1,
+    factura = -1,
     sector = -1,
     num_socio = -1,
     nombre_socio = "",
-    lectura_anterior = -1,
-    lectura = -1,
-    num_contador = -1,
-    cambio_contador = false,
+    caudal_anterior = -1,
+    caudal_actual = -1,
     errors = [],
 } = {}) => {
     const publicApi = {
-        id,
+        id: num_socio,
+        factura,
         num_socio,
         nombre_socio,
         sector,
-        lectura_anterior,
-        lectura,
-        num_contador,
-        cambio_contador,
+        caudal_anterior: parseInt(caudal_anterior),
+        caudal_actual: parseInt(caudal_actual),
+        consumo: caudal_actual - caudal_anterior,
         errors,
     };
 

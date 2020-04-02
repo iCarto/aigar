@@ -1,21 +1,19 @@
 import React from "react";
-import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
-import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
-import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
-import LoadMeasurementsStep4Result from "./LoadMeasurementsStep4Result";
+import LoadPaymentsStep1ReadFile from "./LoadPaymentsStep1ReadFile";
+import LoadPaymentsStep2PaymentsTable from "./LoadPaymentsStep2PaymentsTable";
+import LoadPaymentsStep3InvoicesTable from "./LoadPaymentsStep3InvoicesTable";
+import LoadPaymentsStep4Result from "./LoadPaymentsStep4Result";
 import {Spinner, ErrorMessage} from "components/common";
 import {InvoicingMonthService} from "service/api";
 
-class LoadMeasurementsWizard extends React.Component {
+class LoadPaymentsWizard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id_mes_facturacion: null,
-            invoicingMonth: null,
-            measurements: [],
+            payments: [],
         };
 
-        this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
+        this.handleChangePayments = this.handleChangePayments.bind(this);
         this.handleChangeInvoices = this.handleChangeInvoices.bind(this);
     }
 
@@ -53,7 +51,7 @@ class LoadMeasurementsWizard extends React.Component {
             },
             {
                 index: 2,
-                text: "Revisar lecturas",
+                text: "Revisar pagos",
                 icon: "table",
                 help: "Revise los datos y corrija posibles errores.",
             },
@@ -80,10 +78,10 @@ class LoadMeasurementsWizard extends React.Component {
         );
     }
 
-    handleChangeMeasurements(measurements) {
-        console.log("handleChangeMeasurements", measurements);
+    handleChangePayments(payments) {
+        console.log("handleChangePayments", payments);
         this.setState({
-            measurements,
+            payments,
         });
     }
 
@@ -100,24 +98,25 @@ class LoadMeasurementsWizard extends React.Component {
                 switch (this.props.currentStep) {
                     case 1:
                         return (
-                            <LoadMeasurementsStep1ReadFile
-                                handleChangeMeasurements={this.handleChangeMeasurements}
+                            <LoadPaymentsStep1ReadFile
+                                handleChangePayments={this.handleChangePayments}
                                 setIsValidStep={this.props.setIsValidStep}
                             />
                         );
                     case 2:
                         return (
-                            <LoadMeasurementsStep2MeasurementsTable
-                                measurements={this.state.measurements}
-                                handleChangeMeasurements={this.handleChangeMeasurements}
+                            <LoadPaymentsStep2PaymentsTable
+                                payments={this.state.payments}
+                                id_mes_facturacion={this.state.id_mes_facturacion}
+                                handleChangePayments={this.handleChangePayments}
                                 setIsValidStep={this.props.setIsValidStep}
                             />
                         );
                     case 3:
                         return (
-                            <LoadMeasurementsStep3InvoicesTable
+                            <LoadPaymentsStep3InvoicesTable
                                 id_mes_facturacion={this.state.id_mes_facturacion}
-                                measurements={this.state.measurements}
+                                payments={this.state.payments}
                                 invoices={this.state.invoices}
                                 handleChangeInvoices={this.handleChangeInvoices}
                                 setIsValidStep={this.props.setIsValidStep}
@@ -125,9 +124,9 @@ class LoadMeasurementsWizard extends React.Component {
                         );
                     case 4:
                         return (
-                            <LoadMeasurementsStep4Result
+                            <LoadPaymentsStep4Result
                                 id_mes_facturacion={this.state.id_mes_facturacion}
-                                measurements={this.state.measurements}
+                                payments={this.state.payments}
                                 setIsValidStep={this.props.setIsValidStep}
                             />
                         );
@@ -141,4 +140,4 @@ class LoadMeasurementsWizard extends React.Component {
     }
 }
 
-export default LoadMeasurementsWizard;
+export default LoadPaymentsWizard;

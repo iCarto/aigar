@@ -1,6 +1,7 @@
 from api.models.invoice import Invoice
 from api.models.invoicing_month import InvoicingMonth
 from api.serializers.invoice import InvoiceSerializer
+from api.serializers.payment import PaymentSerializer
 from rest_framework import serializers
 
 

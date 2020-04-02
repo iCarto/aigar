@@ -166,3 +166,45 @@ class InvoicingMonthPreview(ListAPIView):
             context={"request": request, "invoices": updated_invoices},
         )
         return Response(serializer.data)
+
+
+class InvoicingMonthPreview(ListAPIView):
+    def post(self, request, pk):
+        try:
+            invoicing_month = InvoicingMonth.objects.get(pk=pk)
+        except:
+            return Response(
+                {"error": "El mes de facturación no existe"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not invoicing_month.is_open:
+            return Response(
+                {
+                    "error": "El servicio GET /api/invoicing_month/<year>/<month> sólo funciona sobre el mes de facturación en curso"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        measurement_invoices = request.data.get("invoices")
+        invoices_ids = [
+            measurement_invoice["id_factura"]
+            for measurement_invoice in measurement_invoices
+        ]
+        invoices = Invoice.objects.filter(id_factura__in=invoices_ids)
+        updated_invoices = []
+        for invoice in invoices:
+            measurement_found = [
+                measurement_invoice
+                for measurement_invoice in measurement_invoices
+                if measurement_invoice["id_factura"] == invoice.id_factura
+            ]
+            measurement = measurement_found[0]
+            invoice.caudal_anterior = measurement["caudal_anterior"]
+            invoice.caudal_actual = measurement["caudal_actual"]
+            invoice = invoice.update_consumo_related_fields()
+            updated_invoices.append(invoice)
+        serializer = InvoicingMonthWithInvoicesSerializer(
+            instance=invoicing_month,
+            context={"request": request, "invoices": updated_invoices},
+        )
+        return Response(serializer.data)

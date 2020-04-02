@@ -24,15 +24,30 @@ from api.views.domain import DomainsView
 from api.views.invoice import InvoiceViewSet
 from api.views.invoicing_month import InvoicingMonthPreview, InvoicingMonthViewSet
 from api.views.member import MemberViewSet
+from api.views.payment import PaymentViewSet
 from rest_framework import routers
+from rest_framework_extensions import routers
+
+
+class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
+    pass
 
 
 admin.autodiscover()
 
-router = routers.DefaultRouter()
+router = NestedDefaultRouter()
 router.register(r"members", MemberViewSet, basename="member")
 router.register(r"invoices", InvoiceViewSet, basename="invoice")
-router.register(r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth")
+
+invoicingmonths_router = router.register(
+    r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"
+)
+invoicingmonths_router.register(
+    r"payments",
+    PaymentViewSet,
+    basename="invoicingmonth-payments",
+    parents_query_lookups=["mes_facturacion"],
+)
 
 
 urlpatterns = [

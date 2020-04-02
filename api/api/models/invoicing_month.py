@@ -31,7 +31,7 @@ class InvoicingMonth(models.Model):
     updated_at = models.DateTimeField(null=True, auto_now=True)
 
     def __str__(self):
-        return f"{self.anho} - {self.mes} - {self.opened}"
+        return f"{self.anho} - {self.mes} - {self.is_open}"
 
     def get_absolute_url(self):
         # TODO

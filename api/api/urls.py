@@ -22,9 +22,10 @@ from django.urls import include, path
 
 from api.views.domain import DomainsView
 from api.views.invoice import InvoiceViewSet
-from api.views.invoicing_month import InvoicingMonthPreview, InvoicingMonthViewSet
+from api.views.invoicing_month import InvoicingMonthViewSet
+from api.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
 from api.views.member import MemberViewSet
-from api.views.payment import PaymentViewSet
+from api.views.payment import PaymentInvoicePreview, PaymentViewSet
 from rest_framework import routers
 from rest_framework_extensions import routers
 
@@ -43,6 +44,18 @@ invoicingmonths_router = router.register(
     r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"
 )
 invoicingmonths_router.register(
+    r"invoices",
+    InvoiceViewSet,
+    basename="invoicingmonth-invoices",
+    parents_query_lookups=["mes_facturacion"],
+)
+invoicingmonths_router.register(
+    r"measurements",
+    MeasurementViewSet,
+    basename="invoicingmonth-measurements",
+    parents_query_lookups=["mes_facturacion"],
+)
+invoicingmonths_router.register(
     r"payments",
     PaymentViewSet,
     basename="invoicingmonth-payments",
@@ -57,7 +70,14 @@ urlpatterns = [
     # - all /static/... files served on /...
     # Django REST Framework urls
     path("api/", include(router.urls)),
-    path("api/invoicingmonths/<str:pk>/preview", InvoicingMonthPreview.as_view()),
+    path(
+        "api/invoicingmonths/<str:pk>/measurements/previewinvoices",
+        MeasurementInvoicePreview.as_view(),
+    ),
+    path(
+        "api/invoicingmonths/<str:pk>/payments/previewinvoices",
+        PaymentInvoicePreview.as_view(),
+    ),
     path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too

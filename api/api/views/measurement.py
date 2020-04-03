@@ -1,13 +1,11 @@
-from datetime import datetime
-
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
 from api.models.invoice import Invoice
 from api.models.invoicing_month import InvoicingMonth
-from api.models.payment import Payment
+from api.models.measurement import Measurement
 from api.serializers.invoice import InvoiceSerializer
-from api.serializers.payment import PaymentSerializer
+from api.serializers.measurement import MeasurementSerializer
 from api.views.exceptions import ClosedMonthException
 from rest_framework import mixins, status, viewsets
 from rest_framework.generics import CreateAPIView
@@ -15,39 +13,35 @@ from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 
-class PaymentViewSet(
+class MeasurementViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     NestedViewSetMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Payment.objects.prefetch_related("factura").all()
-    serializer_class = PaymentSerializer
+    queryset = Measurement.objects.prefetch_related("factura").all()
+    serializer_class = MeasurementSerializer
 
     # SQLite performance is slow when we have a lot of insert or update operations
     # Including these operations inside an atomic transaction improves that
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-
-        # To create payments through /invocingmonth/<id>/payments
-        # https://stackoverflow.com/questions/35879857/check-permissions-on-a-related-object-in-django-rest-framework
-
         id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
-        payments = request.data
+        measurements = request.data
 
         invoicing_month = get_object_or_404(InvoicingMonth, pk=id_mes_facturacion)
         if not invoicing_month.is_open:
             raise ClosedMonthException()
 
-        invoices = get_invoices_for_payments(payments)
+        invoices = get_invoices_for_measurements(measurements, invoicing_month)
 
-        for payment in payments:
-            invoice = get_invoice_by_id_factura(invoices, payment["id_factura"])
-            payment["factura"] = payment["id_factura"]
-            payment["mes_facturacion"] = id_mes_facturacion
+        for measurement in measurements:
+            invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
+            measurement["factura"] = invoice.id_factura
+            measurement["mes_facturacion"] = id_mes_facturacion
 
-        serializer = PaymentSerializer(
-            data=payments, many=True, context={"request": request}
+        serializer = MeasurementSerializer(
+            data=measurements, many=True, context={"request": request}
         )
         if serializer.is_valid():
             serializer.save()
@@ -55,21 +49,22 @@ class PaymentViewSet(
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PaymentInvoicePreview(CreateAPIView):
+class MeasurementInvoicePreview(CreateAPIView):
     def post(self, request, pk):
         id_mes_facturacion = pk
-        payments = request.data
+        measurements = request.data
 
         invoicing_month = get_object_or_404(InvoicingMonth, pk=id_mes_facturacion)
         if not invoicing_month.is_open:
             raise ClosedMonthException()
 
-        invoices = get_invoices_for_payments(payments)
+        invoices = get_invoices_for_measurements(measurements, invoicing_month)
         updated_invoices = []
-        for payment in payments:
-            invoice = get_invoice_by_id_factura(invoices, payment["id_factura"])
-            fecha = datetime.strptime(payment["fecha"], "%Y-%m-%d")
-            invoice.update_with_payment(fecha, payment["monto"])
+        for measurement in measurements:
+            invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
+            invoice.update_with_measurement(
+                measurement["caudal_anterior"], measurement["caudal_actual"]
+            )
             updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}
@@ -78,10 +73,14 @@ class PaymentInvoicePreview(CreateAPIView):
         return Response(serializer.data)
 
 
-def get_invoices_for_payments(payments):
-    num_socios = [payment["id_factura"] for payment in payments]
-    return Invoice.objects.filter(id_factura__in=num_socios)
+def get_invoices_for_measurements(measurements, invoicing_month):
+    num_socios = [measurement["num_socio"] for measurement in measurements]
+    return Invoice.objects.prefetch_related("member").filter(
+        member__in=num_socios,
+        anho=invoicing_month.anho,
+        mes_facturado=invoicing_month.mes,
+    )
 
 
-def get_invoice_by_id_factura(invoices, id_factura):
-    return [invoice for invoice in invoices if id_factura == invoice.id_factura][0]
+def get_invoice_by_num_socio(invoices, num_socio):
+    return [invoice for invoice in invoices if num_socio == invoice.member.num_socio][0]

@@ -21,7 +21,7 @@ class InvoicingMonth(models.Model):
     mes = models.TextField(null=False, blank=False, verbose_name="Mes", help_text="")
 
     is_open = models.BooleanField(
-        null=False, blank=False, default=False, verbose_name="Mes", help_text=""
+        null=False, blank=False, default=True, verbose_name="Mes", help_text=""
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures

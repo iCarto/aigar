@@ -179,7 +179,7 @@ class Invoice(models.Model):
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
 
-    def update_consumo_related_fields(self):
+    def update_with_measurement(self, caudal_anterior, caudal_actual):
         self.comision = fixed_values["COMISION"]
         self.ahorro = (
             fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
@@ -191,6 +191,8 @@ class Invoice(models.Model):
             if self.member.solo_mecha
             else fixed_values["CUOTA_FIJA_NORMAL"]
         )
+        self.caudal_actual = caudal_actual
+        self.caudal_anterior = caudal_anterior
         self.consumo = self.caudal_actual - self.caudal_anterior
         consumo_final = (
             min(self.consumo, self.member.consumo_maximo)
@@ -219,3 +221,9 @@ class Invoice(models.Model):
             + self.saldo_anterior
         )
         return self
+
+    def update_with_payment(self, fecha_pago, monto_pago):
+        if fecha_pago.day < 11:
+            self.pago_1_al_11 = self.pago_1_al_11 + monto_pago
+        else:
+            self.pago_11_al_30 = self.pago_11_al_30 + monto_pago

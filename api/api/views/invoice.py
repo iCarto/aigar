@@ -3,11 +3,14 @@ from django.db.models import Value as V
 from django.db.models.functions import Concat
 
 from api.models.invoice import Invoice, fixed_values
+from api.models.invoicing_month import InvoicingMonth
 from api.serializers.invoice import InvoiceSerializer
 from rest_framework import permissions, status, viewsets
+from rest_framework.response import Response
+from rest_framework_extensions.mixins import ListUpdateModelMixin, NestedViewSetMixin
 
 
-class InvoiceViewSet(viewsets.ModelViewSet):
+class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -17,9 +20,4 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         if num_socio is not None:
             queryset = queryset.filter(member=num_socio)
 
-        year = self.request.query_params.get("year", None)
-        month = self.request.query_params.get("month", None)
-        if year is not None and month is not None:
-            queryset = queryset.filter(anho=int(year), mes_facturado=(int(month)))
-
-        return queryset
+        return self.filter_queryset_by_parents_lookups(queryset)

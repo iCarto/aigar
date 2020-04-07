@@ -20,4 +20,10 @@ class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelVie
         if num_socio is not None:
             queryset = queryset.filter(member=num_socio)
 
+        # For PATCH bulk operations
+        # https://github.com/chibisov/drf-extensions/blob/503c22f8b442b2bff1f9060c58c024d7d4caabf2/rest_framework_extensions/bulk_operations/mixins.py#L60
+        id_facturas = self.request.query_params.get("id_facturas", None)
+        if id_facturas is not None:
+            queryset = queryset.filter(id_factura__in=id_facturas.split(","))
+
         return self.filter_queryset_by_parents_lookups(queryset)

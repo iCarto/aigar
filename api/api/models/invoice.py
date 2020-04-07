@@ -18,7 +18,6 @@ fixed_values = {
 
 class InvoiceStatus(models.TextChoices):
     NUEVA = "nueva"
-    EMITIDA = "emitida"
     PENDIENTE_DE_COBRO = "pendiente_de_cobro"
     COBRADA = "cobrada"
     ANULADA = "anulada"

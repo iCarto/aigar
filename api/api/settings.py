@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 from django.core.exceptions import ImproperlyConfigured
 
 import environ
+from corsheaders.defaults import default_headers
 
 
 # from .logger import LOGGING
@@ -191,6 +192,9 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:8000",
 )
 # CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]
 
 AUTH_USER_MODEL = "users.User"
 # LOGIN_URL = "/login/"

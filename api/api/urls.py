@@ -38,7 +38,14 @@ admin.autodiscover()
 
 router = NestedDefaultRouter()
 router.register(r"members", MemberViewSet, basename="member")
-router.register(r"invoices", InvoiceViewSet, basename="invoice")
+
+invoices_router = router.register(r"invoices", InvoiceViewSet, basename="invoice")
+invoices_router.register(
+    r"payments",
+    PaymentViewSet,
+    basename="invoice-payments",
+    parents_query_lookups=["factura"],
+)
 
 invoicingmonths_router = router.register(
     r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"

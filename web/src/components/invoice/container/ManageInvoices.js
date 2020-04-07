@@ -1,7 +1,7 @@
 import React from "react";
 import "components/common/SideBar.css";
 import ListInvoices from "./ListInvoices";
-import EditInvoice from "./EditInvoice";
+import ViewInvoice from "./ViewInvoice";
 
 class ManageInvoices extends React.Component {
     constructor(props) {
@@ -53,7 +53,7 @@ class ManageInvoices extends React.Component {
     render() {
         if (this.state.selectedInvoice) {
             return (
-                <EditInvoice
+                <ViewInvoice
                     id_factura={this.state.selectedInvoice}
                     handleBack={this.handleBackEditInvoice}
                 />

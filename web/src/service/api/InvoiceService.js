@@ -3,6 +3,8 @@ import {
     invoice_api_adapter,
     createInvoices,
     invoices_api_adapter,
+    payments_front_adapter,
+    createPayments,
 } from "model";
 import ApiService from "./ApiService";
 
@@ -31,12 +33,20 @@ const InvoiceService = {
     },
 
     getInvoice(id_factura) {
-        // always cast numero_socio to int
         id_factura = parseInt(id_factura);
         return ApiService.get("/invoices/" + id_factura + "/").then(response => {
             let invoice = invoice_api_adapter(response);
             return createInvoice(invoice);
         });
+    },
+
+    getInvoicePayments(id_factura) {
+        id_factura = parseInt(id_factura);
+        return ApiService.get("/invoices/" + id_factura + "/payments/").then(
+            response => {
+                return createPayments(payments_front_adapter(response));
+            }
+        );
     },
 
     createInvoice(invoice) {

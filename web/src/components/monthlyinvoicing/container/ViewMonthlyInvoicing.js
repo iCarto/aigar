@@ -1,6 +1,6 @@
 import React from "react";
 import "components/common/SideBar.css";
-import {EditInvoice} from "components/invoice/container";
+import {ViewInvoice} from "components/invoice/container";
 import {ViewMember} from "components/member/container";
 import ListMonthlyInvoices from "./ListMonthlyInvoices";
 import {InvoicingMonthService} from "service/api";
@@ -108,7 +108,7 @@ class ViewMonthlyInvoicing extends React.Component {
     render() {
         if (this.state.selectedInvoice) {
             return (
-                <EditInvoice
+                <ViewInvoice
                     id_factura={this.state.selectedInvoice}
                     handleBack={this.handleBackFromEditInvoice}
                 />

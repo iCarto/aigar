@@ -3,14 +3,18 @@ import {Spinner} from "components/common";
 import {InvoiceDetail} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
-import {InvoiceService} from "service/api";
+import {InvoiceService, MemberService} from "service/api";
+import {MemberDetailShort} from "components/member/presentation";
+import {PaymentsList} from "components/payments/presentation";
 
 class ViewInvoice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            invoice: null,
             id_factura: null,
+            invoice: null,
+            member: null,
+            payments: null,
             view: "view",
         };
         this.handleBack = this.handleBack.bind(this);
@@ -42,8 +46,13 @@ class ViewInvoice extends React.Component {
 
     loadInvoice() {
         InvoiceService.getInvoice(this.state.id_factura).then(invoice => {
-            console.log("invoice", invoice);
             this.setState({invoice});
+            MemberService.getMember(invoice.num_socio).then(member => {
+                this.setState({member});
+            });
+            InvoiceService.getInvoicePayments(this.state.id_factura).then(payments => {
+                this.setState({payments});
+            });
         });
     }
 
@@ -81,7 +90,9 @@ class ViewInvoice extends React.Component {
                 </nav>
                 <div className="col-md-10 offset-md-2">
                     <div className="container">
+                        <MemberDetailShort member={this.state.member} />
                         <InvoiceDetail invoice={this.state.invoice} />
+                        <PaymentsList payments={this.state.payments} />
                     </div>
                 </div>
             </div>

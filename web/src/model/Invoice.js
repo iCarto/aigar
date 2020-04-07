@@ -101,6 +101,7 @@ const createInvoices = (data = []) => {
 
 const createInvoice = ({
     id_factura = -1,
+    mes_facturacion = "",
     numero = "",
     ahorro = 0,
     anho = 0,
@@ -135,6 +136,7 @@ const createInvoice = ({
 } = {}) => {
     const publicApi = {
         id_factura,
+        mes_facturacion,
         numero,
         ahorro,
         anho,

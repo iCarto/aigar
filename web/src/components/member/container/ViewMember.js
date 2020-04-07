@@ -90,56 +90,50 @@ class ViewMember extends React.Component {
         this.handleBack();
     }
 
-    get sidebar() {
-        if (this.state.view === "edit" || !this.state.member) {
-            return null;
-        }
+    get view() {
         return (
-            <ViewMemberSidebar
-                member={this.state.member}
-                handleClickEditMember={this.handleClickEditMember}
-                handleSuccessDeletedMember={this.handleSuccessDeletedMember}
-                handleSuccessConnectMember={this.handleSuccessConnectMember}
-                handleSuccessDisconnectMember={this.handleSuccessDisconnectMember}
-                handleBack={this.handleBack}
+            <div className="row h-100">
+                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                    <ViewMemberSidebar
+                        member={this.state.member}
+                        handleClickEditMember={this.handleClickEditMember}
+                        handleSuccessDeletedMember={this.handleSuccessDeletedMember}
+                        handleSuccessConnectMember={this.handleSuccessConnectMember}
+                        handleSuccessDisconnectMember={
+                            this.handleSuccessDisconnectMember
+                        }
+                        handleBack={this.handleBack}
+                    />
+                </nav>
+                <div className="col-md-10 offset-md-2">
+                    <div className="container">
+                        <MemberDetail member={this.state.member} />
+                        <ListMemberInvoices num_socio={this.state.member.num_socio} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    get edit() {
+        return (
+            <EditMember
+                num_socio={this.state.num_socio}
+                handleSubmit={this.handleSubmitEditMember}
+                handleBack={this.handleBackEditMember}
             />
         );
     }
 
     get content() {
         if (this.state.member) {
-            if (this.state.view === "edit") {
-                return (
-                    <EditMember
-                        num_socio={this.state.num_socio}
-                        handleSubmit={this.handleSubmitEditMember}
-                        handleBack={this.handleBackEditMember}
-                    />
-                );
-            }
-            return (
-                <>
-                    <MemberDetail member={this.state.member} />
-                    <ListMemberInvoices num_socio={this.state.member.num_socio} />
-                </>
-            );
+            return this[this.state.view];
         }
         return <Spinner message="Cargando datos" />;
     }
 
     render() {
-        return (
-            <div className="h-100">
-                <div className="row h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
-                    </div>
-                </div>
-            </div>
-        );
+        return <div className="h-100">{this.content}</div>;
     }
 }
 

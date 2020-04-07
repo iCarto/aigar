@@ -41,15 +41,16 @@ class EditInvoice extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.invoice === null) {
+        if (prevState.id_factura !== this.state.id_factura) {
             this.loadInvoice();
         }
     }
 
     loadInvoice() {
         InvoiceService.getInvoice(this.state.id_factura).then(invoice => {
+            this.setState({invoice});
             MemberService.getMember(invoice.num_socio).then(member => {
-                this.setState({invoice, member});
+                this.setState({member});
             });
         });
     }
@@ -97,7 +98,7 @@ class EditInvoice extends React.Component {
     }
 
     get content() {
-        if (this.state.member) {
+        if (this.state.invoice) {
             return (
                 <>
                     <MemberDetailShort member={this.state.member} />

@@ -9,6 +9,13 @@ const SECTORES_COMUNIDADES = {
     "7": "TLACUXTLI",
 };
 
+const ESTADOS_FACTURA = {
+    NUEVA: "nueva",
+    PENDIENTE_DE_COBRO: "pendiente_de_cobro",
+    COBRADA: "cobrada",
+    ANULADA: "anulada",
+};
+
 class Invoices extends Array {
     getInvoice(num_factura) {
         const invoices = this.filter(invoice => {
@@ -184,4 +191,5 @@ export {
     invoice_api_adapter,
     createInvoices,
     invoices_api_adapter,
+    ESTADOS_FACTURA,
 };

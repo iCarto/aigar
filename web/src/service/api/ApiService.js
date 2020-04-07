@@ -15,8 +15,12 @@ const ApiService = {
         return httpClientService.put(urlBase + url, data);
     },
 
-    patch(url, data) {
-        return httpClientService.patch(urlBase + url, data);
+    patch(url, data, bulk = false) {
+        return httpClientService.patch(
+            urlBase + url,
+            data,
+            bulk ? {"X-BULK-OPERATION": true} : {}
+        );
     },
 
     delete(url) {

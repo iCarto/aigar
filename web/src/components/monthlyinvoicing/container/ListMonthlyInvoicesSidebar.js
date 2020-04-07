@@ -35,6 +35,9 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                             handleSuccessCreateInvoices={
                                 this.props.handleSuccessCreateInvoices
                             }
+                            handleSuccessPrintedInvoices={
+                                this.props.handleSuccessPrintedInvoices
+                            }
                         />
                     </div>
                 </div>

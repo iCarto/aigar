@@ -11,6 +11,9 @@ class ListMonthlyInvoices extends React.Component {
         this.state = {
             invoices: null,
         };
+        this.handleSuccessPrintedInvoices = this.handleSuccessPrintedInvoices.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -41,6 +44,10 @@ class ListMonthlyInvoices extends React.Component {
                     this.setState({invoices: []});
                 });
         });
+    }
+
+    handleSuccessPrintedInvoices() {
+        this.loadInvoices();
     }
 
     filter(invoices, filter) {
@@ -87,6 +94,9 @@ class ListMonthlyInvoices extends React.Component {
                                 this.props.handleSuccessCreateInvoices
                             }
                             handleFilterChange={this.props.handleFilterChange}
+                            handleSuccessPrintedInvoices={
+                                this.handleSuccessPrintedInvoices
+                            }
                         />
                     </nav>
                     <div className="col-md-10 offset-md-2">

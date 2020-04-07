@@ -1,4 +1,5 @@
 import React from "react";
+import InvoiceStatusLabel from "./InvoiceStatusLabel";
 
 class MemberDetail extends React.Component {
     get message() {
@@ -15,6 +16,7 @@ class MemberDetail extends React.Component {
     render() {
         const {
             numero,
+            estado,
             consumo,
             caudal_actual,
             caudal_anterior,
@@ -36,6 +38,12 @@ class MemberDetail extends React.Component {
                         <div className="p-3">
                             <label className="p-1">Número:</label>
                             <span className="p-1">{numero}</span>
+                        </div>
+                        <div className="p-3">
+                            <label className="p-1">Estado:</label>
+                            <span className="p-1">
+                                <InvoiceStatusLabel estado={estado} />
+                            </span>
                         </div>
                         <div className="p-3">
                             <label className="p-1">Caudal anterior:</label>

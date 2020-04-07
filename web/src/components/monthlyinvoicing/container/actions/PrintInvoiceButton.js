@@ -1,13 +1,15 @@
 import React from "react";
 import {Spinner} from "components/common";
 import {DocXPrintFileService, FileService} from "service/file";
+import {InvoiceService} from "service/api";
+import {ESTADOS_FACTURA} from "model";
 
 class PrintInvoiceButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            result: null,
+            messageError: null,
         };
         this.generateDoc = this.generateDoc.bind(this);
     }
@@ -32,22 +34,28 @@ class PrintInvoiceButton extends React.Component {
                         this.props.outputFilename + ".docx",
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     );
-                    this.setState({
-                        loading: false,
-                        result: {
-                            type: "success",
-                            msg: "El documento se ha generado correctamente",
-                        },
-                    });
+                    InvoiceService.updateInvoiceStatus(
+                        this.props.invoices.map(invoice => invoice.id_factura),
+                        ESTADOS_FACTURA.PENDIENTE_DE_COBRO
+                    )
+                        .then(result => {
+                            this.setState({
+                                loading: false,
+                            });
+                            this.props.handleSuccessPrintedInvoices();
+                        })
+                        .catch(error => {
+                            this.setState({
+                                loading: false,
+                                messageError:
+                                    "No se ha podido actualizar el estado de la factura.",
+                            });
+                        });
                 } catch (err) {
                     console.log(err);
                     this.setState({
                         loading: false,
-                        result: {
-                            type: "error",
-                            msg:
-                                "Se ha producido un error y no se ha podido generar el documento.",
-                        },
+                        messageError: "No se ha podido generar el documento.",
                     });
                 }
             }
@@ -55,25 +63,17 @@ class PrintInvoiceButton extends React.Component {
     }
 
     get message() {
-        if (this.state.result) {
-            return this.state.result.type === "error" ? (
-                <div className="alert alert-danger mt-2" role="alert">
-                    {this.state.result.msg}
-                </div>
-            ) : (
-                <div className="alert alert-success mt-2" role="alert">
-                    {this.state.result.msg}
-                </div>
-            );
-        }
-        return null;
+        return this.state.messageError ? (
+            <div className="alert alert-danger mt-2" role="alert">
+                {this.state.messageError}
+            </div>
+        ) : null;
     }
 
     get spinner() {
         return (
             <div className="d-flex align-items-center">
                 <Spinner message="Generando factura" />
-                <strong className="ml-2">Generando factura...</strong>
             </div>
         );
     }

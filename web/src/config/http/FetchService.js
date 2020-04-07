@@ -67,8 +67,11 @@ const patch = (url = "", body = {}, headers = {}) =>
             ...headers,
         },
     }).then(response => {
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 204) {
             throw new Error("Not 200 response");
+        }
+        if (parseInt(response.headers.get("content-length")) === 0) {
+            return true;
         }
         return response.json();
     });

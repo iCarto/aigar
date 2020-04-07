@@ -32,7 +32,7 @@ class ViewInvoiceSidebar extends React.Component {
                                 Cambiar datos
                             </button>
                         </div>
-                        <div className="mt-4 mb-4">
+                        <div className="mt-1 mb-4">
                             <PrintInvoiceButton
                                 invoices={[this.props.invoice]}
                                 buttonTitle="Imprimir factura"

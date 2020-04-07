@@ -1,23 +1,9 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
+import {InvoiceStatusLabel} from "components/invoice/presentation";
 
 const EstadoCellTable = ({cell}) => {
-    if (cell.value === "nueva") {
-        return "Nueva";
-    }
-    if (cell.value === "emitida") {
-        return "Emitida";
-    }
-    if (cell.value === "pendiente_cobro") {
-        return "Pendiente de cobro";
-    }
-    if (cell.value === "cobrada") {
-        return "Cobrada";
-    }
-    if (cell.value === "anulada") {
-        return "Anulada";
-    }
-    return cell.value;
+    return <InvoiceStatusLabel estado={cell.value} />;
 };
 
 const TipoSocioCellTable = ({cell}) => {

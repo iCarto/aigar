@@ -3,6 +3,7 @@ export {
     invoice_api_adapter,
     createInvoices,
     invoices_api_adapter,
+    ESTADOS_FACTURA,
 } from "./Invoice";
 export {
     default as createInvoicingMonth,

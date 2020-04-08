@@ -1,11 +1,9 @@
 import React from "react";
 import {
     SortedTable,
-    EditableSelectCellTable,
     EditableTextCellTable,
     EditableDateCellTable,
 } from "components/common/table";
-import {LoadDataTableFilter} from "components/common/loaddata/table";
 
 class LoadPaymentsList extends React.Component {
     render() {

@@ -124,7 +124,7 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
 
     render() {
         const paymentsFiltered = this.filter(this.props.payments);
-        if (this.state.loading == true) {
+        if (this.state.loading === true) {
             return <Spinner message="Verificando pagos" />;
         }
         if (this.props.payments) {

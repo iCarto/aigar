@@ -10,7 +10,6 @@ const SortedTable = ({columns, data, onUpdateData}) => {
         },
         useSortBy
     );
-    console.log("SortedTable.render");
 
     return (
         <>

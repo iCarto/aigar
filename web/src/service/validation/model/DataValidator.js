@@ -1,4 +1,3 @@
-import moment from "moment";
 import Validator from "./Validator";
 import {DateUtil} from "components/util";
 

@@ -1,4 +1,4 @@
-import {invoices_api_adapter, createInvoices} from "./Invoice";
+import {createInvoices} from "./Invoice";
 
 class InvoicingMonths extends Array {}
 

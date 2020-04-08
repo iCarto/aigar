@@ -1,4 +1,4 @@
-import {createPayment, payment_api_adapter} from "model";
+import {createPayment} from "model";
 
 const PaymentService = {
     getPaymentsFromCSVContent: function(content) {

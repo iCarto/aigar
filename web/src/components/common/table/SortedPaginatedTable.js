@@ -36,7 +36,7 @@ const SortedPaginatedTable = ({
         useSortBy,
         usePagination
     );
-    console.log("SortedPaginatedTable.render", {selectedPageIndex});
+    // console.log("SortedPaginatedTable.render", {selectedPageIndex});
 
     // Listening for changes in pagination and lifting up them
     useEffect(() => {

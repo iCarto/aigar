@@ -1,6 +1,5 @@
 import React from "react";
 import {InvoicingMonthService} from "service/api";
-import {createInvoice, createInvoicingMonth, createMeasurement} from "model";
 import {Spinner} from "components/common";
 import {
     LoadDataInvoicesTableFilter,

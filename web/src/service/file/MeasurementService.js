@@ -1,6 +1,4 @@
 import {createMeasurement, measurement_api_adapter} from "model";
-import {LoadDataValidatorService} from "service/validation";
-
 const MeasurementsService = {
     getMeasurementsFromJSONContent: function(content) {
         const jsonMeasurements = JSON.parse(content);

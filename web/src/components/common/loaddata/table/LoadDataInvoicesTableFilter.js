@@ -1,5 +1,4 @@
 import React from "react";
-import {Util} from "components/util";
 
 class LoadDataInvoicesTableFilter extends React.Component {
     constructor(props) {

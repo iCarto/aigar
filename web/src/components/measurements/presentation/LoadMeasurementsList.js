@@ -1,10 +1,5 @@
 import React from "react";
-import {
-    SortedTable,
-    EditableSelectCellTable,
-    EditableTextCellTable,
-} from "components/common/table";
-import {LoadDataTableFilter} from "components/common/loaddata/table";
+import {SortedTable, EditableTextCellTable} from "components/common/table";
 
 class LoadMeasurementsList extends React.Component {
     render() {

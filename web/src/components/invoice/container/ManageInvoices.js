@@ -16,11 +16,12 @@ class ManageInvoices extends React.Component {
                 sector: 0,
             },
             selectedInvoice: null,
+            filteredInvoicesIds: [],
         };
         this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
-        this.handleBackEditInvoice = this.handleBackEditInvoice.bind(this);
+        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
+        this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
     }
 
     handleChangePageIndex(pageIndex) {
@@ -36,14 +37,18 @@ class ManageInvoices extends React.Component {
         });
     }
 
-    handleClickEditInvoice(id_factura) {
-        console.log("handleClickEditInvoice", id_factura);
+    handleClickViewInvoice(id_factura, filteredInvoicesIds) {
+        console.log("handleClickEditInvoice", id_factura, filteredInvoicesIds);
+        if (!filteredInvoicesIds) {
+            filteredInvoicesIds = this.state.filteredInvoicesIds;
+        }
         this.setState({
             selectedInvoice: id_factura,
+            filteredInvoicesIds,
         });
     }
 
-    handleBackEditInvoice() {
+    handleBackFromViewInvoice() {
         console.log("handleBackEditInvoice");
         this.setState({
             selectedInvoice: null,
@@ -55,7 +60,9 @@ class ManageInvoices extends React.Component {
             return (
                 <ViewInvoice
                     id_factura={this.state.selectedInvoice}
-                    handleBack={this.handleBackEditInvoice}
+                    navigatorIds={this.state.filteredInvoicesIds}
+                    handleClickSelectInNavigator={this.handleClickViewInvoice}
+                    handleBack={this.handleBackFromViewInvoice}
                 />
             );
         }
@@ -64,7 +71,7 @@ class ManageInvoices extends React.Component {
                 selectedPageIndex={this.state.pagination.pageIndex}
                 handleChangePageIndex={this.handleChangePageIndex}
                 handleFilterChange={this.handleFilterChange}
-                handleClickEditInvoice={this.handleClickEditInvoice}
+                handleClickViewInvoice={this.handleClickViewInvoice}
                 filter={this.state.filter}
             />
         );

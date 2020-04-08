@@ -7,27 +7,33 @@ class InvoiceNavigator extends React.Component {
         this.handleClickNextInvoice = this.handleClickNextInvoice.bind(this);
     }
 
+    findSelectedIndex() {
+        return this.props.navigatorIds.findIndex(id => id === this.props.selectedId);
+    }
+
     handleClickPreviousInvoice() {
-        this.props.handleClickNavigatorInvoice(-1);
+        this.props.handleClickSelect(
+            this.props.navigatorIds[this.findSelectedIndex() - 1]
+        );
     }
 
     handleClickNextInvoice() {
-        this.props.handleClickNavigatorInvoice(1);
+        this.props.handleClickSelect(
+            this.props.navigatorIds[this.findSelectedIndex() + 1]
+        );
     }
 
     isPreviousButtonDisabled() {
-        return false;
+        return this.findSelectedIndex() === 0;
     }
 
     isNextButtonDisabled() {
-        return false;
+        return this.findSelectedIndex() === this.props.navigatorIds.length - 1;
     }
 
     render() {
-        const {month, year} = this.props;
-
         return (
-            <div className="text-center">
+            <div className="text-center mb-2" style={{borderBottom: "1px solid #ccc"}}>
                 <form className="form-inline d-flex justify-content-between m-1">
                     <button
                         type="button"

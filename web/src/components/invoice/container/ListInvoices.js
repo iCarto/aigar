@@ -11,6 +11,7 @@ class ListInvoices extends React.Component {
         this.state = {
             invoices: null,
         };
+        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
     }
 
     componentDidMount() {
@@ -28,6 +29,12 @@ class ListInvoices extends React.Component {
             console.log("invoices", invoices);
             this.setState({invoices});
         });
+    }
+
+    handleClickViewInvoice(id_factura) {
+        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
+        const filteredInvoicesIds = filteredInvoices.map(invoice => invoice.id_factura);
+        this.props.handleClickViewInvoice(id_factura, filteredInvoicesIds);
     }
 
     filter(invoices, filter) {
@@ -65,7 +72,7 @@ class ListInvoices extends React.Component {
                     invoices={this.filter(this.state.invoices, this.props.filter)}
                     selectedPageIndex={this.props.selectedPageIndex}
                     handleChangePageIndex={this.props.handleChangePageIndex}
-                    handleClickEditInvoice={this.props.handleClickEditInvoice}
+                    handleClickViewInvoice={this.handleClickViewInvoice}
                     filter={this.props.filter}
                 />
             );

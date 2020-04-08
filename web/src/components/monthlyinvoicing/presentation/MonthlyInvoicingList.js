@@ -45,7 +45,7 @@ class MonthlyInvoicingList extends React.Component {
                     accessor: "numero",
                     Cell: LinkCellTable,
                     getProps: () => ({
-                        handleClick: this.props.handleClickEditInvoice,
+                        handleClick: this.props.handleClickViewInvoice,
                         linkAccessor: "id_factura",
                     }),
                 },

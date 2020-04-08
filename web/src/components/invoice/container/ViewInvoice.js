@@ -1,6 +1,6 @@
 import React from "react";
 import {Spinner} from "components/common";
-import {InvoiceDetail} from "components/invoice/presentation";
+import {InvoiceDetail, InvoiceNavigator} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
 import {InvoiceService, MemberService} from "service/api";
@@ -90,6 +90,15 @@ class ViewInvoice extends React.Component {
                 </nav>
                 <div className="col-md-10 offset-md-2">
                     <div className="container">
+                        {this.props.navigatorIds ? (
+                            <InvoiceNavigator
+                                selectedId={this.state.id_factura}
+                                navigatorIds={this.props.navigatorIds}
+                                handleClickSelect={
+                                    this.props.handleClickSelectInNavigator
+                                }
+                            />
+                        ) : null}
                         <MemberDetailShort member={this.state.member} />
                         <InvoiceDetail invoice={this.state.invoice} />
                         <PaymentsList payments={this.state.payments} />

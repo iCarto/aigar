@@ -14,6 +14,7 @@ class ViewMonthlyInvoicing extends React.Component {
             selectedInvoicingMonth: null,
             selectedInvoice: null,
             selectedMember: null,
+            filteredInvoicesIds: [],
             pagination: {
                 pageIndex: 0,
             },
@@ -26,9 +27,9 @@ class ViewMonthlyInvoicing extends React.Component {
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
-        this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
+        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
+        this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
-        this.handleBackFromEditInvoice = this.handleBackFromEditInvoice.bind(this);
         this.handleBackFromViewMember = this.handleBackFromViewMember.bind(this);
         this.handleChangeInvoicingMonth = this.handleChangeInvoicingMonth.bind(this);
         this.handleSuccessCreateInvoices = this.handleSuccessCreateInvoices.bind(this);
@@ -67,14 +68,18 @@ class ViewMonthlyInvoicing extends React.Component {
         });
     }
 
-    handleClickEditInvoice(numero) {
-        console.log("handleSelectInvoice", numero);
+    handleClickViewInvoice(id_factura, filteredInvoicesIds) {
+        console.log("handleClickEditInvoice", id_factura, filteredInvoicesIds);
+        if (!filteredInvoicesIds) {
+            filteredInvoicesIds = this.state.filteredInvoicesIds;
+        }
         this.setState({
-            selectedInvoice: numero,
+            selectedInvoice: id_factura,
+            filteredInvoicesIds,
         });
     }
 
-    handleBackFromEditInvoice() {
+    handleBackFromViewInvoice() {
         console.log("handleBackFromInvoice");
         this.setState({
             selectedInvoice: null,
@@ -110,7 +115,9 @@ class ViewMonthlyInvoicing extends React.Component {
             return (
                 <ViewInvoice
                     id_factura={this.state.selectedInvoice}
-                    handleBack={this.handleBackFromEditInvoice}
+                    navigatorIds={this.state.filteredInvoicesIds}
+                    handleClickSelectInNavigator={this.handleClickViewInvoice}
+                    handleBack={this.handleBackFromViewInvoice}
                 />
             );
         }
@@ -130,7 +137,7 @@ class ViewMonthlyInvoicing extends React.Component {
                     selectedPageIndex={this.state.pagination.pageIndex}
                     handleFilterChange={this.handleFilterChange}
                     handleChangePageIndex={this.handleChangePageIndex}
-                    handleClickEditInvoice={this.handleClickEditInvoice}
+                    handleClickViewInvoice={this.handleClickViewInvoice}
                     handleClickViewMember={this.handleClickViewMember}
                     filter={this.state.filter}
                     invoicingMonths={this.state.invoicingMonths}

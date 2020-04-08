@@ -14,6 +14,7 @@ class ListMonthlyInvoices extends React.Component {
         this.handleSuccessPrintedInvoices = this.handleSuccessPrintedInvoices.bind(
             this
         );
+        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
     }
 
     componentDidMount() {
@@ -48,6 +49,12 @@ class ListMonthlyInvoices extends React.Component {
 
     handleSuccessPrintedInvoices() {
         this.loadInvoices();
+    }
+
+    handleClickViewInvoice(id_factura) {
+        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
+        const filteredInvoicesIds = filteredInvoices.map(invoice => invoice.id_factura);
+        this.props.handleClickViewInvoice(id_factura, filteredInvoicesIds);
     }
 
     filter(invoices, filter) {
@@ -111,9 +118,7 @@ class ListMonthlyInvoices extends React.Component {
                                     handleClickViewMember={
                                         this.props.handleClickViewMember
                                     }
-                                    handleClickEditInvoice={
-                                        this.props.handleClickEditInvoice
-                                    }
+                                    handleClickViewInvoice={this.handleClickViewInvoice}
                                 />
                             ) : (
                                 <Spinner message="Cargando datos" />

@@ -7,10 +7,25 @@ from rest_framework import serializers
 class InvoiceSerializer(serializers.ModelSerializer):
     id_factura = serializers.ReadOnlyField()
     member = MemberShortSerializer(many=False, read_only=True)
+    resumen = serializers.SerializerMethodField()
 
     class Meta:
         model = Invoice
         fields = "__all__"
+
+    def get_resumen(self, obj):
+        last_three_months_invoices = self.context.get(
+            "last_three_months_invoices", None
+        )
+        if not last_three_months_invoices:
+            return None
+
+        last_three_member_invoices_status = [
+            invoice.estado
+            for invoice in last_three_months_invoices
+            if invoice.member.num_socio == obj.member.num_socio
+        ]
+        return last_three_member_invoices_status
 
 
 class InvoiceShortSerializer(serializers.ModelSerializer):

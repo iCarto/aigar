@@ -27,3 +27,35 @@ class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelVie
             queryset = queryset.filter(id_factura__in=id_facturas.split(","))
 
         return self.filter_queryset_by_parents_lookups(queryset)
+
+    def get_serializer_context(self):
+        context = super(InvoiceViewSet, self).get_serializer_context()
+
+        id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
+        if id_mes_facturacion is not None:
+            try:
+                invoicing_month = InvoicingMonth.objects.get(pk=id_mes_facturacion)
+            except:
+                return context
+            last_three_invoicing_months = (
+                InvoicingMonth.objects.all()
+                .filter(id_mes_facturacion__lt=invoicing_month.id_mes_facturacion)
+                .order_by("-id_mes_facturacion")[:3]
+            )
+            last_three_invoicing_months_ids = [
+                invoicing_month.id_mes_facturacion
+                for invoicing_month in last_three_invoicing_months
+            ]
+            last_three_months_invoices = (
+                Invoice.objects.prefetch_related("member")
+                .filter(mes_facturacion__in=last_three_invoicing_months_ids)
+                .order_by("-mes_facturacion")
+            )
+
+            context.update(
+                {
+                    "request": self.request,
+                    "last_three_months_invoices": last_three_months_invoices,
+                }
+            )
+        return context

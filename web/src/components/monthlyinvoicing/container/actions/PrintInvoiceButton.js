@@ -45,6 +45,7 @@ class PrintInvoiceButton extends React.Component {
                             this.props.handleSuccessPrintedInvoices();
                         })
                         .catch(error => {
+                            console.log(error);
                             this.setState({
                                 loading: false,
                                 messageError:

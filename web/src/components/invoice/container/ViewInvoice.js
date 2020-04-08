@@ -21,6 +21,9 @@ class ViewInvoice extends React.Component {
         this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
         this.handleSubmitEditInvoice = this.handleSubmitEditInvoice.bind(this);
         this.handleBackEditInvoice = this.handleBackEditInvoice.bind(this);
+        this.handleSuccessPrintedInvoices = this.handleSuccessPrintedInvoices.bind(
+            this
+        );
     }
 
     static getDerivedStateFromProps(props, prevState) {
@@ -78,6 +81,10 @@ class ViewInvoice extends React.Component {
         this.setState({view: "view", invoice});
     }
 
+    handleSuccessPrintedInvoices() {
+        this.loadInvoice();
+    }
+
     get view() {
         return (
             <div className="row h-100">
@@ -85,6 +92,7 @@ class ViewInvoice extends React.Component {
                     <ViewInvoiceSidebar
                         invoice={this.state.invoice}
                         handleClickEditInvoice={this.handleClickEditInvoice}
+                        handleSuccessPrintedInvoices={this.handleSuccessPrintedInvoices}
                         handleBack={this.handleBack}
                     />
                 </nav>

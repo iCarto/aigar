@@ -37,6 +37,9 @@ class ViewInvoiceSidebar extends React.Component {
                                 invoices={[this.props.invoice]}
                                 buttonTitle="Imprimir factura"
                                 outputFilename={this.getOutputFilename()}
+                                handleSuccessPrintedInvoices={
+                                    this.props.handleSuccessPrintedInvoices
+                                }
                             />
                         </div>
                     </div>

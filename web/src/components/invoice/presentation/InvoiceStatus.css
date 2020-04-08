@@ -1,0 +1,29 @@
+.estado-label {
+    border-radius: 3px;
+    color: white;
+    padding: 5px 15px;
+}
+
+.estado-icon {
+    border-radius: 50%;
+    display: inline-block;
+    height: 25px;
+    margin: 0 2px;
+    width: 25px;
+}
+
+.nueva {
+    background-color: blue;
+}
+
+.pendiente_de_cobro {
+    background-color: orange;
+}
+
+.cobrada {
+    background-color: green;
+}
+
+.anulada {
+    background-color: red;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import "./InvoiceStatusLabel.css";
+import "./InvoiceStatus.css";
 
 class InvoiceStatusLabel extends React.Component {
     getStatusName(estado) {
@@ -9,7 +9,7 @@ class InvoiceStatusLabel extends React.Component {
 
     render() {
         return (
-            <span className={"estado-label estado-label-" + this.props.estado}>
+            <span className={"estado-label " + this.props.estado}>
                 {" "}
                 {this.getStatusName(this.props.estado)}
             </span>

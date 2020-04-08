@@ -1,10 +1,9 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
-import {InvoiceStatusLabel} from "components/invoice/presentation";
-
-const EstadoCellTable = ({cell}) => {
-    return <InvoiceStatusLabel estado={cell.value} />;
-};
+import {
+    InvoiceStatusCellTable,
+    InvoiceResumenCellTable,
+} from "components/invoice/presentation";
 
 const TipoSocioCellTable = ({cell}) => {
     if (cell.value === "normal") {
@@ -61,12 +60,13 @@ class MonthlyInvoicingList extends React.Component {
                 {
                     Header: "Estado",
                     accessor: "estado",
-                    Cell: EstadoCellTable,
+                    Cell: InvoiceStatusCellTable,
                 },
-                /*{
-                    Header: "Mora",
-                    accessor: "mora",
-                },*/
+                {
+                    Header: "Meses previos",
+                    accessor: "resumen",
+                    Cell: InvoiceResumenCellTable,
+                },
             ];
 
             return (

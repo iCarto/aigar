@@ -3,9 +3,9 @@ import {invoices_api_adapter, createInvoices} from "./Invoice";
 class InvoicingMonths extends Array {}
 
 const invoicing_month_api_adapter = invoicing_month => {
-    if (invoicing_month.invoices) {
+    /*if (invoicing_month.invoices) {
         invoicing_month["invoices"] = invoices_api_adapter(invoicing_month.invoices);
-    }
+    }*/
     return invoicing_month;
 };
 

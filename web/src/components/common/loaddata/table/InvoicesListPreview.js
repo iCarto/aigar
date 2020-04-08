@@ -1,6 +1,7 @@
 import React from "react";
 import {SortedTable} from "components/common/table";
 import {Spinner} from "components/common";
+import {InvoiceStatusCellTable} from "components/invoice/presentation";
 
 class InvoicesListPreview extends React.Component {
     render() {
@@ -50,6 +51,10 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Saldo pendiente",
                         accessor: "saldo_pendiente",
+                    },
+                    {
+                        Header: "Total",
+                        accessor: "total",
                     }
                 );
             }
@@ -78,13 +83,18 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Pago 11 al 30",
                         accessor: "pago_11_al_30",
+                    },
+                    {
+                        Header: "Total",
+                        accessor: "total",
+                    },
+                    {
+                        Header: "Estado",
+                        accessor: "estado",
+                        Cell: InvoiceStatusCellTable,
                     }
                 );
             }
-            columns.push({
-                Header: "Total",
-                accessor: "total",
-            });
 
             return (
                 <div

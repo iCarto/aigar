@@ -1,4 +1,5 @@
 import React from "react";
+import {FormInput, FormLabel} from "components/common/form";
 
 /**
 Controlled component for invoice form.
@@ -24,12 +25,12 @@ class InvoiceForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
-        const name = event.target.name;
+    handleChange(name, value) {
+        /*const name = event.target.name;
         const value =
             event.target.type === "checkbox"
                 ? event.target.checked
-                : event.target.value;
+                : event.target.value;*/
         this.props.handleChange(name, value);
         this.setState({dirty: true});
     }
@@ -71,179 +72,108 @@ class InvoiceForm extends React.Component {
             asamblea,
             derecho,
             reconexion,
+            traspaso,
             mora,
+            saldo_pendiente,
             total,
         } = this.getFormDataFromProps();
         return (
             <form
                 onSubmit={this.handleSubmit}
                 noValidate
-                className="row needs-validation"
+                className="form-inline needs-validation d-flex flex-column align-items-center"
             >
-                <div className="col-md-6">
-                    <div className="form-group">
-                        <label htmlFor="numero">Número</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="numero"
-                            value={numero.value}
-                            aria-describedby="numero_help"
-                            onChange={this.handleChange}
-                            readOnly
-                        />
-                        <div className="invalid-feedback d-block">{numero.errors}</div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Caudal anterior</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="caudal_anterior"
-                            value={caudal_anterior.value}
-                            onChange={this.handleChange}
-                            disabled
-                        />
-                        <div className="invalid-feedback d-block">
-                            {caudal_anterior.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Consumo</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="consumo"
-                            value={consumo.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">{consumo.errors}</div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Caudal actual</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="caudal_actual"
-                            value={caudal_actual.value}
-                            onChange={this.handleChange}
-                            disabled
-                        />
-                        <div className="invalid-feedback d-block">
-                            {caudal_actual.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Cuota fija</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="cuota_fija"
-                            value={cuota_fija.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">
-                            {cuota_fija.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Cuota variable</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="cuota_variable"
-                            value={cuota_variable.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">
-                            {cuota_variable.errors}
-                        </div>
-                    </div>
+                <div className="d-flex justify-content-center" style={{width: "100%"}}>
+                    <FormLabel label="Número de factura" name="numero" field={numero} />
                 </div>
-                <div className="col-md-6">
-                    <div className="form-group">
-                        <label htmlFor="name">Comisión</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="comision"
-                            value={comision.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">
-                            {comision.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Ahorro</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="ahorro"
-                            value={ahorro.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">{ahorro.errors}</div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Asamblea</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="asamblea"
-                            value={asamblea.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">
-                            {asamblea.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Derecho</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="derecho"
-                            value={derecho.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">{derecho.errors}</div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Reconexión</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="reconexion"
-                            value={reconexion.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">
-                            {reconexion.errors}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Mora</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="mora"
-                            value={mora.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">{mora.errors}</div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Total</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="total"
-                            value={total.value}
-                            onChange={this.handleChange}
-                        />
-                        <div className="invalid-feedback d-block">{total.errors}</div>
-                    </div>
+                <div className="d-flex justify-content-between" style={{width: "100%"}}>
+                    <FormInput
+                        label="Caudal anterior"
+                        name="caudal_anterior"
+                        field={caudal_anterior}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Consumo"
+                        name="consumo"
+                        field={consumo}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Caudal actual"
+                        name="caudal_actual"
+                        field={caudal_actual}
+                        handleChange={this.handleChange}
+                    />
+                </div>
+                <div style={{width: "60%"}}>
+                    <FormInput
+                        label="Cuota fija"
+                        name="cuota_fija"
+                        field={cuota_fija}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Cuota variable"
+                        name="cuota_variable"
+                        field={cuota_variable}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Comisión de pago"
+                        name="comision"
+                        field={comision}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Ahorro para mano de obra"
+                        name="ahorro"
+                        field={ahorro}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Recargo por mora"
+                        name="mora"
+                        field={mora}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Inasistencia a asambleas"
+                        name="asamblea"
+                        field={asamblea}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Nuevo derecho"
+                        name="derecho"
+                        field={derecho}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Re-conexión"
+                        name="reconexion"
+                        field={reconexion}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Traspaso de derecho"
+                        name="traspaso"
+                        field={traspaso}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Saldo pendiente"
+                        name="saldo_pendiente"
+                        field={saldo_pendiente}
+                        handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Total"
+                        name="total"
+                        field={total}
+                        handleChange={this.handleChange}
+                        readOnly={true}
+                    />
                 </div>
                 <div className="col-md-12 mt-4 d-flex justify-content-center">
                     <button

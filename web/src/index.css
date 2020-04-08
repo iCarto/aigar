@@ -25,3 +25,22 @@ body {
     background-color: white;
     border: 1px solid #eee;
 }
+
+.form-inline .form-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-inline label {
+    border-bottom: 1px dotted #ccc;
+    flex-grow: 1;
+    justify-content: flex-start;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.form-inline input {
+    margin-right: 10px;
+    text-align: left;
+    white-space: nowrap;
+}

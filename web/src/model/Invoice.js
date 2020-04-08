@@ -106,6 +106,17 @@ const createInvoices = (data = []) => {
     return invoices;
 };
 
+const customParseFloat = number => {
+    console.log("customParseFloat", number);
+    const floatNumber = parseFloat(number);
+    console.log("customParseFloat", number, floatNumber, isNaN(floatNumber));
+    if (isNaN(floatNumber)) {
+        console.log("returns", number);
+        return number;
+    }
+    return floatNumber;
+};
+
 const createInvoice = ({
     id_factura = -1,
     mes_facturacion = "",
@@ -149,8 +160,8 @@ const createInvoice = ({
         ahorro,
         anho,
         asamblea,
-        caudal_actual: parseInt(caudal_actual),
-        caudal_anterior: parseInt(caudal_anterior),
+        caudal_actual,
+        caudal_anterior,
         comision,
         comprobar_pago_11_al_30,
         comprobar_pago_1_al_11,

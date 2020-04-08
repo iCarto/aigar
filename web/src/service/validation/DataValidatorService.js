@@ -36,7 +36,18 @@ const DataValidatorService = {
             entryObject,
             new DataValidator({
                 numero: ["isNotEmpty"],
-                consumo: ["isNotEmpty"],
+                consumo: ["isNotEmpty", "isInteger"],
+                caudal_anterior: ["isNotEmpty", "isInteger"],
+                caudal_actual: ["isNotEmpty", "isInteger"],
+                cuota_fija: ["isNotEmpty", "isDecimal2"],
+                cuota_variable: ["isNotEmpty", "isDecimal2"],
+                comision: ["isNotEmpty", "isDecimal2"],
+                ahorro: ["isNotEmpty", "isDecimal2"],
+                asamblea: ["isNotEmpty", "isDecimal2"],
+                derecho: ["isNotEmpty", "isDecimal2"],
+                reconexion: ["isNotEmpty", "isDecimal2"],
+                mora: ["isNotEmpty", "isDecimal2"],
+                total: ["isNotEmpty", "isDecimal2"],
             })
         );
     },

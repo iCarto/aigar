@@ -61,6 +61,7 @@ class EditInvoice extends React.Component {
             const updatedInvoice = createInvoice(
                 Object.assign({}, prevState.invoice, {[name]: value})
             );
+            console.log({updatedInvoice});
             return {
                 invoice: updatedInvoice,
                 errors: DataValidatorService.validateInvoice(updatedInvoice),

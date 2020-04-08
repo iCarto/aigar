@@ -226,3 +226,5 @@ class Invoice(models.Model):
             self.pago_1_al_11 = self.pago_1_al_11 + monto_pago
         else:
             self.pago_11_al_30 = self.pago_11_al_30 + monto_pago
+        if (self.pago_1_al_11 + self.pago_11_al_30) >= self.total:
+            self.estado = InvoiceStatus.COBRADA

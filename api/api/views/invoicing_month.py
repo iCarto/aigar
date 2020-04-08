@@ -20,6 +20,15 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
         new_invoicing_month = request.data
 
         active_members = Member.objects.filter(is_active=True)
+
+        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
+
+        id_members = [member.num_socio for member in active_members]
+        last_month_invoices = Invoice.objects.prefetch_related("member").filter(
+            member__in=id_members,
+            mes_facturacion=last_invoicing_month.id_mes_facturacion,
+        )
+
         new_invoicing_month["invoices"] = []
         for member in active_members:
             invoice = {
@@ -30,6 +39,9 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,
+                "derecho": get_derecho_value(member.num_socio, last_month_invoices),
+                "reconexion": get_reconexion_value(member, last_month_invoices),
+                "mora": get_mora_value(member.num_socio, last_month_invoices),
             }
             new_invoicing_month["invoices"].append((invoice))
 
@@ -40,3 +52,43 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# TODO Donde sería el lugar adecuado para situar estos métodos?
+def get_derecho_value(num_socio, last_month_invoices):
+    invoice = [
+        invoice
+        for invoice in last_month_invoices
+        if invoice.member.num_socio == num_socio
+    ]
+    if invoice:
+        return 0
+    return 400
+
+
+def get_reconexion_value(member, last_month_invoices):
+    invoice = [
+        invoice
+        for invoice in last_month_invoices
+        if invoice.member.num_socio == member.num_socio
+    ]
+    # TODO Comprobar que la factura anterior fue emitida para un socio con solo mecha
+    # pero ahora el socio está activo. Nos basamos en el campo de cuota_fija o creamos un nuevo campo?
+    if (
+        invoice
+        and member.solo_mecha == False
+        and invoice[0].cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+    ):
+        return 10
+    return 0
+
+
+def get_mora_value(num_socio, last_month_invoices):
+    invoice = [
+        invoice
+        for invoice in last_month_invoices
+        if invoice.member.num_socio == num_socio
+    ]
+    if invoice and invoice[0].pago_1_al_11 == 0:
+        return 1
+    return 0

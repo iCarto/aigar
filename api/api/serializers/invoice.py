@@ -26,5 +26,8 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "caudal_anterior",
             "caudal_actual",
             "consumo",
+            "derecho",
+            "reconexion",
+            "mora",
             "total",
         ]

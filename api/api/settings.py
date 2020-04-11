@@ -114,8 +114,7 @@ WSGI_APPLICATION = "api.wsgi.application"
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
-    "default": env.db()
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": base("db.sqlite3")}
 }
 
 
@@ -190,6 +189,8 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:5100",
+    "http://127.0.0.1:5100",
 )
 # CORS_ALLOW_CREDENTIALS = True
 

@@ -20,6 +20,7 @@ node_modules/
 .vscode
 .vagrant
 *~
+ubuntu-xenial-16.04-cloudimg-console.log
 
 
 # Project
@@ -28,3 +29,4 @@ fixtures
 **/migrations/0*.py
 api/api/static
 fixtures.json
+desktop/gomi

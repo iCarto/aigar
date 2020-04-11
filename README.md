@@ -46,16 +46,13 @@ Take care. All these scripts **must** be launched from the root of the git repos
 
 ## Deployment
 
-**NOT READY JET**
-
-You can easily deploy the app on Heroku:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://gitlab.com/icarto-private/aigar.git/tree/prod)
-
-and then trigger new deployments by running:
+Empaquetado de la aplicación de Escritorio
 
 ```shell
 ./scripts/deploy.sh
+cd desktop
+vagrant halt
+vagrant up --provision
 ```
 
 ## Scripts

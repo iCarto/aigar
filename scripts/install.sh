@@ -35,7 +35,7 @@ fi
     cd $FRONTEND_PATH
     npm install
 )
-./scripts/util/prod-package.sh
+# ./scripts/util/prod-package.sh
 
 # TODO
 # link to UI

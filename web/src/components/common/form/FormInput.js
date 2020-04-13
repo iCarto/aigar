@@ -35,7 +35,11 @@ class FormInput extends React.Component {
                     type="text"
                     className="form-control"
                     name="ahorro"
-                    value={this.state.value}
+                    value={
+                        this.props.readOnly === true
+                            ? this.props.field.value
+                            : this.state.value
+                    }
                     onChange={this.handleChange}
                     readOnly={this.props.readOnly}
                 />

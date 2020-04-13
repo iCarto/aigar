@@ -1,7 +1,7 @@
 import React from "react";
 import {Spinner} from "components/common";
 import {InvoiceForm} from "components/invoice/presentation";
-import {createInvoice} from "model";
+import {createInvoice, refreshInvoiceValues} from "model";
 import {InvoiceService, MemberService} from "service/api";
 import {DataValidatorService} from "service/validation";
 import {MemberDetailShort} from "components/member/presentation";
@@ -58,13 +58,24 @@ class EditInvoice extends React.Component {
     handleChange(name, value) {
         console.log("EditInvoice.handleChange", name, value);
         this.setState((prevState, props) => {
-            const updatedInvoice = createInvoice(
-                Object.assign({}, prevState.invoice, {[name]: value})
+            const invoiceDataWithNewChange = Object.assign({}, prevState.invoice, {
+                [name]: value,
+            });
+            const errors = DataValidatorService.validateInvoice(
+                invoiceDataWithNewChange
             );
+            let updatedInvoice = createInvoice(invoiceDataWithNewChange);
+            if (errors.length === 0) {
+                updatedInvoice = refreshInvoiceValues(
+                    updatedInvoice,
+                    this.state.member.consumo_maximo,
+                    this.state.member.consumo_reduccion_fija
+                );
+            }
             console.log({updatedInvoice});
             return {
                 invoice: updatedInvoice,
-                errors: DataValidatorService.validateInvoice(updatedInvoice),
+                errors,
             };
         });
     }

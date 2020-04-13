@@ -16,6 +16,12 @@ const ESTADOS_FACTURA = {
     ANULADA: "anulada",
 };
 
+const COSTE_METRO_CUBICO = {
+    CUOTA_VARIABLE_MENOS_14: 0,
+    CUOTA_VARIABLE_14_20: 0.75,
+    CUOTA_VARIABLE_MAS_20: 2.5,
+};
+
 class Invoices extends Array {
     getInvoice(num_factura) {
         const invoices = this.filter(invoice => {
@@ -106,15 +112,18 @@ const createInvoices = (data = []) => {
     return invoices;
 };
 
-const customParseFloat = number => {
-    console.log("customParseFloat", number);
-    const floatNumber = parseFloat(number);
-    console.log("customParseFloat", number, floatNumber, isNaN(floatNumber));
-    if (isNaN(floatNumber)) {
-        console.log("returns", number);
-        return number;
+const parseFloatOrNull = value => {
+    if (value == null || isNaN(value)) {
+        return "";
     }
-    return floatNumber;
+    return parseFloat(value);
+};
+
+const parseIntOrNull = value => {
+    if (value == null || isNaN(value)) {
+        return "";
+    }
+    return parseInt(value);
 };
 
 const createInvoice = ({
@@ -157,35 +166,35 @@ const createInvoice = ({
         id_factura,
         mes_facturacion,
         numero,
-        ahorro,
+        ahorro: parseFloatOrNull(ahorro),
         anho,
-        asamblea,
-        caudal_actual,
-        caudal_anterior,
-        comision,
+        asamblea: parseFloatOrNull(asamblea),
+        caudal_actual: parseIntOrNull(caudal_actual),
+        caudal_anterior: parseIntOrNull(caudal_anterior),
+        comision: parseFloatOrNull(comision),
         comprobar_pago_11_al_30,
         comprobar_pago_1_al_11,
-        consumo,
-        cuota_fija,
-        cuota_variable,
-        derecho,
+        consumo: parseIntOrNull(consumo),
+        cuota_fija: parseFloatOrNull(cuota_fija),
+        cuota_variable: parseFloatOrNull(cuota_variable),
+        derecho: parseFloatOrNull(derecho),
         entrega,
         mes_facturado,
         mes_limite,
-        mora,
+        mora: parseFloatOrNull(mora),
         nombre,
         num_socio,
         tipo_socio,
         observaciones,
-        pago_11_al_30,
-        pago_1_al_11,
-        reconexion,
-        saldo_anterior,
-        saldo_pendiente,
+        pago_11_al_30: parseFloatOrNull(pago_11_al_30),
+        pago_1_al_11: parseFloatOrNull(pago_1_al_11),
+        reconexion: parseFloatOrNull(reconexion),
+        saldo_anterior: parseFloatOrNull(saldo_anterior),
+        saldo_pendiente: parseFloatOrNull(saldo_pendiente),
         sector,
-        total_pagado,
-        total,
-        traspaso,
+        total_pagado: parseFloatOrNull(total_pagado),
+        total: parseFloatOrNull(total),
+        traspaso: parseFloatOrNull(traspaso),
         estado,
         resumen,
     };
@@ -199,10 +208,39 @@ const createInvoice = ({
     return Object.freeze(publicApi);
 };
 
+const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) => {
+    const consumo = invoice.caudal_actual - invoice.caudal_anterior;
+    const consumo_final =
+        (consumo_maximo !== 0 ? Math.min(consumo, consumo_maximo) : consumo) -
+        consumo_reduccion_fija;
+    let cuota_variable = null;
+    if (consumo_final >= 0 && consumo_final <= 14) {
+        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * consumo_final;
+    } else if (consumo_final > 14 && consumo_final <= 20) {
+        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * consumo_final;
+    } else if (consumo_final > 20) {
+        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MAS_20 * consumo_final;
+    }
+    let total =
+        invoice.cuota_fija +
+        cuota_variable +
+        invoice.comision +
+        invoice.ahorro +
+        invoice.mora +
+        invoice.asamblea +
+        invoice.derecho +
+        invoice.reconexion +
+        invoice.traspaso +
+        invoice.saldo_anterior;
+    console.log({consumo, cuota_variable, total});
+    return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
+};
+
 export {
     createInvoice as default,
     invoice_api_adapter,
     createInvoices,
     invoices_api_adapter,
     ESTADOS_FACTURA,
+    refreshInvoiceValues,
 };

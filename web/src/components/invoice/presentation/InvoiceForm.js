@@ -26,11 +26,6 @@ class InvoiceForm extends React.Component {
     }
 
     handleChange(name, value) {
-        /*const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;*/
         this.props.handleChange(name, value);
         this.setState({dirty: true});
     }
@@ -92,18 +87,20 @@ class InvoiceForm extends React.Component {
                         name="caudal_anterior"
                         field={caudal_anterior}
                         handleChange={this.handleChange}
-                    />
-                    <FormInput
-                        label="Consumo"
-                        name="consumo"
-                        field={consumo}
-                        handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Caudal actual"
                         name="caudal_actual"
                         field={caudal_actual}
                         handleChange={this.handleChange}
+                    />
+                    <FormInput
+                        label="Consumo"
+                        name="consumo"
+                        field={consumo}
+                        handleChange={this.handleChange}
+                        readOnly={true}
                     />
                 </div>
                 <div style={{width: "60%"}}>
@@ -112,24 +109,28 @@ class InvoiceForm extends React.Component {
                         name="cuota_fija"
                         field={cuota_fija}
                         handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Cuota variable"
                         name="cuota_variable"
                         field={cuota_variable}
                         handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Comisión de pago"
                         name="comision"
                         field={comision}
                         handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Ahorro para mano de obra"
                         name="ahorro"
                         field={ahorro}
                         handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Recargo por mora"
@@ -166,6 +167,7 @@ class InvoiceForm extends React.Component {
                         name="saldo_pendiente"
                         field={saldo_pendiente}
                         handleChange={this.handleChange}
+                        readOnly={true}
                     />
                     <FormInput
                         label="Total"
@@ -179,7 +181,7 @@ class InvoiceForm extends React.Component {
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={!this.state.dirty}
+                        disabled={!this.state.dirty || this.props.errors.length > 0}
                     >
                         <i className="fas fa-save mr-2" />
                         Salvar

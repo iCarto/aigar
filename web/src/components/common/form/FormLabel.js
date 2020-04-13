@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "underscore";
 
 class FormLabel extends React.Component {
     render() {

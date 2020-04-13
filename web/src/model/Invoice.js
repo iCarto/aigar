@@ -157,6 +157,7 @@ const createInvoice = ({
     saldo_pendiente = 0,
     sector = "",
     total_pagado = 0,
+    descuento = 0,
     total = 0,
     traspaso = 0,
     estado = "",
@@ -193,6 +194,7 @@ const createInvoice = ({
         saldo_pendiente: parseFloatOrNull(saldo_pendiente),
         sector,
         total_pagado: parseFloatOrNull(total_pagado),
+        descuento: parseFloatOrNull(descuento),
         total: parseFloatOrNull(total),
         traspaso: parseFloatOrNull(traspaso),
         estado,
@@ -231,7 +233,8 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         invoice.derecho +
         invoice.reconexion +
         invoice.traspaso +
-        invoice.saldo_anterior;
+        invoice.saldo_anterior -
+        invoice.descuento;
     console.log({consumo, cuota_variable, total});
     return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
 };

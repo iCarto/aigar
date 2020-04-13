@@ -31,7 +31,7 @@ class DataValidator extends Validator {
         if (!value || value === "") {
             return;
         }
-        var decimalRegExp = /^\d+$/;
+        var decimalRegExp = /^0$|^-?[1-9]\d*(\.\d+)?$/;
         if (!decimalRegExp.test(value)) {
             return "El campo no tiene un formato válido";
         }
@@ -41,9 +41,15 @@ class DataValidator extends Validator {
         if (!value || value === "") {
             return;
         }
-        var decimalRegExp = /^\d+(\.\d{1,2})?$/;
+        var decimalRegExp = /^-?\d+(\.\d{0,2})?$/;
         if (!decimalRegExp.test(value)) {
             return "El campo no tiene un formato válido";
+        }
+    }
+
+    isPositive(value) {
+        if (value < 0) {
+            return "El valor no puede ser negativo";
         }
     }
 

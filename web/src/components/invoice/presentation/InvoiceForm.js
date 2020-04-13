@@ -70,6 +70,7 @@ class InvoiceForm extends React.Component {
             traspaso,
             mora,
             saldo_pendiente,
+            descuento,
             total,
         } = this.getFormDataFromProps();
         return (
@@ -168,6 +169,12 @@ class InvoiceForm extends React.Component {
                         field={saldo_pendiente}
                         handleChange={this.handleChange}
                         readOnly={true}
+                    />
+                    <FormInput
+                        label="Descuento"
+                        name="descuento"
+                        field={descuento}
+                        handleChange={this.handleChange}
                     />
                     <FormInput
                         label="Total"

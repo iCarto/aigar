@@ -13,6 +13,12 @@ const MemberService = {
         });
     },
 
+    getMembersToExport() {
+        return ApiService.get("/members/export").then(response => {
+            return response;
+        });
+    },
+
     getMember(num_socio) {
         // always cast numero_socio to int
         num_socio = parseInt(num_socio);

@@ -1,5 +1,9 @@
 import React from "react";
-import {MembersFilter, MemberNewButton} from "components/member/presentation";
+import {
+    MembersFilter,
+    MemberNewButton,
+    MembersExport,
+} from "components/member/presentation";
 import "components/common/SideBar.css";
 import {DomainService} from "service/api";
 
@@ -47,6 +51,9 @@ class ListMembersSidebar extends React.Component {
                 <div className="sidebar-group mt-auto">
                     <label>Acciones</label>
                     <div className="d-flex flex-column text-center">
+                        <div className="mt-1 mb-1">
+                            <MembersExport />
+                        </div>
                         <div className="mt-4 mb-4">
                             <MemberNewButton
                                 handleClickCreateMember={

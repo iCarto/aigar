@@ -34,15 +34,6 @@ function NavBar() {
                     </li>
                     <li className="nav-item active">
                         <NavLink
-                            to="/cargarpagos"
-                            activeClassName="active"
-                            className="nav-link"
-                        >
-                            Cargar Pagos
-                        </NavLink>
-                    </li>
-                    <li className="nav-item active">
-                        <NavLink
                             to="/socios"
                             activeClassName="active"
                             className="nav-link"

@@ -1,5 +1,5 @@
 import React from "react";
-import {Spinner} from "components/common";
+import {Spinner, ErrorMessage} from "components/common";
 import {InvoiceDetail, InvoiceNavigator} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
@@ -16,6 +16,8 @@ class ViewInvoice extends React.Component {
             member: null,
             payments: null,
             view: "view",
+            isLoading: null,
+            errorMessage: null,
         };
         this.handleBack = this.handleBack.bind(this);
         this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
@@ -42,21 +44,38 @@ class ViewInvoice extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.invoice === null) {
+        if (prevState.id_factura !== this.state.id_factura) {
             this.loadInvoice();
         }
     }
 
     loadInvoice() {
-        InvoiceService.getInvoice(this.state.id_factura).then(invoice => {
-            this.setState({invoice});
-            MemberService.getMember(invoice.num_socio).then(member => {
-                this.setState({member});
-            });
-            InvoiceService.getInvoicePayments(this.state.id_factura).then(payments => {
-                this.setState({payments});
-            });
+        this.setState({
+            invoice: null,
+            member: null,
+            payments: null,
+            isLoading: true,
+            errorMessage: null,
         });
+        InvoiceService.getInvoice(this.state.id_factura)
+            .then(invoice => {
+                this.setState({invoice, isLoading: false});
+                MemberService.getMember(invoice.num_socio).then(member => {
+                    this.setState({member});
+                });
+                InvoiceService.getInvoicePayments(this.state.id_factura).then(
+                    payments => {
+                        this.setState({payments});
+                    }
+                );
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage:
+                        "Se ha producido un error y no se han podido obtener los datos de la factura",
+                    isLoading: false,
+                });
+            });
     }
 
     handleBack() {
@@ -98,6 +117,7 @@ class ViewInvoice extends React.Component {
                 </nav>
                 <div className="col-md-10 offset-md-2">
                     <div className="container">
+                        <ErrorMessage message={this.state.errorMessage} />
                         {this.props.navigatorIds ? (
                             <InvoiceNavigator
                                 selectedId={this.state.id_factura}
@@ -127,10 +147,10 @@ class ViewInvoice extends React.Component {
     }
 
     get content() {
-        if (this.state.invoice) {
-            return this[this.state.view];
+        if (this.state.isLoading) {
+            return <Spinner message="Cargando datos" />;
         }
-        return <Spinner message="Cargando datos" />;
+        return this[this.state.view];
     }
 
     render() {

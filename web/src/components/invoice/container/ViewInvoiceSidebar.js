@@ -20,30 +20,32 @@ class ViewInvoiceSidebar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="sidebar-group mt-auto">
-                    <label>Acciones</label>
-                    <div className="d-flex flex-column text-center">
-                        <div className="mt-1 mb-1">
-                            <button
-                                onClick={this.props.handleClickEditInvoice}
-                                className="btn btn-primary"
-                            >
-                                <i className="fas mr-2" />
-                                Cambiar datos
-                            </button>
-                        </div>
-                        <div className="mt-1 mb-4">
-                            <PrintInvoiceButton
-                                invoices={[this.props.invoice]}
-                                buttonTitle="Imprimir factura"
-                                outputFilename={this.getOutputFilename()}
-                                handleSuccessPrintedInvoices={
-                                    this.props.handleSuccessPrintedInvoices
-                                }
-                            />
+                {this.props.invoice ? (
+                    <div className="sidebar-group mt-auto">
+                        <label>Acciones</label>
+                        <div className="d-flex flex-column text-center">
+                            <div className="mt-1 mb-1">
+                                <button
+                                    onClick={this.props.handleClickEditInvoice}
+                                    className="btn btn-primary"
+                                >
+                                    <i className="fas mr-2" />
+                                    Cambiar datos
+                                </button>
+                            </div>
+                            <div className="mt-1 mb-4">
+                                <PrintInvoiceButton
+                                    invoices={[this.props.invoice]}
+                                    buttonTitle="Imprimir factura"
+                                    outputFilename={this.getOutputFilename()}
+                                    handleSuccessPrintedInvoices={
+                                        this.props.handleSuccessPrintedInvoices
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
+                ) : null}
             </div>
         );
     }

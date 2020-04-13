@@ -1,5 +1,5 @@
 import React from "react";
-import {Spinner} from "components/common";
+import {Spinner, ErrorMessage} from "components/common";
 import {InvoiceForm} from "components/invoice/presentation";
 import {createInvoice, refreshInvoiceValues} from "model";
 import {InvoiceService, MemberService} from "service/api";
@@ -14,7 +14,10 @@ class EditInvoice extends React.Component {
             id_factura: null,
             invoice: null,
             member: null,
-            errors: null,
+            validationErrors: null,
+            isLoading: null,
+            isSaving: null,
+            errorMessage: null,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,12 +50,28 @@ class EditInvoice extends React.Component {
     }
 
     loadInvoice() {
-        InvoiceService.getInvoice(this.state.id_factura).then(invoice => {
-            this.setState({invoice});
-            MemberService.getMember(invoice.num_socio).then(member => {
-                this.setState({member});
-            });
+        this.setState({
+            invoice: null,
+            isLoading: true,
+            errorMessage: null,
         });
+        InvoiceService.getInvoice(this.state.id_factura)
+            .then(invoice => {
+                this.setState({
+                    invoice,
+                    isLoading: false,
+                });
+                MemberService.getMember(invoice.num_socio).then(member => {
+                    this.setState({member});
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage:
+                        "Se ha producido un error y no se han podido obtener los datos de la factura",
+                    isLoading: false,
+                });
+            });
     }
 
     handleChange(name, value) {
@@ -61,11 +80,11 @@ class EditInvoice extends React.Component {
             const invoiceDataWithNewChange = Object.assign({}, prevState.invoice, {
                 [name]: value,
             });
-            const errors = DataValidatorService.validateInvoice(
+            const validationErrors = DataValidatorService.validateInvoice(
                 invoiceDataWithNewChange
             );
             let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-            if (errors.length === 0) {
+            if (validationErrors.length === 0) {
                 updatedInvoice = refreshInvoiceValues(
                     updatedInvoice,
                     this.state.member.consumo_maximo,
@@ -75,20 +94,35 @@ class EditInvoice extends React.Component {
             console.log({updatedInvoice});
             return {
                 invoice: updatedInvoice,
-                errors,
+                validationErrors,
             };
         });
     }
 
     handleSubmit() {
         console.log("EditMember.handleSubmit", this.state);
-        InvoiceService.updateInvoice(this.state.invoice).then(updatedInvoice => {
-            if (this.props.handleSubmit) {
-                this.props.handleSubmit(updatedInvoice);
-            } else {
-                this.handleBack();
-            }
+        this.setState({
+            isSaving: true,
+            errorMessage: null,
         });
+        InvoiceService.updateInvoice(this.state.invoice)
+            .then(updatedInvoice => {
+                this.setState({
+                    isSaving: false,
+                });
+                if (this.props.handleSubmit) {
+                    this.props.handleSubmit(updatedInvoice);
+                } else {
+                    this.handleBack();
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage:
+                        "Se ha producido un error y no se han podido almacenar los datos de la factura",
+                    isSaving: false,
+                });
+            });
     }
 
     handleBack() {
@@ -96,7 +130,7 @@ class EditInvoice extends React.Component {
         if (this.props.handleBack) {
             this.props.handleBack();
         } else {
-            this.props.history.push("/facturas/");
+            this.props.history.push("/facturas/" + this.state.id_factura);
         }
     }
 
@@ -110,20 +144,22 @@ class EditInvoice extends React.Component {
     }
 
     get content() {
-        if (this.state.invoice) {
-            return (
-                <>
-                    <MemberDetailShort member={this.state.member} />
-                    <InvoiceForm
-                        invoice={this.state.invoice}
-                        errors={this.state.errors}
-                        handleChange={this.handleChange}
-                        handleSubmit={this.handleSubmit}
-                    />
-                </>
-            );
+        if (this.state.isLoading) {
+            return <Spinner message="Cargando datos" />;
         }
-        return <Spinner message="Cargando datos" />;
+        return (
+            <>
+                <ErrorMessage message={this.state.errorMessage} />
+                <MemberDetailShort member={this.state.member} />
+                <InvoiceForm
+                    invoice={this.state.invoice}
+                    errors={this.state.validationErrors}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                    saving={this.state.isSaving}
+                />
+            </>
+        );
     }
 
     render() {

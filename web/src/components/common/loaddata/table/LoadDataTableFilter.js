@@ -1,5 +1,5 @@
 import React from "react";
-import {Util} from "components/util";
+import _ from "underscore";
 
 class LoadDataTableFilter extends React.Component {
     constructor(props) {
@@ -8,10 +8,7 @@ class LoadDataTableFilter extends React.Component {
         // https://lifesaver.codes/answer/debounce-and-onchange
         // this.handleChange = Util.debounce(this.handleChange.bind(this), 250);
         this.handleChange = this.handleChange.bind(this);
-        this.liftUpHandleChange = Util.debounce(
-            this.liftUpHandleChange.bind(this),
-            250
-        );
+        this.liftUpHandleChange = _.debounce(this.liftUpHandleChange.bind(this), 250);
     }
 
     handleChange(event) {

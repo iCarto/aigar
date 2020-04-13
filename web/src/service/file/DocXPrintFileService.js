@@ -3,6 +3,7 @@ import FileService from "./FileService";
 import BarcodeService from "./BarcodeService";
 import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
 import invoiceTemplatePath from "assets/print-templates/invoice/Modelo_Factura_ASCATLI.docx";
+import {DateUtil, NumberUtil} from "components/util";
 
 const DocXPrintFileService = {
     async getLogoAscatli() {
@@ -45,6 +46,8 @@ const DocXPrintFileService = {
                     return logoAscatli;
                 },
                 getInvoiceBarcode: this.getInvoiceBarcode,
+                getMonthName: DateUtil.getMonthName,
+                getDecimal: NumberUtil.getDecimal,
             },
             /*
             With the default configuration, browser usage can become slow with

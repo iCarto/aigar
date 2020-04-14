@@ -55,16 +55,53 @@ def create_django_fixtures(database):
     fixtures_invoicing_months[-1]["fields"]["is_open"] = True
     fixtures = fixtures + fixtures_invoicing_months
 
+    mes_facturacion_previo = None
     for year, year_invoices in database["invoices"].items():
         for month, month_invoices in year_invoices.items():
+            mes_facturacion = str(year) + str(month)
             for invoice in month_invoices:
+                num_socio = int(invoice["num_socio"])
+                # estos pagos se corresponden con la factura del mes anterior
+                # y se utiliza en el excel para determinar si hay mora o no
+                # pero no se pueden cargar en la factura actual, sino en la anterior
+                pago_1_al_11 = float(invoice.get("pago_1_al_11", 0) or 0)
+                pago_11_al_30 = float(invoice.get("pago_11_al_30", 0) or 0)
+                comprobar_pago_1_al_11 = float(
+                    invoice.get("comprobar_pago_1_al_11", 0) or 0
+                )
+                comprobar_pago_11_al_30 = float(
+                    invoice.get("comprobar_pago_11_al_30", 0) or 0
+                )
+                if mes_facturacion_previo is not None:
+                    last_month_fixture_invoice = [
+                        aux_fixture_invoice
+                        for aux_fixture_invoice in fixtures
+                        if aux_fixture_invoice["model"] == "api.Invoice"
+                        and aux_fixture_invoice["fields"]["member"] == num_socio
+                        and aux_fixture_invoice["fields"]["mes_facturacion"]
+                        == mes_facturacion_previo
+                    ]
+                    if last_month_fixture_invoice:
+                        last_month_fixture_invoice = last_month_fixture_invoice[0]
+                        last_month_fixture_invoice["fields"][
+                            "pago_11_al_30"
+                        ] = pago_11_al_30
+                        last_month_fixture_invoice["fields"][
+                            "pago_1_al_11"
+                        ] = pago_1_al_11
+                        last_month_fixture_invoice["fields"]["estado"] = (
+                            "pendiente_de_cobro"
+                            if comprobar_pago_1_al_11 == 0
+                            and comprobar_pago_11_al_30 == 0
+                            else "cobrada"
+                        )
                 fixture_invoice = {
                     "model": "api.Invoice",
                     "pk": None,
                     "fields": {
-                        "mes_facturacion": str(year) + str(month),
+                        "mes_facturacion": mes_facturacion,
                         "anho": int(year),
-                        "member": int(invoice["num_socio"]),
+                        "member": num_socio,
                         "nombre": invoice["nombre"],
                         "sector": int(invoice["sector"]),
                         "ahorro": float(invoice.get("ahorro", 0) or 0),
@@ -72,8 +109,6 @@ def create_django_fixtures(database):
                         "caudal_actual": int(invoice.get("caudal_actual", 0) or 0),
                         "caudal_anterior": int(invoice.get("caudal_anterior", 0) or 0),
                         "comision": float(invoice.get("comision", 0) or 0),
-                        # "comprobar_pago_11_al_30": float(m["comprobar_pago_11_al_30", 0)),
-                        # "comprobar_pago_1_al_11": float(m["comprobar_pago_1_al_11", 0)),
                         "consumo": int(invoice.get("consumo", 0) or 0),
                         "cuota_fija": float(invoice.get("cuota_fija", 0) or 0),
                         "cuota_variable": float(invoice.get("cuota_variable", 0) or 0),
@@ -82,10 +117,7 @@ def create_django_fixtures(database):
                         "mes_facturado": int(invoice.get("mes_facturado") or 0),
                         "mes_limite": int(invoice.get("mes_limite") or 0),
                         "mora": float(invoice.get("mora", 0) or 0),
-                        "pago_11_al_30": float(invoice.get("pago_11_al_30", 0) or 0),
-                        "pago_1_al_11": float(invoice.get("pago_1_al_11", 0) or 0),
                         "reconexion": float(invoice.get("reconexion", 0) or 0),
-                        "saldo_anterior": float(invoice.get("saldo_anterior", 0) or 0),
                         "saldo_pendiente": float(
                             invoice.get("saldo_pendiente", 0) or 0
                         ),
@@ -97,6 +129,7 @@ def create_django_fixtures(database):
                     },
                 }
                 fixtures.append(fixture_invoice)
+            mes_facturacion_previo = mes_facturacion
     print(json.dumps(fixtures))
 
 

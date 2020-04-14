@@ -31,6 +31,12 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
 
         new_invoicing_month["invoices"] = []
         for member in active_members:
+            last_month_invoice = [
+                invoice
+                for invoice in last_month_invoices
+                if invoice.member.num_socio == member.num_socio
+            ]
+            last_month_invoice = last_month_invoice[0] if last_month_invoice else None
             invoice = {
                 "anho": new_invoicing_month["anho"],
                 "mes_facturado": new_invoicing_month["mes"],
@@ -39,9 +45,11 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,
-                "derecho": get_derecho_value(member.num_socio, last_month_invoices),
-                "reconexion": get_reconexion_value(member, last_month_invoices),
-                "mora": get_mora_value(member.num_socio, last_month_invoices),
+                "caudal_anterior": last_month_invoice.caudal_actual,
+                "derecho": get_derecho_value(last_month_invoice),
+                "reconexion": get_reconexion_value(member, last_month_invoice),
+                "mora": get_mora_value(last_month_invoice),
+                "saldo_pendiente": get_saldo_pendiente_value(last_month_invoice),
             }
             new_invoicing_month["invoices"].append((invoice))
 
@@ -55,40 +63,35 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
 
 
 # TODO Donde sería el lugar adecuado para situar estos métodos?
-def get_derecho_value(num_socio, last_month_invoices):
-    invoice = [
-        invoice
-        for invoice in last_month_invoices
-        if invoice.member.num_socio == num_socio
-    ]
-    if invoice:
-        return 0
-    return 400
+def get_derecho_value(last_month_invoice):
+    if last_month_invoice is None:
+        return 400
+    return 0
 
 
-def get_reconexion_value(member, last_month_invoices):
-    invoice = [
-        invoice
-        for invoice in last_month_invoices
-        if invoice.member.num_socio == member.num_socio
-    ]
+def get_reconexion_value(member, last_month_invoice):
     # TODO Comprobar que la factura anterior fue emitida para un socio con solo mecha
     # pero ahora el socio está activo. Nos basamos en el campo de cuota_fija o creamos un nuevo campo?
     if (
-        invoice
+        last_month_invoice is not None
         and member.solo_mecha == False
-        and invoice[0].cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+        and last_month_invoice.cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
     ):
         return 10
     return 0
 
 
-def get_mora_value(num_socio, last_month_invoices):
-    invoice = [
-        invoice
-        for invoice in last_month_invoices
-        if invoice.member.num_socio == num_socio
-    ]
-    if invoice and invoice[0].pago_1_al_11 == 0:
+def get_mora_value(last_month_invoice):
+    if last_month_invoice is not None and last_month_invoice.pago_1_al_11 == 0:
         return 1
+    return 0
+
+
+def get_saldo_pendiente_value(last_month_invoice):
+    if last_month_invoice is not None:
+        return (
+            (last_month_invoice.total or 0)
+            - last_month_invoice.pago_1_al_11
+            - last_month_invoice.pago_11_al_30
+        )
     return 0

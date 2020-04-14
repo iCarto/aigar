@@ -44,5 +44,6 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "derecho",
             "reconexion",
             "mora",
+            "saldo_pendiente",
             "total",
         ]

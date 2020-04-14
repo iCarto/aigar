@@ -129,10 +129,6 @@ class Invoice(models.Model):
         null=False, blank=False, default=0, verbose_name="Saldo pendiente", help_text=""
     )
 
-    saldo_anterior = models.FloatField(
-        null=False, blank=False, default=0, verbose_name="Saldo anterior", help_text=""
-    )
-
     descuento = models.FloatField(
         null=False, blank=False, default=0, verbose_name="Descuento", help_text=""
     )
@@ -221,7 +217,7 @@ class Invoice(models.Model):
             + self.derecho
             + self.reconexion
             + self.traspaso
-            + self.saldo_anterior
+            + self.saldo_pendiente
             - self.descuento
         )
         return self

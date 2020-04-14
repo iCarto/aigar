@@ -1,6 +1,9 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
 import {Spinner} from "components/common";
+import InvoiceGroupFieldsCellTable from "./InvoiceGroupFieldsCellTable";
+import InvoiceStatusCellTable from "./InvoiceStatusCellTable";
+import InvoiceMonthCellTable from "./InvoiceMonthCellTable";
 
 class InvoicesList extends React.Component {
     render() {
@@ -8,6 +11,51 @@ class InvoicesList extends React.Component {
         if (this.props.invoices) {
             const columns = [
                 {
+                    Header: "Mes",
+                    Cell: InvoiceMonthCellTable,
+                },
+                {
+                    Header: "Caudal anterior",
+                    accessor: "caudal_anterior",
+                    className: "litre",
+                },
+                {
+                    Header: "Caudal actual",
+                    accessor: "caudal_actual",
+                    className: "litre",
+                },
+                {
+                    Header: "Consumo",
+                    accessor: "consumo",
+                    className: "litre",
+                },
+                {
+                    Header: "Mora",
+                    accessor: "mora",
+                    className: "dollar",
+                },
+                {
+                    Header: "Otros",
+                    Cell: InvoiceGroupFieldsCellTable,
+                },
+                {
+                    Header: "Total",
+                    accessor: "total",
+                    className: "dollar font-weight-bold",
+                },
+                {
+                    Header: "Estado",
+                    accessor: "estado",
+                    Cell: InvoiceStatusCellTable,
+                },
+            ];
+            if (this.props.showLink === false) {
+                columns.splice(0, 0, {
+                    Header: "Número",
+                    accessor: "numero",
+                });
+            } else {
+                columns.splice(0, 0, {
                     Header: "Número",
                     accessor: "numero",
                     Cell: LinkCellTable,
@@ -15,56 +63,22 @@ class InvoicesList extends React.Component {
                         handleClick: this.props.handleClickViewInvoice,
                         linkAccessor: "id_factura",
                     }),
-                },
-                {
-                    Header: "Nombre",
-                    accessor: "nombre",
-                },
-                {
-                    Header: "Sector",
-                    accessor: "sector",
-                },
-                {
-                    Header: "Caudal anterior",
-                    accessor: "caudal_anterior",
-                },
-                {
-                    Header: "Consumo",
-                    accessor: "consumo",
-                },
-                {
-                    Header: "Caudal actual",
-                    accessor: "caudal_actual",
-                },
-                {
-                    Header: "Cuota fija",
-                    accessor: "cuota_fija",
-                },
-                {
-                    Header: "Cuota variable",
-                    accessor: "cuota_variable",
-                },
-                {
-                    Header: "Comisión",
-                    accessor: "comision",
-                },
-                {
-                    Header: "Ahorro",
-                    accessor: "ahorro",
-                },
-                {
-                    Header: "Derecho",
-                    accessor: "derecho",
-                },
-                {
-                    Header: "Reconexión",
-                    accessor: "reconexion",
-                },
-                {
-                    Header: "Total",
-                    accessor: "total",
-                },
-            ];
+                });
+            }
+            if (this.props.showMember !== false) {
+                const memberColumns = [
+                    {
+                        Header: "Nombre",
+                        accessor: "nombre",
+                        className: "font-weight-bold text-nowrap",
+                    },
+                    {
+                        Header: "Sector",
+                        accessor: "sector",
+                    },
+                ];
+                columns.splice(1, 0, ...memberColumns);
+            }
 
             return (
                 <SortedPaginatedTable

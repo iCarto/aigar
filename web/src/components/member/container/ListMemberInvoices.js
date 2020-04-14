@@ -2,6 +2,7 @@ import React from "react";
 import {InvoiceService} from "service/api";
 import {SortedPaginatedTable} from "components/common/table";
 import {Spinner} from "components/common";
+import {InvoicesList} from "components/invoice/presentation";
 
 class ListMemberInvoices extends React.Component {
     constructor(props) {
@@ -43,60 +44,12 @@ class ListMemberInvoices extends React.Component {
     render() {
         console.log("ListMemberInvoices.render");
         if (this.state.invoices) {
-            const columns = [
-                {
-                    Header: "Listado de facturas",
-                    columns: [
-                        {
-                            Header: "Número",
-                            accessor: "numero",
-                        },
-                        {
-                            Header: "Caudal anterior",
-                            accessor: "caudal_anterior",
-                        },
-                        {
-                            Header: "Consumo",
-                            accessor: "consumo",
-                        },
-                        {
-                            Header: "Caudal actual",
-                            accessor: "caudal_actual",
-                        },
-                        {
-                            Header: "Cuota fija",
-                            accessor: "cuota_fija",
-                        },
-                        {
-                            Header: "Cuota variable",
-                            accessor: "cuota_variable",
-                        },
-                        {
-                            Header: "Comisión",
-                            accessor: "comision",
-                        },
-                        {
-                            Header: "Ahorro",
-                            accessor: "ahorro",
-                        },
-                        {
-                            Header: "Derecho",
-                            accessor: "derecho",
-                        },
-                        {
-                            Header: "Reconexión",
-                            accessor: "reconexion",
-                        },
-                        {
-                            Header: "Total",
-                            accessor: "total",
-                        },
-                    ],
-                },
-            ];
-
             return (
-                <SortedPaginatedTable columns={columns} data={this.state.invoices} />
+                <InvoicesList
+                    invoices={this.state.invoices}
+                    showLink={false}
+                    showMember={false}
+                />
             );
         }
         return <Spinner message="Cargando datos" />;

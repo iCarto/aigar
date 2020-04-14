@@ -87,9 +87,7 @@ class ListInvoices extends React.Component {
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {this.sidebar}
                     </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
-                    </div>
+                    <div className="col-md-10 offset-md-2">{this.content}</div>
                 </div>
             </div>
         );

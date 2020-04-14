@@ -5,16 +5,18 @@ body {
 .link-button {
     background-color: transparent;
     border: none;
+    color: #333;
     cursor: pointer;
     display: inline;
     margin: 0;
     padding: 0;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .link-button:hover,
 .link-button:focus {
-    text-decoration: none;
+    color: #333;
+    text-decoration: underline;
 }
 
 .modal-dialog {
@@ -43,4 +45,32 @@ body {
     margin-right: 10px;
     text-align: left;
     white-space: nowrap;
+}
+
+.litre {
+    text-align: right;
+}
+
+.litre:not(:empty)::after {
+    color: #888;
+    content: " L";
+    font-size: 0.7em;
+}
+
+.dollar {
+    text-align: right;
+}
+
+.dollar:not(:empty)::after {
+    color: #888;
+    content: " $";
+    font-size: 0.7em;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
 }

@@ -3,7 +3,7 @@ import React from "react";
 const LinkCellTable = ({row, column, cell}) => (
     <button
         type="button"
-        className="link-button text-primary"
+        className="link-button font-weight-bold"
         onClick={() => {
             console.log(row.original);
             column.getProps().handleClick(row.original[column.getProps().linkAccessor]);

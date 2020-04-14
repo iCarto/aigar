@@ -12,11 +12,6 @@ class MembersList extends React.Component {
                         {
                             Header: "Número",
                             accessor: "num_socio",
-                            Cell: LinkCellTable,
-                            getProps: () => ({
-                                handleClick: this.props.handleClickViewMember,
-                                linkAccessor: "num_socio",
-                            }),
                         },
                         {
                             Header: "Nombre",

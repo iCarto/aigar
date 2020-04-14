@@ -65,18 +65,6 @@ class InvoicesListPreview extends React.Component {
                         accessor: "consumo",
                     },
                     {
-                        Header: "Cuota fija",
-                        accessor: "cuota_fija",
-                    },
-                    {
-                        Header: "Cuota variable",
-                        accessor: "cuota_variable",
-                    },
-                    {
-                        Header: "Saldo pendiente",
-                        accessor: "saldo_pendiente",
-                    },
-                    {
                         Header: "Pago 1 al 11",
                         accessor: "pago_1_al_11",
                     },

@@ -34,6 +34,7 @@ class MonthlyInvoicingList extends React.Component {
                 {
                     Header: "Sector",
                     accessor: "sector",
+                    className: "text-center",
                 },
                 {
                     Header: "Tipo",
@@ -52,10 +53,12 @@ class MonthlyInvoicingList extends React.Component {
                 {
                     Header: "Lectura",
                     accessor: "consumo",
+                    className: "litre",
                 },
                 {
                     Header: "Importe",
                     accessor: "total",
+                    className: "dollar font-weight-bold",
                 },
                 {
                     Header: "Estado",

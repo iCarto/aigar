@@ -47,7 +47,10 @@ const SortedPaginatedTable = ({
 
     return (
         <>
-            <table {...getTableProps()} className="table table-bordered table-hover">
+            <table
+                {...getTableProps()}
+                className="table table-bordered table-striped table-hover"
+            >
                 <thead className="thead-dark">
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
@@ -80,7 +83,14 @@ const SortedPaginatedTable = ({
                             <tr {...row.getRowProps()}>
                                 {row.cells.map(cell => {
                                     return (
-                                        <td {...cell.getCellProps()}>
+                                        <td
+                                            {...cell.getCellProps([
+                                                {
+                                                    className: cell.column.className,
+                                                    style: cell.column.style,
+                                                },
+                                            ])}
+                                        >
                                             {cell.render("Cell")}
                                         </td>
                                     );

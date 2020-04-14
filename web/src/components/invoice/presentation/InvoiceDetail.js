@@ -18,6 +18,7 @@ class MemberDetail extends React.Component {
                 derecho,
                 reconexion,
                 mora,
+                saldo_pendiente,
                 total,
             } = this.props.invoice;
             return (
@@ -79,6 +80,10 @@ class MemberDetail extends React.Component {
                             <div className="p-3">
                                 <label className="p-1">Mora:</label>
                                 <span className="p-1">{mora}</span>
+                            </div>
+                            <div className="p-3">
+                                <label className="p-1">Saldo pendiente:</label>
+                                <span className="p-1">{saldo_pendiente}</span>
                             </div>
                             <div className="p-3">
                                 <label className="p-1">Total:</label>

@@ -2,20 +2,29 @@ from django.db.models import Max
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
-from api.models.invoice import Invoice, fixed_values
+from api.models.invoice import Invoice, InvoiceStatus, fixed_values
 from api.models.invoicing_month import InvoicingMonth
 from api.serializers.invoice import InvoiceSerializer
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
-from rest_framework_extensions.mixins import ListUpdateModelMixin, NestedViewSetMixin
+from rest_framework_extensions.mixins import (
+    ListDestroyModelMixin,
+    ListUpdateModelMixin,
+    NestedViewSetMixin,
+)
 
 
-class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelViewSet):
+class InvoiceViewSet(
+    ListUpdateModelMixin,
+    ListDestroyModelMixin,
+    NestedViewSetMixin,
+    viewsets.ModelViewSet,
+):
     serializer_class = InvoiceSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Invoice.objects.prefetch_related("member").all()
+        queryset = Invoice.objects.prefetch_related("member")
         num_socio = self.request.query_params.get("num_socio", None)
         if num_socio is not None:
             queryset = queryset.filter(member=num_socio)
@@ -26,6 +35,9 @@ class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelVie
         if id_facturas is not None:
             queryset = queryset.filter(id_factura__in=id_facturas.split(","))
 
+        id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
+        if id_mes_facturacion is not None:
+            queryset = queryset.filter(is_active=True)
         return self.filter_queryset_by_parents_lookups(queryset)
 
     def get_serializer_context(self):
@@ -48,7 +60,9 @@ class InvoiceViewSet(ListUpdateModelMixin, NestedViewSetMixin, viewsets.ModelVie
             ]
             last_three_months_invoices = (
                 Invoice.objects.prefetch_related("member")
-                .filter(mes_facturacion__in=last_three_invoicing_months_ids)
+                .filter(
+                    mes_facturacion__in=last_three_invoicing_months_ids, is_active=True
+                )
                 .order_by("-mes_facturacion")
             )
 

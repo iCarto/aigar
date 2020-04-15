@@ -100,6 +100,7 @@ def create_django_fixtures(database):
                     "pk": None,
                     "fields": {
                         "mes_facturacion": mes_facturacion,
+                        "version": 1,
                         "anho": int(year),
                         "member": num_socio,
                         "nombre": invoice["nombre"],

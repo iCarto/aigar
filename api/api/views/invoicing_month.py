@@ -38,6 +38,8 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
             ]
             last_month_invoice = last_month_invoice[0] if last_month_invoice else None
             invoice = {
+                # New monthly invoices are always version 1
+                "version": 1,
                 "anho": new_invoicing_month["anho"],
                 "mes_facturado": new_invoicing_month["mes"],
                 # Is mes_limite necessary and anho_limite not necessary?

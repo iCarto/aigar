@@ -32,6 +32,7 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invoice
         fields = [
+            "version",
             "anho",
             "mes_facturado",
             "mes_limite",

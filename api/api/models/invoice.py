@@ -30,7 +30,11 @@ class Invoice(models.Model):
         verbose_name="Id factura",
         help_text="El Identificador de la factura no puede estar vacío y no debe repetirse",
     )
-    # No deberían darse nombres iguales, pero puede tener sentido permitirlo
+
+    version = models.PositiveSmallIntegerField(
+        null=False, blank=False, unique=False, verbose_name="Version", help_text=""
+    )
+
     mes_facturacion = models.ForeignKey(
         "InvoicingMonth",
         null=False,
@@ -165,6 +169,10 @@ class Invoice(models.Model):
     # https://code.djangoproject.com/ticket/28951
     created_at = models.DateTimeField(null=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, auto_now=True)
+
+    is_active = models.BooleanField(
+        blank=False, null=False, default=True, verbose_name="", help_text=""
+    )
 
     def __str__(self):
         return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total}"

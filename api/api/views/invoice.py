@@ -73,3 +73,21 @@ class InvoiceViewSet(
                 }
             )
         return context
+
+    # Override destroy method to set Invoice as inactive and return a new version of the same invoice
+    def destroy(self, request, *args, **kwargs):
+        invoice = self.get_object()
+        version = invoice.version
+        invoice.estado = InvoiceStatus.ANULADA
+        invoice.is_active = False
+        invoice.save()
+
+        # https://docs.djangoproject.com/en/2.2/topics/db/queries/#copying-model-instances
+        invoice.pk = None
+        invoice.version = version + 1
+        invoice.estado = InvoiceStatus.NUEVA
+        invoice.is_active = True
+        invoice.save()
+        return Response(
+            InvoiceSerializer(context={"request": request}, instance=invoice).data
+        )

@@ -59,7 +59,13 @@ class ViewInvoice extends React.Component {
         });
         InvoiceService.getInvoice(this.state.id_factura)
             .then(invoice => {
-                this.setState({invoice, isLoading: false});
+                this.setState({
+                    invoice,
+                    isLoading: false,
+                    errorMessage: invoice.is_active
+                        ? null
+                        : "La factura ha sido borrada.",
+                });
                 MemberService.getMember(invoice.num_socio).then(member => {
                     this.setState({member});
                 });
@@ -112,12 +118,14 @@ class ViewInvoice extends React.Component {
                         invoice={this.state.invoice}
                         handleClickEditInvoice={this.handleClickEditInvoice}
                         handleSuccessPrintedInvoices={this.handleSuccessPrintedInvoices}
+                        handleSuccessCreateNewInvoiceVersion={
+                            this.props.handleSuccessCreateNewInvoiceVersion
+                        }
                         handleBack={this.handleBack}
                     />
                 </nav>
                 <div className="col-md-10 offset-md-2">
                     <div className="container">
-                        <ErrorMessage message={this.state.errorMessage} />
                         {this.props.navigatorIds ? (
                             <InvoiceNavigator
                                 selectedId={this.state.id_factura}
@@ -127,6 +135,7 @@ class ViewInvoice extends React.Component {
                                 }
                             />
                         ) : null}
+                        <ErrorMessage message={this.state.errorMessage} />
                         <MemberDetailShort member={this.state.member} />
                         <InvoiceDetail invoice={this.state.invoice} />
                         <PaymentsList payments={this.state.payments} />

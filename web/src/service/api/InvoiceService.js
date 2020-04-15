@@ -74,6 +74,13 @@ const InvoiceService = {
             true
         );
     },
+
+    createNewInvoiceVersion(id_factura) {
+        return ApiService.delete("/invoices/" + id_factura + "/").then(response => {
+            let invoice = invoice_api_adapter(response);
+            return createInvoice(invoice);
+        });
+    },
 };
 
 export default InvoiceService;

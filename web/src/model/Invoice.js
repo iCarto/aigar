@@ -45,33 +45,11 @@ const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija
 };
 
 const invoice_api_adapter = invoice => {
-    /*m["ahorro"] = Number(m["ahorro"]) || 0;
-    m["asamblea"] = Number(m["asamblea"]) || 0;
-    m["caudal_actual"] = Number(m["caudal_actual"]) || 0;
-    m["caudal_anterior"] = Number(m["caudal_anterior"]) || 0;
-    m["comision"] = Number(m["comision"]) || 0;
-    m["comprobar_pago_11_al_30"] = Number(m["comprobar_pago_11_al_30"]) || 0;
-    m["comprobar_pago_1_al_11"] = Number(m["comprobar_pago_1_al_11"]) || 0;
-    m["consumo"] = Number(m["consumo"]) || 0;
-    m["cuota_fija"] = Number(m["cuota_fija"]) || 0;
-    m["cuota_variable"] = Number(m["cuota_variable"]) || 0;
-    m["derecho"] = Number(m["derecho"]) || 0;
-    m["entrega"] = m["entrega"] === "Si" ? true : false;
-    m["mes_facturado"] = Number(m["mes_facturado"]);
-    m["mes_limite"] = Number(m["mes_limite"]);
-    m["mora"] = Number(m["mora"]) || 0;
-    m["pago_11_al_30"] = Number(m["pago_11_al_30"]) || 0;
-    m["pago_1_al_11"] = Number(m["pago_1_al_11"]) || 0;
-    m["reconexion"] = Number(m["reconexion"]) || 0;
-    m["saldo_anterior"] = Number(m["saldo_anterior"]) || 0;
-    m["saldo_pendiente"] = Number(m["saldo_pendiente"]) || 0;
-    m["total"] = Number(m["total"]) || 0;
-    m["traspaso"] = Number(m["traspaso"]) || 0;*/
     invoice["numero"] =
         invoice.member.num_socio.toString().padStart(4, "0") +
         invoice.anho.toString() +
         invoice.mes_facturado.toString().padStart(2, "0") +
-        "01";
+        invoice.version.toString().padStart(2, "0");
     invoice["num_socio"] = invoice.member.num_socio;
     invoice["tipo_socio"] = getTipoSocio(
         invoice.member.solo_mecha,
@@ -83,22 +61,6 @@ const invoice_api_adapter = invoice => {
 };
 
 const invoices_api_adapter = invoices => {
-    /*let result = [];
-    Object.keys(invoices).forEach(year => {
-        Object.keys(invoices[year]).forEach(month => {
-            let monthInvoices = invoices[year][month].map(invoice => {
-                invoice = invoice_api_adapter(invoice);
-                invoice.numero =
-                    invoice.numero_socio.toString() +
-                    invoice.anho.toString() +
-                    invoice.mes_facturado.toString() +
-                    "01";
-                return invoice;
-            });
-            result.push(...monthInvoices);
-        });
-    });
-    return result;*/
     return invoices.map(invoice => {
         invoice = invoice_api_adapter(invoice);
         return invoice;
@@ -128,6 +90,7 @@ const parseIntOrNull = value => {
 
 const createInvoice = ({
     id_factura = -1,
+    version = -1,
     mes_facturacion = "",
     numero = "",
     ahorro = 0,
@@ -161,9 +124,11 @@ const createInvoice = ({
     traspaso = 0,
     estado = "",
     resumen = [],
+    is_active = true,
 } = {}) => {
     const publicApi = {
         id_factura,
+        version,
         mes_facturacion,
         numero,
         ahorro: parseFloatOrNull(ahorro),
@@ -197,6 +162,7 @@ const createInvoice = ({
         traspaso: parseFloatOrNull(traspaso),
         estado,
         resumen,
+        is_active,
     };
 
     Object.defineProperty(publicApi, "comunidad", {
@@ -233,7 +199,6 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         invoice.traspaso +
         invoice.saldo_pendiente -
         invoice.descuento;
-    console.log({consumo, cuota_variable, total});
     return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
 };
 

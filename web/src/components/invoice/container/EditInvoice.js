@@ -60,6 +60,9 @@ class EditInvoice extends React.Component {
                 this.setState({
                     invoice,
                     isLoading: false,
+                    errorMessage: invoice.is_active
+                        ? null
+                        : "La factura ha sido borrada.",
                 });
                 MemberService.getMember(invoice.num_socio).then(member => {
                     this.setState({member});

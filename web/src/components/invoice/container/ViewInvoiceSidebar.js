@@ -1,6 +1,7 @@
 import React from "react";
 import {BackButton} from "components/common";
 import {PrintInvoiceButton} from "components/monthlyinvoicing/container/actions";
+import UpdateInvoiceButton from "./actions/UpdateInvoiceButton";
 
 class ViewInvoiceSidebar extends React.Component {
     getOutputFilename() {
@@ -24,15 +25,18 @@ class ViewInvoiceSidebar extends React.Component {
                     <div className="sidebar-group mt-auto">
                         <label>Acciones</label>
                         <div className="d-flex flex-column text-center">
-                            <div className="mt-1 mb-1">
-                                <button
-                                    onClick={this.props.handleClickEditInvoice}
-                                    className="btn btn-primary"
-                                >
-                                    <i className="fas mr-2" />
-                                    Cambiar datos
-                                </button>
-                            </div>
+                            {this.props.invoice.is_active ? (
+                                <UpdateInvoiceButton
+                                    invoice={this.props.invoice}
+                                    hidden={this.props.invoice.is_active === false}
+                                    handleClickEditInvoice={
+                                        this.props.handleClickEditInvoice
+                                    }
+                                    handleSuccessCreateNewInvoiceVersion={
+                                        this.props.handleSuccessCreateNewInvoiceVersion
+                                    }
+                                />
+                            ) : null}
                             <div className="mt-1 mb-4">
                                 <PrintInvoiceButton
                                     invoices={[this.props.invoice]}

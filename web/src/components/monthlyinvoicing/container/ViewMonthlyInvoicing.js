@@ -33,6 +33,9 @@ class ViewMonthlyInvoicing extends React.Component {
         this.handleBackFromViewMember = this.handleBackFromViewMember.bind(this);
         this.handleChangeInvoicingMonth = this.handleChangeInvoicingMonth.bind(this);
         this.handleSuccessCreateInvoices = this.handleSuccessCreateInvoices.bind(this);
+        this.handleSuccessCreateNewInvoiceVersion = this.handleSuccessCreateNewInvoiceVersion.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -69,7 +72,7 @@ class ViewMonthlyInvoicing extends React.Component {
     }
 
     handleClickViewInvoice(id_factura, filteredInvoicesIds) {
-        console.log("handleClickEditInvoice", id_factura, filteredInvoicesIds);
+        console.log("handleClickViewInvoice", id_factura, filteredInvoicesIds);
         if (!filteredInvoicesIds) {
             filteredInvoicesIds = this.state.filteredInvoicesIds;
         }
@@ -110,12 +113,29 @@ class ViewMonthlyInvoicing extends React.Component {
         this.loadInvoicingMonths();
     }
 
+    handleSuccessCreateNewInvoiceVersion(
+        new_version_id_factura,
+        old_version_id_factura
+    ) {
+        // Replace old version id
+        const filteredInvoicesIds = this.state.filteredInvoicesIds.map(invoiceId =>
+            invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
+        );
+        this.setState({
+            selectedInvoice: new_version_id_factura,
+            filteredInvoicesIds,
+        });
+    }
+
     render() {
         if (this.state.selectedInvoice) {
             return (
                 <ViewInvoice
                     id_factura={this.state.selectedInvoice}
                     navigatorIds={this.state.filteredInvoicesIds}
+                    handleSuccessCreateNewInvoiceVersion={
+                        this.handleSuccessCreateNewInvoiceVersion
+                    }
                     handleClickSelectInNavigator={this.handleClickViewInvoice}
                     handleBack={this.handleBackFromViewInvoice}
                 />

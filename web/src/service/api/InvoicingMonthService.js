@@ -35,12 +35,6 @@ const InvoicingMonthService = {
             let invoicingMonths = createInvoicingMonths(
                 invoicing_months_api_adapter(response)
             );
-            const invoicingMonthOpened = invoicingMonths.find(
-                invoicingMonth => invoicingMonth.is_open
-            );
-            invoicingMonths.push(
-                this.getNextInvoicingMonthToCreate(invoicingMonthOpened)
-            );
             return invoicingMonths;
         });
     },

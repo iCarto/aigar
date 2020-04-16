@@ -51,10 +51,19 @@ class ViewMonthlyInvoicing extends React.Component {
 
     loadInvoicingMonths() {
         InvoicingMonthService.getInvoicingMonths().then(invoicingMonths => {
-            const selectedInvoicingMonth = invoicingMonths.find(
+            const invoicingMonthOpened = invoicingMonths.find(
                 invoicingMonth => invoicingMonth.is_open
             );
-            this.setState({invoicingMonths, selectedInvoicingMonth});
+            // Next month add to allow the creation of a new monthly invoicing process
+            invoicingMonths.push(
+                InvoicingMonthService.getNextInvoicingMonthToCreate(
+                    invoicingMonthOpened
+                )
+            );
+            this.setState({
+                invoicingMonths,
+                selectedInvoicingMonth: invoicingMonthOpened,
+            });
         });
     }
 

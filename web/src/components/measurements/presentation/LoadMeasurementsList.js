@@ -1,5 +1,9 @@
 import React from "react";
-import {SortedTable, EditableTextCellTable} from "components/common/table";
+import {
+    SortedTable,
+    EditableTextCellTable,
+    EditableSelectCellTable,
+} from "components/common/table";
 
 class LoadMeasurementsList extends React.Component {
     render() {
@@ -16,6 +20,16 @@ class LoadMeasurementsList extends React.Component {
                 {
                     Header: "Nombre",
                     accessor: "nombre_socio",
+                },
+                {
+                    Header: "Medidor",
+                    accessor: "medidor",
+                    Cell: EditableTextCellTable,
+                },
+                {
+                    Header: "Cambio medidor",
+                    accessor: "cambio_medidor",
+                    Cell: EditableSelectCellTable,
                 },
                 {
                     Header: "Lectura anterior",

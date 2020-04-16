@@ -36,14 +36,14 @@ class ListMonthlyInvoicesActions extends React.Component {
     isLoadMeasurementsButtonEnabled() {
         return (
             this.props.invoices.length > 0 &&
-            this.props.invoices.filter(invoice => invoice.consumo == null).length !== 0
+            this.props.invoices.filter(invoice => invoice.consumo === "").length !== 0
         );
     }
 
     isPrintInvoiceButtonEnabled() {
         return (
             this.props.invoices.length > 0 &&
-            this.props.invoices.filter(invoice => invoice.consumo == null).length === 0
+            this.props.invoices.filter(invoice => invoice.consumo === "").length === 0
         );
     }
 

@@ -22,6 +22,8 @@ const createMeasurement = ({
     nombre_socio = "",
     caudal_anterior = -1,
     caudal_actual = -1,
+    cambio_medidor = false,
+    medidor = "",
     errors = [],
 } = {}) => {
     const publicApi = {
@@ -30,9 +32,11 @@ const createMeasurement = ({
         num_socio,
         nombre_socio,
         sector,
-        caudal_anterior: parseInt(caudal_anterior),
+        caudal_anterior: cambio_medidor === true ? 0 : parseInt(caudal_anterior),
         caudal_actual: parseInt(caudal_actual),
         consumo: caudal_actual - caudal_anterior,
+        cambio_medidor,
+        medidor,
         errors,
     };
 

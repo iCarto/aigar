@@ -14,6 +14,8 @@ const MeasurementsService = {
                         nombre_socio: jsonMeasurement.name,
                         caudal_anterior: jsonMeasurement.lectura_anterior,
                         caudal_actual: jsonMeasurement.lectura,
+                        medidor: jsonMeasurement.medidor,
+                        cambio_medidor: jsonMeasurement.cambio_medidor,
                     })
                 );
             })

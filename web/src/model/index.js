@@ -26,6 +26,10 @@ export {
     members_api_adapter,
 } from "./Member";
 export {
+    default as createMemberInvoiceGroup,
+    createMemberInvoiceGroups,
+} from "./MemberInvoiceGroup";
+export {
     default as createPayment,
     createPayments,
     payment_api_adapter,

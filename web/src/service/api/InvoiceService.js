@@ -81,6 +81,12 @@ const InvoiceService = {
             return createInvoice(invoice);
         });
     },
+
+    getInvoicesStats() {
+        return ApiService.get("/invoices/stats").then(response => {
+            return response;
+        });
+    },
 };
 
 export default InvoiceService;

@@ -50,6 +50,15 @@ function NavBar() {
                             Facturas
                         </NavLink>
                     </li>
+                    <li className="nav-item active">
+                        <NavLink
+                            to="/estadisticas"
+                            activeClassName="active"
+                            className="nav-link"
+                        >
+                            Estadísticas
+                        </NavLink>
+                    </li>
                 </ul>
             </div>
         </nav>

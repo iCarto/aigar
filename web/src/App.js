@@ -11,6 +11,7 @@ import {
     ManageMembers,
 } from "./components/member/container";
 import {EditInvoice, ViewInvoice, ManageInvoices} from "components/invoice/container";
+import {ViewInvoicesStats} from "components/stats/container";
 
 import LoadDataWizard from "./components/common/loaddata/wizard/LoadDataWizard";
 
@@ -87,6 +88,10 @@ function MainContent(props) {
                 <Route
                     path="/facturas"
                     render={props => <ManageInvoices {...props} />}
+                />
+                <Route
+                    path="/estadisticas"
+                    render={props => <ViewInvoicesStats {...props} />}
                 />
                 <Route
                     exact

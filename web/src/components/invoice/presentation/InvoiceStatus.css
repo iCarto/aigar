@@ -24,6 +24,10 @@
     background-color: green;
 }
 
-.anulada {
+.no_cobrada {
     background-color: red;
+}
+
+.anulada {
+    background-color: grey;
 }

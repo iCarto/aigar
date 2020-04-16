@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from api.models.invoice import Invoice
+from api.models.invoice import Invoice, InvoiceStatus
 from api.models.invoicing_month import InvoicingMonth
 from api.serializers.invoice import InvoiceShortSerializer
 from api.serializers.payment import PaymentSerializer
@@ -27,6 +27,14 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
         if invoicing_month_to_close is not None:
             invoicing_month_to_close.is_open = False
             invoicing_month_to_close.save()
+
+            last_month_invoices = Invoice.objects.filter(
+                mes_facturacion=invoicing_month_to_close
+            )
+            for last_month_invoice in last_month_invoices:
+                if last_month_invoice.estado == InvoiceStatus.PENDIENTE_DE_COBRO:
+                    last_month_invoice.estado = InvoiceStatus.NO_COBRADA
+                    last_month_invoice.save()
 
         invoices = validated_data.pop("invoices", [])
         validated_data["id_mes_facturacion"] = validated_data.get(

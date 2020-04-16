@@ -90,7 +90,7 @@ def create_django_fixtures(database):
                             "pago_1_al_11"
                         ] = pago_1_al_11
                         last_month_fixture_invoice["fields"]["estado"] = (
-                            "pendiente_de_cobro"
+                            "no_cobrada"
                             if comprobar_pago_1_al_11 == 0
                             and comprobar_pago_11_al_30 == 0
                             else "cobrada"

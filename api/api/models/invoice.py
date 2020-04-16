@@ -20,6 +20,7 @@ class InvoiceStatus(models.TextChoices):
     NUEVA = "nueva"
     PENDIENTE_DE_COBRO = "pendiente_de_cobro"
     COBRADA = "cobrada"
+    NO_COBRADA = "no_cobrada"
     ANULADA = "anulada"
 
 
@@ -175,7 +176,7 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total}"
+        return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
 
     def get_absolute_url(self):
         # TODO

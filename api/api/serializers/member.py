@@ -25,8 +25,13 @@ class MemberShortSerializer(serializers.ModelSerializer):
 
 
 class MemberExportSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
     num_socio = serializers.ReadOnlyField()
     lectura_anterior = serializers.SerializerMethodField()
+    lectura = serializers.SerializerMethodField()
+    consumo_calculado = serializers.SerializerMethodField()
+    tarifa_calculada = serializers.SerializerMethodField()
+    cambio_medidor = serializers.SerializerMethodField()
     cuota_fija = serializers.SerializerMethodField()
     comision = serializers.SerializerMethodField()
     ahorro = serializers.SerializerMethodField()
@@ -34,16 +39,24 @@ class MemberExportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = [
-            "num_socio",
+            "id",
             "name",
+            "num_socio",
             "orden",
             "sector",
             "lectura_anterior",
+            "lectura",
+            "consumo_calculado",
+            "tarifa_calculada",
             "medidor",
+            "cambio_medidor",
             "cuota_fija",
             "comision",
             "ahorro",
         ]
+
+    def get_id(self, obj):
+        return obj.num_socio
 
     def get_lectura_anterior(self, obj):
         last_monthly_invoices = self.context.get("last_monthly_invoices", None)
@@ -57,6 +70,18 @@ class MemberExportSerializer(serializers.ModelSerializer):
         if last_invoice_for_member:
             return last_invoice_for_member[0].caudal_anterior
         return None
+
+    def get_lectura(self, obj):
+        return None
+
+    def get_consumo_calculado(self, obj):
+        return None
+
+    def get_tarifa_calculada(self, obj):
+        return None
+
+    def get_cambio_medidor(self, obj):
+        return False
 
     def get_cuota_fija(self, obj):
         return (

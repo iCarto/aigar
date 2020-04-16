@@ -37,6 +37,23 @@ class Measurement(models.Model):
         null=True, blank=True, verbose_name="Consumo", help_text=""
     )
 
+    cambio_medidor = models.BooleanField(
+        blank=False,
+        null=False,
+        default=False,
+        verbose_name="Cambio de medidor",
+        help_text="",
+    )
+
+    medidor = models.CharField(
+        max_length=30,
+        null=False,
+        blank=False,
+        default="",
+        verbose_name="Medidor",
+        help_text="",
+    )
+
     # null debería ser falso pero para evitar problemas con las fixtures
     # https://groups.google.com/forum/#!topic/django-users/Zfqx-kEE2uY
     # https://code.djangoproject.com/ticket/28951

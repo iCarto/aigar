@@ -22,4 +22,9 @@ class MeasurementSerializer(serializers.ModelSerializer):
         )
         invoice.save()
 
+        if measurement.cambio_medidor == True:
+            member = invoice.member
+            member.medidor = measurement.medidor
+            member.save()
+
         return measurement

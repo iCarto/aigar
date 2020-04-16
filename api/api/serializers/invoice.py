@@ -48,3 +48,22 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "saldo_pendiente",
             "total",
         ]
+
+
+class InvoiceStatsSerializer(serializers.ModelSerializer):
+    num_socio = serializers.IntegerField(source="member.num_socio")
+    monto = serializers.IntegerField(source="total")
+
+    class Meta:
+        model = Invoice
+        fields = [
+            "mes_facturacion",
+            "anho",
+            "mes_facturado",
+            "num_socio",
+            "nombre",
+            "sector",
+            "consumo",
+            "mora",
+            "monto",
+        ]

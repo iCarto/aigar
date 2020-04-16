@@ -4,8 +4,9 @@ from django.db.models.functions import Concat
 
 from api.models.invoice import Invoice, InvoiceStatus, fixed_values
 from api.models.invoicing_month import InvoicingMonth
-from api.serializers.invoice import InvoiceSerializer
+from api.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
 from rest_framework import permissions, status, viewsets
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import (
     ListDestroyModelMixin,
@@ -91,3 +92,12 @@ class InvoiceViewSet(
         return Response(
             InvoiceSerializer(context={"request": request}, instance=invoice).data
         )
+
+
+class InvoiceStatsView(ListAPIView):
+    queryset = (
+        Invoice.objects.prefetch_related("member")
+        .filter(is_active=True)
+        .order_by("-mes_facturacion", "member")
+    )
+    serializer_class = InvoiceStatsSerializer

@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from api.views.domain import DomainsView
-from api.views.invoice import InvoiceViewSet
+from api.views.invoice import InvoiceStatsView, InvoiceViewSet
 from api.views.invoicing_month import InvoicingMonthViewSet
 from api.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
 from api.views.member import MemberExportView, MemberViewSet
@@ -86,6 +86,7 @@ urlpatterns = [
         PaymentInvoicePreview.as_view(),
     ),
     path("api/members/export", MemberExportView.as_view()),
+    path("api/invoices/stats", InvoiceStatsView.as_view()),
     path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too

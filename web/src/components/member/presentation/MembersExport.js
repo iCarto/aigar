@@ -27,10 +27,7 @@ class MembersExport extends React.Component {
                         var membersJSONData =
                             "data:text/json;charset=utf-8," +
                             encodeURIComponent(JSON.stringify(members));
-                        FileService.downloadURL(
-                            membersJSONData,
-                            "members_database.json"
-                        );
+                        FileService.downloadURL(membersJSONData, "lecturas.json");
                     })
                     .catch(error => {
                         this.setState({

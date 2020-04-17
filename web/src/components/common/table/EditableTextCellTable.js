@@ -40,7 +40,7 @@ const EditableTextCellTable = ({
     return (
         <div>
             <input
-                value={value}
+                value={value != null ? value : ""}
                 onChange={onChange}
                 onBlur={onBlur}
                 onDoubleClick={enableInput}

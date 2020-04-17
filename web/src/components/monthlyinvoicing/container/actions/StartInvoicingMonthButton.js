@@ -4,7 +4,7 @@ import {
     OperationWithConfirmationContentModal,
     OperationWithConfirmationContentModalStatus,
 } from "components/common/modal";
-import {DateUtil} from "components/util";
+import {DateUtil} from "utilities";
 
 class StartInvoicingMonthButton extends React.Component {
     constructor(props) {
@@ -113,7 +113,7 @@ class StartInvoicingMonthButton extends React.Component {
     get button() {
         return (
             <button
-                className="btn btn-secondary"
+                className="btn btn-primary mt-1 mb-1"
                 disabled={this.props.disabled}
                 onClick={this.openModal}
             >

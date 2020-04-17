@@ -1,19 +1,31 @@
 import React from "react";
+import _ from "underscore";
 
 class LoadDataInvoicesTableFilter extends React.Component {
     constructor(props) {
-        super(props);
-
+        super();
+        this.state = {
+            value: props.filter.text,
+        };
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentDidMount() {
+        this.handleChangeDebounced = _.debounce(function() {
+            console.log(this.props.name, this.state.value);
+            this.props.handleChange.apply(this, [{text: this.state.value}]);
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        this.setState = () => {};
+        this.handleChangeDebounced.cancel();
+    }
+
     handleChange(event) {
-        const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;
-        this.props.handleChange({[name]: value});
+        this.setState({value: event.target.value}, () => {
+            this.handleChangeDebounced();
+        });
     }
 
     get filterByText() {
@@ -24,7 +36,7 @@ class LoadDataInvoicesTableFilter extends React.Component {
                     name="text"
                     className="form-control"
                     placeholder="Buscar"
-                    value={this.props.filter.text}
+                    value={this.state.value}
                     onChange={this.handleChange}
                 />
             </div>
@@ -32,6 +44,7 @@ class LoadDataInvoicesTableFilter extends React.Component {
     }
 
     render() {
+        console.log("filterByText");
         return (
             <form className="form-inline d-flex align-self-left mb-2">
                 {this.filterByText}

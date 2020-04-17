@@ -1,4 +1,4 @@
-import {DateUtil} from "components/util";
+import {DateUtil} from "utilities";
 
 class Payments extends Array {}
 

@@ -1,6 +1,6 @@
 import React from "react";
-import {InvoicesFilter} from "components/invoice/presentation";
 import "components/common/SideBar.css";
+import ListInvoicesFilter from "./ListInvoicesFilter";
 
 class ListInvoicesSidebar extends React.Component {
     render() {
@@ -8,9 +8,9 @@ class ListInvoicesSidebar extends React.Component {
             <div className="sidebar-sticky d-flex flex-column">
                 <div className="sidebar-group">
                     <label>Filtro</label>
-                    <InvoicesFilter
+                    <ListInvoicesFilter
                         filter={this.props.filter}
-                        handleChange={this.props.handleFilterChange}
+                        handleFilterChange={this.props.handleFilterChange}
                     />
                 </div>
             </div>

@@ -43,7 +43,15 @@ const dataFromMyRESTAPI = [
 
 */
 
-const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija) {
+const getTipoSocio = function(
+    is_active,
+    solo_mecha,
+    consumo_maximo,
+    consumo_reduccion_fija
+) {
+    if (is_active === false) {
+        return "eliminado";
+    }
     if (solo_mecha === true) {
         return "con_mecha";
     }
@@ -59,6 +67,7 @@ const member_api_adapter = member => {
     // member["solo_mecha"] = member["medidor"] === "M" ? true : false;
     member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
     member["tipo_socio"] = getTipoSocio(
+        member.is_active,
         member.solo_mecha,
         member.consumo_maximo,
         member.consumo_reduccion_fija
@@ -107,6 +116,7 @@ const createMember = ({
 
     consumo_maximo = 0,
     consumo_reduccion_fija = 0,
+    tipo_socio = "",
     is_active = true,
 } = {}) => {
     const publicApi = {
@@ -119,6 +129,7 @@ const createMember = ({
         observaciones,
         consumo_maximo,
         consumo_reduccion_fija,
+        tipo_socio,
         is_active,
         // comunidad: SECTORES_COMUNIDADES[this.sector],
     };

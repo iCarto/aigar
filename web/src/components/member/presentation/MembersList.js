@@ -48,6 +48,12 @@ class MembersList extends React.Component {
                             Header: "Consumo reducción fija",
                             accessor: "consumo_reduccion_fija",
                         },
+                        {
+                            Header: "Eliminado",
+                            accessor: d => {
+                                return !d.is_active ? "Sí" : "";
+                            },
+                        },
                     ],
                 },
             ];

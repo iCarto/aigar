@@ -42,7 +42,7 @@ class ViewMember extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.member === null) {
+        if (prevState.num_socio !== this.state.num_socio) {
             this.loadMember();
         }
     }

@@ -4,25 +4,31 @@ import _ from "underscore";
 class LoadDataTableFilter extends React.Component {
     constructor(props) {
         super(props);
-
-        // https://lifesaver.codes/answer/debounce-and-onchange
-        // this.handleChange = Util.debounce(this.handleChange.bind(this), 250);
+        this.state = {
+            text: props.filter.text,
+            showOnlyErrors: props.filter.showOnlyErrors,
+        };
         this.handleChange = this.handleChange.bind(this);
-        this.liftUpHandleChange = _.debounce(this.liftUpHandleChange.bind(this), 250);
+    }
+
+    componentDidMount() {
+        this.handleChangeDebounced = _.debounce(function() {
+            console.log(this.state.value);
+            this.props.handleChange.apply(this, [
+                {text: this.state.text, showOnlyErrors: this.state.showOnlyErrors},
+            ]);
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        this.setState = () => {};
+        this.handleChangeDebounced.cancel();
     }
 
     handleChange(event) {
-        const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;
-        this.props.handleChange({[name]: value});
-        // this.liftUpHandleChange({[name]: value});
-    }
-
-    liftUpHandleChange(newFilter) {
-        this.props.handleChange(newFilter);
+        this.setState({[event.target.name]: event.target.value}, () => {
+            this.handleChangeDebounced();
+        });
     }
 
     get selectShowOnlyErrors() {
@@ -32,7 +38,7 @@ class LoadDataTableFilter extends React.Component {
                 <select
                     name="showOnlyErrors"
                     className="form-control ml-2"
-                    value={this.props.filter.showOnlyErrors}
+                    value={this.state.showOnlyErrors}
                     onChange={this.handleChange}
                 >
                     <option value={false}>Todos</option>
@@ -50,7 +56,7 @@ class LoadDataTableFilter extends React.Component {
                     name="text"
                     className="form-control"
                     placeholder="Buscar"
-                    value={this.props.filter.text}
+                    value={this.state.text}
                     onChange={this.handleChange}
                 />
             </div>

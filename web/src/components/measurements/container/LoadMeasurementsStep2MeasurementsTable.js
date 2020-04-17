@@ -50,7 +50,7 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
         return (
             measurement.nombre_socio.indexOf(filterText) >= 0 ||
             measurement.num_socio.toString().indexOf(filterText) >= 0 ||
-            measurement.num_contador.toString().indexOf(filterText) >= 0
+            measurement.medidor.toString().indexOf(filterText) >= 0
         );
     }
 

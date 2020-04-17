@@ -1,5 +1,5 @@
 import Validator from "./Validator";
-import {DateUtil} from "components/util";
+import {DateUtil} from "utilities";
 
 class DataValidator extends Validator {
     isNotEmpty(value) {

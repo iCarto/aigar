@@ -83,7 +83,7 @@ class PrintInvoiceButton extends React.Component {
         return (
             <button
                 onClick={this.generateDoc}
-                className="btn btn-secondary mt-2 mb-2"
+                className="btn btn-primary mt-1 mb-1"
                 disabled={this.props.disabled}
             >
                 {this.props.buttonTitle}

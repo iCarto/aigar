@@ -46,12 +46,7 @@ class Measurement(models.Model):
     )
 
     medidor = models.CharField(
-        max_length=30,
-        null=False,
-        blank=False,
-        default="",
-        verbose_name="Medidor",
-        help_text="",
+        max_length=30, null=True, blank=True, verbose_name="Medidor", help_text=""
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures

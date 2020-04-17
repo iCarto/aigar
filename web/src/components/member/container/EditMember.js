@@ -39,7 +39,7 @@ class EditMember extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.member === null) {
+        if (prevState.num_socio !== this.state.num_socio) {
             this.loadMember(parseInt(this.state.num_socio));
         }
     }

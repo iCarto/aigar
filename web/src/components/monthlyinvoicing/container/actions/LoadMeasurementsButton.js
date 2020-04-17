@@ -7,11 +7,11 @@ class LoadMeasurementsButton extends React.Component {
             <Link
                 to={"/cargarlecturas/" + this.props.invoicingMonth.id_mes_facturacion}
                 className={
-                    "btn btn-secondary mt-2 mb-2 " +
+                    "btn btn-primary mt-1 mb-1 " +
                     (this.props.disabled ? "disabled" : "")
                 }
             >
-                2. Importar lecturas
+                3. Importar lecturas
             </Link>
         );
     }

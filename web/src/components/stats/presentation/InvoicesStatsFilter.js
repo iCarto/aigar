@@ -1,5 +1,5 @@
 import React from "react";
-import {DateUtil} from "components/util";
+import {DateUtil} from "utilities";
 
 class InvoicesStatsFilter extends React.Component {
     constructor(props) {

@@ -42,12 +42,16 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "version": 1,
                 "anho": new_invoicing_month["anho"],
                 "mes_facturado": new_invoicing_month["mes"],
-                # Is mes_limite necessary and anho_limite not necessary?
                 "mes_limite": (int(new_invoicing_month["mes"]) + 1) % 12,
+                "anho_limite": new_invoicing_month["anho"]
+                if int(new_invoicing_month["mes"]) != 12
+                else new_invoicing_month["anho"] + 1,
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,
-                "caudal_anterior": last_month_invoice.caudal_actual,
+                "caudal_anterior": last_month_invoice.caudal_actual
+                if last_month_invoice
+                else 0,
                 "derecho": get_derecho_value(last_month_invoice),
                 "reconexion": get_reconexion_value(member, last_month_invoice),
                 "mora": get_mora_value(last_month_invoice),

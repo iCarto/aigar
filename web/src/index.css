@@ -49,6 +49,7 @@ body {
 
 .litre {
     text-align: right;
+    white-space: nowrap;
 }
 
 .litre:not(:empty)::after {
@@ -59,6 +60,7 @@ body {
 
 .dollar {
     text-align: right;
+    white-space: nowrap;
 }
 
 .dollar:not(:empty)::after {

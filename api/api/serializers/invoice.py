@@ -36,6 +36,7 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "anho",
             "mes_facturado",
             "mes_limite",
+            "anho_limite",
             "member",
             "nombre",
             "sector",

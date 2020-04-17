@@ -13,7 +13,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Member.objects.filter(is_active=True).all()
+        queryset = Member.objects.all()
         serializer = MemberSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data)
 

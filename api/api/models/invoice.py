@@ -82,6 +82,10 @@ class Invoice(models.Model):
         null=False, blank=False, verbose_name="Mes límite", help_text=""
     )
 
+    anho_limite = models.PositiveSmallIntegerField(
+        null=False, blank=False, verbose_name="Año límite", help_text=""
+    )
+
     caudal_anterior = models.PositiveIntegerField(
         null=True, blank=True, verbose_name="Caudal anterior", help_text=""
     )

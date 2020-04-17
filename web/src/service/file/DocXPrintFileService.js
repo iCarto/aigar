@@ -3,7 +3,7 @@ import FileService from "./FileService";
 import BarcodeService from "./BarcodeService";
 import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
 import invoiceTemplatePath from "assets/print-templates/invoice/Modelo_Factura_ASCATLI.docx";
-import {DateUtil, NumberUtil} from "components/util";
+import {DateUtil, NumberUtil} from "utilities";
 
 const DocXPrintFileService = {
     async getLogoAscatli() {

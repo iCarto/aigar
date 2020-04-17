@@ -3,7 +3,7 @@ import {MemberService} from "service/api";
 import {Spinner} from "components/common";
 import {FileService} from "service/file";
 
-class MembersExport extends React.Component {
+class ExportMemberButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -57,8 +57,8 @@ class MembersExport extends React.Component {
 
     get button() {
         return (
-            <button onClick={this.handleClick} className="btn btn-primary">
-                <i className="fas fa-mobile-alt" /> Exportar al móvil
+            <button onClick={this.handleClick} className="btn btn-primary mt-1 mb-1">
+                2. Exportar socios
             </button>
         );
     }
@@ -73,4 +73,4 @@ class MembersExport extends React.Component {
     }
 }
 
-export default MembersExport;
+export default ExportMemberButton;

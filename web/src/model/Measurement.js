@@ -33,8 +33,11 @@ const createMeasurement = ({
         nombre_socio,
         sector,
         caudal_anterior: cambio_medidor === true ? 0 : parseInt(caudal_anterior),
-        caudal_actual: parseInt(caudal_actual),
-        consumo: caudal_actual - caudal_anterior,
+        caudal_actual,
+        consumo:
+            caudal_actual != null && caudal_anterior != null
+                ? caudal_actual - caudal_anterior
+                : "",
         cambio_medidor,
         medidor,
         errors,

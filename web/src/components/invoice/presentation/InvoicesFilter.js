@@ -47,8 +47,10 @@ class InvoicesFilter extends React.Component {
                         onChange={this.handleChange}
                     >
                         <option></option>
-                        {[1, 2, 3, 4, 5].map(n => (
-                            <option key={n}>{n}</option>
+                        {this.props.sectorsDomain.map(sector => (
+                            <option key={sector.key} value={sector.key}>
+                                {sector.value}
+                            </option>
                         ))}
                     </select>
                 </div>

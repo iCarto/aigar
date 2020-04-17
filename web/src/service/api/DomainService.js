@@ -17,7 +17,7 @@ const DomainService = {
             {key: "normal", value: "Normal"},
             {key: "con_mecha", value: "Con mecha"},
             {key: "con_ajuste_consumo", value: "Ajuste de consumo"},
-            {key: "desconectado", value: "Desconectado"},
+            {key: "eliminado", value: "Eliminado"},
         ]);
     },
 

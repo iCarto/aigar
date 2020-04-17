@@ -7,11 +7,11 @@ class LoadPaymentsButton extends React.Component {
             <Link
                 to={"/cargarpagos/" + this.props.invoicingMonth.id_mes_facturacion}
                 className={
-                    "btn btn-secondary mt-2 mb-2 " +
+                    "btn btn-primary mt-1 mb-1 " +
                     (this.props.disabled ? "disabled" : "")
                 }
             >
-                4. Importar pagos
+                5. Importar pagos
             </Link>
         );
     }

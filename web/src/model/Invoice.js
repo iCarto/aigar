@@ -1,3 +1,5 @@
+import {NumberUtil} from "utilities";
+
 const SECTORES_COMUNIDADES = {
     "0": "",
     "1": "TIHUAPA NORTE",
@@ -74,20 +76,6 @@ const createInvoices = (data = []) => {
     return invoices;
 };
 
-const parseFloatOrNull = value => {
-    if (value == null || isNaN(value)) {
-        return "";
-    }
-    return parseFloat(value);
-};
-
-const parseIntOrNull = value => {
-    if (value == null || isNaN(value)) {
-        return "";
-    }
-    return parseInt(value);
-};
-
 const createInvoice = ({
     id_factura = -1,
     version = -1,
@@ -108,6 +96,7 @@ const createInvoice = ({
     entrega = "",
     mes_facturado = 0,
     mes_limite = 0,
+    anho_limite = 0,
     mora = 0,
     nombre = "",
     num_socio = -1,
@@ -131,35 +120,36 @@ const createInvoice = ({
         version,
         mes_facturacion,
         numero,
-        ahorro: parseFloatOrNull(ahorro),
+        ahorro: NumberUtil.parseFloatOrNull(ahorro),
         anho,
-        asamblea: parseFloatOrNull(asamblea),
-        caudal_actual: parseIntOrNull(caudal_actual),
-        caudal_anterior: parseIntOrNull(caudal_anterior),
-        comision: parseFloatOrNull(comision),
+        asamblea: NumberUtil.parseFloatOrNull(asamblea),
+        caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),
+        caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
+        comision: NumberUtil.parseFloatOrNull(comision),
         comprobar_pago_11_al_30,
         comprobar_pago_1_al_11,
-        consumo: parseIntOrNull(consumo),
-        cuota_fija: parseFloatOrNull(cuota_fija),
-        cuota_variable: parseFloatOrNull(cuota_variable),
-        derecho: parseFloatOrNull(derecho),
+        consumo: NumberUtil.parseIntOrNull(consumo),
+        cuota_fija: NumberUtil.parseFloatOrNull(cuota_fija),
+        cuota_variable: NumberUtil.parseFloatOrNull(cuota_variable),
+        derecho: NumberUtil.parseFloatOrNull(derecho),
         entrega,
         mes_facturado,
         mes_limite,
-        mora: parseFloatOrNull(mora),
+        anho_limite,
+        mora: NumberUtil.parseFloatOrNull(mora),
         nombre,
         num_socio,
         tipo_socio,
         observaciones,
-        pago_11_al_30: parseFloatOrNull(pago_11_al_30),
-        pago_1_al_11: parseFloatOrNull(pago_1_al_11),
-        reconexion: parseFloatOrNull(reconexion),
-        saldo_pendiente: parseFloatOrNull(saldo_pendiente),
+        pago_11_al_30: NumberUtil.parseFloatOrNull(pago_11_al_30),
+        pago_1_al_11: NumberUtil.parseFloatOrNull(pago_1_al_11),
+        reconexion: NumberUtil.parseFloatOrNull(reconexion),
+        saldo_pendiente: NumberUtil.parseFloatOrNull(saldo_pendiente),
         sector,
-        total_pagado: parseFloatOrNull(total_pagado),
-        descuento: parseFloatOrNull(descuento),
-        total: parseFloatOrNull(total),
-        traspaso: parseFloatOrNull(traspaso),
+        total_pagado: NumberUtil.parseFloatOrNull(total_pagado),
+        descuento: NumberUtil.parseFloatOrNull(descuento),
+        total: NumberUtil.parseFloatOrNull(total),
+        traspaso: NumberUtil.parseFloatOrNull(traspaso),
         estado,
         resumen,
         is_active,

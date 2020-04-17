@@ -4,7 +4,9 @@ import {
     LoadPaymentsButton,
     LoadMeasurementsButton,
     StartInvoicingMonthButton,
+    ExportMemberButton,
 } from "components/monthlyinvoicing/container/actions";
+import {ESTADOS_FACTURA} from "model";
 
 class ListMonthlyInvoicesActions extends React.Component {
     getOutputFilename() {
@@ -48,15 +50,12 @@ class ListMonthlyInvoicesActions extends React.Component {
     }
 
     isLoadPaymentsButtonEnabled() {
-        return true;
-        /*return (
+        return (
             this.props.invoices.length > 0 &&
             this.props.invoices.filter(
-                invoice =>
-                    invoice.estado === "emitida" ||
-                    invoice.estado === "pendiente_de_cobro"
+                invoice => invoice.estado === ESTADOS_FACTURA.PENDIENTE_DE_COBRO
             ).length !== 0
-        );*/
+        );
     }
 
     get invoiceButton() {
@@ -67,6 +66,10 @@ class ListMonthlyInvoicesActions extends React.Component {
                 handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
             />
         );
+    }
+
+    get exportMemberButton() {
+        return <ExportMemberButton />;
     }
 
     get loadMeasurementsButton() {
@@ -82,7 +85,7 @@ class ListMonthlyInvoicesActions extends React.Component {
         return (
             <PrintInvoiceButton
                 invoices={this.props.invoices}
-                buttonTitle="3. Imprimir facturas"
+                buttonTitle="4. Imprimir facturas"
                 outputFilename={this.getOutputFilename()}
                 disabled={!this.isPrintInvoiceButtonEnabled()}
                 handleSuccessPrintedInvoices={this.props.handleSuccessPrintedInvoices}
@@ -102,12 +105,18 @@ class ListMonthlyInvoicesActions extends React.Component {
     render() {
         if (this.props.invoices) {
             if (this.isNextInvoicingMonth()) {
-                return this.invoiceButton;
+                return (
+                    <>
+                        {this.invoiceButton}
+                        {this.exportMemberButton}
+                    </>
+                );
             }
             if (this.isCurrentInvoicingMonth()) {
                 return (
                     <>
                         {this.invoiceButton}
+                        {this.exportMemberButton}
                         {this.loadMeasurementsButton}
                         {this.printInvoiceButton}
                         {this.loadPaymentsButton}

@@ -34,7 +34,8 @@ class InvoiceViewSet(
         # https://github.com/chibisov/drf-extensions/blob/503c22f8b442b2bff1f9060c58c024d7d4caabf2/rest_framework_extensions/bulk_operations/mixins.py#L60
         id_facturas = self.request.query_params.get("id_facturas", None)
         if id_facturas is not None:
-            queryset = queryset.filter(id_factura__in=id_facturas.split(","))
+            id_facturas_list = id_facturas.split(",") if id_facturas != "" else []
+            queryset = queryset.filter(id_factura__in=id_facturas_list)
 
         id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
         if id_mes_facturacion is not None:

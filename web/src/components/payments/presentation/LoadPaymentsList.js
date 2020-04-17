@@ -10,16 +10,16 @@ class LoadPaymentsList extends React.Component {
         if (this.props.payments) {
             const columns = [
                 {
-                    Header: "Sector",
-                    accessor: "sector",
-                },
-                {
                     Header: "Nº socio",
                     accessor: "num_socio",
                 },
                 {
                     Header: "Nombre",
                     accessor: "nombre_socio",
+                },
+                {
+                    Header: "Sector",
+                    accessor: "sector",
                 },
                 {
                     Header: "Nº Factura",

@@ -58,9 +58,9 @@ const LoadDataValidatorService = {
         );
     },
 
-    validatePaymentEntry(entryObject) {
-        return LoadDataValidatorService.validateEntry(
-            entryObject,
+    validatePaymentEntry(payment, invoice) {
+        const paymentErrors = LoadDataValidatorService.validateEntry(
+            payment,
             new DataValidator({
                 num_factura: [
                     "isNotEmpty",
@@ -71,9 +71,16 @@ const LoadDataValidatorService = {
                 ],
                 fecha: ["isNotEmpty", "isDate"],
                 monto: ["isNotEmpty", "isDecimal2"],
-                nombre_socio: ["isNotEmpty"],
             })
         );
+        if (!invoice || payment.num_factura !== invoice.numero) {
+            paymentErrors.push({
+                type: "error",
+                field: "num_factura",
+                msg: "No existe la factura para este mes",
+            });
+        }
+        return paymentErrors;
     },
 
     validateMeasurementsFile(fileObject) {
@@ -92,9 +99,9 @@ const LoadDataValidatorService = {
         );
     },
 
-    validateMeasurementEntry(entryObject) {
+    validateMeasurementEntry(measurement) {
         return LoadDataValidatorService.validateEntry(
-            entryObject,
+            measurement,
             new DataValidator({
                 sector: ["isNotEmpty"],
                 num_socio: ["isNotEmpty"],

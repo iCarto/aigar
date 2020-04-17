@@ -35,7 +35,9 @@ class PrintInvoiceButton extends React.Component {
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     );
                     InvoiceService.updateInvoiceStatus(
-                        this.props.invoices.map(invoice => invoice.id_factura),
+                        this.props.invoices
+                            .filter(invoice => invoice.estado === ESTADOS_FACTURA.NUEVA)
+                            .map(invoice => invoice.id_factura),
                         ESTADOS_FACTURA.PENDIENTE_DE_COBRO
                     )
                         .then(result => {

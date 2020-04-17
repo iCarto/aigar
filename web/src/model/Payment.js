@@ -40,7 +40,7 @@ const createPayment = ({
         num_socio: parseInt(num_factura.substr(0, 4)),
         nombre_socio,
         sector,
-        num_factura: num_factura.padStart(12, "0"),
+        num_factura,
         id_factura,
         fecha,
         monto: parseFloat(monto),

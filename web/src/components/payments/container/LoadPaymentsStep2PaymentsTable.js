@@ -15,6 +15,7 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
                 text: "",
                 props: false,
             },
+            invoices: null,
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.onUpdatePayment = this.onUpdatePayment.bind(this);
@@ -25,35 +26,47 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({loading: true});
+        this.setState({loading: true, invoices: null});
         InvoicingMonthService.getInvoicingMonthInvoices(
             this.props.id_mes_facturacion
         ).then(invoices => {
-            const paymentsWithInvoiceInfo = this.props.payments.map(payment => {
-                const invoiceForPayment = invoices.find(
-                    invoice => invoice.numero === payment.num_factura
-                );
-                if (invoiceForPayment) {
-                    return createPayment({
-                        ...payment,
-                        num_socio: invoiceForPayment.num_socio,
-                        nombre_socio: invoiceForPayment.nombre,
-                        sector: invoiceForPayment.sector,
-                        id_factura: invoiceForPayment.id_factura,
-                    });
-                }
-                return payment;
+            this.setState({invoices, loading: false}, () => {
+                this.reviewPayments(this.props.payments);
             });
-            this.setState({loading: false});
-            this.reviewPayments(paymentsWithInvoiceInfo);
         });
+    }
+
+    findInvoiceForPayment(payment) {
+        let invoiceForPayment = this.state.invoices.find(
+            invoice => invoice.numero === payment.num_factura
+        );
+        if (!invoiceForPayment) {
+            invoiceForPayment = this.state.invoices.find(
+                invoice => invoice.num_socio === payment.num_socio
+            );
+        }
+        return invoiceForPayment;
     }
 
     reviewPayments(payments) {
         const paymentsWithErrors = payments.map(payment => {
+            const invoiceForPayment = this.findInvoiceForPayment(payment);
+            let invoiceFieldsForPayment = {};
+            if (invoiceForPayment) {
+                invoiceFieldsForPayment = {
+                    num_socio: invoiceForPayment.num_socio,
+                    nombre_socio: invoiceForPayment.nombre,
+                    sector: invoiceForPayment.sector,
+                    id_factura: invoiceForPayment.id_factura,
+                };
+            }
             return createPayment({
                 ...payment,
-                errors: LoadDataValidatorService.validatePaymentEntry(payment),
+                ...invoiceFieldsForPayment,
+                errors: LoadDataValidatorService.validatePaymentEntry(
+                    payment,
+                    invoiceForPayment
+                ),
             });
         });
         this.props.handleChangePayments(paymentsWithErrors);

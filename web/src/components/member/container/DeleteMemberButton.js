@@ -67,7 +67,7 @@ class DeleteMemberButton extends React.Component {
     get button() {
         return (
             <button
-                className="btn btn-danger"
+                className="btn btn-secondary"
                 disabled={this.props.disabled}
                 onClick={this.openModal}
             >

@@ -42,7 +42,6 @@ const dataFromMyRESTAPI = [
 ]
 
 */
-
 const getTipoSocio = function(
     is_active,
     solo_mecha,
@@ -53,7 +52,7 @@ const getTipoSocio = function(
         return "eliminado";
     }
     if (solo_mecha === true) {
-        return "con_mecha";
+        return "solo_mecha";
     }
     if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
         return "con_ajuste_consumo";

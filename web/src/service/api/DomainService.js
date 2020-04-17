@@ -15,8 +15,7 @@ const DomainService = {
     getMemberTypes() {
         return Promise.resolve([
             {key: "normal", value: "Normal"},
-            {key: "con_mecha", value: "Con mecha"},
-            {key: "con_ajuste_consumo", value: "Ajuste de consumo"},
+            {key: "solo_mecha", value: "Solo mecha"},
             {key: "eliminado", value: "Eliminado"},
         ]);
     },

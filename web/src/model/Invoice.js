@@ -38,7 +38,7 @@ class Invoices extends Array {
 
 const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija) {
     if (solo_mecha === true) {
-        return "con_mecha";
+        return "solo_mecha";
     }
     if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
         return "con_ajuste_consumo";

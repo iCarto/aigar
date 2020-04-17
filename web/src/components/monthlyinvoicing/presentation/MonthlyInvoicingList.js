@@ -4,24 +4,20 @@ import {
     InvoiceStatusCellTable,
     InvoiceResumenCellTable,
 } from "components/invoice/presentation";
-
-const TipoSocioCellTable = ({cell}) => {
-    if (cell.value === "normal") {
-        return "Normal";
-    }
-    if (cell.value === "con_mecha") {
-        return "Con Mecha";
-    }
-    if (cell.value === "con_ajuste_consumo") {
-        return "Con ajuste";
-    }
-    return cell.value;
-};
+import {MemberStatusCellTable} from "components/member/presentation";
 
 class MonthlyInvoicingList extends React.Component {
     render() {
         if (this.props.invoices) {
             const columns = [
+                {
+                    accessor: "tipo_socio",
+                    Cell: MemberStatusCellTable,
+                    className: "text-nowrap text-center",
+                    getProps: () => ({
+                        showOnlyIcons: true,
+                    }),
+                },
                 {
                     Header: "Usuario",
                     accessor: "nombre",
@@ -35,11 +31,6 @@ class MonthlyInvoicingList extends React.Component {
                     Header: "Sector",
                     accessor: "sector",
                     className: "text-center",
-                },
-                {
-                    Header: "Tipo",
-                    accessor: "tipo_socio",
-                    Cell: TipoSocioCellTable,
                 },
                 {
                     Header: "Nº Factura",

@@ -48,7 +48,7 @@ body {
 }
 
 .form-control:not([readonly]):focus {
-    background-color: rgb(239, 248, 255);
+    background-color: rgb(247, 251, 255);
 }
 
 .litre {
@@ -79,4 +79,17 @@ body {
 
 .table-hover tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.075);
+}
+
+.field-label {
+    margin: 5px;
+}
+
+.field-label label {
+    color: grey;
+    padding-right: 5px;
+}
+
+.field-label label::after {
+    content: ":";
 }

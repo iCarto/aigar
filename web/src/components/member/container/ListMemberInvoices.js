@@ -1,6 +1,5 @@
 import React from "react";
 import {InvoiceService} from "service/api";
-import {SortedPaginatedTable} from "components/common/table";
 import {Spinner} from "components/common";
 import {InvoicesList} from "components/invoice/presentation";
 

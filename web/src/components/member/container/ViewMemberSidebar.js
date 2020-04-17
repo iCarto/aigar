@@ -15,8 +15,8 @@ class ViewMemberSidebar extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.member.is_active ? (
-                    <div className="sidebar-group mt-auto">
+                {this.props.member && this.props.member.is_active ? (
+                    <div className="sidebar-group">
                         <label>Acciones</label>
                         <div className="d-flex flex-column text-center">
                             <div className="mt-1 mb-1">
@@ -24,7 +24,7 @@ class ViewMemberSidebar extends React.Component {
                                     onClick={this.props.handleClickEditMember}
                                     className="btn btn-primary"
                                 >
-                                    <i className="fas mr-2" />
+                                    <i className="fas fa-edit mr-2" />
                                     Cambiar datos
                                 </button>
                             </div>
@@ -45,7 +45,7 @@ class ViewMemberSidebar extends React.Component {
                                     />
                                 )}
                             </div>
-                            <div className="mt-1 mb-4">
+                            <div className="mt-3 mb-4">
                                 <DeleteMemberButton
                                     member={this.props.member}
                                     handleSuccessDeletedMember={

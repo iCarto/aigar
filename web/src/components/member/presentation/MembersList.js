@@ -1,5 +1,6 @@
 import React from "react";
 import {SortedPaginatedTable, LinkCellTable} from "components/common/table";
+import MemberStatusCellTable from "./MemberStatusCellTable";
 
 class MembersList extends React.Component {
     render() {
@@ -31,10 +32,10 @@ class MembersList extends React.Component {
                             accessor: "medidor",
                         },
                         {
-                            Header: "Solo mecha",
-                            accessor: d => {
-                                return d.solo_mecha ? "Sí" : "";
-                            },
+                            Header: "Estado",
+                            accessor: "tipo_socio",
+                            Cell: MemberStatusCellTable,
+                            className: "text-nowrap",
                         },
                         {
                             Header: "Orden",
@@ -47,12 +48,6 @@ class MembersList extends React.Component {
                         {
                             Header: "Consumo reducción fija",
                             accessor: "consumo_reduccion_fija",
-                        },
-                        {
-                            Header: "Eliminado",
-                            accessor: d => {
-                                return !d.is_active ? "Sí" : "";
-                            },
                         },
                     ],
                 },

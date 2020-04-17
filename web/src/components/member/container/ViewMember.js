@@ -1,5 +1,5 @@
 import React from "react";
-import {Spinner} from "components/common";
+import {Spinner, ErrorMessage} from "components/common";
 import {ListMemberInvoices} from "components/member/container";
 import {MemberDetail} from "components/member/presentation";
 import {MemberService} from "service/api";
@@ -12,8 +12,9 @@ class ViewMember extends React.Component {
         this.state = {
             member: null,
             num_socio: null,
-            errors: null,
             view: "view",
+            isLoading: null,
+            errorMessage: null,
         };
         this.handleBack = this.handleBack.bind(this);
         this.handleClickEditMember = this.handleClickEditMember.bind(this);
@@ -48,10 +49,21 @@ class ViewMember extends React.Component {
     }
 
     loadMember() {
-        MemberService.getMember(this.state.num_socio).then(member => {
-            console.log("member", member);
-            this.setState({member});
-        });
+        MemberService.getMember(this.state.num_socio)
+            .then(member => {
+                this.setState({
+                    member,
+                    isLoading: false,
+                    errorMessage: member.is_active ? null : "El socio ha sido borrado.",
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage:
+                        "Se ha producido un error y no se han podido obtener los datos del socio",
+                    isLoading: false,
+                });
+            });
     }
 
     handleBack() {
@@ -107,8 +119,13 @@ class ViewMember extends React.Component {
                 </nav>
                 <div className="col-md-10 offset-md-2">
                     <div className="container">
+                        <ErrorMessage message={this.state.errorMessage} />
                         <MemberDetail member={this.state.member} />
-                        <ListMemberInvoices num_socio={this.state.member.num_socio} />
+                        {this.state.member ? (
+                            <ListMemberInvoices
+                                num_socio={this.state.member.num_socio}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </div>
@@ -126,10 +143,10 @@ class ViewMember extends React.Component {
     }
 
     get content() {
-        if (this.state.member) {
-            return this[this.state.view];
+        if (this.state.isLoading) {
+            return <Spinner message="Cargando datos" />;
         }
-        return <Spinner message="Cargando datos" />;
+        return this[this.state.view];
     }
 
     render() {

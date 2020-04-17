@@ -8,13 +8,6 @@ class ListMembersSidebar extends React.Component {
         return (
             <div className="sidebar-sticky d-flex flex-column">
                 <div className="sidebar-group">
-                    <label>Filtro</label>
-                    <ListMembersFilter
-                        filter={this.props.filter}
-                        handleFilterChange={this.props.handleFilterChange}
-                    />
-                </div>
-                <div className="sidebar-group mt-auto">
                     <label>Acciones</label>
                     <div className="d-flex flex-column text-center">
                         <div className="mt-4 mb-4">
@@ -25,6 +18,13 @@ class ListMembersSidebar extends React.Component {
                             />
                         </div>
                     </div>
+                </div>
+                <div className="sidebar-group">
+                    <label>Filtro</label>
+                    <ListMembersFilter
+                        filter={this.props.filter}
+                        handleFilterChange={this.props.handleFilterChange}
+                    />
                 </div>
             </div>
         );

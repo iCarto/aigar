@@ -2,18 +2,39 @@ import React from "react";
 import {MemberForm} from "components/member/presentation";
 import {createMember} from "model";
 import {DataValidatorService} from "service/validation";
-import {MemberService} from "service/api";
+import {MemberService, DomainService} from "service/api";
 import CreateMemberSidebar from "./CreateMemberSidebar";
 
 class CreateMember extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            domain: {
+                sectors: [],
+            },
             member: createMember(),
+            validationErrors: [],
+            isSaving: null,
+            errorMessage: null,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
+    }
+
+    componentDidMount() {
+        this.loadDomains();
+    }
+
+    loadDomains() {
+        console.log("loadDomains");
+        Promise.all([DomainService.getSectors()]).then(results => {
+            this.setState({
+                domain: {
+                    sectors: results[0],
+                },
+            });
+        });
     }
 
     handleChange(name, value) {
@@ -30,11 +51,28 @@ class CreateMember extends React.Component {
     }
 
     handleSubmit() {
-        console.log("CreateMember.handleSubmit", this.state.member);
-        MemberService.createMember(this.state.member).then(updatedMember => {
-            console.log(updatedMember);
-            this.props.handleSubmit(updatedMember.num_socio);
+        this.setState({
+            isSaving: true,
+            errorMessage: null,
         });
+        MemberService.createMember(this.state.member)
+            .then(createdMember => {
+                this.setState({
+                    isSaving: false,
+                });
+                if (this.props.handleSubmit) {
+                    this.props.handleSubmit(createdMember.num_socio);
+                } else {
+                    this.handleBack();
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage:
+                        "Se ha producido un error y no se han podido almacenar los datos del socio",
+                    isSaving: false,
+                });
+            });
     }
 
     handleBack() {
@@ -54,10 +92,11 @@ class CreateMember extends React.Component {
         return (
             <MemberForm
                 member={this.state.member}
-                errors={this.state.errors}
+                errors={this.state.validationErrors}
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
-                cancelUrl={"/socios"}
+                sectorsDomain={this.state.domain.sectors}
+                saving={this.state.isSaving}
             />
         );
     }

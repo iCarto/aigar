@@ -25,12 +25,7 @@ body {
 
 .form-control[readonly] {
     background-color: white;
-    border: 1px solid #eee;
-}
-
-.form-inline .form-group {
-    display: flex;
-    justify-content: flex-end;
+    border: 1px solid #f8f5f5;
 }
 
 .form-inline label {
@@ -81,10 +76,6 @@ body {
     background-color: rgba(0, 0, 0, 0.075);
 }
 
-.field-label {
-    margin: 5px;
-}
-
 .field-label label {
     color: grey;
     padding-right: 5px;
@@ -92,4 +83,10 @@ body {
 
 .field-label label::after {
     content: ":";
+}
+
+.navbar-brand {
+    background-color: white;
+    border-radius: 5px;
+    padding: 2px 20px;
 }

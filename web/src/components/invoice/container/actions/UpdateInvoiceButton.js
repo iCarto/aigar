@@ -116,7 +116,7 @@ class UpdateInvoiceButton extends React.Component {
         return (
             <button
                 className={
-                    "btn " +
+                    "btn mb-1 mt-1 " +
                     (this.props.invoice.estado === ESTADOS_FACTURA.NUEVA
                         ? "btn-primary"
                         : "btn-secondary")

@@ -170,7 +170,7 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         (consumo_maximo !== 0 ? Math.min(consumo, consumo_maximo) : consumo) -
         consumo_reduccion_fija;
     let cuota_variable = null;
-    if (consumo_final >= 0 && consumo_final <= 14) {
+    if (consumo_final <= 14) {
         cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * consumo_final;
     } else if (consumo_final > 14 && consumo_final <= 20) {
         cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * consumo_final;

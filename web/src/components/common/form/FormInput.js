@@ -29,7 +29,7 @@ class FormInput extends React.Component {
 
     render() {
         return (
-            <div className="form-group mb-2">
+            <div className="form-group">
                 <label htmlFor="name">{this.props.label}</label>
                 <input
                     type="text"
@@ -42,6 +42,7 @@ class FormInput extends React.Component {
                     }
                     onChange={this.handleChange}
                     readOnly={this.props.readOnly}
+                    style={this.props.small === true ? {width: "100px"} : null}
                 />
                 <div className="invalid-feedback d-block">
                     {this.props.field.errors}

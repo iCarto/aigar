@@ -22,6 +22,9 @@ class ManageInvoices extends React.Component {
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
         this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
+        this.handleSuccessCreateNewInvoiceVersion = this.handleSuccessCreateNewInvoiceVersion.bind(
+            this
+        );
     }
 
     handleChangePageIndex(pageIndex) {
@@ -55,6 +58,20 @@ class ManageInvoices extends React.Component {
         });
     }
 
+    handleSuccessCreateNewInvoiceVersion(
+        new_version_id_factura,
+        old_version_id_factura
+    ) {
+        // Replace old version id
+        const filteredInvoicesIds = this.state.filteredInvoicesIds.map(invoiceId =>
+            invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
+        );
+        this.setState({
+            selectedInvoice: new_version_id_factura,
+            filteredInvoicesIds,
+        });
+    }
+
     render() {
         if (this.state.selectedInvoice) {
             return (
@@ -62,6 +79,9 @@ class ManageInvoices extends React.Component {
                     id_factura={this.state.selectedInvoice}
                     navigatorIds={this.state.filteredInvoicesIds}
                     handleClickSelectInNavigator={this.handleClickViewInvoice}
+                    handleSuccessCreateNewInvoiceVersion={
+                        this.handleSuccessCreateNewInvoiceVersion
+                    }
                     handleBack={this.handleBackFromViewInvoice}
                 />
             );

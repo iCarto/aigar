@@ -31,15 +31,15 @@ class MemberDetail extends React.Component {
                     {this.message}
                     <div className="row p-3">
                         <div className="col-md-5 offset-md-1">
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-5">Socio</label>
                                 <strong>{num_socio}</strong>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-5">Nombre</label>
                                 <strong>{name}</strong>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-5">Estado</label>
                                 {solo_mecha ? (
                                     <strong>
@@ -53,31 +53,31 @@ class MemberDetail extends React.Component {
                                     </strong>
                                 )}
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-5">Sector</label>
                                 <span>
                                     {sector} - {comunidad}
                                 </span>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-5">Observaciones</label>
                                 <span className="col-7">{observaciones}</span>
                             </div>
                         </div>
                         <div className="col-md-5">
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-6">Orden</label>
                                 <span>{orden}</span>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-6">Medidor</label>
                                 <span>{medidor}</span>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-6">Consumo máximo</label>
                                 <span>{consumo_maximo}</span>
                             </div>
-                            <div className="field-label row no-gutters">
+                            <div className="field-label p-2 row no-gutters">
                                 <label className="col-6">Consumo reducción fija</label>
                                 <span>{consumo_reduccion_fija}</span>
                             </div>

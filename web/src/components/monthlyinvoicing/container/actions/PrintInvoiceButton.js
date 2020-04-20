@@ -88,6 +88,9 @@ class PrintInvoiceButton extends React.Component {
                 className="btn btn-primary mt-1 mb-1"
                 disabled={this.props.disabled}
             >
+                {this.props.showIcon === true ? (
+                    <i className="fa fa-print mr-2" />
+                ) : null}
                 {this.props.buttonTitle}
             </button>
         );

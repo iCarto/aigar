@@ -1,11 +1,14 @@
 import React from "react";
-import InvoiceStatusLabel from "./InvoiceStatusLabel";
+import {MemberDetailShort} from "components/member/presentation";
+import InvoiceDetailShort from "./InvoiceDetailShort";
 
-class MemberDetail extends React.Component {
+class InvoiceDetail extends React.Component {
     render() {
         if (this.props.invoice) {
             const {
                 numero,
+                mes_facturado,
+                anho,
                 estado,
                 consumo,
                 caudal_actual,
@@ -17,78 +20,87 @@ class MemberDetail extends React.Component {
                 asamblea,
                 derecho,
                 reconexion,
+                traspaso,
                 mora,
                 saldo_pendiente,
                 total,
             } = this.props.invoice;
             return (
-                <div className="card mb-3">
-                    <div className="row">
-                        <div className="col-6">
-                            <div className="p-3">
-                                <label className="p-1">Número:</label>
-                                <span className="p-1">{numero}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Estado:</label>
-                                <span className="p-1">
-                                    <InvoiceStatusLabel estado={estado} />
-                                </span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Caudal anterior:</label>
-                                <span className="p-1">{caudal_anterior}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Caudal actual:</label>
-                                <span className="p-1">{caudal_actual}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Consumo:</label>
-                                <span className="p-1">{consumo}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Cuota fija:</label>
-                                <span className="p-1">{cuota_fija}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Cuota variable:</label>
-                                <span className="p-1">{cuota_variable}</span>
-                            </div>
+                <div className="card p-2 mb-3">
+                    <div className="row col-md-12">
+                        <div className="col-md-8">
+                            <MemberDetailShort member={this.props.member} />
                         </div>
-                        <div className="col-6">
-                            <div className="p-3">
-                                <label className="p-1">Comision:</label>
-                                <span className="p-1">{comision}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Ahorro:</label>
-                                <span className="p-1">{ahorro}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Asamblea:</label>
-                                <span className="p-1">{asamblea}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Derecho:</label>
-                                <span className="p-1">{derecho}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Reconexión:</label>
-                                <span className="p-1">{reconexion}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Mora:</label>
-                                <span className="p-1">{mora}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Saldo pendiente:</label>
-                                <span className="p-1">{saldo_pendiente}</span>
-                            </div>
-                            <div className="p-3">
-                                <label className="p-1">Total:</label>
-                                <span className="p-1">{total}</span>
-                            </div>
+                        <div className="col-md-4">
+                            <InvoiceDetailShort invoice={this.props.invoice} />
+                        </div>
+                    </div>
+                    <div className="row m-3">
+                        <div className="field-label p-2 col-md-2 row no-gutters"></div>
+                        <div className="field-label p-2 col-md-3 row no-gutters">
+                            <label className="col-6">Caudal anterior</label>
+                            <span className="litre">{caudal_anterior}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-3 row no-gutters">
+                            <label className="col-6">Caudal actual</label>
+                            <span className="litre">{caudal_actual}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-3 row no-gutters">
+                            <label className="col-6">Consumo</label>
+                            <strong className="litre">{consumo}</strong>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Cuota fija</label>
+                            <span className="col-2 dollar">{cuota_fija}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Cuota variable</label>
+                            <span className="col-2 dollar">{cuota_variable}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Comisión de pago</label>
+                            <span className="col-2 dollar">{comision}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Ahorro por mano de obra</label>
+                            <span className="col-2 dollar">{ahorro}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Recargo por mora</label>
+                            <span className="col-2 dollar">{mora}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Inasistencia a Asamblea</label>
+                            <span className="col-2 dollar">{asamblea}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Nuevo derecho</label>
+                            <span className="col-2 dollar">{derecho}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Re-conexión</label>
+                            <span className="col-2 dollar">{reconexion}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Traspaso</label>
+                            <span className="col-2 dollar">{traspaso}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8" style={{fontStyle: "italic"}}>
+                                Saldo pendiente
+                            </label>
+                            <span className="col-2 dollar">{saldo_pendiente}</span>
+                        </div>
+                        <div
+                            className="field-label p-2 col-md-4 offset-md-4 row"
+                            style={{borderTop: "1px solid #ccc"}}
+                        >
+                            <label className="col-8">
+                                <strong>Total</strong>
+                            </label>
+                            <strong className="col-2 dollar">{total}</strong>
                         </div>
                     </div>
                 </div>
@@ -98,4 +110,4 @@ class MemberDetail extends React.Component {
     }
 }
 
-export default MemberDetail;
+export default InvoiceDetail;

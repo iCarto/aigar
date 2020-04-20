@@ -26,6 +26,9 @@ class ViewInvoice extends React.Component {
         this.handleSuccessPrintedInvoices = this.handleSuccessPrintedInvoices.bind(
             this
         );
+        this.handleSuccessCreateNewInvoiceVersion = this.handleSuccessCreateNewInvoiceVersion.bind(
+            this
+        );
     }
 
     static getDerivedStateFromProps(props, prevState) {
@@ -62,9 +65,6 @@ class ViewInvoice extends React.Component {
                 this.setState({
                     invoice,
                     isLoading: false,
-                    errorMessage: invoice.is_active
-                        ? null
-                        : "La factura ha sido borrada.",
                 });
                 MemberService.getMember(invoice.num_socio).then(member => {
                     this.setState({member});
@@ -110,6 +110,20 @@ class ViewInvoice extends React.Component {
         this.loadInvoice();
     }
 
+    handleSuccessCreateNewInvoiceVersion(
+        new_version_id_factura,
+        old_version_id_factura
+    ) {
+        if (this.props.handleSuccessCreateNewInvoiceVersion) {
+            this.props.handleSuccessCreateNewInvoiceVersion(
+                new_version_id_factura,
+                old_version_id_factura
+            );
+        } else {
+            this.props.history.push("/facturas/" + new_version_id_factura);
+        }
+    }
+
     get view() {
         return (
             <div className="row h-100">
@@ -119,7 +133,7 @@ class ViewInvoice extends React.Component {
                         handleClickEditInvoice={this.handleClickEditInvoice}
                         handleSuccessPrintedInvoices={this.handleSuccessPrintedInvoices}
                         handleSuccessCreateNewInvoiceVersion={
-                            this.props.handleSuccessCreateNewInvoiceVersion
+                            this.handleSuccessCreateNewInvoiceVersion
                         }
                         handleBack={this.handleBack}
                     />
@@ -136,8 +150,10 @@ class ViewInvoice extends React.Component {
                             />
                         ) : null}
                         <ErrorMessage message={this.state.errorMessage} />
-                        <MemberDetailShort member={this.state.member} />
-                        <InvoiceDetail invoice={this.state.invoice} />
+                        <InvoiceDetail
+                            invoice={this.state.invoice}
+                            member={this.state.member}
+                        />
                         <PaymentsList payments={this.state.payments} />
                     </div>
                 </div>

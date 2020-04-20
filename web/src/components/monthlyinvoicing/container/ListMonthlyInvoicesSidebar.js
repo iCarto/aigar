@@ -41,7 +41,7 @@ class ListMonthlyInvoicesSidebar extends React.Component {
                         />
                     </div>
                 </div>
-                <div className="sidebar-group mt-auto mb-5">
+                <div className="sidebar-group mb-5">
                     <label>Filtro</label>
                     <ListMonthlyInvoicesFilter
                         filter={this.props.filter}

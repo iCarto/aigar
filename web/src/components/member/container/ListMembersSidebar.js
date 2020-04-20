@@ -9,14 +9,10 @@ class ListMembersSidebar extends React.Component {
             <div className="sidebar-sticky d-flex flex-column">
                 <div className="sidebar-group">
                     <label>Acciones</label>
-                    <div className="d-flex flex-column text-center">
-                        <div className="mt-4 mb-4">
-                            <MemberNewButton
-                                handleClickCreateMember={
-                                    this.props.handleClickCreateMember
-                                }
-                            />
-                        </div>
+                    <div className="d-flex flex-column text-center pr-4 pl-4">
+                        <MemberNewButton
+                            handleClickCreateMember={this.props.handleClickCreateMember}
+                        />
                     </div>
                 </div>
                 <div className="sidebar-group">

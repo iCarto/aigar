@@ -60,9 +60,6 @@ class EditInvoice extends React.Component {
                 this.setState({
                     invoice,
                     isLoading: false,
-                    errorMessage: invoice.is_active
-                        ? null
-                        : "La factura ha sido borrada.",
                 });
                 MemberService.getMember(invoice.num_socio).then(member => {
                     this.setState({member});
@@ -83,21 +80,16 @@ class EditInvoice extends React.Component {
             const invoiceDataWithNewChange = Object.assign({}, prevState.invoice, {
                 [name]: value,
             });
-            const validationErrors = DataValidatorService.validateInvoice(
-                invoiceDataWithNewChange
-            );
             let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-            if (validationErrors.length === 0) {
-                updatedInvoice = refreshInvoiceValues(
-                    updatedInvoice,
-                    this.state.member.consumo_maximo,
-                    this.state.member.consumo_reduccion_fija
-                );
-            }
+            updatedInvoice = refreshInvoiceValues(
+                updatedInvoice,
+                this.state.member.consumo_maximo,
+                this.state.member.consumo_reduccion_fija
+            );
             console.log({updatedInvoice});
             return {
                 invoice: updatedInvoice,
-                validationErrors,
+                validationErrors: DataValidatorService.validateInvoice(updatedInvoice),
             };
         });
     }
@@ -153,9 +145,9 @@ class EditInvoice extends React.Component {
         return (
             <>
                 <ErrorMessage message={this.state.errorMessage} />
-                <MemberDetailShort member={this.state.member} />
                 <InvoiceForm
                     invoice={this.state.invoice}
+                    member={this.state.member}
                     errors={this.state.validationErrors}
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}

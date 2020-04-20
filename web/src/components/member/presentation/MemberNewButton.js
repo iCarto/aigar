@@ -5,7 +5,7 @@ class MemberNewButton extends React.Component {
         return (
             <button
                 onClick={this.props.handleClickCreateMember}
-                className="btn btn-primary"
+                className="btn btn-primary mb-1 mt-1"
             >
                 <i className="fas fa-user-plus" /> Nuevo Socio
             </button>

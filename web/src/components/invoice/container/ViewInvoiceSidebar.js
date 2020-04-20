@@ -22,9 +22,9 @@ class ViewInvoiceSidebar extends React.Component {
                     </div>
                 </div>
                 {this.props.invoice ? (
-                    <div className="sidebar-group mt-auto">
+                    <div className="sidebar-group">
                         <label>Acciones</label>
-                        <div className="d-flex flex-column text-center">
+                        <div className="d-flex flex-column text-center pr-4 pl-4">
                             {this.props.invoice.is_active ? (
                                 <UpdateInvoiceButton
                                     invoice={this.props.invoice}
@@ -37,16 +37,15 @@ class ViewInvoiceSidebar extends React.Component {
                                     }
                                 />
                             ) : null}
-                            <div className="mt-1 mb-4">
-                                <PrintInvoiceButton
-                                    invoices={[this.props.invoice]}
-                                    buttonTitle="Imprimir factura"
-                                    outputFilename={this.getOutputFilename()}
-                                    handleSuccessPrintedInvoices={
-                                        this.props.handleSuccessPrintedInvoices
-                                    }
-                                />
-                            </div>
+                            <PrintInvoiceButton
+                                invoices={[this.props.invoice]}
+                                buttonTitle="Imprimir factura"
+                                showIcon={true}
+                                outputFilename={this.getOutputFilename()}
+                                handleSuccessPrintedInvoices={
+                                    this.props.handleSuccessPrintedInvoices
+                                }
+                            />
                         </div>
                     </div>
                 ) : null}

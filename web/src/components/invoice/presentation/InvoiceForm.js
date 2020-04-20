@@ -1,6 +1,9 @@
 import React from "react";
-import {FormInput, FormLabel} from "components/common/form";
+import {FormInput} from "components/common/form";
 import {Spinner} from "components/common";
+import {MemberDetailShort} from "components/member/presentation";
+import InvoiceDetailShort from "./InvoiceDetailShort";
+import {ESTADOS_FACTURA} from "model";
 
 /**
 Controlled component for invoice form.
@@ -75,126 +78,175 @@ class InvoiceForm extends React.Component {
                 descuento,
                 total,
             } = this.getFormDataFromProps();
+            const isReadOnlyInvoice =
+                this.props.invoice.estado !== ESTADOS_FACTURA.NUEVA;
             return (
                 <form
                     onSubmit={this.handleSubmit}
                     noValidate
-                    className="form-inline needs-validation d-flex flex-column align-items-center"
+                    className="row p-2 mb-3 form-inline needs-validation"
                 >
-                    <div
-                        className="d-flex justify-content-center"
-                        style={{width: "100%"}}
-                    >
-                        <FormLabel
-                            label="Número de factura"
-                            name="numero"
-                            field={numero}
-                        />
+                    <div className="row col-md-12">
+                        <div className="col-md-8">
+                            <MemberDetailShort member={this.props.member} />
+                        </div>
+                        <div className="col-md-4">
+                            <InvoiceDetailShort invoice={this.props.invoice} />
+                        </div>
                     </div>
-                    <div
-                        className="d-flex justify-content-between"
-                        style={{width: "100%"}}
-                    >
-                        <FormInput
-                            label="Caudal anterior"
-                            name="caudal_anterior"
-                            field={caudal_anterior}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Caudal actual"
-                            name="caudal_actual"
-                            field={caudal_actual}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Consumo"
-                            name="consumo"
-                            field={consumo}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
+                    <div className="row col-md-12 p-3">
+                        <div className="col-md-4 text-nowrap">
+                            <FormInput
+                                label="Caudal anterior"
+                                name="caudal_anterior"
+                                field={caudal_anterior}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-4 d-inline-block">
+                            <FormInput
+                                label="Caudal actual"
+                                name="caudal_actual"
+                                field={caudal_actual}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-4 text-nowrap">
+                            <FormInput
+                                label="Consumo"
+                                name="consumo"
+                                field={consumo}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
                     </div>
-                    <div style={{width: "60%"}}>
-                        <FormInput
-                            label="Cuota fija"
-                            name="cuota_fija"
-                            field={cuota_fija}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Cuota variable"
-                            name="cuota_variable"
-                            field={cuota_variable}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Comisión de pago"
-                            name="comision"
-                            field={comision}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Ahorro para mano de obra"
-                            name="ahorro"
-                            field={ahorro}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Recargo por mora"
-                            name="mora"
-                            field={mora}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Inasistencia a asambleas"
-                            name="asamblea"
-                            field={asamblea}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Nuevo derecho"
-                            name="derecho"
-                            field={derecho}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Re-conexión"
-                            name="reconexion"
-                            field={reconexion}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Traspaso de derecho"
-                            name="traspaso"
-                            field={traspaso}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Saldo pendiente"
-                            name="saldo_pendiente"
-                            field={saldo_pendiente}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
-                        <FormInput
-                            label="Descuento"
-                            name="descuento"
-                            field={descuento}
-                            handleChange={this.handleChange}
-                        />
-                        <FormInput
-                            label="Total"
-                            name="total"
-                            field={total}
-                            handleChange={this.handleChange}
-                            readOnly={true}
-                        />
+                    <div className="row">
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Cuota fija"
+                                name="cuota_fija"
+                                field={cuota_fija}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Cuota variable"
+                                name="cuota_variable"
+                                field={cuota_variable}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Comisión de pago"
+                                name="comision"
+                                field={comision}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Ahorro para mano de obra"
+                                name="ahorro"
+                                field={ahorro}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Recargo por mora"
+                                name="mora"
+                                field={mora}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Inasistencia a asambleas"
+                                name="asamblea"
+                                field={asamblea}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Nuevo derecho"
+                                name="derecho"
+                                field={derecho}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Re-conexión"
+                                name="reconexion"
+                                field={reconexion}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Traspaso de derecho"
+                                name="traspaso"
+                                field={traspaso}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Saldo pendiente"
+                                name="saldo_pendiente"
+                                field={saldo_pendiente}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Descuento"
+                                name="descuento"
+                                field={descuento}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Total"
+                                name="total"
+                                field={total}
+                                handleChange={this.handleChange}
+                                readOnly={true}
+                                small={true}
+                            />
+                        </div>
                     </div>
                     <div className="col-md-12 mt-4 d-flex justify-content-center">
                         {this.props.saving ? (
@@ -204,7 +256,9 @@ class InvoiceForm extends React.Component {
                                 type="submit"
                                 className="btn btn-primary"
                                 disabled={
-                                    !this.state.dirty || this.props.errors.length > 0
+                                    !this.state.dirty ||
+                                    this.props.errors.length > 0 ||
+                                    isReadOnlyInvoice
                                 }
                             >
                                 <i className="fas fa-save mr-2" />

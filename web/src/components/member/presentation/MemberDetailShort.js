@@ -1,6 +1,17 @@
 import React from "react";
 
 class MemberDetailShort extends React.Component {
+    get message() {
+        if (!this.props.member.is_active) {
+            return (
+                <div className="alert alert-danger">
+                    Este socio se encuentra eliminado del sistema.
+                </div>
+            );
+        }
+        return null;
+    }
+
     render() {
         if (this.props.member) {
             const {
@@ -13,33 +24,46 @@ class MemberDetailShort extends React.Component {
                 consumo_reduccion_fija,
             } = this.props.member;
             return (
-                <div className="card mb-3">
-                    <div className="d-flex justify-content-center">
-                        <div className="p-2">
-                            <strong className="p-1">({num_socio})</strong>
+                <div className="row border rounded bg-light mb-3 p-1">
+                    {this.message}
+                    <div className="col-md-6">
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-3">Socio</label>
+                            <strong>{num_socio}</strong>
                         </div>
-                        <div className="p-2">
-                            <strong className="p-1">{name}</strong>
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-3">Nombre</label>
+                            <strong>{name}</strong>
                         </div>
-                        <div className="p-2">
-                            <span className="p-1">{sector + " - " + comunidad}</span>
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-3">Estado</label>
+                            {solo_mecha ? (
+                                <strong>
+                                    <i className="fas fa-tint-slash mr-2" />
+                                    Solo mecha
+                                </strong>
+                            ) : (
+                                <strong>
+                                    <i className="fas fa-tint mr-2" />
+                                    Conectado
+                                </strong>
+                            )}
                         </div>
                     </div>
-                    <div className="d-flex justify-content-center">
-                        {solo_mecha ? (
-                            <div className="p-2">
-                                <label className="p-1">
-                                    <strong>Solo mecha</strong>
-                                </label>
-                            </div>
-                        ) : null}
-                        <div className="p-2">
-                            <label className="p-1">Consumo máximo:</label>
-                            <span className="p-1">{consumo_maximo}</span>
+                    <div className="col-md-6">
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-5">Sector</label>
+                            <span>
+                                {sector} - {comunidad}
+                            </span>
                         </div>
-                        <div className="p-2">
-                            <label className="p-1">Consumo reducción fija:</label>
-                            <span className="p-1">{consumo_reduccion_fija}</span>
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-6">Consumo máximo</label>
+                            <span>{consumo_maximo}</span>
+                        </div>
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-6">Consumo red. fija</label>
+                            <span>{consumo_reduccion_fija}</span>
                         </div>
                     </div>
                 </div>

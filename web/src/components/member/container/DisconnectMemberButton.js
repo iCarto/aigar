@@ -106,7 +106,7 @@ class DisconnectMemberButton extends React.Component {
     get button() {
         return (
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary mt-1 mb-1"
                 disabled={this.props.disabled}
                 onClick={this.openModal}
             >

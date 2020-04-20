@@ -106,25 +106,29 @@ class ListMonthlyInvoicesActions extends React.Component {
         if (this.props.invoices) {
             if (this.isNextInvoicingMonth()) {
                 return (
-                    <>
+                    <div className="d-flex flex-column pl-4 pr-4">
                         {this.invoiceButton}
                         {this.exportMemberButton}
-                    </>
+                    </div>
                 );
             }
             if (this.isCurrentInvoicingMonth()) {
                 return (
-                    <>
+                    <div className="d-flex flex-column pl-4 pr-4">
                         {this.invoiceButton}
                         {this.exportMemberButton}
                         {this.loadMeasurementsButton}
                         {this.printInvoiceButton}
                         {this.loadPaymentsButton}
-                    </>
+                    </div>
                 );
             }
             if (this.isPreviousInvoicingMonth()) {
-                return this.printInvoiceButton;
+                return (
+                    <div className="d-flex flex-column pl-4 pr-4">
+                        {this.printInvoiceButton}
+                    </div>
+                );
             }
             return null;
         }

@@ -57,7 +57,11 @@ class ExportMemberButton extends React.Component {
 
     get button() {
         return (
-            <button onClick={this.handleClick} className="btn btn-primary mt-1 mb-1">
+            <button
+                onClick={this.handleClick}
+                className="btn btn-primary mt-1 mb-1"
+                disabled={this.props.disabled}
+            >
                 2. Exportar socios
             </button>
         );

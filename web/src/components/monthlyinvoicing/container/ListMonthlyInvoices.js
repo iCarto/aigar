@@ -64,7 +64,10 @@ class ListMonthlyInvoices extends React.Component {
                 if (filter) {
                     if (filter.nombre) {
                         filtered =
-                            filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
+                            filtered &&
+                            invoice.nombre
+                                .toLowerCase()
+                                .indexOf(filter.nombre.toLowerCase()) >= 0;
                     }
                     if (filter.sector) {
                         filtered =

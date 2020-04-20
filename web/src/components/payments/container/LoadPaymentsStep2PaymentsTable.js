@@ -103,16 +103,17 @@ class LoadPaymentsStep2PaymentsTable extends React.Component {
         });
     }
 
-    onUpdatePayment(rowIndex, columnId, value) {
-        const updatedPayments = this.props.payments.map((row, index) => {
-            if (index === rowIndex) {
+    onUpdatePayment(rowId, columnId, value) {
+        const updatedPayments = this.props.payments.map((payment, index) => {
+            if (payment.id === rowId) {
                 const updatedPayment = createPayment({
-                    ...this.props.payments[rowIndex],
+                    ...this.props.payments[index],
                     [columnId]: value,
                 });
+                console.log({updatedPayment});
                 return updatedPayment;
             }
-            return row;
+            return payment;
         });
         this.reviewPayments(updatedPayments);
     }

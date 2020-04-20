@@ -37,10 +37,10 @@ const createPayment = ({
 } = {}) => {
     const publicApi = {
         id: num_factura + fecha,
-        num_socio: parseInt(num_factura.substr(0, 4)),
+        num_socio: num_socio !== -1 ? num_socio : parseInt(num_factura.substr(0, 4)),
         nombre_socio,
         sector,
-        num_factura,
+        num_factura: num_factura !== "" ? num_factura.padStart(12, "0") : num_factura,
         id_factura,
         fecha,
         monto: parseFloat(monto),

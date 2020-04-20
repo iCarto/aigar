@@ -20,7 +20,6 @@ const DateUtil = {
 
     // Transform to UI format date DD/MM/YYYY from DD-MM-YYYY
     format(date) {
-        console.log(date);
         return moment(date, API_DATEFORMAT).format(BANK_DATEFORMAT);
     },
 

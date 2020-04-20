@@ -48,7 +48,8 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
 
     filterByText(measurement, filterText) {
         return (
-            measurement.nombre_socio.indexOf(filterText) >= 0 ||
+            measurement.nombre_socio.toLowerCase().indexOf(filterText.toLowerCase()) >=
+                0 ||
             measurement.num_socio.toString().indexOf(filterText) >= 0 ||
             measurement.medidor.toString().indexOf(filterText) >= 0
         );
@@ -67,17 +68,19 @@ class LoadMeasurementsStep2MeasurementsTable extends React.Component {
         });
     }
 
-    onUpdateMeasurement(rowIndex, columnId, value) {
-        const updatedMeasurements = this.props.measurements.map((row, index) => {
-            if (index === rowIndex) {
-                const updatedMeasurement = createMeasurement({
-                    ...this.props.measurements[rowIndex],
-                    [columnId]: value,
-                });
-                return updatedMeasurement;
+    onUpdateMeasurement(rowId, columnId, value) {
+        const updatedMeasurements = this.props.measurements.map(
+            (measurement, index) => {
+                if (measurement.id === rowId) {
+                    const updatedMeasurement = createMeasurement({
+                        ...this.props.measurements[index],
+                        [columnId]: value,
+                    });
+                    return updatedMeasurement;
+                }
+                return measurement;
             }
-            return row;
-        });
+        );
         this.reviewMeasurements(updatedMeasurements);
     }
 

@@ -6,7 +6,11 @@ const PaymentService = {
         let payments = [];
         for (let i = 0; i < lines.length; i++) {
             if (this.isValidLine(lines[i])) {
-                let paymentRead = lines[i].split(";");
+                const line = lines[i].trim();
+                let paymentRead = line.split(";");
+                if (paymentRead.length === 1) {
+                    paymentRead = line.split(",");
+                }
                 if (paymentRead.length === 10) {
                     // 10 columns = Tigo Money
                     payments.push(
@@ -17,13 +21,14 @@ const PaymentService = {
                             errors: [],
                         })
                     );
-                } else if (paymentRead.length === 5) {
-                    // 5 columns = Banco
+                } else if (paymentRead.length === 6) {
+                    // 6 columns = Banco
                     payments.push(
                         createPayment({
                             num_factura: paymentRead[0],
-                            fecha: paymentRead[1],
-                            monto: paymentRead[2],
+                            num_socio: paymentRead[1],
+                            fecha: paymentRead[2],
+                            monto: paymentRead[3],
                             errors: [],
                         })
                     );

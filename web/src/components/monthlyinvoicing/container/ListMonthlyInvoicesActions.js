@@ -35,6 +35,13 @@ class ListMonthlyInvoicesActions extends React.Component {
         return this.isNextInvoicingMonth();
     }
 
+    isExportMembersButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(invoice => invoice.consumo === "").length !== 0
+        );
+    }
+
     isLoadMeasurementsButtonEnabled() {
         return (
             this.props.invoices.length > 0 &&
@@ -69,7 +76,7 @@ class ListMonthlyInvoicesActions extends React.Component {
     }
 
     get exportMemberButton() {
-        return <ExportMemberButton />;
+        return <ExportMemberButton disabled={!this.isExportMembersButtonEnabled()} />;
     }
 
     get loadMeasurementsButton() {
@@ -104,15 +111,7 @@ class ListMonthlyInvoicesActions extends React.Component {
 
     render() {
         if (this.props.invoices) {
-            if (this.isNextInvoicingMonth()) {
-                return (
-                    <div className="d-flex flex-column pl-4 pr-4">
-                        {this.invoiceButton}
-                        {this.exportMemberButton}
-                    </div>
-                );
-            }
-            if (this.isCurrentInvoicingMonth()) {
+            if (this.isNextInvoicingMonth() || this.isCurrentInvoicingMonth()) {
                 return (
                     <div className="d-flex flex-column pl-4 pr-4">
                         {this.invoiceButton}

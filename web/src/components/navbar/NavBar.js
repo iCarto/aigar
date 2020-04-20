@@ -6,7 +6,7 @@ function NavBar() {
     return (
         <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <Link to="/" className="navbar-brand">
-                <img src={process.env.PUBLIC_URL + "/aigar_40.png"} />
+                <img src={process.env.PUBLIC_URL + "/aigar_40.png"} alt="AIGAR Logo" />
             </Link>
             <button
                 className="navbar-toggler"

@@ -24,7 +24,11 @@ class CSVFileValidator extends Validator {
         let lines = content.split(/\r\n|\r|\n/g);
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].trim() !== "") {
-                let paymentRead = lines[i].trim().split(";");
+                const line = lines[i].trim();
+                let paymentRead = line.split(";");
+                if (paymentRead.length === 1) {
+                    paymentRead = line.split(",");
+                }
                 if (!possibleNumberOfColumns.includes(paymentRead.length)) {
                     return (
                         "Alguna de las entradas del fichero no tiene las columnas necesarias [" +

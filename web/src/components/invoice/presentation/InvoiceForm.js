@@ -61,7 +61,6 @@ class InvoiceForm extends React.Component {
         // They are always modified at the high order component and this component only render their values.
         if (this.props.invoice) {
             const {
-                numero,
                 consumo,
                 caudal_actual,
                 caudal_anterior,

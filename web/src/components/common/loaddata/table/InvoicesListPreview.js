@@ -1,5 +1,5 @@
 import React from "react";
-import {SortedTable} from "components/common/table";
+import {SortedTable, LinkCellTable} from "components/common/table";
 import {Spinner} from "components/common";
 import {InvoiceStatusCellTable} from "components/invoice/presentation";
 
@@ -10,16 +10,26 @@ class InvoicesListPreview extends React.Component {
         if (this.props.invoices) {
             const columns = [
                 {
-                    Header: "Sector",
-                    accessor: "sector",
-                },
-                {
-                    Header: "Nº socio",
+                    Header: "Número",
                     accessor: "num_socio",
+                    Cell: LinkCellTable,
+                    getProps: () => ({
+                        handleClick: this.handleClickViewMember,
+                        linkAccessor: "num_socio",
+                    }),
                 },
                 {
                     Header: "Nombre",
-                    accessor: "nombre",
+                    accessor: "nombre_socio",
+                    Cell: LinkCellTable,
+                    getProps: () => ({
+                        handleClick: this.handleClickViewMember,
+                        linkAccessor: "num_socio",
+                    }),
+                },
+                {
+                    Header: "Sector",
+                    accessor: "sector",
                 },
                 {
                     Header: "Número Factura",

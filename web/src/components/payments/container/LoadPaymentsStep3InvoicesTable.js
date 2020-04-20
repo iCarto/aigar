@@ -41,7 +41,10 @@ class LoadPaymentsStep3InvoicesTable extends React.Component {
         return (
             invoice.numero.indexOf(filterText) >= 0 ||
             invoice.num_socio.toString().indexOf(filterText) >= 0 ||
-            invoice.nombre.toString().indexOf(filterText) >= 0
+            invoice.nombre
+                .toString()
+                .toLowerCase()
+                .indexOf(filterText.toLowerCase()) >= 0
         );
     }
 

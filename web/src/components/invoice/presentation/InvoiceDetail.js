@@ -6,10 +6,6 @@ class InvoiceDetail extends React.Component {
     render() {
         if (this.props.invoice) {
             const {
-                numero,
-                mes_facturado,
-                anho,
-                estado,
                 consumo,
                 caudal_actual,
                 caudal_anterior,

@@ -4,7 +4,6 @@ import {InvoiceForm} from "components/invoice/presentation";
 import {createInvoice, refreshInvoiceValues} from "model";
 import {InvoiceService, MemberService} from "service/api";
 import {DataValidatorService} from "service/validation";
-import {MemberDetailShort} from "components/member/presentation";
 import EditInvoiceSidebar from "./EditInvoiceSidebar";
 
 class EditInvoice extends React.Component {

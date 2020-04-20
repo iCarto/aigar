@@ -4,7 +4,6 @@ import {InvoiceDetail, InvoiceNavigator} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
 import {InvoiceService, MemberService} from "service/api";
-import {MemberDetailShort} from "components/member/presentation";
 import {PaymentsList} from "components/payments/presentation";
 
 class ViewInvoice extends React.Component {

@@ -45,7 +45,11 @@ class ListInvoices extends React.Component {
                     filtered = invoice.numero.indexOf(filter.numero) >= 0;
                 }
                 if (filter.nombre) {
-                    filtered = filtered && invoice.nombre.indexOf(filter.nombre) >= 0;
+                    filtered =
+                        filtered &&
+                        invoice.nombre
+                            .toLowerCase()
+                            .indexOf(filter.nombre.toLowerCase()) >= 0;
                 }
                 if (filter.sector) {
                     filtered = filtered && invoice.sector === parseInt(filter.sector);

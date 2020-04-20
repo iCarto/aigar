@@ -16,7 +16,6 @@ function createWindow(mainAddr, subpy) {
         webPreferences: {nodeIntegration: true},
         title: "AIGAR",
         show: false,
-        icon: __dirname + "/window_icon.ico",
     });
     mainWindow.maximize();
 

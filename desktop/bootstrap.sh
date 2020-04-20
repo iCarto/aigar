@@ -19,7 +19,7 @@ export DEBIAN_FRONTEND=noninteractive
 export UCF_FORCE_CONFFNEW=1
 
 apt-get update
-apt-get upgrade
+apt-get upgrade -y
 
 update_apt_db_if_need() {
     # En versiones de Ubuntu 18.04 no es necesario hacer apt update después de
@@ -161,7 +161,8 @@ install_app() {
 
     cp -R /wine/drive_c/Python37/ "${GOMI}/${DATE}_aigar/"
 
-    mv "${GOMI}/${DATE}_aigar/electron.exe" "${GOMI}/${DATE}_aigar/AIGAR.exe"
+    rm "${GOMI}/${DATE}_aigar/electron.exe"
+    cp "${GOMI}/electron.exe" "${GOMI}/${DATE}_aigar/AIGAR.exe"
     cp -R /vagrant/app "${GOMI}/${DATE}_aigar/resources/"
     sed -i "s/\"version\":.*/\"version\": \"${DATE}\",/" "${GOMI}/${DATE}_aigar/resources/app/package.json"
 }

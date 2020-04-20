@@ -5,6 +5,7 @@ source ./scripts/util/env.sh
 # build the frontend
 (
     cd $FRONTEND_PATH
+    npm install
     npm run build
 )
 

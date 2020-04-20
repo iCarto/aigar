@@ -3,7 +3,7 @@ import {Spinner} from "components/common";
 import {InvoicingMonthService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
-import {MonthlyInvoicingList} from "../presentation";
+import {MonthlyInvoicingList, MonthlyInvoicingListSummary} from "../presentation";
 
 class ListMonthlyInvoices extends React.Component {
     constructor(props) {
@@ -112,17 +112,28 @@ class ListMonthlyInvoices extends React.Component {
                     <div className="col-md-10 offset-md-2">
                         <div className="container">
                             {filteredInvoices ? (
-                                <MonthlyInvoicingList
-                                    invoices={filteredInvoices}
-                                    selectedPageIndex={this.props.selectedPageIndex}
-                                    handleChangePageIndex={
-                                        this.props.handleChangePageIndex
-                                    }
-                                    handleClickViewMember={
-                                        this.props.handleClickViewMember
-                                    }
-                                    handleClickViewInvoice={this.handleClickViewInvoice}
-                                />
+                                <>
+                                    <MonthlyInvoicingListSummary
+                                        invoicingMonth={
+                                            this.props.selectedInvoicingMonth
+                                        }
+                                        filteredInvoicesLength={filteredInvoices.length}
+                                        invoicesLength={this.state.invoices.length}
+                                    />
+                                    <MonthlyInvoicingList
+                                        invoices={filteredInvoices}
+                                        selectedPageIndex={this.props.selectedPageIndex}
+                                        handleChangePageIndex={
+                                            this.props.handleChangePageIndex
+                                        }
+                                        handleClickViewMember={
+                                            this.props.handleClickViewMember
+                                        }
+                                        handleClickViewInvoice={
+                                            this.handleClickViewInvoice
+                                        }
+                                    />
+                                </>
                             ) : (
                                 <Spinner message="Cargando datos" />
                             )}

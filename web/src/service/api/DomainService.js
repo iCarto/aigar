@@ -12,12 +12,15 @@ const DomainService = {
         });
     },
 
-    getMemberTypes() {
-        return Promise.resolve([
+    getMemberTypes(showEliminado = true) {
+        let memberTypes = [
             {key: "normal", value: "Normal"},
             {key: "solo_mecha", value: "Solo mecha"},
-            {key: "eliminado", value: "Eliminado"},
-        ]);
+        ];
+        if (showEliminado) {
+            memberTypes.push({key: "eliminado", value: "Eliminado"});
+        }
+        return Promise.resolve(memberTypes);
     },
 
     getInvoiceStatus() {

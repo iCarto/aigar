@@ -23,7 +23,7 @@ class ListMonthlyInvoicesFilter extends React.Component {
         console.log("loadDomains");
         Promise.all([
             DomainService.getSectors(),
-            DomainService.getMemberTypes(),
+            DomainService.getMemberTypes(false),
             DomainService.getInvoiceStatus(),
         ]).then(results => {
             this.setState({

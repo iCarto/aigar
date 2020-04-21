@@ -5,8 +5,8 @@ import PaginatedTableNavigator from "./PaginatedTableNavigator";
 const SortedPaginatedTable = ({
     columns,
     data,
-    selectedPageIndex,
-    handleChangePageIndex,
+    listView,
+    handleChangeListView,
     onUpdateData,
 }) => {
     const {
@@ -22,28 +22,28 @@ const SortedPaginatedTable = ({
         gotoPage,
         nextPage,
         previousPage,
-        state: {pageIndex},
+        state: {pageIndex, sortBy},
     } = useTable(
         {
             columns,
             data,
             initialState: {
                 pageSize: 15,
-                pageIndex: selectedPageIndex || 0,
+                pageIndex: listView ? listView.pageIndex : 0,
+                sortBy: listView ? listView.sortBy : [],
             },
             onUpdateData,
         },
         useSortBy,
         usePagination
     );
-    // console.log("SortedPaginatedTable.render", {selectedPageIndex});
 
-    // Listening for changes in pagination and lifting up them
+    // Listening for changes in pagination or sorting and lifting up them
     useEffect(() => {
-        if (handleChangePageIndex) {
-            handleChangePageIndex(pageIndex);
+        if (handleChangeListView) {
+            handleChangeListView({pageIndex, sortBy});
         }
-    }, [pageIndex, handleChangePageIndex]);
+    }, [pageIndex, sortBy, handleChangeListView]);
 
     return (
         <>

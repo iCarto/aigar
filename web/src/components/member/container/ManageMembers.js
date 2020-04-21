@@ -8,7 +8,8 @@ class ManageMembers extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pagination: {
+            listView: {
+                sortBy: [],
                 pageIndex: 0,
             },
             filter: {
@@ -18,7 +19,7 @@ class ManageMembers extends React.Component {
             selectedMember: null,
             view: "list",
         };
-        this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
+        this.handleChangeListView = this.handleChangeListView.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
         this.handleBackViewMember = this.handleBackViewMember.bind(this);
@@ -27,16 +28,18 @@ class ManageMembers extends React.Component {
         this.handleBackCreateMember = this.handleBackCreateMember.bind(this);
     }
 
-    handleChangePageIndex(pageIndex) {
-        console.log("handleChangePageIndex", {pageIndex});
-        this.setState({pagination: {pageIndex}});
+    handleChangeListView(listView) {
+        console.log("handleChangeListView", {listData: listView});
+        this.setState({
+            listView,
+        });
     }
 
     handleFilterChange(newFilter) {
         console.log("handleFilterChange", newFilter);
         this.setState({
             filter: Object.assign(this.state.filter, newFilter),
-            pagination: {pageIndex: 0},
+            listView: Object.assign(this.state.listView, {pageIndex: 0}),
         });
     }
 
@@ -98,8 +101,8 @@ class ManageMembers extends React.Component {
         }
         return (
             <ListMembers
-                selectedPageIndex={this.state.pagination.pageIndex}
-                handleChangePageIndex={this.handleChangePageIndex}
+                listView={this.state.listView}
+                handleChangeListView={this.handleChangeListView}
                 handleFilterChange={this.handleFilterChange}
                 handleClickViewMember={this.handleClickViewMember}
                 handleClickCreateMember={this.handleClickCreateMember}

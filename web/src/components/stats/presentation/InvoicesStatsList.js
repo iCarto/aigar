@@ -50,7 +50,7 @@ class InvoicesStatsList extends React.Component {
                 <SortedPaginatedTable
                     columns={columns}
                     data={this.props.invoicesStats}
-                    handleChangePageIndex={this.props.handleChangePageIndex}
+                    handleChangeListView={this.props.handleChangeListView}
                 />
             );
         }

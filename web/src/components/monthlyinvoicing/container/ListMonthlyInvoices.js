@@ -122,9 +122,9 @@ class ListMonthlyInvoices extends React.Component {
                                     />
                                     <MonthlyInvoicingList
                                         invoices={filteredInvoices}
-                                        selectedPageIndex={this.props.selectedPageIndex}
-                                        handleChangePageIndex={
-                                            this.props.handleChangePageIndex
+                                        listView={this.props.listView}
+                                        handleChangeListView={
+                                            this.props.handleChangeListView
                                         }
                                         handleClickViewMember={
                                             this.props.handleClickViewMember

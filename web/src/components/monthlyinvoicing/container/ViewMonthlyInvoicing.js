@@ -15,7 +15,8 @@ class ViewMonthlyInvoicing extends React.Component {
             selectedInvoice: null,
             selectedMember: null,
             filteredInvoicesIds: [],
-            pagination: {
+            listView: {
+                sortBy: [],
                 pageIndex: 0,
             },
             filter: {
@@ -26,7 +27,7 @@ class ViewMonthlyInvoicing extends React.Component {
             },
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
+        this.handleChangeListView = this.handleChangeListView.bind(this);
         this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
         this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
@@ -67,16 +68,18 @@ class ViewMonthlyInvoicing extends React.Component {
         });
     }
 
-    handleChangePageIndex(pageIndex) {
-        console.log("handleChangePageIndex", {pageIndex});
-        this.setState({pagination: {pageIndex}});
+    handleChangeListView(listView) {
+        console.log("handleChangeListView", {listData: listView});
+        this.setState({
+            listView,
+        });
     }
 
     handleFilterChange(newFilter) {
         console.log("handleFilterChange", newFilter);
         this.setState({
             filter: Object.assign(this.state.filter, newFilter),
-            pagination: {pageIndex: 0},
+            listView: Object.assign(this.state.listView, {pageIndex: 0}),
         });
     }
 
@@ -163,9 +166,9 @@ class ViewMonthlyInvoicing extends React.Component {
         if (this.state.selectedInvoicingMonth != null) {
             return (
                 <ListMonthlyInvoices
-                    selectedPageIndex={this.state.pagination.pageIndex}
+                    listView={this.state.listView}
                     handleFilterChange={this.handleFilterChange}
-                    handleChangePageIndex={this.handleChangePageIndex}
+                    handleChangeListView={this.handleChangeListView}
                     handleClickViewInvoice={this.handleClickViewInvoice}
                     handleClickViewMember={this.handleClickViewMember}
                     filter={this.state.filter}

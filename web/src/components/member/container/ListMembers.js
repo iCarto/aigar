@@ -65,8 +65,8 @@ class ListMembers extends React.Component {
             return (
                 <MembersList
                     members={this.filter(this.state.members, this.props.filter)}
-                    selectedPageIndex={this.props.selectedPageIndex}
-                    handleChangePageIndex={this.props.handleChangePageIndex}
+                    listView={this.props.listView}
+                    handleChangeListView={this.props.handleChangeListView}
                     handleClickViewMember={this.props.handleClickViewMember}
                     filter={this.props.filter}
                 />

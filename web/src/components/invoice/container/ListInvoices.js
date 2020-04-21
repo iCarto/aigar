@@ -74,8 +74,8 @@ class ListInvoices extends React.Component {
             return (
                 <InvoicesList
                     invoices={this.filter(this.state.invoices, this.props.filter)}
-                    selectedPageIndex={this.props.selectedPageIndex}
-                    handleChangePageIndex={this.props.handleChangePageIndex}
+                    listView={this.props.listView}
+                    handleChangeListView={this.props.handleChangeListView}
                     handleClickViewInvoice={this.handleClickViewInvoice}
                     filter={this.props.filter}
                 />

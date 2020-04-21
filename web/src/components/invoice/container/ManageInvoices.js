@@ -7,7 +7,8 @@ class ManageInvoices extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pagination: {
+            listView: {
+                sortBy: [],
                 pageIndex: 0,
             },
             filter: {
@@ -18,7 +19,7 @@ class ManageInvoices extends React.Component {
             selectedInvoice: null,
             filteredInvoicesIds: [],
         };
-        this.handleChangePageIndex = this.handleChangePageIndex.bind(this);
+        this.handleChangeListView = this.handleChangeListView.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
         this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
@@ -27,16 +28,18 @@ class ManageInvoices extends React.Component {
         );
     }
 
-    handleChangePageIndex(pageIndex) {
-        console.log("handleChangePageIndex", {pageIndex});
-        this.setState({pagination: {pageIndex}});
+    handleChangeListView(listView) {
+        console.log("handleChangeListView", {listData: listView});
+        this.setState({
+            listView,
+        });
     }
 
     handleFilterChange(newFilter) {
         console.log("handleFilterChange", newFilter);
         this.setState({
             filter: Object.assign(this.state.filter, newFilter),
-            pagination: {pageIndex: 0},
+            listView: Object.assign(this.state.listView, {pageIndex: 0}),
         });
     }
 
@@ -88,8 +91,8 @@ class ManageInvoices extends React.Component {
         }
         return (
             <ListInvoices
-                selectedPageIndex={this.state.pagination.pageIndex}
-                handleChangePageIndex={this.handleChangePageIndex}
+                listView={this.state.listView}
+                handleChangeListView={this.handleChangeListView}
                 handleFilterChange={this.handleFilterChange}
                 handleClickViewInvoice={this.handleClickViewInvoice}
                 filter={this.state.filter}

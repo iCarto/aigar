@@ -12,6 +12,7 @@ class InvoicesList extends React.Component {
             const columns = [
                 {
                     Header: "Mes",
+                    accessor: "mes_facturacion",
                     Cell: InvoiceMonthCellTable,
                 },
                 {

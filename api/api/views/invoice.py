@@ -25,7 +25,9 @@ class InvoiceViewSet(
     # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Invoice.objects.prefetch_related("member")
+        queryset = Invoice.objects.prefetch_related("member").order_by(
+            "-mes_facturacion"
+        )
         num_socio = self.request.query_params.get("num_socio", None)
         if num_socio is not None:
             queryset = queryset.filter(member=num_socio)

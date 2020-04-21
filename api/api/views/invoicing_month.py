@@ -49,6 +49,9 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,
+                "cuota_fija": get_cuota_fija_value(member),
+                "comision": get_comision_value(),
+                "ahorro": get_ahorro_value(member),
                 "caudal_anterior": last_month_invoice.caudal_actual
                 if last_month_invoice
                 else 0,
@@ -69,6 +72,26 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
 
 
 # TODO Donde sería el lugar adecuado para situar estos métodos?
+def get_comision_value():
+    return fixed_values["COMISION"]
+
+
+def get_cuota_fija_value(member):
+    return (
+        fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+        if member.solo_mecha
+        else fixed_values["CUOTA_FIJA_NORMAL"]
+    )
+
+
+def get_ahorro_value(member):
+    return (
+        fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
+        if member.solo_mecha
+        else fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+    )
+
+
 def get_derecho_value(last_month_invoice):
     if last_month_invoice is None:
         return 400

@@ -192,19 +192,8 @@ class Invoice(models.Model):
         ordering = ("id_factura",)
 
     def update_with_measurement(self, caudal_anterior, caudal_actual):
-        self.comision = fixed_values["COMISION"]
-        self.ahorro = (
-            fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
-            if self.member.solo_mecha
-            else fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
-        )
-        self.cuota_fija = (
-            fixed_values["CUOTA_FIJA_SOLO_MECHA"]
-            if self.member.solo_mecha
-            else fixed_values["CUOTA_FIJA_NORMAL"]
-        )
-        self.caudal_actual = caudal_actual
-        self.caudal_anterior = caudal_anterior
+        self.caudal_actual = int(caudal_actual)
+        self.caudal_anterior = int(caudal_anterior)
         self.consumo = self.caudal_actual - self.caudal_anterior
         consumo_final = (
             min(self.consumo, self.member.consumo_maximo)

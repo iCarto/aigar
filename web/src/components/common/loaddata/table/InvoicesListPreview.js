@@ -4,6 +4,15 @@ import {Spinner} from "components/common";
 import {InvoiceStatusCellTable} from "components/invoice/presentation";
 
 class InvoicesListPreview extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClickViewMember = this.handleClickViewMember.bind(this);
+    }
+
+    handleClickViewMember(num_socio) {
+        window.open("/socios/" + num_socio, "_blank");
+    }
+
     render() {
         console.log("InvoicesListPreview.render");
 
@@ -20,7 +29,7 @@ class InvoicesListPreview extends React.Component {
                 },
                 {
                     Header: "Nombre",
-                    accessor: "nombre_socio",
+                    accessor: "nombre",
                     Cell: LinkCellTable,
                     getProps: () => ({
                         handleClick: this.handleClickViewMember,

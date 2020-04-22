@@ -62,9 +62,7 @@ class MeasurementInvoicePreview(CreateAPIView):
         updated_invoices = []
         for measurement in measurements:
             invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
-            invoice.update_with_measurement(
-                measurement["caudal_anterior"], measurement["caudal_actual"]
-            )
+            invoice.update_with_measurement(measurement["caudal_actual"])
             updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}

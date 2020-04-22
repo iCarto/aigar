@@ -17,9 +17,7 @@ class MeasurementSerializer(serializers.ModelSerializer):
         measurement = Measurement.objects.create(**validated_data)
 
         invoice = measurement.factura
-        invoice.update_with_measurement(
-            measurement.caudal_anterior, measurement.caudal_actual
-        )
+        invoice.update_with_measurement(measurement.caudal_actual)
         invoice.save()
 
         if measurement.cambio_medidor == True:

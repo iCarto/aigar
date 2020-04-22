@@ -2,7 +2,7 @@ import json
 from random import randrange
 
 
-with open("/home/elias/Proyectos/aecid/test/lecturas.json") as f:
+with open("lecturas.json") as f:
     data = json.load(f)
 
 updated_measurements = []

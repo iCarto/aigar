@@ -34,7 +34,7 @@ class FormInput extends React.Component {
                 <input
                     type="text"
                     className="form-control"
-                    name="ahorro"
+                    name={this.props.name}
                     value={
                         this.props.readOnly === true
                             ? this.props.field.value
@@ -44,6 +44,14 @@ class FormInput extends React.Component {
                     readOnly={this.props.readOnly}
                     style={this.props.small === true ? {width: "100px"} : null}
                 />
+                <small
+                    id="num_socio_help"
+                    className={`form-text text-muted ${
+                        this.props.info && this.props.info === "" ? "d-none" : ""
+                    }`}
+                >
+                    {this.props.info}
+                </small>
                 <div className="invalid-feedback d-block">
                     {this.props.field.errors}
                 </div>

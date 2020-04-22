@@ -31,8 +31,8 @@ class DataValidator extends Validator {
         if (!value || value === "") {
             return;
         }
-        var decimalRegExp = /^0$|^-?[1-9]\d*(\.\d+)?$/;
-        if (!decimalRegExp.test(value)) {
+        var integerRegExp = /^[-]?[0-9]+$/;
+        if (!integerRegExp.test(value)) {
             return "El campo no tiene un formato válido";
         }
     }

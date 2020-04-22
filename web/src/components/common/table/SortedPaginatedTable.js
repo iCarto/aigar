@@ -28,7 +28,7 @@ const SortedPaginatedTable = ({
             columns,
             data,
             initialState: {
-                pageSize: 15,
+                pageSize: 12,
                 pageIndex: listView ? listView.pageIndex : 0,
                 sortBy: listView ? listView.sortBy : [],
             },

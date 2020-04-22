@@ -6,7 +6,7 @@
 }
 
 .stepper .step .circle {
-    background: greenyellow;
+    background: green;
     border-radius: 2em;
     color: white;
     height: 4em;
@@ -17,7 +17,7 @@
 }
 
 .stepper .step::before {
-    background: greenyellow;
+    background: green;
     content: "";
     height: 0.4em;
     position: absolute;
@@ -43,7 +43,7 @@
 
 .stepper .active.valid .circle,
 .stepper .active.valid::before {
-    background: greenyellow;
+    background: green;
 }
 
 .stepper .active ~ .step .circle,

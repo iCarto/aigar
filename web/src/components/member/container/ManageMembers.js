@@ -14,7 +14,9 @@ class ManageMembers extends React.Component {
             },
             filter: {
                 name: "",
+                num_socio: "",
                 sector: 0,
+                tipo_socio: "",
             },
             selectedMember: null,
             view: "list",

@@ -17,7 +17,17 @@ class MembersFilter extends React.Component {
 
     render() {
         return (
-            <form className="column">
+            <form className="column m-3">
+                <div className="form-group">
+                    <label htmlFor="num_socio">Número de socio</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="num_socio"
+                        value={this.props.filter.num_socio}
+                        onChange={this.handleChange}
+                    />
+                </div>
                 <div className="form-group">
                     <label htmlFor="name">Nombre</label>
                     <input

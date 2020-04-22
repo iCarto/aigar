@@ -39,6 +39,12 @@ class ListMembers extends React.Component {
                         member.name.toLowerCase().indexOf(filter.name.toLowerCase()) >=
                         0;
                 }
+                if (filter.num_socio) {
+                    filtered =
+                        member.num_socio
+                            .toString()
+                            .indexOf(filter.num_socio.toString()) >= 0;
+                }
                 if (filter.sector) {
                     filtered = filtered && member.sector === parseInt(filter.sector);
                 }

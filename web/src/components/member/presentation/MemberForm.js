@@ -1,5 +1,6 @@
 import React from "react";
 import {Spinner} from "components/common";
+import {FormInput} from "components/common/form";
 
 /**
 Controlled component for member form.
@@ -22,15 +23,18 @@ class MemberForm extends React.Component {
             dirty: false,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeField = this.handleChangeField.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleChange(name, value) {
+        this.props.handleChange(name, value);
+        this.setState({dirty: true});
+    }
+
+    handleChangeField(event) {
         const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;
+        const value = event.target.value;
         this.props.handleChange(name, value);
         this.setState({dirty: true});
     }
@@ -78,48 +82,31 @@ class MemberForm extends React.Component {
                     className="needs-validation row"
                 >
                     <div className="col-md-5 offset-md-2">
-                        <div className="form-group">
-                            <label htmlFor="num_socio">Número</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="num_socio"
-                                value={num_socio.value}
-                                aria-describedby="num_socio_help"
-                                onChange={this.handleChange}
-                                readOnly
-                            />
-                            <small
-                                id="num_socio_help"
-                                className={`form-text text-muted ${
-                                    num_socio === -1 ? "d-none" : ""
-                                }`}
-                            >
-                                El número de socio se calculará cuando pulse salvar
-                            </small>
-                            <div className="invalid-feedback d-block">
-                                {num_socio.errors}
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Nombre</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="name"
-                                value={name.value}
-                                onChange={this.handleChange}
-                            />
-                            <div className="invalid-feedback d-block">
-                                {name.errors}
-                            </div>
-                        </div>
+                        <FormInput
+                            label="Número"
+                            name="num_socio"
+                            field={num_socio}
+                            handleChange={this.handleChange}
+                            readOnly={true}
+                            small={true}
+                            info={
+                                num_socio.value === -1
+                                    ? "El número de socio se calculará cuando pulse Salvar"
+                                    : ""
+                            }
+                        />
+                        <FormInput
+                            label="Nombre"
+                            name="name"
+                            field={name}
+                            handleChange={this.handleChange}
+                        />
                         <div className="form-group">
                             <label htmlFor="sector">Sector</label>
                             <select
                                 className="form-control"
                                 name="sector"
-                                onChange={this.handleChange}
+                                onChange={this.handleChangeField}
                                 value={sector.value}
                             >
                                 <option></option>
@@ -139,7 +126,7 @@ class MemberForm extends React.Component {
                                 className="form-control"
                                 name="observaciones"
                                 value={observaciones.value}
-                                onChange={this.handleChange}
+                                onChange={this.handleChangeField}
                             ></textarea>
                             <div className="invalid-feedback d-block">
                                 {observaciones.errors}
@@ -147,61 +134,33 @@ class MemberForm extends React.Component {
                         </div>
                     </div>
                     <div className="col-md-3">
-                        <div className="form-group">
-                            <label htmlFor="orden">Orden Ruta</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="orden"
-                                value={orden.value}
-                                onChange={this.handleChange}
-                            />
-                            <div className="invalid-feedback d-block">
-                                {orden.errors}
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="medidor">Medidor</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="medidor"
-                                value={medidor.value}
-                                onChange={this.handleChange}
-                            />
-                            <div className="invalid-feedback d-block">
-                                {medidor.errors}
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="consumo_maximo">Consumo máximo</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="consumo_maximo"
-                                value={consumo_maximo.value}
-                                onChange={this.handleChange}
-                            />
-                            <div className="invalid-feedback d-block">
-                                {consumo_maximo.errors}
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="consumo_reduccion_fija">
-                                Consumo reducción fija
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="consumo_reduccion_fija"
-                                value={consumo_reduccion_fija.value}
-                                onChange={this.handleChange}
-                            />
-                            <div className="invalid-feedback d-block">
-                                {consumo_reduccion_fija.errors}
-                            </div>
-                        </div>
+                        <FormInput
+                            label="Medidor"
+                            name="medidor"
+                            field={medidor}
+                            handleChange={this.handleChange}
+                        />
+                        <FormInput
+                            label="Orden Ruta"
+                            name="orden"
+                            field={orden}
+                            handleChange={this.handleChange}
+                            small={true}
+                        />
+                        <FormInput
+                            label="Consumo máximo"
+                            name="consumo_maximo"
+                            field={consumo_maximo}
+                            handleChange={this.handleChange}
+                            small={true}
+                        />
+                        <FormInput
+                            label="Consumo reducción fija"
+                            name="consumo_reduccion_fija"
+                            field={consumo_reduccion_fija}
+                            handleChange={this.handleChange}
+                            small={true}
+                        />
                     </div>
 
                     <div className="col-md-12 mt-4 text-center">

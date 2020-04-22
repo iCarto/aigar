@@ -1,13 +1,14 @@
 {
-    "name": "icarto-scaffolding",
-    "version": "1.0.0",
-    "description": "Formatter scaffolding for iCarto projects",
+    "name": "AIGAR",
+    "version": "200420",
+    "description": "Aplicación Innovadora para la Gestión de Juntas de Agua de Comunidades Rurales",
     "author": "iCarto <info@icarto.es>",
     "license": "AGPL-3.0",
-    "homepage": "https://gitlab.com/icarto/ikdb",
+    "private": true,
+    "homepage": "https://gitlab.com/icarto/aigar",
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@gitlab.com:icarto/ikdb.git"
+        "url": "git+ssh://git@gitlab.com:icarto/aigar.git"
     },
     "main": "index.js",
     "scripts": {

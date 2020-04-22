@@ -115,18 +115,14 @@ class Member(models.Model):
         help_text="",
     )
     observaciones = models.TextField(
-        null=False, blank=True, default="", verbose_name="Observaciones", help_text=""
+        null=True, blank=True, default="", verbose_name="Observaciones", help_text=""
     )
 
     consumo_maximo = models.PositiveSmallIntegerField(
-        null=False, blank=False, default=0, verbose_name="Consumo Máximo", help_text=""
+        null=True, blank=True, verbose_name="Consumo Máximo", help_text=""
     )
     consumo_reduccion_fija = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        default=0,
-        verbose_name="Reducción Fija de Consumo",
-        help_text="",
+        null=True, blank=True, verbose_name="Reducción Fija de Consumo", help_text=""
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures

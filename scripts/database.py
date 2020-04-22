@@ -14,49 +14,94 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def create_django_fixtures(database):
-    fixtures = []
-    for m in database["members"]:
-        fixture_member = {
-            "model": "api.Member",
-            "pk": int(m["numero_socio"]),
-            "fields": {
-                "name": m["nombre"],
-                "sector": int(m["sector"]),
-                "medidor": str(m["medidor"]),
-                "solo_mecha": True if m["medidor"] == "M" else False,
-                "orden": 0 if m["ruta"] is None else int(m["ruta"]),
-                "observaciones": f"{m['observaciones_1'] or ''} {m['observaciones_2'] or ''}".strip(),
-                "consumo_maximo": 0,
-                "consumo_reduccion_fija": 0,
-            },
-        }
-        fixtures.append(fixture_member)
-
-    invoicing_months = []
+def get_fixtures_invoicing_months(invoices):
     fixtures_invoicing_months = []
-    for year, year_invoices in database["invoices"].items():
+    invoicing_months = []
+    for year, year_invoices in invoices.items():
         for month, month_invoices in year_invoices.items():
             invoicing_month = str(year) + str(month)
             if (invoicing_month) not in invoicing_months:
                 invoicing_months.append(invoicing_month)
                 fixture_invoicing_month = {
                     "model": "api.InvoicingMonth",
-                    "pk": "id_mes_facturacion",
-                    "fields": {
-                        "id_mes_facturacion": invoicing_month,
-                        "anho": year,
-                        "mes": month,
-                        "is_open": False,
-                    },
+                    "pk": invoicing_month,
+                    "fields": {"anho": year, "mes": month, "is_open": False},
                 }
                 fixtures_invoicing_months.append(fixture_invoicing_month)
-    # last month parsed must be opened
+    # last month parsed must be open
     fixtures_invoicing_months[-1]["fields"]["is_open"] = True
-    fixtures = fixtures + fixtures_invoicing_months
+    return fixtures_invoicing_months
 
+
+def get_fixtures_members(invoices, last_invoicing_month):
+    fixtures_members = []
+    for year, year_invoices in invoices.items():
+        for month, month_invoices in year_invoices.items():
+            mes_facturacion = str(year) + str(month)
+            if mes_facturacion == last_invoicing_month:
+                for invoice in month_invoices:
+                    num_socio = int(invoice["num_socio"])
+                    fixture_member = [
+                        aux_fixture_member
+                        for aux_fixture_member in fixtures_members
+                        if aux_fixture_member["pk"] == num_socio
+                    ]
+                    if not fixture_member:
+                        fixture_member = {
+                            "model": "api.Member",
+                            "pk": num_socio,
+                            "fields": {
+                                "name": invoice["nombre"],
+                                "sector": int(invoice["sector"]),
+                                "medidor": str(invoice["medidor"])
+                                if invoice.get("medidor", None) is not None
+                                else "",
+                                "solo_mecha": invoice.get("solo_mecha", None) == "si",
+                                "orden": 0
+                                if invoice.get("orden", None) is None
+                                else int(invoice["orden"]),
+                                "consumo_maximo": int(invoice["consumo_maximo"])
+                                if invoice.get("consumo_maximo", None) is not None
+                                and isinstance(invoice["consumo_maximo"], int)
+                                else None,
+                                "is_active": True,
+                            },
+                        }
+                        fixtures_members.append(fixture_member)
+    return fixtures_members
+
+
+def get_fixtures_deleted_members(invoices, fixtures_members, last_invoicing_month):
+    fixtures_deleted_members = []
+    for year, year_invoices in invoices.items():
+        for month, month_invoices in year_invoices.items():
+            mes_facturacion = str(year) + str(month)
+            if mes_facturacion != last_invoicing_month:
+                for invoice in month_invoices:
+                    num_socio = int(invoice["num_socio"])
+                    fixture_member = [
+                        aux_fixture_member
+                        for aux_fixture_member in fixtures_members
+                        if aux_fixture_member["pk"] == num_socio
+                    ]
+                    if not fixture_member:
+                        fixture_member = {
+                            "model": "api.Member",
+                            "pk": num_socio,
+                            "fields": {
+                                "name": invoice["nombre"],
+                                "sector": int(invoice["sector"]),
+                                "is_active": False,
+                            },
+                        }
+                        fixtures_deleted_members.append(fixture_member)
+    return fixtures_deleted_members
+
+
+def get_fixtures_invoices(invoices):
     mes_facturacion_previo = None
-    for year, year_invoices in database["invoices"].items():
+    fixtures_invoices = []
+    for year, year_invoices in invoices.items():
         for month, month_invoices in year_invoices.items():
             mes_facturacion = str(year) + str(month)
             for invoice in month_invoices:
@@ -75,7 +120,7 @@ def create_django_fixtures(database):
                 if mes_facturacion_previo is not None:
                     last_month_fixture_invoice = [
                         aux_fixture_invoice
-                        for aux_fixture_invoice in fixtures
+                        for aux_fixture_invoice in fixtures_invoices
                         if aux_fixture_invoice["model"] == "api.Invoice"
                         and aux_fixture_invoice["fields"]["member"] == num_socio
                         and aux_fixture_invoice["fields"]["mes_facturacion"]
@@ -122,6 +167,7 @@ def create_django_fixtures(database):
                         else int(year) + 1,
                         "mora": float(invoice.get("mora", 0) or 0),
                         "reconexion": float(invoice.get("reconexion", 0) or 0),
+                        "descuento": float(invoice.get("descuento", 0) or 0),
                         "saldo_pendiente": float(
                             invoice.get("saldo_pendiente", 0) or 0
                         ),
@@ -132,8 +178,32 @@ def create_django_fixtures(database):
                         "estado": "nueva",
                     },
                 }
-                fixtures.append(fixture_invoice)
+                fixtures_invoices.append(fixture_invoice)
             mes_facturacion_previo = mes_facturacion
+    return fixtures_invoices
+
+
+def create_django_fixtures(database):
+
+    fixtures_invoicing_months = get_fixtures_invoicing_months(database["invoices"])
+    fixtures = fixtures_invoicing_months
+
+    last_invoicing_month = fixtures_invoicing_months[-1]["pk"]
+    fixtures_members = get_fixtures_members(database["invoices"], last_invoicing_month)
+
+    fixtures_deleted_members = get_fixtures_deleted_members(
+        database["invoices"], fixtures_members, last_invoicing_month
+    )
+
+    fixtures_invoices = get_fixtures_invoices(database["invoices"])
+
+    fixtures = (
+        fixtures_invoicing_months
+        + fixtures_members
+        + fixtures_deleted_members
+        + fixtures_invoices
+    )
+
     print(json.dumps(fixtures))
 
 

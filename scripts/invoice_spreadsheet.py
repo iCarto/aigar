@@ -28,7 +28,10 @@ def parse_invoice_spreadsheet(xls):
     column_names = {
         "NúmeroS": "sector",
         "NúmeroSocio": "num_socio",
+        "Orden": "orden",
+        "Num_contador": "medidor",
         "Nombre": "nombre",
+        "Mecha": "solo_mecha",
         "Canterior": "caudal_anterior",
         "Cactual": "caudal_actual",
         "Consumo": "consumo",
@@ -41,8 +44,10 @@ def parse_invoice_spreadsheet(xls):
         "Reconexion": "reconexion",
         "Asamblea": "asamblea",
         "TraspasoD": "traspaso",
+        "Descuento": "descuento",
         "SaldoP": "saldo_pendiente",
         "Saldoanterior": "saldo_anterior",
+        "Ajuste_consumo": "consumo_maximo",
         "Total": "total",
         "Unnamed: 14": "observaciones",
         "Comentarios": "observaciones",
@@ -57,7 +62,17 @@ def parse_invoice_spreadsheet(xls):
     }
     df = pd.read_excel(xls, **excel_options)
     df.rename(columns=column_names, inplace=True)
-    drop_columns = ["MesFact.1", "NúmeroS_num", "Unnamed: 25", "Unnamed: 27"]
+    drop_columns = [
+        "MesFact.1",
+        "NúmeroS_num",
+        "Desconexión",
+        "Nuevo socio",
+        "Tipo_pago",
+        "Unnamed: 25",
+        "Unnamed: 27",
+        "Unnamed: 35",
+        "Unnamed: 38",
+    ]
     for d in drop_columns:
         if d in df.columns:
             df.drop(columns=d, inplace=True)

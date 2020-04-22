@@ -197,17 +197,23 @@ class Invoice(models.Model):
         self.consumo = self.caudal_actual - self.caudal_anterior
         consumo_final = (
             min(self.consumo, self.member.consumo_maximo)
-            if self.member.consumo_maximo != 0
+            if self.member.consumo_maximo is not None
             else self.consumo
-        ) - self.member.consumo_reduccion_fija
-        if 0 < consumo_final <= 14:
+        ) - (self.member.consumo_reduccion_fija or 0)
+        if consumo_final <= 14:
             self.cuota_variable = (
                 fixed_values["CUOTA_VARIABLE_MENOS_14"] * consumo_final
             )
-        elif 14 < consumo_final <= 20:
-            self.cuota_variable = fixed_values["CUOTA_VARIABLE_14_20"] * consumo_final
+        elif 14 < consumo_final < 20:
+            self.cuota_variable = (
+                fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14
+            ) + fixed_values["CUOTA_VARIABLE_14_20"] * (consumo_final - 14)
         else:
-            self.cuota_variable = fixed_values["CUOTA_VARIABLE_MAS_20"] * consumo_final
+            self.cuota_variable = (
+                (fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14)
+                + (fixed_values["CUOTA_VARIABLE_14_20"] * 6)
+                + fixed_values["CUOTA_VARIABLE_MAS_20"] * (consumo_final - 20)
+            )
 
         self.total = (
             self.cuota_fija

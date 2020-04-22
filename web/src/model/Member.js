@@ -42,22 +42,20 @@ const dataFromMyRESTAPI = [
 ]
 
 */
-const getTipoSocio = function(
-    is_active,
-    solo_mecha,
-    consumo_maximo,
-    consumo_reduccion_fija
-) {
-    if (is_active === false) {
+const getTipoSocio = function(member) {
+    if (member.is_active === false) {
         return "eliminado";
     }
-    if (solo_mecha === true) {
+    if (member.solo_mecha === true) {
         return "solo_mecha";
     }
-    if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
+    if (
+        (member.consumo_maximo && member.consumo_maximo !== 0) ||
+        (member.consumo_reduccion_fija && member.consumo_reduccion_fija !== 0)
+    ) {
         return "con_ajuste_consumo";
     }
-    return "normal";
+    return "conectado";
 };
 
 class Members extends Array {}
@@ -65,12 +63,7 @@ class Members extends Array {}
 const member_api_adapter = member => {
     // member["solo_mecha"] = member["medidor"] === "M" ? true : false;
     member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
-    member["tipo_socio"] = getTipoSocio(
-        member.is_active,
-        member.solo_mecha,
-        member.consumo_maximo,
-        member.consumo_reduccion_fija
-    );
+    member["tipo_socio"] = getTipoSocio(member);
     return member;
 };
 
@@ -113,8 +106,8 @@ const createMember = ({
     orden = -1,
     observaciones = "",
 
-    consumo_maximo = 0,
-    consumo_reduccion_fija = 0,
+    consumo_maximo = null,
+    consumo_reduccion_fija = null,
     tipo_socio = "",
     is_active = true,
 } = {}) => {
@@ -156,4 +149,5 @@ export {
     createMembers,
     member_api_adapter,
     members_api_adapter,
+    getTipoSocio,
 };

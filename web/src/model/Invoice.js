@@ -1,4 +1,5 @@
 import {NumberUtil} from "utilities";
+import {getTipoSocio} from "./Member";
 
 const SECTORES_COMUNIDADES = {
     "0": "",
@@ -36,16 +37,6 @@ class Invoices extends Array {
     }
 }
 
-const getTipoSocio = function(solo_mecha, consumo_maximo, consumo_reduccion_fija) {
-    if (solo_mecha === true) {
-        return "solo_mecha";
-    }
-    if (consumo_maximo !== 0 || consumo_reduccion_fija !== 0) {
-        return "con_ajuste_consumo";
-    }
-    return "normal";
-};
-
 const invoice_api_adapter = invoice => {
     invoice["numero"] =
         invoice.member.num_socio.toString().padStart(4, "0") +
@@ -53,11 +44,7 @@ const invoice_api_adapter = invoice => {
         invoice.mes_facturado.toString().padStart(2, "0") +
         invoice.version.toString().padStart(2, "0");
     invoice["num_socio"] = invoice.member.num_socio;
-    invoice["tipo_socio"] = getTipoSocio(
-        invoice.member.solo_mecha,
-        invoice.member.consumo_maximo,
-        invoice.member.consumo_reduccion_fija
-    );
+    invoice["tipo_socio"] = getTipoSocio(invoice.member);
     invoice["total_pagado"] = invoice.pago_1_al_11 + invoice.pago_11_al_30;
     return invoice;
 };
@@ -167,15 +154,20 @@ const createInvoice = ({
 const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) => {
     const consumo = invoice.caudal_actual - invoice.caudal_anterior;
     const consumo_final =
-        (consumo_maximo !== 0 ? Math.min(consumo, consumo_maximo) : consumo) -
-        consumo_reduccion_fija;
+        (consumo_maximo ? Math.min(consumo, consumo_maximo) : consumo) -
+        (consumo_reduccion_fija || 0);
     let cuota_variable = null;
     if (consumo_final <= 14) {
         cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * consumo_final;
-    } else if (consumo_final > 14 && consumo_final <= 20) {
-        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * consumo_final;
-    } else if (consumo_final > 20) {
-        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MAS_20 * consumo_final;
+    } else if (consumo_final > 14 && consumo_final < 20) {
+        cuota_variable =
+            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * 14 +
+            COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * (consumo_final - 14);
+    } else if (consumo_final >= 20) {
+        cuota_variable =
+            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * 14 +
+            COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * 6 +
+            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MAS_20 * (consumo_final - 20);
     }
     let total =
         invoice.cuota_fija +

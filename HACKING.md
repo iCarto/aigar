@@ -55,6 +55,17 @@ vagrant halt
 vagrant up --provision
 ```
 
+Tras esto la carpeta `desktop/gomi/$(date +%y%m%d)_aigar` contendrá la aplicación de escritorio. Puede zipearse (mejor con 7zip) y ser redistribuida.
+
+El fichero `package.json` se habrá modificado automáticamente con la nueva versión (fecha). Cuando sean versiones internas puede descartarse. Con versiones externas:
+
+```
+git add package.json
+git commit -m "New Version: $(date +%y%m%d)"
+git tag "$(date +%y%m%d)"
+git push --tags origin master
+```
+
 ## Scripts
 
 -   `requirements.txt` in scripts folder contains the dependencies to use the python scrips. It should be used for a different virtualenv that the application of only in development.

@@ -68,7 +68,12 @@ class MemberExportSerializer(serializers.ModelSerializer):
             if invoice.member.num_socio == obj.num_socio
         ]
         if last_invoice_for_member:
-            return last_invoice_for_member[0].caudal_anterior
+            # si no tenemos caudal actual es porque las facturas todavía no tienen lecturas
+            # en ese caso, la lectura anterior la sacaremos del caudal_anterior porque ya está actualizado
+            return (
+                last_invoice_for_member[0].caudal_actual
+                or last_invoice_for_member[0].caudal_anterior
+            )
         return None
 
     def get_lectura(self, obj):

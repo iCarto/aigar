@@ -90,3 +90,8 @@ body {
     border-radius: 5px;
     padding: 2px 20px;
 }
+
+.table .thead-dark th {
+    font-size: 0.85em;
+    text-align: center;
+}

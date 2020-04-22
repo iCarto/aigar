@@ -20,17 +20,8 @@ class LoadMeasurementsList extends React.Component {
         if (this.props.measurements) {
             const columns = [
                 {
-                    Header: "Número",
-                    accessor: "num_socio",
-                    Cell: LinkCellTable,
-                    getProps: () => ({
-                        handleClick: this.handleClickViewMember,
-                        linkAccessor: "num_socio",
-                    }),
-                },
-                {
-                    Header: "Nombre",
-                    accessor: "nombre_socio",
+                    Header: "Socio",
+                    accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
                     Cell: LinkCellTable,
                     getProps: () => ({
                         handleClick: this.handleClickViewMember,

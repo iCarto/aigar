@@ -19,17 +19,8 @@ class InvoicesListPreview extends React.Component {
         if (this.props.invoices) {
             const columns = [
                 {
-                    Header: "Número",
-                    accessor: "num_socio",
-                    Cell: LinkCellTable,
-                    getProps: () => ({
-                        handleClick: this.handleClickViewMember,
-                        linkAccessor: "num_socio",
-                    }),
-                },
-                {
-                    Header: "Nombre",
-                    accessor: "nombre",
+                    Header: "Socio",
+                    accessor: d => `${d.num_socio} - ${d.nombre}`,
                     Cell: LinkCellTable,
                     getProps: () => ({
                         handleClick: this.handleClickViewMember,
@@ -50,30 +41,37 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Lectura anterior",
                         accessor: "caudal_anterior",
+                        className: "litre",
                     },
                     {
                         Header: "Lectura actual",
                         accessor: "caudal_actual",
+                        className: "litre",
                     },
                     {
                         Header: "Consumo",
                         accessor: "consumo",
+                        className: "litre font-weight-bold",
                     },
                     {
                         Header: "Cuota fija",
                         accessor: "cuota_fija",
+                        className: "dollar",
                     },
                     {
                         Header: "Cuota variable",
                         accessor: "cuota_variable",
+                        className: "dollar",
                     },
                     {
                         Header: "Saldo pendiente",
                         accessor: "saldo_pendiente",
+                        className: "dollar",
                     },
                     {
                         Header: "Total",
                         accessor: "total",
+                        className: "dollar font-weight-bold",
                     }
                 );
             }
@@ -82,18 +80,22 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Consumo",
                         accessor: "consumo",
+                        className: "litre font-weight-bold",
                     },
                     {
                         Header: "Pago 1 al 11",
                         accessor: "pago_1_al_11",
+                        className: "dollar",
                     },
                     {
                         Header: "Pago 11 al 30",
                         accessor: "pago_11_al_30",
+                        className: "dollar",
                     },
                     {
                         Header: "Total",
                         accessor: "total",
+                        className: "dollar font-weight-bold",
                     },
                     {
                         Header: "Estado",
@@ -102,6 +104,11 @@ class InvoicesListPreview extends React.Component {
                     }
                 );
             }
+            columns.push({
+                Header: "Alertas",
+                accessor: "errors",
+                className: "text-danger small",
+            });
 
             return (
                 <div

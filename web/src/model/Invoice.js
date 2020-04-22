@@ -101,6 +101,7 @@ const createInvoice = ({
     estado = "",
     resumen = [],
     is_active = true,
+    errors = [],
 } = {}) => {
     const publicApi = {
         id_factura,
@@ -140,6 +141,7 @@ const createInvoice = ({
         estado,
         resumen,
         is_active,
+        errors,
     };
 
     Object.defineProperty(publicApi, "comunidad", {

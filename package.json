@@ -1,9 +1,9 @@
 {
     "name": "AIGAR",
-    "version": "200420",
+    "version": "200423",
     "description": "Aplicación Innovadora para la Gestión de Juntas de Agua de Comunidades Rurales",
     "author": "iCarto <info@icarto.es>",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-or-later",
     "private": true,
     "homepage": "https://gitlab.com/icarto/aigar",
     "repository": {

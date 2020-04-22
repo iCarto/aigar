@@ -167,6 +167,14 @@ install_app() {
     sed -i "s/\"version\":.*/\"version\": \"${DATE}\",/" "${GOMI}/${DATE}_aigar/resources/app/package.json"
 }
 
+copy_license() {
+    DATE=$(date +%y%m%d)
+    mv "${GOMI}/${DATE}_aigar/LICENSE" "${GOMI}/${DATE}_aigar/ELECTRON_LICENSE"
+    mv "${GOMI}/${DATE}_aigar/src/LICENSE" "${GOMI}/${DATE}_aigar/LICENSE"
+    mv "${GOMI}/${DATE}_aigar/src/README" "${GOMI}/${DATE}_aigar/README"
+    cp /vagrant/NOTICE "${GOMI}/${DATE}_aigar/"
+}
+
 GOMI=/vagrant/gomi
 ELECTRON_URL=https://github.com/electron/electron/releases/download/v8.2.1/electron-v8.2.1-win32-x64.zip
 
@@ -178,4 +186,5 @@ install_wine
 install_python
 install_dll
 install_app
+copy_license
 # install_python_2

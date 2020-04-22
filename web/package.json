@@ -1,12 +1,9 @@
 {
     "name": "web",
     "version": "0.1.0",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-or-later",
     "private": true,
     "dependencies": {
-        "@testing-library/jest-dom": "4.2.4",
-        "@testing-library/react": "9.4.0",
-        "@testing-library/user-event": "7.2.1",
         "bootstrap": "4.4.1",
         "chart.js": "^2.9.3",
         "docx-templates": "^3.1.1",
@@ -16,10 +13,7 @@
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
         "react-router-dom": "5.1.2",
-        "react-scripts": "3.3.0",
         "react-table": "^7.0.0-rc.16",
-        "storyboard": "^3.1.4",
-        "storyboard-listener-console": "^3.1.4",
         "underscore": "^1.10.2"
     },
     "scripts": {
@@ -42,5 +36,13 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "4.2.4",
+        "@testing-library/react": "9.4.0",
+        "@testing-library/user-event": "7.2.1",
+        "react-scripts": "3.3.0",
+        "storyboard": "^3.1.4",
+        "storyboard-listener-console": "^3.1.4"
     }
 }

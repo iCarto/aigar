@@ -8,6 +8,9 @@ cp web/src/fixtures/electron.exe desktop/gomi
 DATE=$(date +%y%m%d)
 sed -i "s/\"version\":.*/\"version\": \"${DATE}\",/" "package.json"
 cp LICENSE desktop/gomi/src
+cp README desktop/gomi/src
+
+./scripts/create_notice.sh
 
 # ./scripts/util/prod-commit.sh
 # (

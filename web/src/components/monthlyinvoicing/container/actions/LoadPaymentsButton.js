@@ -11,7 +11,8 @@ class LoadPaymentsButton extends React.Component {
                     (this.props.disabled ? "disabled" : "")
                 }
             >
-                5. Importar pagos
+                {this.props.position ? this.props.position + ". " : null}
+                Importar pagos
             </Link>
         );
     }

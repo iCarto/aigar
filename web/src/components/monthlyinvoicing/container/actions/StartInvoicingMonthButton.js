@@ -117,7 +117,8 @@ class StartInvoicingMonthButton extends React.Component {
                 disabled={this.props.disabled}
                 onClick={this.openModal}
             >
-                1. Facturación
+                {this.props.position ? this.props.position + ". " : null}
+                Facturación
             </button>
         );
     }

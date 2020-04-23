@@ -35,13 +35,6 @@ class ListMonthlyInvoicesActions extends React.Component {
         return this.isNextInvoicingMonth();
     }
 
-    isExportMembersButtonEnabled() {
-        return (
-            this.props.invoices.length > 0 &&
-            this.props.invoices.filter(invoice => invoice.consumo === "").length !== 0
-        );
-    }
-
     isLoadMeasurementsButtonEnabled() {
         return (
             this.props.invoices.length > 0 &&
@@ -56,6 +49,10 @@ class ListMonthlyInvoicesActions extends React.Component {
         );
     }
 
+    isExportMembersButtonEnabled() {
+        return true;
+    }
+
     isLoadPaymentsButtonEnabled() {
         return (
             this.props.invoices.length > 0 &&
@@ -68,6 +65,7 @@ class ListMonthlyInvoicesActions extends React.Component {
     get invoiceButton() {
         return (
             <StartInvoicingMonthButton
+                position="1"
                 invoicingMonth={this.props.selectedInvoicingMonth}
                 disabled={!this.isStartInvoicingEnabled()}
                 handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
@@ -75,13 +73,10 @@ class ListMonthlyInvoicesActions extends React.Component {
         );
     }
 
-    get exportMemberButton() {
-        return <ExportMemberButton disabled={!this.isExportMembersButtonEnabled()} />;
-    }
-
     get loadMeasurementsButton() {
         return (
             <LoadMeasurementsButton
+                position="2"
                 invoicingMonth={this.props.selectedInvoicingMonth}
                 disabled={!this.isLoadMeasurementsButtonEnabled()}
             />
@@ -92,7 +87,8 @@ class ListMonthlyInvoicesActions extends React.Component {
         return (
             <PrintInvoiceButton
                 invoices={this.props.invoices}
-                buttonTitle="4. Imprimir facturas"
+                position="3"
+                buttonTitle="Imprimir facturas"
                 outputFilename={this.getOutputFilename()}
                 disabled={!this.isPrintInvoiceButtonEnabled()}
                 handleSuccessPrintedInvoices={this.props.handleSuccessPrintedInvoices}
@@ -100,9 +96,19 @@ class ListMonthlyInvoicesActions extends React.Component {
         );
     }
 
+    get exportMemberButton() {
+        return (
+            <ExportMemberButton
+                position="4"
+                disabled={!this.isExportMembersButtonEnabled()}
+            />
+        );
+    }
+
     get loadPaymentsButton() {
         return (
             <LoadPaymentsButton
+                position="5"
                 invoicingMonth={this.props.selectedInvoicingMonth}
                 disabled={!this.isLoadPaymentsButtonEnabled()}
             />
@@ -115,17 +121,10 @@ class ListMonthlyInvoicesActions extends React.Component {
                 return (
                     <div className="d-flex flex-column pl-4 pr-4">
                         {this.invoiceButton}
-                        {this.exportMemberButton}
                         {this.loadMeasurementsButton}
                         {this.printInvoiceButton}
+                        {this.exportMemberButton}
                         {this.loadPaymentsButton}
-                    </div>
-                );
-            }
-            if (this.isPreviousInvoicingMonth()) {
-                return (
-                    <div className="d-flex flex-column pl-4 pr-4">
-                        {this.printInvoiceButton}
                     </div>
                 );
             }

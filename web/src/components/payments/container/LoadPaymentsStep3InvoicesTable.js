@@ -35,7 +35,7 @@ class LoadPaymentsStep3InvoicesTable extends React.Component {
     reviewInvoices(payments, invoices) {
         invoices.forEach(invoice => {
             const paymentsForInvoice = payments.filter(
-                payment => invoice.num_socio === payment.num_socio
+                payment => invoice.numero === payment.num_factura
             );
             if (paymentsForInvoice.length !== 0) {
                 if (paymentsForInvoice.length > 1) {

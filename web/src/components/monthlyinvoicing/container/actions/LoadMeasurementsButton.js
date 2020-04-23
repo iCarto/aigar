@@ -11,7 +11,8 @@ class LoadMeasurementsButton extends React.Component {
                     (this.props.disabled ? "disabled" : "")
                 }
             >
-                3. Importar lecturas
+                {this.props.position ? this.props.position + ". " : null}
+                Importar lecturas
             </Link>
         );
     }

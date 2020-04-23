@@ -62,7 +62,8 @@ class ExportMemberButton extends React.Component {
                 className="btn btn-primary mt-1 mb-1"
                 disabled={this.props.disabled}
             >
-                2. Exportar socios
+                {this.props.position ? this.props.position + ". " : null}
+                Exportar socios
             </button>
         );
     }

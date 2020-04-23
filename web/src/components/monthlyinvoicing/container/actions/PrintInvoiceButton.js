@@ -91,6 +91,7 @@ class PrintInvoiceButton extends React.Component {
                 {this.props.showIcon === true ? (
                     <i className="fa fa-print mr-2" />
                 ) : null}
+                {this.props.position ? this.props.position + ". " : null}
                 {this.props.buttonTitle}
             </button>
         );

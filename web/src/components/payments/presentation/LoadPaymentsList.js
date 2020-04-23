@@ -5,15 +5,41 @@ import {
     EditableDateCellTable,
     LinkCellTable,
 } from "components/common/table";
+import {MemberViewModal} from "components/member/presentation";
 
 class LoadPaymentsList extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showMemberModal: null,
+            selectedMemberForModal: null,
+        };
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
+        this.onClickCancelViewMember = this.onClickCancelViewMember.bind(this);
     }
 
     handleClickViewMember(num_socio) {
-        window.open("/socios/" + num_socio, "_blank");
+        this.setState({
+            showMemberModal: true,
+            selectedMemberForModal: num_socio,
+        });
+    }
+
+    onClickCancelViewMember() {
+        this.setState({
+            showMemberModal: null,
+            selectedMemberForModal: null,
+        });
+    }
+
+    get modal() {
+        return (
+            <MemberViewModal
+                num_socio={this.state.selectedMemberForModal}
+                showModal={this.state.showMemberModal}
+                onClickCancel={this.onClickCancelViewMember}
+            />
+        );
     }
 
     render() {
@@ -45,21 +71,23 @@ class LoadPaymentsList extends React.Component {
                 {
                     Header: "Monto",
                     accessor: "monto",
-                    Cell: EditableTextCellTable,
                 },
             ];
 
             return (
-                <div
-                    className="overflow-auto border rounded"
-                    style={{maxHeight: "450px"}}
-                >
-                    <SortedTable
-                        columns={columns}
-                        data={this.props.payments}
-                        onUpdateData={this.props.onUpdatePayment}
-                    />
-                </div>
+                <>
+                    <div
+                        className="overflow-auto border rounded"
+                        style={{maxHeight: "450px"}}
+                    >
+                        <SortedTable
+                            columns={columns}
+                            data={this.props.payments}
+                            onUpdateData={this.props.onUpdatePayment}
+                        />
+                    </div>
+                    {this.modal}
+                </>
             );
         }
         return null;

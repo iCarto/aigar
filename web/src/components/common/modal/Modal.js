@@ -62,7 +62,13 @@ class Modal extends Component {
                     aria-hidden="true"
                     style={{display: this.state.display}}
                 >
-                    <div className="modal-dialog" role="document">
+                    <div
+                        className={
+                            "modal-dialog modal-dialog-scrollable " +
+                            (this.props.size ? "modal-" + this.props.size : "")
+                        }
+                        role="document"
+                    >
                         <div className="modal-content">{this.props.children}</div>
                     </div>
                 </div>

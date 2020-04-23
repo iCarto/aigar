@@ -2,20 +2,45 @@ import React from "react";
 import {SortedTable, LinkCellTable} from "components/common/table";
 import {Spinner} from "components/common";
 import {InvoiceStatusCellTable} from "components/invoice/presentation";
+import {MemberViewModal} from "components/member/presentation";
 
 class InvoicesListPreview extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showMemberModal: null,
+            selectedMemberForModal: null,
+        };
         this.handleClickViewMember = this.handleClickViewMember.bind(this);
+        this.onClickCancelViewMember = this.onClickCancelViewMember.bind(this);
     }
 
     handleClickViewMember(num_socio) {
-        window.open("/socios/" + num_socio, "_blank");
+        console.log("handleClickViewMember", num_socio);
+        this.setState({
+            showMemberModal: true,
+            selectedMemberForModal: num_socio,
+        });
+    }
+
+    onClickCancelViewMember() {
+        this.setState({
+            showMemberModal: null,
+            selectedMemberForModal: null,
+        });
+    }
+
+    get modal() {
+        return (
+            <MemberViewModal
+                num_socio={this.state.selectedMemberForModal}
+                showModal={this.state.showMemberModal}
+                onClickCancel={this.onClickCancelViewMember}
+            />
+        );
     }
 
     render() {
-        console.log("InvoicesListPreview.render");
-
         if (this.props.invoices) {
             const columns = [
                 {
@@ -111,12 +136,15 @@ class InvoicesListPreview extends React.Component {
             });
 
             return (
-                <div
-                    className="overflow-auto border rounded"
-                    style={{maxHeight: "450px"}}
-                >
-                    <SortedTable columns={columns} data={this.props.invoices} />
-                </div>
+                <>
+                    <div
+                        className="overflow-auto border rounded"
+                        style={{maxHeight: "450px"}}
+                    >
+                        <SortedTable columns={columns} data={this.props.invoices} />
+                    </div>
+                    {this.modal}
+                </>
             );
         }
         return <Spinner message="Obteniendo facturas" />;

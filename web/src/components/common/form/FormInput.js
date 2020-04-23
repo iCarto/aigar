@@ -45,7 +45,7 @@ class FormInput extends React.Component {
                     style={this.props.small === true ? {width: "100px"} : null}
                 />
                 <small
-                    id="num_socio_help"
+                    id="help"
                     className={`form-text text-muted ${
                         this.props.info && this.props.info === "" ? "d-none" : ""
                     }`}

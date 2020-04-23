@@ -117,7 +117,7 @@ const createMember = ({
         sector,
         medidor,
         solo_mecha,
-        orden,
+        orden: parseInt(orden),
         observaciones,
         consumo_maximo,
         consumo_reduccion_fija,

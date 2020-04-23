@@ -30,7 +30,7 @@ class FormInput extends React.Component {
     render() {
         return (
             <div className="form-group">
-                <label htmlFor="name">{this.props.label}</label>
+                <label htmlFor={this.props.name}>{this.props.label}</label>
                 <input
                     type="text"
                     className="form-control"
@@ -39,6 +39,8 @@ class FormInput extends React.Component {
                         this.props.readOnly === true
                             ? this.props.field.value
                             : this.state.value
+                            ? this.state.value
+                            : ""
                     }
                     onChange={this.handleChange}
                     readOnly={this.props.readOnly}

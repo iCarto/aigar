@@ -4,6 +4,7 @@ import {createMember} from "model";
 import {DataValidatorService} from "service/validation";
 import {MemberService, DomainService} from "service/api";
 import CreateMemberSidebar from "./CreateMemberSidebar";
+import {ErrorMessage} from "components/common";
 
 class CreateMember extends React.Component {
     constructor(props) {
@@ -16,8 +17,10 @@ class CreateMember extends React.Component {
             validationErrors: [],
             isSaving: null,
             errorMessage: null,
+            membersWithOrder: [],
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeOrder = this.handleChangeOrder.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
     }
@@ -28,12 +31,64 @@ class CreateMember extends React.Component {
 
     loadDomains() {
         console.log("loadDomains");
-        Promise.all([DomainService.getSectors()]).then(results => {
-            this.setState({
-                domain: {
-                    sectors: results[0],
-                },
+        Promise.all([DomainService.getSectors(), MemberService.getMembers()]).then(
+            results => {
+                const membersWithOrder = this.getMembersWithOrder(results[1]);
+                // Add the new member to list at last position
+                const orderForNewMember =
+                    membersWithOrder[membersWithOrder.length - 1].order + 1;
+                membersWithOrder.push({
+                    id: this.state.member.num_socio,
+                    order: orderForNewMember,
+                    name: "<<Nuevo socio>>",
+                });
+                this.setState(prevState => {
+                    return {
+                        member: createMember(
+                            Object.assign({}, prevState.member, {
+                                orden: orderForNewMember,
+                            })
+                        ),
+                        domain: {
+                            sectors: results[0],
+                        },
+                        membersWithOrder,
+                    };
+                });
+            }
+        );
+    }
+
+    getMembersWithOrder(members) {
+        let membersWithOrder = members
+            .filter(member => member.is_active)
+            .map(member => {
+                return {
+                    id: member.num_socio,
+                    order: member.orden,
+                    name: member.name,
+                };
             });
+        membersWithOrder.sort((a, b) => {
+            return a.order - b.order;
+        });
+        return membersWithOrder;
+    }
+
+    handleChangeOrder(name, membersWithOrder) {
+        const orderForItem = membersWithOrder.find(
+            item => item.id === this.state.member.num_socio
+        ).order;
+        console.log("EditMember.handleChangeOrder", name, orderForItem);
+        this.setState((prevState, props) => {
+            const updatedMember = createMember(
+                Object.assign({}, prevState.member, {[name]: orderForItem})
+            );
+            return {
+                member: updatedMember,
+                validationErrors: DataValidatorService.validateMember(updatedMember),
+                membersWithOrder,
+            };
         });
     }
 
@@ -45,7 +100,7 @@ class CreateMember extends React.Component {
             );
             return {
                 member: updatedMember,
-                errors: DataValidatorService.validateMember(updatedMember),
+                validationErrors: DataValidatorService.validateMember(updatedMember),
             };
         });
     }
@@ -90,14 +145,19 @@ class CreateMember extends React.Component {
 
     get content() {
         return (
-            <MemberForm
-                member={this.state.member}
-                errors={this.state.validationErrors}
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-                sectorsDomain={this.state.domain.sectors}
-                saving={this.state.isSaving}
-            />
+            <>
+                <ErrorMessage message={this.state.errorMessage} />
+                <MemberForm
+                    member={this.state.member}
+                    errors={this.state.validationErrors}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                    sectorsDomain={this.state.domain.sectors}
+                    membersWithOrder={this.state.membersWithOrder}
+                    handleChangeOrder={this.handleChangeOrder}
+                    saving={this.state.isSaving}
+                />
+            </>
         );
     }
 

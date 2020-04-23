@@ -1,6 +1,6 @@
 import React from "react";
 import {Spinner} from "components/common";
-import {FormInput} from "components/common/form";
+import {FormInput, FormSelectOrder} from "components/common/form";
 
 /**
 Controlled component for member form.
@@ -23,8 +23,14 @@ class MemberForm extends React.Component {
             dirty: false,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeOrder = this.handleChangeOrder.bind(this);
         this.handleChangeField = this.handleChangeField.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeOrder(name, membersWithOrder) {
+        this.props.handleChangeOrder(name, membersWithOrder);
+        this.setState({dirty: true});
     }
 
     handleChange(name, value) {
@@ -140,12 +146,12 @@ class MemberForm extends React.Component {
                             field={medidor}
                             handleChange={this.handleChange}
                         />
-                        <FormInput
+                        <FormSelectOrder
                             label="Orden Ruta"
                             name="orden"
                             field={orden}
-                            handleChange={this.handleChange}
-                            small={true}
+                            elements={this.props.membersWithOrder}
+                            handleChange={this.handleChangeOrder}
                         />
                         <FormInput
                             label="Consumo máximo"

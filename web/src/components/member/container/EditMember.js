@@ -19,8 +19,10 @@ class EditMember extends React.Component {
             isLoading: null,
             isSaving: null,
             errorMessage: null,
+            membersWithOrder: [],
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeOrder = this.handleChangeOrder.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
     }
@@ -53,13 +55,33 @@ class EditMember extends React.Component {
 
     loadDomains() {
         console.log("loadDomains");
-        Promise.all([DomainService.getSectors()]).then(results => {
-            this.setState({
-                domain: {
-                    sectors: results[0],
-                },
+        Promise.all([DomainService.getSectors(), MemberService.getMembers()]).then(
+            results => {
+                const membersWithOrder = this.getMembersWithOrder(results[1]);
+                this.setState({
+                    domain: {
+                        sectors: results[0],
+                    },
+                    membersWithOrder,
+                });
+            }
+        );
+    }
+
+    getMembersWithOrder(members) {
+        let membersWithOrder = members
+            .filter(member => member.is_active)
+            .map(member => {
+                return {
+                    id: member.num_socio,
+                    order: member.orden,
+                    name: member.name,
+                };
             });
+        membersWithOrder.sort((a, b) => {
+            return a.order - b.order;
         });
+        return membersWithOrder;
     }
 
     loadMember() {
@@ -78,6 +100,23 @@ class EditMember extends React.Component {
                     isLoading: false,
                 });
             });
+    }
+
+    handleChangeOrder(name, membersWithOrder) {
+        const orderForItem = membersWithOrder.find(
+            item => item.id === this.state.num_socio
+        ).order;
+        console.log("EditMember.handleChangeOrder", name, orderForItem);
+        this.setState((prevState, props) => {
+            const updatedMember = createMember(
+                Object.assign({}, prevState.member, {[name]: orderForItem})
+            );
+            return {
+                member: updatedMember,
+                validationErrors: DataValidatorService.validateMember(updatedMember),
+                membersWithOrder,
+            };
+        });
     }
 
     handleChange(name, value) {
@@ -146,6 +185,8 @@ class EditMember extends React.Component {
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
                     sectorsDomain={this.state.domain.sectors}
+                    membersWithOrder={this.state.membersWithOrder}
+                    handleChangeOrder={this.handleChangeOrder}
                     saving={this.state.isSaving}
                 />
             </>

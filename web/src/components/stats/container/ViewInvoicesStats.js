@@ -15,6 +15,11 @@ class ViewInvoicesStats extends React.Component {
         super(props);
         this.state = {
             invoices: null,
+            fields: [
+                {key: "monto", text: "Monto"},
+                {key: "consumo", text: "Consumo"},
+                {key: "mora", text: "Mora"},
+            ],
             selectedField: "monto",
             filter: {
                 startInvoicingMonth: "",
@@ -114,6 +119,10 @@ class ViewInvoicesStats extends React.Component {
         return dataset;
     }
 
+    getFieldTitle(fieldKey) {
+        return this.state.fields.find(field => field.key === fieldKey).text;
+    }
+
     get sidebar() {
         return (
             <ViewInvoicesStatsSidebar
@@ -132,6 +141,7 @@ class ViewInvoicesStats extends React.Component {
             return (
                 <>
                     <InvoicesStatsFieldSelect
+                        fields={this.state.fields}
                         selectedField={this.state.selectedField}
                         handleChange={this.handleSelectedFieldChange}
                     />
@@ -145,7 +155,8 @@ class ViewInvoicesStats extends React.Component {
                     />
                     <BarChart
                         data={this.convertToDataset(filteredInvoices)}
-                        title={this.state.selectedField}
+                        title={this.getFieldTitle(this.state.selectedField)}
+                        color="#1c71bc"
                     />
                 </>
             );

@@ -46,15 +46,16 @@ body {
     background-color: rgb(247, 251, 255);
 }
 
-.litre {
+.cubic-metre {
     text-align: right;
     white-space: nowrap;
 }
 
-.litre:not(:empty)::after {
+.cubic-metre:not(:empty)::after {
     color: #888;
-    content: " L";
-    font-size: 0.7em;
+    content: " ㎥";
+    font-size: 0.85em;
+    font-weight: normal;
 }
 
 .dollar {
@@ -65,7 +66,8 @@ body {
 .dollar:not(:empty)::after {
     color: #888;
     content: " $";
-    font-size: 0.7em;
+    font-size: 0.75em;
+    font-weight: normal;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {

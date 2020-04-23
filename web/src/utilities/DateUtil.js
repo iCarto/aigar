@@ -12,10 +12,10 @@ const DateUtil = {
 
     // Transform to API format date YYYY-MM-DD from DD-MMM-YYYY or DD/MM/YYYY
     parse(date) {
-        if (moment(date, TIGO_DATEFORMAT).isValid()) {
-            return moment(date, TIGO_DATEFORMAT).format(API_DATEFORMAT);
+        if (moment(date, TIGO_DATEFORMAT, true).isValid()) {
+            return moment(date, TIGO_DATEFORMAT, true).format(API_DATEFORMAT);
         }
-        return moment(date, BANK_DATEFORMAT).format(API_DATEFORMAT);
+        return moment(date, BANK_DATEFORMAT, true).format(API_DATEFORMAT);
     },
 
     // Transform to UI format date DD/MM/YYYY from DD-MM-YYYY

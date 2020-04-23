@@ -132,7 +132,6 @@ class InvoiceForm extends React.Component {
                                 name="cuota_fija"
                                 field={cuota_fija}
                                 handleChange={this.handleChange}
-                                readOnly={true}
                                 small={true}
                             />
                         </div>

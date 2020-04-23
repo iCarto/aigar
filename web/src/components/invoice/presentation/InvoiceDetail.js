@@ -35,15 +35,15 @@ class InvoiceDetail extends React.Component {
                         <div className="field-label p-2 col-md-2 row no-gutters"></div>
                         <div className="field-label p-2 col-md-3 row no-gutters">
                             <label className="col-6">Caudal anterior</label>
-                            <span className="litre">{caudal_anterior}</span>
+                            <span className="cubic-metre">{caudal_anterior}</span>
                         </div>
                         <div className="field-label p-2 col-md-3 row no-gutters">
                             <label className="col-6">Caudal actual</label>
-                            <span className="litre">{caudal_actual}</span>
+                            <span className="cubic-metre">{caudal_actual}</span>
                         </div>
                         <div className="field-label p-2 col-md-3 row no-gutters">
                             <label className="col-6">Consumo</label>
-                            <strong className="litre">{consumo}</strong>
+                            <strong className="cubic-metre">{consumo}</strong>
                         </div>
                     </div>
                     <div className="row">

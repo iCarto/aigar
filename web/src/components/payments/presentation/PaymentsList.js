@@ -3,6 +3,7 @@ import {SortedTable} from "components/common/table";
 
 class PaymentsList extends React.Component {
     render() {
+        console.log(this.props.payments);
         if (this.props.payments) {
             const columns = [
                 {

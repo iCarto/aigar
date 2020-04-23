@@ -18,17 +18,17 @@ class InvoicesList extends React.Component {
                 {
                     Header: "Caudal anterior",
                     accessor: "caudal_anterior",
-                    className: "litre",
+                    className: "cubic-metre",
                 },
                 {
                     Header: "Caudal actual",
                     accessor: "caudal_actual",
-                    className: "litre",
+                    className: "cubic-metre",
                 },
                 {
                     Header: "Consumo",
                     accessor: "consumo",
-                    className: "litre",
+                    className: "cubic-metre",
                 },
                 {
                     Header: "Mora",

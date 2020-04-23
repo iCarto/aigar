@@ -44,7 +44,7 @@ class MonthlyInvoicingList extends React.Component {
                 {
                     Header: "Lectura",
                     accessor: "consumo",
-                    className: "litre",
+                    className: "cubic-metre",
                 },
                 {
                     Header: "Importe",

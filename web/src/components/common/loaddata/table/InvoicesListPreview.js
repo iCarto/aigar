@@ -41,17 +41,17 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Lectura anterior",
                         accessor: "caudal_anterior",
-                        className: "litre",
+                        className: "cubic-metre",
                     },
                     {
                         Header: "Lectura actual",
                         accessor: "caudal_actual",
-                        className: "litre",
+                        className: "cubic-metre",
                     },
                     {
                         Header: "Consumo",
                         accessor: "consumo",
-                        className: "litre font-weight-bold",
+                        className: "cubic-metre font-weight-bold",
                     },
                     {
                         Header: "Cuota fija",
@@ -80,7 +80,7 @@ class InvoicesListPreview extends React.Component {
                     {
                         Header: "Consumo",
                         accessor: "consumo",
-                        className: "litre font-weight-bold",
+                        className: "cubic-metre font-weight-bold",
                     },
                     {
                         Header: "Pago 1 al 11",

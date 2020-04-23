@@ -36,6 +36,7 @@ class BarChart extends React.Component {
 
     componentDidUpdate() {
         this.chart.data.labels = this.props.data.map(d => d.label);
+        this.chart.data.datasets[0].label = this.props.title;
         this.chart.data.datasets[0].data = this.props.data.map(d => d.value);
         this.chart.update();
     }

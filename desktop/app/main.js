@@ -33,7 +33,9 @@ function createWindow(mainAddr, subpy) {
   mainWindow.webContents.session.clearStorageData(function(){console.log('StorageData cleared')});
   */
 
-    // mainWindow.webContents.openDevTools();
+    if (process.platform === "linux") {
+        mainWindow.webContents.openDevTools();
+    }
 
     mainWindow.webContents.once("did-finish-load", function() {
         mainWindow.show();
@@ -67,7 +69,12 @@ app.on("ready", function() {
     showSplash();
 
     var spawn = require("child_process").spawn;
-    var subpy = spawn("./Python37/python.exe", ["./src/manage.py", "runserver_plus"]);
+    var subpy;
+    if (process.platform !== "linux") {
+        subpy = spawn("./Python37/python.exe", ["./src/manage.py", "runserver_plus"]);
+    } else {
+        subpy = spawn("python", ["../../src/manage.py", "runserver_plus"]);
+    }
 
     // TODO. Esto está hecho para esperar a que se lance el servidor Python.
     // Sería mejor que fuera una especie de callback que creara la ventana justo

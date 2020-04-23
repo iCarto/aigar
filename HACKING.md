@@ -66,6 +66,18 @@ git tag "$(date +%y%m%d)"
 git push --tags origin master
 ```
 
+### Test deployment
+
+Una forma no muy cómoda pero funcional de probar el "bundle" en linux sería:
+
+```
+# En un terminal dentro del virtualenv
+python desktop/gomi/$(date +%y%m%d)_aigar/src/manage.py runserver_plus
+
+# En otro terminal
+npx electron desktop/gomi/$(date +%y%m%d)_aigar/resources/app/main.js
+```
+
 ## Scripts
 
 -   `requirements.txt` in scripts folder contains the dependencies to use the python scrips. It should be used for a different virtualenv that the application of only in development.

@@ -53,7 +53,7 @@ def get_fixtures_members(invoices, last_invoicing_month):
                             "fields": {
                                 "name": invoice["nombre"],
                                 "sector": int(invoice["sector"]),
-                                "medidor": str(invoice["medidor"])
+                                "medidor": int(invoice["medidor"])
                                 if invoice.get("medidor", None) is not None
                                 else "",
                                 "solo_mecha": invoice.get("solo_mecha", None) == "si",

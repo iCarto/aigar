@@ -88,8 +88,8 @@ class Member(models.Model):
     # Tiene sentido fijar un max_length exacto?
     medidor = models.CharField(
         max_length=30,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         default="",
         verbose_name="Medidor",
         help_text="",

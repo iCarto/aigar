@@ -111,8 +111,10 @@ def get_reconexion_value(member, last_month_invoice):
 
 
 def get_mora_value(last_month_invoice):
-    if last_month_invoice is not None and last_month_invoice.pago_1_al_11 == 0:
-        return 1
+    # TODO Estos meses, debido a la crisis del Covid-19, no se cobrarán moras
+    # Comentamos el código que deberá ser revisado cuando se lance una versión funcional
+    # if last_month_invoice is not None and last_month_invoice.pago_1_al_11 == 0:
+    #    return 1
     return 0
 
 

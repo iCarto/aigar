@@ -68,9 +68,10 @@ class PaymentInvoicePreview(CreateAPIView):
         updated_invoices = []
         for payment in payments:
             invoice = get_invoice_by_id_factura(invoices, payment["id_factura"])
-            fecha = datetime.strptime(payment["fecha"], "%Y-%m-%d")
-            invoice.update_with_payment(fecha, payment["monto"])
-            updated_invoices.append(invoice)
+            if invoice is not None:
+                fecha = datetime.strptime(payment["fecha"], "%Y-%m-%d")
+                invoice.update_with_payment(fecha, payment["monto"])
+                updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}
         )
@@ -84,4 +85,7 @@ def get_invoices_for_payments(payments):
 
 
 def get_invoice_by_id_factura(invoices, id_factura):
-    return [invoice for invoice in invoices if id_factura == invoice.id_factura][0]
+    invoice = [invoice for invoice in invoices if id_factura == invoice.id_factura]
+    if invoice:
+        return invoice[0]
+    return None

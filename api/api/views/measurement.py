@@ -62,8 +62,9 @@ class MeasurementInvoicePreview(CreateAPIView):
         updated_invoices = []
         for measurement in measurements:
             invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
-            invoice.update_with_measurement(measurement["caudal_actual"])
-            updated_invoices.append(invoice)
+            if invoice is not None:
+                invoice.update_with_measurement(measurement["caudal_actual"])
+                updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}
         )
@@ -81,4 +82,7 @@ def get_invoices_for_measurements(measurements, invoicing_month):
 
 
 def get_invoice_by_num_socio(invoices, num_socio):
-    return [invoice for invoice in invoices if num_socio == invoice.member.num_socio][0]
+    invoice = [invoice for invoice in invoices if num_socio == invoice.member.num_socio]
+    if invoice:
+        return invoice[0]
+    return None

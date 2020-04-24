@@ -25,7 +25,7 @@ const PaymentService = {
                     // 6 columns = Banco
                     payments.push(
                         createPayment({
-                            num_factura: paymentRead[0],
+                            num_factura: this.getNumFactura(paymentRead[0]),
                             num_socio: paymentRead[1],
                             fecha: paymentRead[2],
                             monto: paymentRead[3],
@@ -36,6 +36,18 @@ const PaymentService = {
             }
         }
         return Promise.resolve(payments);
+    },
+
+    getNumFactura(numFactura) {
+        // TODO Temporary hack until bank uses the right invoice number
+        // Bank number is like 01392020201, but we need month with 2 digits
+        const monthIndex = numFactura.indexOf("2020") + 4;
+        const month = numFactura.substring(monthIndex, numFactura.length - 2);
+        return (
+            numFactura.substring(0, monthIndex) +
+            month.padStart(2, "0") +
+            numFactura.substring(numFactura.length - 2)
+        );
     },
 
     isValidLine(line) {

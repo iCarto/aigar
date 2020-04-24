@@ -13,6 +13,7 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
             filter: {
                 text: "",
             },
+            measurementsWithoutInvoice: [],
         };
         this.handleFilterChange = this.handleFilterChange.bind(this);
     }
@@ -33,20 +34,26 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
     }
 
     reviewMeasurements(measurements, invoices) {
+        let measurementsWithoutInvoice = [];
         measurements.forEach(measurement => {
             const invoice = invoices.find(
                 invoice => invoice.num_socio === measurement.num_socio
             );
-            if (invoice.caudal_anterior !== measurement.caudal_anterior) {
-                invoice.errors.push(
-                    "No coincide la lectura anterior (" +
-                        measurement.caudal_anterior +
-                        ", " +
-                        invoice.caudal_anterior +
-                        ")"
-                );
+            if (invoice) {
+                if (invoice.caudal_anterior !== measurement.caudal_anterior) {
+                    invoice.errors.push(
+                        "No coincide la lectura anterior (" +
+                            measurement.caudal_anterior +
+                            ", " +
+                            invoice.caudal_anterior +
+                            ")"
+                    );
+                }
+            } else {
+                measurementsWithoutInvoice.push(measurement.num_socio);
             }
         });
+        this.setState({measurementsWithoutInvoice});
     }
 
     handleFilterChange(newFilter) {
@@ -94,6 +101,20 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
         return null;
     }
 
+    get measurementsWithoutInvoiceError() {
+        if (this.state.measurementsWithoutInvoice.length !== 0) {
+            return (
+                <div className="alert alert-danger text-center" role="alert">
+                    <strong>
+                        Se han detectado lecturas para socios que no tienen factura:{" "}
+                        {this.state.measurementsWithoutInvoice.join(",")}
+                    </strong>
+                </div>
+            );
+        }
+        return null;
+    }
+
     render() {
         const filteredInvoices = this.props.invoices
             ? this.filter(this.props.invoices)
@@ -102,6 +123,7 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
             <div className="d-flex flex-column justify-content-around">
                 {this.props.invoices ? (
                     <>
+                        {this.measurementsWithoutInvoiceError}
                         {this.messagesError}
                         <LoadDataTableFilter
                             filter={this.state.filter}

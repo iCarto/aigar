@@ -2,6 +2,7 @@ import React from "react";
 import LoadDataWizardStepInfo from "./LoadDataWizardStepInfo";
 import LoadDataWizardStepper from "./LoadDataWizardStepper";
 import LoadDataWizardButtons from "./LoadDataWizardButtons";
+import LoadDataWizardSidebar from "./LoadDataWizardSidebar";
 
 class LoadDataWizard extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class LoadDataWizard extends React.Component {
         this.next = this.next.bind(this);
         this.prev = this.prev.bind(this);
         this.setIsValidStep = this.setIsValidStep.bind(this);
+        this.handleBack = this.handleBack.bind(this);
     }
 
     setSteps(steps) {
@@ -42,6 +44,10 @@ class LoadDataWizard extends React.Component {
 
     setIsValidStep(valid) {
         this.setState({isValidStep: valid});
+    }
+
+    handleBack() {
+        this.props.history.push("/");
     }
 
     /* VIEW SUBCOMPONENTS */
@@ -77,22 +83,39 @@ class LoadDataWizard extends React.Component {
         );
     }
 
+    get sidebar() {
+        return <LoadDataWizardSidebar handleBack={this.handleBack} />;
+    }
+
+    get content() {
+        return (
+            <div className="d-flex flex-column justify-content-between">
+                <div className="mb-4">{this.stepper}</div>
+                <div className="rounded-top">{this.stepInfo}</div>
+                <div className="border p-3">
+                    {React.cloneElement(this.props.children, {
+                        ...this.props,
+                        setSteps: this.setSteps,
+                        currentStep: this.state.currentStep,
+                        setIsValidStep: this.setIsValidStep,
+                    })}
+                </div>
+                <div className="border-left border-right border-bottom rounded-bottom p-3">
+                    {this.buttons}
+                </div>
+            </div>
+        );
+    }
+
     render() {
         return (
-            <div className="container">
-                <div className="d-flex flex-column justify-content-between">
-                    <div className="mb-4">{this.stepper}</div>
-                    <div className="rounded-top">{this.stepInfo}</div>
-                    <div className="border p-3">
-                        {React.cloneElement(this.props.children, {
-                            ...this.props,
-                            setSteps: this.setSteps,
-                            currentStep: this.state.currentStep,
-                            setIsValidStep: this.setIsValidStep,
-                        })}
-                    </div>
-                    <div className="border-left border-right border-bottom rounded-bottom p-3">
-                        {this.buttons}
+            <div className="h-100">
+                <div className="row h-100">
+                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                        {this.sidebar}
+                    </nav>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
                     </div>
                 </div>
             </div>

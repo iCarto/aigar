@@ -59,7 +59,7 @@ const LoadDataValidatorService = {
     },
 
     validatePaymentEntry(payment, invoice) {
-        const paymentErrors = LoadDataValidatorService.validateEntry(
+        let paymentErrors = LoadDataValidatorService.validateEntry(
             payment,
             new DataValidator({
                 num_factura: [
@@ -100,7 +100,7 @@ const LoadDataValidatorService = {
     },
 
     validateMeasurementEntry(measurement) {
-        return LoadDataValidatorService.validateEntry(
+        let measurementErrors = LoadDataValidatorService.validateEntry(
             measurement,
             new DataValidator({
                 sector: ["isNotEmpty"],
@@ -109,6 +109,14 @@ const LoadDataValidatorService = {
                 caudal_actual: ["isNotEmpty", "isDecimal2"],
             })
         );
+        if (measurement.caudal_actual < measurement.caudal_anterior) {
+            measurementErrors.push({
+                type: "error",
+                field: "caudal_actual",
+                msg: "El caudal actual es menor que el caudal actual",
+            });
+        }
+        return measurementErrors;
     },
 };
 

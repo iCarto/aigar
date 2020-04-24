@@ -44,7 +44,6 @@ class App extends React.Component {
 }
 
 function MainContent(props) {
-    const {database} = props;
     return (
         <main role="main">
             <Switch>
@@ -66,15 +65,15 @@ function MainContent(props) {
                 />
                 <Route
                     path="/socios/:num_socio/modificar"
-                    render={props => <EditMember {...props} database={database} />}
+                    render={props => <EditMember {...props} />}
                 />
                 <Route
                     path="/socios/nuevo"
-                    render={props => <CreateMember {...props} database={database} />}
+                    render={props => <CreateMember {...props} />}
                 />
                 <Route
                     path="/socios/:num_socio"
-                    render={props => <ViewMember {...props} database={database} />}
+                    render={props => <ViewMember {...props} />}
                 />
                 <Route path="/socios" render={props => <ManageMembers {...props} />} />
                 <Route
@@ -96,9 +95,7 @@ function MainContent(props) {
                 <Route
                     exact
                     path="/"
-                    render={props => (
-                        <ViewMonthlyInvoicing {...props} database={database} />
-                    )}
+                    render={props => <ViewMonthlyInvoicing {...props} />}
                 />
             </Switch>
         </main>

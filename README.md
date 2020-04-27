@@ -1,4 +1,4 @@
-AIGAR: Aplicación Innovadora para la Gestión de Aguas Rurales
+AIGAR: Aplicación Innovadora para la Gestión de Juntas de Aguas Rurales
 
 AIGAR es una aplicación desarrollada por [iCarto](https://icarto.es/) en colaboración con [Ingeniería Sin Fronteras Cataluña](https://esf-cat.org/) y [ACUA](http://acua.org.sv/).
 
@@ -18,7 +18,7 @@ La aplicación en este momento está muy ligada a la forma de trabajo de ASCATLI
 
 Puedes descargar y probar la aplicación desde el [apartado de relases](https://gitlab.com/icarto/aigar/-/relases). Llega con descomprimir el zip y hacer doble click en el fichero `AIGAR.exe`. La aplicación contiene una base de datos vacía.
 
-La [aplicación de escritorio](https://gitlab.com/icarto/aigar) se complementa con [aigar-lecturas](https://gitlab.com/icarto/aigar-lecturas) una aplicación móvil para tomar en campo las lecturas de los contadores de agua de las viviendas.
+La [aplicación de escritorio](https://gitlab.com/icarto/aigar) se complementa con [aigar-lecturas](https://gitlab.com/icarto/aigar-lecturas) una aplicación móvil para tomar en campo las lecturas de los contadores de agua de las viviendas. A pesar de empaquetarse como una aplicación de escritorio está concebida para poder ser desplegada en un servidor web de modo que pueda ser usada por usuarios con diferentes roles, una asociación de juntas de agua que de soporte a varias, ...
 
 Ambas aplicaciones son libres (licencia AGPL) y gratuitas.
 

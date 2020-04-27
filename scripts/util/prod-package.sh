@@ -33,6 +33,7 @@ rsync -avm \
 
 cp api/.env prod/api
 cp api/db.sqlite3 prod/api
+cp api/db.sqlite3.empty prod/api
 
 # move the frontend to its place
 mv "$FRONTEND_PATH/build" "prod/${BACKEND_PATH}/api/static"

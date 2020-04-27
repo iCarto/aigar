@@ -171,8 +171,15 @@ copy_license() {
     DATE=$(date +%y%m%d)
     mv "${GOMI}/${DATE}_aigar/LICENSE" "${GOMI}/${DATE}_aigar/ELECTRON_LICENSE"
     mv "${GOMI}/${DATE}_aigar/src/LICENSE" "${GOMI}/${DATE}_aigar/LICENSE"
-    mv "${GOMI}/${DATE}_aigar/src/README" "${GOMI}/${DATE}_aigar/README"
+    mv "${GOMI}/${DATE}_aigar/src/README.md" "${GOMI}/${DATE}_aigar/README.md"
     cp /vagrant/NOTICE "${GOMI}/${DATE}_aigar/"
+}
+
+prepare_empty_app() {
+    DATE=$(date +%y%m%d)
+    cp -r "${GOMI}/${DATE}_aigar/" "${GOMI}/${DATE}_aigar_empty/"
+    rm "${GOMI}/${DATE}_aigar/src/db.sqlite3.empty"
+    mv "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3.empty" "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3"
 }
 
 GOMI=/vagrant/gomi
@@ -187,4 +194,5 @@ install_python
 install_dll
 install_app
 copy_license
+prepare_empty_app
 # install_python_2

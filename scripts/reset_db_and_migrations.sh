@@ -2,6 +2,9 @@
 
 source ./scripts/util/env.sh
 
+# Si se pasa cualquier parámetro a este comando crea una base de datos vacía
+CREATE_EMPTY="${1}"
+
 cd "${BACKEND_PATH}" || {
     echo "Can not access: ${BACKEND_PATH}"
     exit 1
@@ -23,5 +26,7 @@ python manage.py migrate
 export DJANGO_SUPERUSER_PASSWORD
 python manage.py createsuperuser --no-input --username admin
 
-python ../scripts/database.py --hack ../web/src/fixtures/database_fileindex.csv > ../api/fixtures.json
-python manage.py loaddata fixtures.json
+if [ -z "${CREATE_EMPTY}" ]; then
+    python ../scripts/database.py --hack ../web/src/fixtures/database_fileindex.csv > ../api/fixtures.json
+    python manage.py loaddata fixtures.json
+fi

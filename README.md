@@ -1,4 +1,4 @@
-AIGAR: Aplicación Innovadora para la Gestión de Juntas de Aguas Rurales
+AIGAR: Aplicación Innovadora para la Gestión de Agua Rural
 
 AIGAR es una aplicación desarrollada por [iCarto](https://icarto.es/) en colaboración con [Ingeniería Sin Fronteras Cataluña](https://esf-cat.org/) y [ACUA](http://acua.org.sv/).
 
@@ -6,7 +6,7 @@ AIGAR está financiado por la AGENCIA ESPAÑOLA DE COOPERACIÓN INTERNACIONAL PA
 
 ![splash](desktop/app/splash.png)
 
-Este repositorio contiene la aplicación web (empaquetada para escritorio a través de Electron) de AIGAR. AIGAR permite al personal de Juntas de Agua de comunidades rurales gestionar el catastro de personas socias de la junta, y todo el proceso de facturación relacionado:
+Este repositorio contiene la aplicación web (empaquetada para escritorio a través de Electron) de AIGAR. AIGAR permite a las Juntas Administradoras de los sistemas de Agua Potable y Saneamiento rurales (Juntas de agua) la gestión administrativa del sistema. Incluye la gestión del catastro de personas socias de la Junta de Agua, y todo el proceso de facturación con las siguientes funcionalidades:
 
 -   Consumo y Facturación
 -   Importar lecturas de contadores
@@ -14,7 +14,7 @@ Este repositorio contiene la aplicación web (empaquetada para escritorio a trav
 -   Catastro de personas socias
 -   Estadísticas de consumos, moras, ...
 
-La aplicación en este momento está muy ligada a la forma de trabajo de ASCATLI la Junta de Agua que se ha escogido como piloto para este proyecto. El sistema de agua que administra ASCATLI tiene alrededor de 250 socias y comprende las comunidades de Tihuapa Norte y Tlacuxtli, en el municipio del Puerto de la Libertad en El Salvador.
+La aplicación en este momento está muy ligada a la forma de trabajo de ASCATLI, la Junta de Agua que se ha escogido como piloto para este proyecto. El sistema de agua que administra ASCATLI tiene alrededor de 250 socias y comprende las comunidades de Tihuapa Norte y Tlacuxtli, en el municipio del Puerto de la Libertad en El Salvador.
 
 Puedes descargar y probar la aplicación desde el [apartado de relases](https://gitlab.com/icarto/aigar/-/relases). Llega con descomprimir el zip y hacer doble click en el fichero `AIGAR.exe`. La aplicación contiene una base de datos vacía.
 

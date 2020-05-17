@@ -5,15 +5,27 @@ const NumberUtil = {
     },
 
     parseFloatOrNull(value) {
-        if (value == null || isNaN(value)) {
+        if (value == null) {
             return "";
+        }
+        if (value === "") {
+            return 0;
+        }
+        if (isNaN(value)) {
+            return value;
         }
         return parseFloat(value);
     },
 
     parseIntOrNull(value) {
-        if (value == null || isNaN(value)) {
+        if (value == null) {
             return "";
+        }
+        if (value === "") {
+            return 0;
+        }
+        if (isNaN(value)) {
+            return value;
         }
         return parseInt(value);
     },

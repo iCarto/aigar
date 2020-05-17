@@ -17,6 +17,7 @@ class InvoiceDetail extends React.Component {
                 derecho,
                 reconexion,
                 traspaso,
+                otros,
                 mora,
                 saldo_pendiente,
                 total,
@@ -82,6 +83,10 @@ class InvoiceDetail extends React.Component {
                         <div className="field-label p-2 col-md-4 offset-md-4 row">
                             <label className="col-8">Traspaso</label>
                             <span className="col-2 dollar">{traspaso}</span>
+                        </div>
+                        <div className="field-label p-2 col-md-4 offset-md-4 row">
+                            <label className="col-8">Otros</label>
+                            <span className="col-2 dollar">{otros}</span>
                         </div>
                         <div className="field-label p-2 col-md-4 offset-md-4 row">
                             <label className="col-8" style={{fontStyle: "italic"}}>

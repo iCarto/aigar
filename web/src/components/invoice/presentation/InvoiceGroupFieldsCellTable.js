@@ -15,6 +15,12 @@ const InvoiceGroupFieldsCellTable = ({row}) => {
             {row.original.traspaso !== 0 ? (
                 <div className="dollar">Traspaso: {row.original.traspaso}</div>
             ) : null}
+            {row.original.otros !== 0 ? (
+                <div className="dollar">Otros: {row.original.otros}</div>
+            ) : null}
+            {row.original.descuento !== 0 ? (
+                <div className="dollar">Descuento: {row.original.descuento}</div>
+            ) : null}
         </div>
     );
 };

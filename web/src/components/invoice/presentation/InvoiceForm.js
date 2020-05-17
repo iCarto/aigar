@@ -72,6 +72,7 @@ class InvoiceForm extends React.Component {
                 derecho,
                 reconexion,
                 traspaso,
+                otros,
                 mora,
                 saldo_pendiente,
                 descuento,
@@ -210,6 +211,16 @@ class InvoiceForm extends React.Component {
                                 label="Traspaso de derecho"
                                 name="traspaso"
                                 field={traspaso}
+                                handleChange={this.handleChange}
+                                readOnly={isReadOnlyInvoice}
+                                small={true}
+                            />
+                        </div>
+                        <div className="col-md-6 offset-md-3">
+                            <FormInput
+                                label="Otros"
+                                name="otros"
+                                field={otros}
                                 handleChange={this.handleChange}
                                 readOnly={isReadOnlyInvoice}
                                 small={true}

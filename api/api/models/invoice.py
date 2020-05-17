@@ -142,6 +142,10 @@ class Invoice(models.Model):
         null=False, blank=False, default=0, verbose_name="Descuento", help_text=""
     )
 
+    otros = models.FloatField(
+        null=False, blank=False, default=0, verbose_name="Otros", help_text=""
+    )
+
     total = models.FloatField(null=True, blank=True, verbose_name="Total", help_text="")
 
     estado = models.TextField(
@@ -224,6 +228,7 @@ class Invoice(models.Model):
             + self.derecho
             + self.reconexion
             + self.traspaso
+            + self.otros
             + self.saldo_pendiente
             - self.descuento
         )

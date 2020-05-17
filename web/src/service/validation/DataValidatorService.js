@@ -51,6 +51,8 @@ const DataValidatorService = {
                 derecho: ["isNotEmpty", "isDecimal2", "isPositive"],
                 reconexion: ["isNotEmpty", "isDecimal2", "isPositive"],
                 mora: ["isNotEmpty", "isDecimal2", "isPositive"],
+                traspaso: ["isNotEmpty", "isDecimal2", "isPositive"],
+                otros: ["isNotEmpty", "isDecimal2", "isPositive"],
                 descuento: ["isNotEmpty", "isDecimal2", "isPositive"],
                 total: ["isNotEmpty", "isDecimal2"],
             })

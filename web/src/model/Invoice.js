@@ -92,6 +92,7 @@ const createInvoice = ({
     pago_11_al_30 = 0,
     pago_1_al_11 = 0,
     reconexion = 0,
+    otros = 0,
     saldo_pendiente = 0,
     sector = "",
     total_pagado = 0,
@@ -132,6 +133,7 @@ const createInvoice = ({
         pago_11_al_30: NumberUtil.parseFloatOrNull(pago_11_al_30),
         pago_1_al_11: NumberUtil.parseFloatOrNull(pago_1_al_11),
         reconexion: NumberUtil.parseFloatOrNull(reconexion),
+        otros: NumberUtil.parseFloatOrNull(otros),
         saldo_pendiente: NumberUtil.parseFloatOrNull(saldo_pendiente),
         sector,
         total_pagado: NumberUtil.parseFloatOrNull(total_pagado),
@@ -154,7 +156,10 @@ const createInvoice = ({
 };
 
 const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) => {
-    const consumo = invoice.caudal_actual - invoice.caudal_anterior;
+    let consumo = invoice.caudal_actual - invoice.caudal_anterior;
+    if (isNaN(consumo)) {
+        consumo = null;
+    }
     const consumo_final =
         (consumo_maximo ? Math.min(consumo, consumo_maximo) : consumo) -
         (consumo_reduccion_fija || 0);
@@ -181,8 +186,12 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         invoice.derecho +
         invoice.reconexion +
         invoice.traspaso +
+        invoice.otros +
         invoice.saldo_pendiente -
         invoice.descuento;
+    if (isNaN(total)) {
+        total = null;
+    }
     return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
 };
 

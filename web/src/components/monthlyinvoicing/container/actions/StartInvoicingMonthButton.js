@@ -11,6 +11,7 @@ class StartInvoicingMonthButton extends React.Component {
         super(props);
         this.state = {
             status: null,
+            errorMessage: null,
         };
         this.startInvoicingMonth = this.startInvoicingMonth.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -23,7 +24,10 @@ class StartInvoicingMonthButton extends React.Component {
     startInvoicingMonth() {
         console.log("StartInvoicingMonthButton.startInvoicingMonth");
         this.setState(
-            {status: OperationWithConfirmationContentModalStatus.PROGRESS},
+            {
+                status: OperationWithConfirmationContentModalStatus.PROGRESS,
+                errorMessage: null,
+            },
             () => {
                 InvoicingMonthService.startInvoicingMonth(
                     this.props.invoicingMonth,
@@ -32,12 +36,14 @@ class StartInvoicingMonthButton extends React.Component {
                     .then(invoicingMonth => {
                         this.setState({
                             status: OperationWithConfirmationContentModalStatus.SUCCESS,
+                            errorMessage: null,
                         });
                     })
                     .catch(error => {
                         console.log(error);
                         this.setState({
                             status: OperationWithConfirmationContentModalStatus.ERROR,
+                            errorMessage: error,
                         });
                     });
             }
@@ -91,6 +97,19 @@ class StartInvoicingMonthButton extends React.Component {
         );
     }
 
+    get modalContentError() {
+        console.log(this.state.errorMessage);
+        return (
+            <>
+                Se ha producido un error y no se han podido crear las facturas.
+                <br />
+                <strong>
+                    {this.state.errorMessage ? this.state.errorMessage.message : null}
+                </strong>
+            </>
+        );
+    }
+
     get modal() {
         return (
             <OperationWithConfirmationContentModal
@@ -102,7 +121,7 @@ class StartInvoicingMonthButton extends React.Component {
                 modalAcceptText="Iniciar"
                 modalAcceptIcon="file-invoice"
                 spinnerMessage="Generando facturas"
-                modalErrorText="Se ha producido un error y no se han podido crear las facturas."
+                modalErrorText={this.modalContentError}
                 onClickCancel={this.onClickCancel}
                 onClickAccept={this.onClickAccept}
                 onClickFinished={this.onClickFinished}

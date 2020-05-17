@@ -19,7 +19,9 @@ const get = (url = "", headers = {}) =>
         },
     }).then(response => {
         if (response.status !== 200 && response.status !== 201) {
-            throw new Error("Not 200 response");
+            return response.text().then(text => {
+                throw new Error(text);
+            });
         }
         return response.json();
     });
@@ -36,7 +38,9 @@ const post = (url = "", body = {}, headers = {}) =>
     }).then(response => {
         console.log(response);
         if (response.status !== 200 && response.status !== 201) {
-            throw new Error("Not 200 response");
+            return response.text().then(text => {
+                throw new Error(text);
+            });
         }
         return response.json();
     });
@@ -52,7 +56,9 @@ const put = (url = "", body = {}, headers = {}) =>
         },
     }).then(response => {
         if (response.status !== 200) {
-            throw new Error("Not 200 response");
+            return response.text().then(text => {
+                throw new Error(text);
+            });
         }
         return response.json();
     });
@@ -68,7 +74,9 @@ const patch = (url = "", body = {}, headers = {}) =>
         },
     }).then(response => {
         if (response.status !== 200 && response.status !== 204) {
-            throw new Error("Not 200 response");
+            return response.text().then(text => {
+                throw new Error(text);
+            });
         }
         if (parseInt(response.headers.get("content-length")) === 0) {
             return true;
@@ -86,7 +94,9 @@ const del = (url = "", headers = {}) =>
         },
     }).then(response => {
         if (response.status !== 200) {
-            throw new Error("Not 200 response");
+            return response.text().then(text => {
+                throw new Error(text);
+            });
         }
         return response.json();
     });

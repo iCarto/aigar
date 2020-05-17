@@ -2,6 +2,7 @@ from django.db import transaction
 
 from api.models.invoice import Invoice, InvoiceStatus
 from api.models.invoicing_month import InvoicingMonth
+from api.models.payment import Payment
 from api.serializers.invoice import InvoiceShortSerializer
 from api.serializers.payment import PaymentSerializer
 from rest_framework import serializers
@@ -24,6 +25,15 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
                 "Existen varios meses de facturación abiertos. Debe revisar este problema."
             )
         invoicing_month_to_close = invoicing_month_to_close_query.first()
+
+        invoicing_month_to_close_payments = Payment.objects.filter(
+            mes_facturacion=invoicing_month_to_close
+        ).count()
+        if invoicing_month_to_close_payments == 0:
+            raise serializers.ValidationError(
+                "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
+            )
+
         if invoicing_month_to_close is not None:
             invoicing_month_to_close.is_open = False
             invoicing_month_to_close.save()

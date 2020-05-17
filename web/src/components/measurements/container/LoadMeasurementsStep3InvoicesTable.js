@@ -43,8 +43,6 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
                 if (invoice.caudal_anterior !== measurement.caudal_anterior) {
                     invoice.errors.push(
                         "No coincide la lectura anterior (" +
-                            measurement.caudal_anterior +
-                            ", " +
                             invoice.caudal_anterior +
                             ")"
                     );

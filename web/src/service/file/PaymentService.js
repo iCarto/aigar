@@ -21,14 +21,16 @@ const PaymentService = {
                             errors: [],
                         })
                     );
-                } else if (paymentRead.length === 6) {
-                    // 6 columns = Banco
+                } else if (paymentRead.length === 5) {
+                    // 5 columns = Banco
                     payments.push(
                         createPayment({
                             num_factura: this.getNumFactura(paymentRead[0]),
-                            num_socio: paymentRead[1],
-                            fecha: paymentRead[2],
-                            monto: paymentRead[3],
+                            num_socio: this.getNumSocio(
+                                this.getNumFactura(paymentRead[0])
+                            ),
+                            fecha: paymentRead[1],
+                            monto: paymentRead[2],
                             errors: [],
                         })
                     );
@@ -48,6 +50,12 @@ const PaymentService = {
             month.padStart(2, "0") +
             numFactura.substring(numFactura.length - 2)
         );
+    },
+
+    getNumSocio(numFactura) {
+        // TODO Temporary hack until bank uses the right invoice number
+        // Bank number is like 01392020201, but we need month with 2 digits
+        return numFactura.substring(0, numFactura.length - 8);
     },
 
     isValidLine(line) {

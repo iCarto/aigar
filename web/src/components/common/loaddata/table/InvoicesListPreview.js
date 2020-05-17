@@ -57,7 +57,7 @@ class InvoicesListPreview extends React.Component {
                     accessor: "sector",
                 },
                 {
-                    Header: "Número Factura",
+                    Header: "Número factura",
                     accessor: "numero",
                 },
             ];
@@ -94,7 +94,7 @@ class InvoicesListPreview extends React.Component {
                         className: "dollar",
                     },
                     {
-                        Header: "Total",
+                        Header: "Total factura",
                         accessor: "total",
                         className: "dollar font-weight-bold",
                     }
@@ -118,7 +118,7 @@ class InvoicesListPreview extends React.Component {
                         className: "dollar",
                     },
                     {
-                        Header: "Total",
+                        Header: "Total factura",
                         accessor: "total",
                         className: "dollar font-weight-bold",
                     },

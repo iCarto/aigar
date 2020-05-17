@@ -34,6 +34,21 @@ class InvoiceDetailShort extends React.Component {
                             <InvoiceStatusLabel estado={estado} />
                         </span>
                     </div>
+                    {this.props.payments && this.props.payments.length !== 0 ? (
+                        <div className="field-label p-2 row no-gutters">
+                            <label className="col-md-5">Pago</label>
+                            <span>
+                                {this.props.payments.map(payment => {
+                                    return (
+                                        <div key={payment.id}>
+                                            {payment.fecha} -{" "}
+                                            <span class="dollar">{payment.monto}</span>
+                                        </div>
+                                    );
+                                })}
+                            </span>
+                        </div>
+                    ) : null}
                 </div>
             );
         }

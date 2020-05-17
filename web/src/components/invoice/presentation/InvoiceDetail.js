@@ -29,7 +29,10 @@ class InvoiceDetail extends React.Component {
                             <MemberDetailShort member={this.props.member} />
                         </div>
                         <div className="col-md-4">
-                            <InvoiceDetailShort invoice={this.props.invoice} />
+                            <InvoiceDetailShort
+                                invoice={this.props.invoice}
+                                payments={this.props.payments}
+                            />
                         </div>
                     </div>
                     <div className="row m-3">

@@ -4,7 +4,6 @@ import {InvoiceDetail, InvoiceNavigator} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
 import {InvoiceService, MemberService} from "service/api";
-import {PaymentsList} from "components/payments/presentation";
 
 class ViewInvoice extends React.Component {
     constructor(props) {
@@ -152,8 +151,8 @@ class ViewInvoice extends React.Component {
                         <InvoiceDetail
                             invoice={this.state.invoice}
                             member={this.state.member}
+                            payments={this.state.payments}
                         />
-                        <PaymentsList payments={this.state.payments} />
                     </div>
                 </div>
             </div>

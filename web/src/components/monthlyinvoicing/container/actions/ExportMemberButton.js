@@ -59,7 +59,10 @@ class ExportMemberButton extends React.Component {
         return (
             <button
                 onClick={this.handleClick}
-                className="btn btn-primary mt-1 mb-1"
+                className={
+                    "btn mt-1 mb-1 " +
+                    (this.props.disabled ? "btn-secondary" : "btn-primary")
+                }
                 disabled={this.props.disabled}
             >
                 {this.props.position ? this.props.position + ". " : null}

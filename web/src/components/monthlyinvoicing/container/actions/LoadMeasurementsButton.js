@@ -7,8 +7,8 @@ class LoadMeasurementsButton extends React.Component {
             <Link
                 to={"/cargarlecturas/" + this.props.invoicingMonth.id_mes_facturacion}
                 className={
-                    "btn btn-primary mt-1 mb-1 " +
-                    (this.props.disabled ? "disabled" : "")
+                    "btn mt-1 mb-1 " +
+                    (this.props.disabled ? "btn-secondary disabled" : "btn-primary")
                 }
             >
                 {this.props.position ? this.props.position + ". " : null}

@@ -73,7 +73,7 @@ class ViewInvoicesStats extends React.Component {
     }
 
     getInvoicingMonths(invoices) {
-        return invoices.map(invoice => invoice.mes_facturacion);
+        return [...new Set(invoices.map(invoice => invoice.mes_facturacion))];
     }
 
     convertToMemberInvoiceGroup(invoices) {
@@ -96,27 +96,82 @@ class ViewInvoicesStats extends React.Component {
         return createMemberInvoiceGroups(memberInvoiceGroups);
     }
 
-    convertToDataset(invoices) {
-        const dataset = [];
+    convertToMoraDataset(invoices) {
+        let datasetMoraPorRetrasoData = [];
+        let datasetMoraPorImpagoData = [];
         invoices.forEach(invoice => {
-            const labelForInvoice =
-                invoice.mes_facturacion.substring(4, 6) +
-                "/" +
-                invoice.mes_facturacion.substring(0, 4);
-            const indexFound = dataset.findIndex(
+            const labelForInvoice = invoice.mes_facturacion;
+            const indexFound = datasetMoraPorRetrasoData.findIndex(
                 dataset => dataset.label === labelForInvoice
             );
             if (indexFound >= 0) {
-                dataset[indexFound].value =
-                    dataset[indexFound].value + invoice[this.state.selectedField];
+                datasetMoraPorRetrasoData[indexFound].value =
+                    datasetMoraPorRetrasoData[indexFound].value +
+                    invoice["mora_por_retraso"];
+                datasetMoraPorImpagoData[indexFound].value =
+                    datasetMoraPorImpagoData[indexFound].value +
+                    invoice["mora_por_impago"];
             } else {
-                dataset.push({
+                datasetMoraPorRetrasoData.push({
+                    label: labelForInvoice,
+                    value: invoice["mora_por_retraso"],
+                });
+                datasetMoraPorImpagoData.push({
+                    label: labelForInvoice,
+                    value: invoice["mora_por_impago"],
+                });
+            }
+        });
+        return [
+            {
+                label: "Mora por retraso ($)",
+                data: datasetMoraPorRetrasoData,
+                backgroundColor: "#7aafdd",
+            },
+            {
+                label: "Mora por impago ($)",
+                data: datasetMoraPorImpagoData,
+                backgroundColor: "#1c71bc",
+            },
+        ];
+    }
+
+    convertToDataset(invoices) {
+        if (this.state.selectedField === "mora") {
+            return this.convertToMoraDataset(invoices);
+        }
+        const datasetData = [];
+        invoices.forEach(invoice => {
+            const labelForInvoice = invoice.mes_facturacion;
+            const indexFound = datasetData.findIndex(
+                dataset => dataset.label === labelForInvoice
+            );
+            if (indexFound >= 0) {
+                datasetData[indexFound].value =
+                    datasetData[indexFound].value + invoice[this.state.selectedField];
+            } else {
+                datasetData.push({
                     label: labelForInvoice,
                     value: invoice[this.state.selectedField],
                 });
             }
         });
-        return dataset;
+        return [
+            {
+                label: this.getLabelFromSelectedField(),
+                data: datasetData,
+                backgroundColor: "#1c71bc",
+            },
+        ];
+    }
+
+    getLabelFromSelectedField() {
+        return (
+            this.getFieldTitle(this.state.selectedField) +
+            " (" +
+            this.getFieldUnit(this.state.selectedField) +
+            ")"
+        );
     }
 
     getFieldTitle(fieldKey) {
@@ -138,6 +193,10 @@ class ViewInvoicesStats extends React.Component {
                 filter={this.state.filter}
             />
         );
+    }
+
+    formatInvoicingMonth(invoicingMonth) {
+        return invoicingMonth.substring(4, 6) + "/" + invoicingMonth.substring(0, 4);
     }
 
     get content() {
@@ -163,14 +222,9 @@ class ViewInvoicesStats extends React.Component {
                         filter={this.state.filter}
                     />
                     <BarChart
-                        data={this.convertToDataset(filteredInvoices)}
-                        title={
-                            this.getFieldTitle(this.state.selectedField) +
-                            " (" +
-                            this.getFieldUnit(this.state.selectedField) +
-                            ")"
-                        }
-                        color="#1c71bc"
+                        dataLabels={this.getInvoicingMonths(filteredInvoices)}
+                        dataLabelsFormat={this.formatInvoicingMonth}
+                        dataDatasets={this.convertToDataset(filteredInvoices)}
                     />
                 </>
             );

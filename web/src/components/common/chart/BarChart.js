@@ -11,19 +11,15 @@ class BarChart extends React.Component {
         this.chart = new Chart(this.chartRef.current, {
             type: "bar",
             data: {
-                labels: this.props.data.map(d => d.label),
-                datasets: [
-                    {
-                        label: this.props.title,
-                        data: this.props.data.map(d => d.value),
-                        backgroundColor: this.props.color,
-                    },
-                ],
+                labels: this.getDataLabels(),
+                datasets: this.getDatasets(),
             },
             options: {
                 scales: {
+                    xAxes: [{stacked: true}],
                     yAxes: [
                         {
+                            stacked: true,
                             ticks: {
                                 beginAtZero: true,
                             },
@@ -35,10 +31,23 @@ class BarChart extends React.Component {
     }
 
     componentDidUpdate() {
-        this.chart.data.labels = this.props.data.map(d => d.label);
-        this.chart.data.datasets[0].label = this.props.title;
-        this.chart.data.datasets[0].data = this.props.data.map(d => d.value);
+        this.chart.data.labels = this.getDataLabels();
+        this.chart.data.datasets = this.getDatasets();
         this.chart.update();
+    }
+
+    getDataLabels() {
+        return this.props.dataLabels.map(this.props.dataLabelsFormat);
+    }
+
+    getDatasets() {
+        return this.props.dataDatasets.map(dataset => {
+            return {
+                label: dataset.label,
+                data: dataset.data.map(d => d.value),
+                backgroundColor: dataset.backgroundColor,
+            };
+        });
     }
 
     render() {

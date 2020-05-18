@@ -7,7 +7,7 @@ const InvoicingMonthCellTable = ({row, column, cell}) => {
         invoice => invoice.mes_facturacion === column.getProps().invoicingMonth
     );
     const value = invoice ? invoice[column.getProps().field] : null;
-    return <div>{value}</div>;
+    return <div className={column.getProps().className}>{value}</div>;
 };
 
 class InvoicesStatsList extends React.Component {
@@ -39,6 +39,7 @@ class InvoicesStatsList extends React.Component {
                             getProps: () => ({
                                 invoicingMonth: invoicingMonth,
                                 field: this.props.selectedField,
+                                className: this.props.unitClass,
                             }),
                         };
                     }

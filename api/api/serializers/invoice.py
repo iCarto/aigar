@@ -56,7 +56,9 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
 
 class InvoiceStatsSerializer(serializers.ModelSerializer):
     num_socio = serializers.IntegerField(source="member.num_socio")
-    monto = serializers.IntegerField(source="total")
+    monto = serializers.SerializerMethodField()
+    mora_por_retraso = serializers.SerializerMethodField()
+    mora_por_impago = serializers.SerializerMethodField()
 
     class Meta:
         model = Invoice
@@ -69,5 +71,16 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "sector",
             "consumo",
             "mora",
+            "mora_por_retraso",
+            "mora_por_impago",
             "monto",
         ]
+
+    def get_monto(self, obj):
+        return obj.pago_1_al_11 + obj.pago_11_al_30
+
+    def get_mora_por_retraso(self, obj):
+        return 1 if obj.mora != 0 and obj.pago_11_al_30 != 0 else 0
+
+    def get_mora_por_impago(self, obj):
+        return 1 if obj.mora != 0 and obj.pago_11_al_30 == 0 else 0

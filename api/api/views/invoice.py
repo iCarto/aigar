@@ -101,6 +101,6 @@ class InvoiceStatsView(ListAPIView):
     queryset = (
         Invoice.objects.prefetch_related("member")
         .filter(is_active=True)
-        .order_by("-mes_facturacion", "member")
+        .order_by("mes_facturacion", "member")
     )
     serializer_class = InvoiceStatsSerializer

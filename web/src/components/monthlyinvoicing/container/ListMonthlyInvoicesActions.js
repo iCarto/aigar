@@ -1,10 +1,10 @@
 import React from "react";
 import {
-    PrintInvoiceButton,
     LoadPaymentsButton,
     LoadMeasurementsButton,
     StartInvoicingMonthButton,
     ExportMemberButton,
+    PrintInvoicesButton,
 } from "components/monthlyinvoicing/container/actions";
 import {ESTADOS_FACTURA} from "model";
 
@@ -85,13 +85,12 @@ class ListMonthlyInvoicesActions extends React.Component {
 
     get printInvoiceButton() {
         return (
-            <PrintInvoiceButton
+            <PrintInvoicesButton
                 invoices={this.props.invoices}
                 position="3"
-                buttonTitle="Imprimir facturas"
                 outputFilename={this.getOutputFilename()}
                 disabled={!this.isPrintInvoiceButtonEnabled()}
-                handleSuccessPrintedInvoices={this.props.handleSuccessPrintedInvoices}
+                handleSuccessPrintInvoices={this.props.handleSuccessPrintInvoices}
             />
         );
     }

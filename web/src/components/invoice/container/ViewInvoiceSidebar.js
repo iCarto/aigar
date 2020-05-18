@@ -1,6 +1,6 @@
 import React from "react";
 import {BackButton} from "components/common";
-import {PrintInvoiceButton} from "components/monthlyinvoicing/container/actions";
+import {PrintInvoicesButton} from "components/monthlyinvoicing/container/actions";
 import UpdateInvoiceButton from "./actions/UpdateInvoiceButton";
 
 class ViewInvoiceSidebar extends React.Component {
@@ -37,13 +37,13 @@ class ViewInvoiceSidebar extends React.Component {
                                     }
                                 />
                             ) : null}
-                            <PrintInvoiceButton
+                            <PrintInvoicesButton
                                 invoices={[this.props.invoice]}
                                 buttonTitle="Imprimir factura"
                                 showIcon={true}
                                 outputFilename={this.getOutputFilename()}
-                                handleSuccessPrintedInvoices={
-                                    this.props.handleSuccessPrintedInvoices
+                                handleSuccessPrintInvoices={
+                                    this.props.handleSuccessPrintInvoices
                                 }
                             />
                         </div>

@@ -17,7 +17,8 @@ class OperationWithConfirmationContentModal extends React.Component {
                 className="close"
                 aria-label="Close"
                 onClick={
-                    this.props.status === OperationWithConfirmationContentModal.SUCCESS
+                    this.props.status ===
+                    OperationWithConfirmationContentModalStatus.SUCCESS
                         ? this.props.onClickFinished
                         : this.props.onClickCancel
                 }

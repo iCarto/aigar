@@ -71,6 +71,7 @@ class ListMembers extends React.Component {
             return (
                 <MembersList
                     members={this.filter(this.state.members, this.props.filter)}
+                    membersLength={this.state.members.length}
                     listView={this.props.listView}
                     handleChangeListView={this.props.handleChangeListView}
                     handleClickViewMember={this.props.handleClickViewMember}
@@ -84,7 +85,7 @@ class ListMembers extends React.Component {
     render() {
         return (
             <div className="h-100">
-                <div className="row h-100">
+                <div className="row no-gutters h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {this.sidebar}
                     </nav>

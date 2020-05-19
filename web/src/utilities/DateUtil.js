@@ -10,6 +10,11 @@ const DateUtil = {
         return month.charAt(0).toLocaleUpperCase() + month.slice(1);
     },
 
+    getShortMonthName(monthNumber) {
+        const month = moment.months(parseInt(monthNumber) - 1);
+        return (month.charAt(0).toLocaleUpperCase() + month.slice(1)).substring(0, 3);
+    },
+
     // Transform to API format date YYYY-MM-DD from DD-MMM-YYYY or DD/MM/YYYY
     parse(date) {
         if (moment(date, TIGO_DATEFORMAT, true).isValid()) {

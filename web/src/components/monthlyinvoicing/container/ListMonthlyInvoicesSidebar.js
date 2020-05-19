@@ -16,38 +16,21 @@ class ListMonthlyInvoicesSidebar extends React.Component {
     render() {
         return (
             <div className="sidebar-sticky d-flex flex-column">
-                <div className="sidebar-group">
-                    <label>Navegación por meses</label>
-                    <MonthlyInvoicingNavigator
-                        selectedInvoicingMonth={this.props.selectedInvoicingMonth}
-                        invoicingMonths={this.props.invoicingMonths}
-                        handleChangeInvoicingMonth={
-                            this.props.handleChangeInvoicingMonth
-                        }
-                    />
-                </div>
-                <div className="sidebar-group">
-                    <label>Acciones</label>
-                    <div className="d-flex flex-column">
-                        <ListMonthlyInvoicesActions
-                            selectedInvoicingMonth={this.props.selectedInvoicingMonth}
-                            invoices={this.props.invoices}
-                            handleSuccessCreateInvoices={
-                                this.props.handleSuccessCreateInvoices
-                            }
-                            handleSuccessPrintInvoices={
-                                this.props.handleSuccessPrintInvoices
-                            }
-                        />
-                    </div>
-                </div>
-                <div className="sidebar-group mb-5">
-                    <label>Filtro</label>
-                    <ListMonthlyInvoicesFilter
-                        filter={this.props.filter}
-                        handleFilterChange={this.props.handleFilterChange}
-                    />
-                </div>
+                <MonthlyInvoicingNavigator
+                    selectedInvoicingMonth={this.props.selectedInvoicingMonth}
+                    invoicingMonths={this.props.invoicingMonths}
+                    handleChangeInvoicingMonth={this.props.handleChangeInvoicingMonth}
+                />
+                <ListMonthlyInvoicesActions
+                    selectedInvoicingMonth={this.props.selectedInvoicingMonth}
+                    invoices={this.props.invoices}
+                    handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
+                    handleSuccessPrintInvoices={this.props.handleSuccessPrintInvoices}
+                />
+                <ListMonthlyInvoicesFilter
+                    filter={this.props.filter}
+                    handleFilterChange={this.props.handleFilterChange}
+                />
             </div>
         );
     }

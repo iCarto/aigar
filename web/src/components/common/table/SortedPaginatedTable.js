@@ -5,6 +5,7 @@ import PaginatedTableNavigator from "./PaginatedTableNavigator";
 const SortedPaginatedTable = ({
     columns,
     data,
+    total,
     listView,
     handleChangeListView,
     onUpdateData,
@@ -28,7 +29,7 @@ const SortedPaginatedTable = ({
             columns,
             data,
             initialState: {
-                pageSize: 12,
+                pageSize: 10,
                 pageIndex: listView ? listView.pageIndex : 0,
                 sortBy: listView ? listView.sortBy : [],
             },
@@ -101,6 +102,8 @@ const SortedPaginatedTable = ({
                 </tbody>
             </table>
             <PaginatedTableNavigator
+                length={data.length}
+                total={total}
                 canPreviousPage={canPreviousPage}
                 previousPage={previousPage}
                 canNextPage={canNextPage}

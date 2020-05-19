@@ -122,7 +122,7 @@ class ViewInvoice extends React.Component {
 
     get view() {
         return (
-            <div className="row h-100">
+            <div className="row no-gutters h-100">
                 <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                     <ViewInvoiceSidebar
                         invoice={this.state.invoice}

@@ -51,6 +51,7 @@ class InvoicesStatsList extends React.Component {
                 <SortedPaginatedTable
                     columns={columns}
                     data={this.props.invoicesStats}
+                    total={this.props.invoicesStatsLength}
                     handleChangeListView={this.props.handleChangeListView}
                 />
             );

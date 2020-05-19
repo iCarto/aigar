@@ -18,7 +18,7 @@ class InvoicesStatsFilter extends React.Component {
 
     render() {
         return (
-            <form className="column m-3">
+            <form className="column p-3">
                 <div className="form-group">
                     <label htmlFor="sector">Sector</label>
                     <select

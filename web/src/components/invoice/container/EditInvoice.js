@@ -159,7 +159,7 @@ class EditInvoice extends React.Component {
     render() {
         return (
             <div className="h-100">
-                <div className="row h-100">
+                <div className="row no-gutters h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {this.sidebar}
                     </nav>

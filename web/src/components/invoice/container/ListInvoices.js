@@ -74,6 +74,7 @@ class ListInvoices extends React.Component {
             return (
                 <InvoicesList
                     invoices={this.filter(this.state.invoices, this.props.filter)}
+                    invoicesLength={this.state.invoices.length}
                     listView={this.props.listView}
                     handleChangeListView={this.props.handleChangeListView}
                     handleClickViewInvoice={this.handleClickViewInvoice}
@@ -87,11 +88,13 @@ class ListInvoices extends React.Component {
     render() {
         return (
             <div className="h-100">
-                <div className="row h-100">
+                <div className="row no-gutters h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {this.sidebar}
                     </nav>
-                    <div className="col-md-10 offset-md-2">{this.content}</div>
+                    <div className="col-md-10 offset-md-2">
+                        <div className="container">{this.content}</div>
+                    </div>
                 </div>
             </div>
         );

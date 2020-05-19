@@ -88,7 +88,7 @@ class ListMonthlyInvoices extends React.Component {
         const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
         return (
             <div className="h-100">
-                <div className="row h-100">
+                <div className="row no-gutters h-100">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         <ListMonthlyInvoicesSidebar
                             filter={this.props.filter}
@@ -109,15 +109,9 @@ class ListMonthlyInvoices extends React.Component {
                         <div className="container">
                             {filteredInvoices ? (
                                 <>
-                                    <MonthlyInvoicingListSummary
-                                        invoicingMonth={
-                                            this.props.selectedInvoicingMonth
-                                        }
-                                        filteredInvoicesLength={filteredInvoices.length}
-                                        invoicesLength={this.state.invoices.length}
-                                    />
                                     <MonthlyInvoicingList
                                         invoices={filteredInvoices}
+                                        invoicesLength={this.state.invoices.length}
                                         listView={this.props.listView}
                                         handleChangeListView={
                                             this.props.handleChangeListView

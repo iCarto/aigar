@@ -6,13 +6,10 @@ class ViewInvoicesStatsSidebar extends React.Component {
     render() {
         return (
             <div className="sidebar-sticky d-flex flex-column">
-                <div className="sidebar-group">
-                    <label>Filtro</label>
-                    <ViewInvoicesStatsFilter
-                        filter={this.props.filter}
-                        handleFilterChange={this.props.handleFilterChange}
-                    />
-                </div>
+                <ViewInvoicesStatsFilter
+                    filter={this.props.filter}
+                    handleFilterChange={this.props.handleFilterChange}
+                />
             </div>
         );
     }

@@ -8,48 +8,43 @@ class MembersList extends React.Component {
         if (this.props.members) {
             const columns = [
                 {
-                    Header: "Listado de facturación",
-                    columns: [
-                        {
-                            Header: "Número",
-                            accessor: "num_socio",
-                        },
-                        {
-                            Header: "Nombre",
-                            accessor: "name",
-                            Cell: LinkCellTable,
-                            getProps: () => ({
-                                handleClick: this.props.handleClickViewMember,
-                                linkAccessor: "num_socio",
-                            }),
-                        },
-                        {
-                            Header: "Sector",
-                            accessor: "sector",
-                        },
-                        {
-                            Header: "Medidor",
-                            accessor: "medidor",
-                        },
-                        {
-                            Header: "Estado",
-                            accessor: "tipo_socio",
-                            Cell: MemberStatusCellTable,
-                            className: "text-nowrap",
-                        },
-                        {
-                            Header: "Orden",
-                            accessor: "orden",
-                        },
-                        {
-                            Header: "Consumo máximo",
-                            accessor: "consumo_maximo",
-                        },
-                        {
-                            Header: "Consumo reducción fija",
-                            accessor: "consumo_reduccion_fija",
-                        },
-                    ],
+                    Header: "Número",
+                    accessor: "num_socio",
+                },
+                {
+                    Header: "Nombre",
+                    accessor: "name",
+                    Cell: LinkCellTable,
+                    getProps: () => ({
+                        handleClick: this.props.handleClickViewMember,
+                        linkAccessor: "num_socio",
+                    }),
+                },
+                {
+                    Header: "Sector",
+                    accessor: "sector",
+                },
+                {
+                    Header: "Medidor",
+                    accessor: "medidor",
+                },
+                {
+                    Header: "Estado",
+                    accessor: "tipo_socio",
+                    Cell: MemberStatusCellTable,
+                    className: "text-nowrap",
+                },
+                {
+                    Header: "Orden",
+                    accessor: "orden",
+                },
+                {
+                    Header: "Consumo máximo",
+                    accessor: "consumo_maximo",
+                },
+                {
+                    Header: "Consumo reducción fija",
+                    accessor: "consumo_reduccion_fija",
                 },
             ];
 
@@ -57,6 +52,7 @@ class MembersList extends React.Component {
                 <SortedPaginatedTable
                     columns={columns}
                     data={this.props.members}
+                    total={this.props.membersLength}
                     listView={this.props.listView}
                     handleChangeListView={this.props.handleChangeListView}
                 />

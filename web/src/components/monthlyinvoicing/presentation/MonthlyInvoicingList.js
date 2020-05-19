@@ -36,6 +36,7 @@ class MonthlyInvoicingList extends React.Component {
                     Header: "Nº Factura",
                     accessor: "numero",
                     Cell: LinkCellTable,
+                    className: "text-center",
                     getProps: () => ({
                         handleClick: this.props.handleClickViewInvoice,
                         linkAccessor: "id_factura",
@@ -54,11 +55,13 @@ class MonthlyInvoicingList extends React.Component {
                 {
                     Header: "Estado",
                     accessor: "estado",
+                    className: "text-center",
                     Cell: InvoiceStatusCellTable,
                 },
                 {
                     Header: "Meses previos",
                     accessor: "resumen",
+                    className: "text-center",
                     Cell: InvoiceResumenCellTable,
                 },
             ];
@@ -67,6 +70,7 @@ class MonthlyInvoicingList extends React.Component {
                 <SortedPaginatedTable
                     columns={columns}
                     data={this.props.invoices}
+                    total={this.props.invoicesLength}
                     listView={this.props.listView}
                     handleChangeListView={this.props.handleChangeListView}
                 />

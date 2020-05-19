@@ -75,7 +75,7 @@ class MonthlyInvoicingNavigator extends React.Component {
         return months.map(month => {
             return (
                 <option key={month} value={month}>
-                    {DateUtil.getMonthName(month)}
+                    {DateUtil.getShortMonthName(month)}
                 </option>
             );
         });
@@ -97,44 +97,42 @@ class MonthlyInvoicingNavigator extends React.Component {
 
     render() {
         return (
-            <div className="text-center">
-                <form className="form-inline d-flex justify-content-between m-1">
-                    <button
-                        type="button"
-                        className="btn mr-1"
-                        onClick={this.handleMonthChangePrevious}
-                        disabled={this.isPreviousButtonDisabled()}
+            <form className="form-inline d-flex justify-content-between pt-2 pb-1">
+                <button
+                    type="button"
+                    className="btn"
+                    onClick={this.handleMonthChangePrevious}
+                    disabled={this.isPreviousButtonDisabled()}
+                >
+                    &laquo;
+                </button>
+                <div className="row">
+                    <select
+                        className="custom-select"
+                        id="inlineFormCustomSelectPref"
+                        value={this.props.selectedInvoicingMonth.mes}
+                        onChange={this.handleMonthSelected}
                     >
-                        &laquo;
-                    </button>
-                    <div className="row">
-                        <select
-                            className="custom-select"
-                            id="inlineFormCustomSelectPref"
-                            value={this.props.selectedInvoicingMonth.mes}
-                            onChange={this.handleMonthSelected}
-                        >
-                            {this.monthOptions}
-                        </select>
-                        <select
-                            className="custom-select"
-                            id="inlineFormCustomSelectPref"
-                            value={this.props.selectedInvoicingMonth.anho}
-                            onChange={this.handleYearSelected}
-                        >
-                            {this.yearOptions}
-                        </select>
-                    </div>
-                    <button
-                        type="button"
-                        className="btn ml-1"
-                        onClick={this.handleMonthChangeNext}
-                        disabled={this.isNextButtonDisabled()}
+                        {this.monthOptions}
+                    </select>
+                    <select
+                        className="custom-select"
+                        id="inlineFormCustomSelectPref"
+                        value={this.props.selectedInvoicingMonth.anho}
+                        onChange={this.handleYearSelected}
                     >
-                        &raquo;
-                    </button>
-                </form>
-            </div>
+                        {this.yearOptions}
+                    </select>
+                </div>
+                <button
+                    type="button"
+                    className="btn"
+                    onClick={this.handleMonthChangeNext}
+                    disabled={this.isNextButtonDisabled()}
+                >
+                    &raquo;
+                </button>
+            </form>
         );
     }
 }

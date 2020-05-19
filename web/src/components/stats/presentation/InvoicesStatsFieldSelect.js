@@ -13,7 +13,7 @@ class InvoicesStatsFieldSelect extends React.Component {
     render() {
         return (
             <div className="d-flex justify-content-center">
-                <div className="btn-group btn-group-toggle m-3" data-toggle="buttons">
+                <div className="btn-group btn-group-toggle mb-3" data-toggle="buttons">
                     {this.props.fields.map(field => (
                         <button
                             type="button"

@@ -1,5 +1,6 @@
 import React from "react";
 import {DateUtil} from "utilities";
+import {IconButtonLink} from "components/common";
 
 class MonthlyInvoicingNavigator extends React.Component {
     constructor(props) {
@@ -97,15 +98,12 @@ class MonthlyInvoicingNavigator extends React.Component {
 
     render() {
         return (
-            <form className="form-inline d-flex justify-content-between pt-2 pb-1">
-                <button
-                    type="button"
-                    className="btn"
-                    onClick={this.handleMonthChangePrevious}
+            <form className="form-inline d-flex justify-content-around pt-2 pb-1">
+                <IconButtonLink
+                    icon="chevron-circle-left"
+                    handleClick={this.handleMonthChangePrevious}
                     disabled={this.isPreviousButtonDisabled()}
-                >
-                    &laquo;
-                </button>
+                />
                 <div className="row">
                     <select
                         className="custom-select"
@@ -124,14 +122,11 @@ class MonthlyInvoicingNavigator extends React.Component {
                         {this.yearOptions}
                     </select>
                 </div>
-                <button
-                    type="button"
-                    className="btn"
-                    onClick={this.handleMonthChangeNext}
+                <IconButtonLink
+                    icon="chevron-circle-right"
+                    handleClick={this.handleMonthChangeNext}
                     disabled={this.isNextButtonDisabled()}
-                >
-                    &raquo;
-                </button>
+                />
             </form>
         );
     }

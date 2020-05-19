@@ -3,7 +3,7 @@ import {Spinner} from "components/common";
 import {InvoicingMonthService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
-import {MonthlyInvoicingList, MonthlyInvoicingListSummary} from "../presentation";
+import {MonthlyInvoicingList} from "../presentation";
 
 class ListMonthlyInvoices extends React.Component {
     constructor(props) {

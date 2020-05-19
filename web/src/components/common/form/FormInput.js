@@ -38,7 +38,7 @@ class FormInput extends React.Component {
                     value={
                         this.props.readOnly === true
                             ? this.props.field.value
-                            : this.state.value
+                            : this.state.value != null
                             ? this.state.value
                             : ""
                     }

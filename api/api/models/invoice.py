@@ -165,8 +165,8 @@ class Invoice(models.Model):
         blank=False, null=False, default=False, verbose_name="Entrega", help_text=""
     )
 
-    pago_1_al_11 = models.FloatField(
-        null=True, blank=True, default=0, verbose_name="Pago 1 al 11", help_text=""
+    pago_1_al_10 = models.FloatField(
+        null=True, blank=True, default=0, verbose_name="Pago 1 al 10", help_text=""
     )
 
     pago_11_al_30 = models.FloatField(
@@ -236,8 +236,8 @@ class Invoice(models.Model):
 
     def update_with_payment(self, fecha_pago, monto_pago):
         if fecha_pago.day < 11:
-            self.pago_1_al_11 = self.pago_1_al_11 + monto_pago
+            self.pago_1_al_10 = self.pago_1_al_10 + monto_pago
         else:
             self.pago_11_al_30 = self.pago_11_al_30 + monto_pago
-        if (self.pago_1_al_11 + self.pago_11_al_30) >= self.total:
+        if (self.pago_1_al_10 + self.pago_11_al_30) >= self.total:
             self.estado = InvoiceStatus.COBRADA

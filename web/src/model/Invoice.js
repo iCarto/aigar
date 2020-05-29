@@ -45,7 +45,7 @@ const invoice_api_adapter = invoice => {
         invoice.version.toString().padStart(2, "0");
     invoice["num_socio"] = invoice.member.num_socio;
     invoice["tipo_socio"] = getTipoSocio(invoice.member);
-    invoice["total_pagado"] = invoice.pago_1_al_11 + invoice.pago_11_al_30;
+    invoice["total_pagado"] = invoice.pago_1_al_10 + invoice.pago_11_al_30;
     return invoice;
 };
 
@@ -75,7 +75,7 @@ const createInvoice = ({
     caudal_anterior = 0,
     comision = 0,
     comprobar_pago_11_al_30 = 0,
-    comprobar_pago_1_al_11 = 0,
+    comprobar_pago_1_al_10 = 0,
     consumo = null,
     cuota_fija = 0,
     cuota_variable = 0,
@@ -90,7 +90,7 @@ const createInvoice = ({
     tipo_socio = "",
     observaciones = "",
     pago_11_al_30 = 0,
-    pago_1_al_11 = 0,
+    pago_1_al_10 = 0,
     reconexion = 0,
     otros = 0,
     saldo_pendiente = 0,
@@ -116,7 +116,7 @@ const createInvoice = ({
         caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
         comision: NumberUtil.parseFloatOrNull(comision),
         comprobar_pago_11_al_30,
-        comprobar_pago_1_al_11,
+        comprobar_pago_1_al_10,
         consumo: NumberUtil.parseIntOrNull(consumo),
         cuota_fija: NumberUtil.parseFloatOrNull(cuota_fija),
         cuota_variable: NumberUtil.parseFloatOrNull(cuota_variable),
@@ -131,7 +131,7 @@ const createInvoice = ({
         tipo_socio,
         observaciones,
         pago_11_al_30: NumberUtil.parseFloatOrNull(pago_11_al_30),
-        pago_1_al_11: NumberUtil.parseFloatOrNull(pago_1_al_11),
+        pago_1_al_10: NumberUtil.parseFloatOrNull(pago_1_al_10),
         reconexion: NumberUtil.parseFloatOrNull(reconexion),
         otros: NumberUtil.parseFloatOrNull(otros),
         saldo_pendiente: NumberUtil.parseFloatOrNull(saldo_pendiente),

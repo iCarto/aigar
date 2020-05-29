@@ -109,10 +109,10 @@ def get_fixtures_invoices(invoices):
                 # estos pagos se corresponden con la factura del mes anterior
                 # y se utiliza en el excel para determinar si hay mora o no
                 # pero no se pueden cargar en la factura actual, sino en la anterior
-                pago_1_al_11 = float(invoice.get("pago_1_al_11", 0) or 0)
+                pago_1_al_10 = float(invoice.get("pago_1_al_10", 0) or 0)
                 pago_11_al_30 = float(invoice.get("pago_11_al_30", 0) or 0)
-                comprobar_pago_1_al_11 = float(
-                    invoice.get("comprobar_pago_1_al_11", 0) or 0
+                comprobar_pago_1_al_10 = float(
+                    invoice.get("comprobar_pago_1_al_10", 0) or 0
                 )
                 comprobar_pago_11_al_30 = float(
                     invoice.get("comprobar_pago_11_al_30", 0) or 0
@@ -132,11 +132,11 @@ def get_fixtures_invoices(invoices):
                             "pago_11_al_30"
                         ] = pago_11_al_30
                         last_month_fixture_invoice["fields"][
-                            "pago_1_al_11"
-                        ] = pago_1_al_11
+                            "pago_1_al_10"
+                        ] = pago_1_al_10
                         last_month_fixture_invoice["fields"]["estado"] = (
                             "no_cobrada"
-                            if comprobar_pago_1_al_11 == 0
+                            if comprobar_pago_1_al_10 == 0
                             and comprobar_pago_11_al_30 == 0
                             else "cobrada"
                         )

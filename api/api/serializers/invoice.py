@@ -90,10 +90,10 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
         )
 
     def get_deuda(self, obj):
-        return obj.total - (obj.pago_1_al_11 + obj.pago_11_al_30)
+        return obj.total - (obj.pago_1_al_10 + obj.pago_11_al_30)
 
     def get_monto(self, obj):
-        return obj.pago_1_al_11 + obj.pago_11_al_30
+        return obj.pago_1_al_10 + obj.pago_11_al_30
 
     def get_mora_por_retraso(self, obj):
         all_invoices_payments_info = self.context.get(

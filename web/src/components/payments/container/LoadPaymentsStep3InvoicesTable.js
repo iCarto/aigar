@@ -42,10 +42,10 @@ class LoadPaymentsStep3InvoicesTable extends React.Component {
                     invoice.errors.push("La factura tiene varios pagos");
                     return;
                 }
-                if (invoice.total > invoice.pago_1_al_11 + invoice.pago_11_al_30) {
+                if (invoice.total > invoice.pago_1_al_10 + invoice.pago_11_al_30) {
                     invoice.errors.push("El pago no cubre el total");
                 }
-                if (invoice.total < invoice.pago_1_al_11 + invoice.pago_11_al_30) {
+                if (invoice.total < invoice.pago_1_al_10 + invoice.pago_11_al_30) {
                     invoice.errors.push("El pago supera el total");
                 }
             }

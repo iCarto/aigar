@@ -115,7 +115,7 @@ class InvoiceStatsView(ListAPIView):
             "anho",
             "member",
             "total",
-            "pago_1_al_11",
+            "pago_1_al_10",
             "pago_11_al_30",
             "mora",
         )
@@ -142,7 +142,7 @@ class InvoiceStatsView(ListAPIView):
                 and (
                     previous_invoice is None
                     or (
-                        previous_invoice["pago_1_al_11"] == 0
+                        previous_invoice["pago_1_al_10"] == 0
                         and previous_invoice["pago_11_al_30"] != 0
                     )
                 )
@@ -150,7 +150,7 @@ class InvoiceStatsView(ListAPIView):
                 "mora_por_impago": 1
                 if invoice["mora"] != 0
                 and previous_invoice is not None
-                and previous_invoice["pago_1_al_11"] == 0
+                and previous_invoice["pago_1_al_10"] == 0
                 and previous_invoice["pago_11_al_30"] == 0
                 else 0,
             }

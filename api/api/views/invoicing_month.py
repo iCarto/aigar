@@ -113,7 +113,7 @@ def get_reconexion_value(member, last_month_invoice):
 def get_mora_value(last_month_invoice):
     # TODO Estos meses, debido a la crisis del Covid-19, no se cobrarán moras
     # Comentamos el código que deberá ser revisado cuando se lance una versión funcional
-    # if last_month_invoice is not None and last_month_invoice.pago_1_al_11 == 0:
+    # if last_month_invoice is not None and last_month_invoice.pago_1_al_10 == 0:
     #    return 1
     return 0
 
@@ -122,7 +122,7 @@ def get_saldo_pendiente_value(last_month_invoice):
     if last_month_invoice is not None:
         return (
             (last_month_invoice.total or 0)
-            - last_month_invoice.pago_1_al_11
+            - last_month_invoice.pago_1_al_10
             - last_month_invoice.pago_11_al_30
         )
     return 0

@@ -88,6 +88,7 @@ class ListMonthlyInvoicesActions extends React.Component {
             <PrintInvoicesButton
                 invoices={this.props.invoices}
                 position="3"
+                buttonTitle="Imprimir facturas"
                 outputFilename={this.getOutputFilename()}
                 disabled={!this.isPrintInvoiceButtonEnabled()}
                 handleSuccessPrintInvoices={this.props.handleSuccessPrintInvoices}

@@ -3,6 +3,7 @@ import {Spinner} from "components/common";
 import {
     InvoicesStatsList,
     InvoicesStatsFieldSelect,
+    InvoicesStatOpenedMonthInfo,
 } from "components/stats/presentation";
 import ViewInvoicesStatsSidebar from "./ViewInvoicesStatsSidebar";
 import {InvoiceService} from "service/api";
@@ -199,6 +200,13 @@ class ViewInvoicesStats extends React.Component {
         return invoicingMonth.substring(4, 6) + "/" + invoicingMonth.substring(0, 4);
     }
 
+    get statsInfo() {
+        if (this.state.selectedField === "monto" && this.state.invoices) {
+            return <InvoicesStatOpenedMonthInfo invoices={this.state.invoices} />;
+        }
+        return null;
+    }
+
     get content() {
         if (this.state.invoices) {
             const filteredInvoices = this.filter(
@@ -222,6 +230,7 @@ class ViewInvoicesStats extends React.Component {
                         unitClass={this.getFieldUnitClass(this.state.selectedField)}
                         filter={this.state.filter}
                     />
+                    {this.statsInfo}
                     <BarChart
                         dataLabels={this.getInvoicingMonths(filteredInvoices)}
                         dataLabelsFormat={this.formatInvoicingMonth}

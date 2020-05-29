@@ -29,6 +29,10 @@ const NumberUtil = {
         }
         return parseInt(value);
     },
+
+    formatFloat(value) {
+        return parseFloat(value).toFixed(2);
+    },
 };
 
 export default NumberUtil;

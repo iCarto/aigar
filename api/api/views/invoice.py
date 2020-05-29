@@ -99,8 +99,69 @@ class InvoiceViewSet(
 
 class InvoiceStatsView(ListAPIView):
     queryset = (
-        Invoice.objects.prefetch_related("member")
+        Invoice.objects.prefetch_related("member", "mes_facturacion")
         .filter(is_active=True)
         .order_by("mes_facturacion", "member")
     )
     serializer_class = InvoiceStatsSerializer
+
+    def get_serializer_context(self):
+        context = super(InvoiceStatsView, self).get_serializer_context()
+
+        all_invoices = Invoice.objects.all().values(
+            "id_factura",
+            "mes_facturacion",
+            "mes_facturado",
+            "anho",
+            "member",
+            "total",
+            "pago_1_al_11",
+            "pago_11_al_30",
+            "mora",
+        )
+        all_invoices_payments_info = []
+        for invoice in all_invoices:
+            mes_facturado = invoice["mes_facturado"]
+            previous_mes_facturado = 12 if mes_facturado == 1 else mes_facturado - 1
+            previous_anho = (
+                invoice["anho"] - 1 if mes_facturado == 1 else invoice["anho"]
+            )
+            previous_invoice = [
+                previous_invoice
+                for previous_invoice in all_invoices
+                if previous_invoice["mes_facturado"] == previous_mes_facturado
+                and previous_invoice["anho"] == previous_anho
+                and previous_invoice["member"] == invoice["member"]
+            ]
+            previous_invoice = previous_invoice[0] if previous_invoice else None
+            invoice_payment_info = {
+                "id_factura": invoice["id_factura"],
+                "mora": invoice["mora"],
+                "mora_por_retraso": 1
+                if invoice["mora"] != 0
+                and (
+                    previous_invoice is None
+                    or (
+                        previous_invoice["pago_1_al_11"] == 0
+                        and previous_invoice["pago_11_al_30"] != 0
+                    )
+                )
+                else 0,
+                "mora_por_impago": 1
+                if invoice["mora"] != 0
+                and previous_invoice is not None
+                and previous_invoice["pago_1_al_11"] == 0
+                and previous_invoice["pago_11_al_30"] == 0
+                else 0,
+            }
+            all_invoices_payments_info.append(invoice_payment_info)
+
+        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
+        context.update(
+            {
+                "request": self.request,
+                "all_invoices_payments_info": all_invoices_payments_info,
+                "last_invoicing_month": last_invoicing_month,
+            }
+        )
+        return context

@@ -13,6 +13,8 @@ class PaymentSerializer(serializers.ModelSerializer):
         payment = Payment.objects.create(**validated_data)
 
         invoice = payment.factura
+        # reload data because another payment could have updated the invoice
+        invoice.refresh_from_db()
         invoice.update_with_payment(payment.fecha, payment.monto)
         invoice.save()
 

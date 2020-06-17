@@ -106,7 +106,8 @@ class MemberExportSerializer(serializers.ModelSerializer):
                 last_invoice_for_member[0].caudal_actual
                 or last_invoice_for_member[0].caudal_anterior
             )
-        return None
+        # si no tiene factura anterior se trata de un nuevo socio, por tanto su consumo anterior es 0
+        return 0
 
     def get_lectura(self, obj):
         return None

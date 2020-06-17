@@ -63,7 +63,12 @@ class MeasurementInvoicePreview(CreateAPIView):
         for measurement in measurements:
             invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
             if invoice is not None:
-                invoice.update_with_measurement(measurement["caudal_actual"])
+                invoice.update_with_measurement(
+                    measurement["caudal_actual"],
+                    measurement["caudal_anterior"]
+                    if measurement["cambio_medidor"] == True
+                    else None,
+                )
                 updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}

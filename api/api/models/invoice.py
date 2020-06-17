@@ -195,8 +195,11 @@ class Invoice(models.Model):
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
 
-    def update_with_measurement(self, caudal_actual):
+    def update_with_measurement(self, caudal_actual, caudal_anterior):
         self.caudal_actual = int(caudal_actual)
+        self.caudal_anterior = (
+            caudal_anterior if caudal_anterior is not None else self.caudal_anterior
+        )
         self.consumo = self.caudal_actual - self.caudal_anterior
         consumo_final = (
             min(self.consumo, self.member.consumo_maximo)

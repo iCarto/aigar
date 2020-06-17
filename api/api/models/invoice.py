@@ -218,7 +218,8 @@ class Invoice(models.Model):
                 + fixed_values["CUOTA_VARIABLE_MAS_20"] * (consumo_final - 20)
             )
 
-        self.total = (
+        # TODO Review if store invoice in decimal fields is a better option
+        self.total = round(
             self.cuota_fija
             + self.cuota_variable
             + self.comision
@@ -230,8 +231,10 @@ class Invoice(models.Model):
             + self.traspaso
             + self.otros
             + self.saldo_pendiente
-            - self.descuento
+            - self.descuento,
+            2,
         )
+
         return self
 
     def update_with_payment(self, fecha_pago, monto_pago):

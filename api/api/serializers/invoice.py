@@ -6,12 +6,21 @@ from rest_framework import serializers
 
 class InvoiceSerializer(serializers.ModelSerializer):
     id_factura = serializers.ReadOnlyField()
-    member = MemberShortSerializer(many=False, read_only=True)
+    num_socio = serializers.PrimaryKeyRelatedField(
+        source="member", queryset=Member.objects.all()
+    )
+    member_data = serializers.SerializerMethodField()
     resumen = serializers.SerializerMethodField()
 
     class Meta:
         model = Invoice
-        fields = "__all__"
+        exclude = ("member",)
+
+    def get_member_data(self, obj):
+        member_data_serializer = MemberShortSerializer(
+            obj.member, many=False, read_only=True
+        )
+        return member_data_serializer.data
 
     def get_resumen(self, obj):
         last_three_months_invoices = self.context.get(

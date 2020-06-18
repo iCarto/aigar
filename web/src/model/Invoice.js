@@ -37,14 +37,23 @@ class Invoices extends Array {
     }
 }
 
+const getNumero = (num_socio, anho, mes_facturado, version) => {
+    return (
+        num_socio.toString().padStart(4, "0") +
+        anho.toString() +
+        mes_facturado.toString().padStart(2, "0") +
+        version.toString().padStart(2, "0")
+    );
+};
+
 const invoice_api_adapter = invoice => {
-    invoice["numero"] =
-        invoice.member.num_socio.toString().padStart(4, "0") +
-        invoice.anho.toString() +
-        invoice.mes_facturado.toString().padStart(2, "0") +
-        invoice.version.toString().padStart(2, "0");
-    invoice["num_socio"] = invoice.member.num_socio;
-    invoice["tipo_socio"] = getTipoSocio(invoice.member);
+    invoice["numero"] = getNumero(
+        invoice.num_socio,
+        invoice.anho,
+        invoice.mes_facturado,
+        invoice.version
+    );
+    invoice["tipo_socio"] = getTipoSocio(invoice.member_data);
     invoice["total_pagado"] = invoice.pago_1_al_10 + invoice.pago_11_al_30;
     return invoice;
 };
@@ -80,7 +89,7 @@ const createInvoice = ({
     cuota_fija = 0,
     cuota_variable = 0,
     derecho = 0,
-    entrega = "",
+    entrega = false,
     mes_facturado = 0,
     mes_limite = 0,
     anho_limite = 0,

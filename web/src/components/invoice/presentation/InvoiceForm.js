@@ -61,6 +61,7 @@ class InvoiceForm extends React.Component {
         // They are always modified at the high order component and this component only render their values.
         if (this.props.invoice) {
             const {
+                id_factura,
                 consumo,
                 caudal_actual,
                 caudal_anterior,
@@ -80,6 +81,7 @@ class InvoiceForm extends React.Component {
             } = this.getFormDataFromProps();
             const isReadOnlyInvoice =
                 this.props.invoice.estado !== ESTADOS_FACTURA.NUEVA;
+            const isNewInvoice = id_factura.value == -1;
             return (
                 <form
                     onSubmit={this.handleSubmit}
@@ -101,7 +103,7 @@ class InvoiceForm extends React.Component {
                                 name="caudal_anterior"
                                 field={caudal_anterior}
                                 handleChange={this.handleChange}
-                                readOnly={true}
+                                readOnly={!isNewInvoice}
                                 small={true}
                             />
                         </div>
@@ -142,7 +144,7 @@ class InvoiceForm extends React.Component {
                                 name="cuota_variable"
                                 field={cuota_variable}
                                 handleChange={this.handleChange}
-                                readOnly={true}
+                                readOnly={!isNewInvoice}
                                 small={true}
                             />
                         </div>
@@ -152,7 +154,7 @@ class InvoiceForm extends React.Component {
                                 name="comision"
                                 field={comision}
                                 handleChange={this.handleChange}
-                                readOnly={true}
+                                readOnly={!isNewInvoice}
                                 small={true}
                             />
                         </div>
@@ -162,7 +164,7 @@ class InvoiceForm extends React.Component {
                                 name="ahorro"
                                 field={ahorro}
                                 handleChange={this.handleChange}
-                                readOnly={true}
+                                readOnly={!isNewInvoice}
                                 small={true}
                             />
                         </div>
@@ -232,7 +234,7 @@ class InvoiceForm extends React.Component {
                                 name="saldo_pendiente"
                                 field={saldo_pendiente}
                                 handleChange={this.handleChange}
-                                readOnly={true}
+                                readOnly={!isNewInvoice}
                                 small={true}
                             />
                         </div>

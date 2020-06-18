@@ -10,7 +10,12 @@ import {
     ViewMember,
     ManageMembers,
 } from "./components/member/container";
-import {EditInvoice, ViewInvoice, ManageInvoices} from "components/invoice/container";
+import {
+    EditInvoice,
+    ViewInvoice,
+    ManageInvoices,
+    CreateInvoice,
+} from "components/invoice/container";
 import {ViewInvoicesStats} from "components/stats/container";
 
 import LoadDataWizard from "./components/common/loaddata/wizard/LoadDataWizard";
@@ -70,6 +75,10 @@ function MainContent(props) {
                 <Route
                     path="/socios/nuevo"
                     render={props => <CreateMember {...props} />}
+                />
+                <Route
+                    path="/socios/:num_socio/nueva_factura"
+                    render={props => <CreateInvoice {...props} />}
                 />
                 <Route
                     path="/socios/:num_socio"

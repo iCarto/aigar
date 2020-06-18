@@ -201,7 +201,29 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
     if (isNaN(total)) {
         total = null;
     }
-    return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
+    return createInvoice(
+        Object.assign({}, invoice, {consumo, cuota_variable, total: total.toFixed(2)})
+    );
+};
+
+const createInvoiceForMember = (member, invoicingMonth, version) => {
+    return createInvoice({
+        numero: getNumero(
+            member.num_socio,
+            invoicingMonth.anho,
+            invoicingMonth.mes,
+            version
+        ),
+        mes_facturacion: invoicingMonth.id_mes_facturacion,
+        anho: invoicingMonth.anho,
+        mes_facturado: invoicingMonth.mes,
+        estado: ESTADOS_FACTURA.NUEVA,
+        num_socio: member.num_socio,
+        nombre: member.name,
+        sector: member.sector,
+        consumo: 0,
+        version,
+    });
 };
 
 export {
@@ -211,4 +233,5 @@ export {
     invoices_api_adapter,
     ESTADOS_FACTURA,
     refreshInvoiceValues,
+    createInvoiceForMember,
 };

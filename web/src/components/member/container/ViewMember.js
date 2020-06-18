@@ -2,7 +2,7 @@ import React from "react";
 import {Spinner, ErrorMessage} from "components/common";
 import {ListMemberInvoices} from "components/member/container";
 import {MemberDetail} from "components/member/presentation";
-import {MemberService} from "service/api";
+import {MemberService, InvoiceService} from "service/api";
 import ViewMemberSidebar from "./ViewMemberSidebar";
 import EditMember from "./EditMember";
 
@@ -25,6 +25,7 @@ class ViewMember extends React.Component {
         this.handleSuccessDisconnectMember = this.handleSuccessDisconnectMember.bind(
             this
         );
+        this.handleClickNewInvoice = this.handleClickNewInvoice.bind(this);
     }
 
     static getDerivedStateFromProps(props, prevState) {
@@ -32,6 +33,7 @@ class ViewMember extends React.Component {
         if (num_socio !== prevState.num_socio) {
             return {
                 member: null,
+                invoices: null,
                 num_socio,
             };
         }
@@ -49,10 +51,15 @@ class ViewMember extends React.Component {
     }
 
     loadMember() {
-        MemberService.getMember(this.state.num_socio)
-            .then(member => {
+        Promise.all([
+            MemberService.getMember(this.state.num_socio),
+            InvoiceService.getInvoicesForMember(this.state.num_socio),
+        ])
+            .then(result => {
+                const member = result[0];
                 this.setState({
                     member,
+                    invoices: result[1],
                     isLoading: false,
                     errorMessage: member.is_active ? null : "El socio ha sido borrado.",
                 });
@@ -102,18 +109,26 @@ class ViewMember extends React.Component {
         this.handleBack();
     }
 
+    handleClickNewInvoice() {
+        this.props.history.push("/socios/" + this.state.num_socio + "/nueva_factura");
+    }
+
     get view() {
         return (
             <div className="row no-gutters h-100">
                 <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                     <ViewMemberSidebar
                         member={this.state.member}
+                        numInvoices={
+                            this.state.invoices ? this.state.invoices.length : 0
+                        }
                         handleClickEditMember={this.handleClickEditMember}
                         handleSuccessDeletedMember={this.handleSuccessDeletedMember}
                         handleSuccessConnectMember={this.handleSuccessConnectMember}
                         handleSuccessDisconnectMember={
                             this.handleSuccessDisconnectMember
                         }
+                        handleClickNewInvoice={this.handleClickNewInvoice}
                         handleBack={this.handleBack}
                     />
                 </nav>
@@ -122,9 +137,7 @@ class ViewMember extends React.Component {
                         <ErrorMessage message={this.state.errorMessage} />
                         <MemberDetail member={this.state.member} />
                         {this.state.member ? (
-                            <ListMemberInvoices
-                                num_socio={this.state.member.num_socio}
-                            />
+                            <ListMemberInvoices invoices={this.state.invoices} />
                         ) : null}
                     </div>
                 </div>

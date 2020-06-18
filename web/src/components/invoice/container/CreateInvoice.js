@@ -112,6 +112,7 @@ class CreateInvoice extends React.Component {
             .then(createdInvoice => {
                 this.setState({
                     isSaving: false,
+                    invoice: createdInvoice,
                 });
                 if (this.props.handleSubmit) {
                     this.props.handleSubmit(createdInvoice.id_factura);
@@ -129,14 +130,14 @@ class CreateInvoice extends React.Component {
             });
     }
 
-    handleBack(id_factura) {
+    handleBack() {
         console.log("CreateInvoice.handleBack");
         if (this.props.handleBack) {
-            this.props.handleBack(id_factura);
-        } else if (id_factura) {
-            this.props.history.push("/facturas/" + id_factura);
+            this.props.handleBack();
+        } else if (this.state.invoice.id_factura != -1) {
+            this.props.history.push("/facturas/" + this.state.invoice.id_factura);
         } else {
-            this.props.history.push("/facturas");
+            this.props.history.push("/socios/" + this.state.num_socio);
         }
     }
 

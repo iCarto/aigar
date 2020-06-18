@@ -15,6 +15,15 @@ class ViewMemberSidebar extends React.Component {
                 </div>
                 {this.props.member && this.props.member.is_active ? (
                     <div className="d-flex flex-column text-center pr-4 pl-4">
+                        {this.props.numInvoices === 0 ? (
+                            <button
+                                onClick={this.props.handleClickNewInvoice}
+                                className="btn btn-primary mt-1 mb-1"
+                            >
+                                <i className="fas fa-file-alt mr-2" />
+                                Crear factura
+                            </button>
+                        ) : null}
                         <button
                             onClick={this.props.handleClickEditMember}
                             className="btn btn-primary mt-1 mb-1"

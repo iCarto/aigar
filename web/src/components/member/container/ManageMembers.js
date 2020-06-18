@@ -90,6 +90,7 @@ class ManageMembers extends React.Component {
                 <ViewMember
                     num_socio={this.state.selectedMember}
                     handleBack={this.handleBackViewMember}
+                    {...this.props}
                 />
             );
         }

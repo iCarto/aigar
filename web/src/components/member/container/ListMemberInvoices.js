@@ -13,6 +13,11 @@ class ListMemberInvoices extends React.Component {
     }
 
     static getDerivedStateFromProps(props, prevState) {
+        if (props.invoices) {
+            return {
+                invoices: props.invoices,
+            };
+        }
         const num_socio = props.num_socio;
         if (num_socio !== prevState.num_socio) {
             return {
@@ -24,7 +29,9 @@ class ListMemberInvoices extends React.Component {
     }
 
     componentDidMount() {
-        this.loadInvoicesForMember();
+        if (this.state.invoices === null) {
+            this.loadInvoicesForMember();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {

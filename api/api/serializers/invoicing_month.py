@@ -42,8 +42,17 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
                 mes_facturacion=invoicing_month_to_close
             )
             for last_month_invoice in last_month_invoices:
-                if last_month_invoice.estado == InvoiceStatus.PENDIENTE_DE_COBRO:
-                    last_month_invoice.estado = InvoiceStatus.NO_COBRADA
+                if (
+                    last_month_invoice.estado == InvoiceStatus.NUEVA
+                    or last_month_invoice.estado == InvoiceStatus.PENDIENTE_DE_COBRO
+                ):
+                    if (
+                        last_month_invoice.pago_1_al_10
+                        + last_month_invoice.pago_11_al_30
+                    ) >= last_month_invoice.total:
+                        last_month_invoice.estado = InvoiceStatus.COBRADA
+                    else:
+                        last_month_invoice.estado = InvoiceStatus.NO_COBRADA
                     last_month_invoice.save()
 
         invoices = validated_data.pop("invoices", [])

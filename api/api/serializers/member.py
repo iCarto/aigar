@@ -1,6 +1,7 @@
 from django.db import transaction
 
-from api.models.invoice import fixed_values
+from api.models.invoice import Invoice, InvoiceStatus, fixed_values
+from api.models.invoicing_month import InvoicingMonth
 from api.models.member import Member
 from rest_framework import serializers
 
@@ -23,24 +24,43 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        prev_orden = instance.orden
-        next_orden = validated_data["orden"]
-        if prev_orden != next_orden:
-            if prev_orden < next_orden:
+        if instance.orden != validated_data["orden"]:
+            self.update_other_members_order(instance.orden, validated_data["orden"])
+
+        updated_member = super(MemberSerializer, self).update(instance, validated_data)
+
+        self.update_current_invoice(updated_member)
+        return updated_member
+
+    def update_other_members_order(self, old_order, new_order):
+        if old_order != new_order:
+            if old_order < new_order:
                 members_to_update = Member.objects.filter(
-                    orden__gt=prev_orden, orden__lte=next_orden
+                    orden__gt=old_order, orden__lte=new_order
                 )
                 for member in members_to_update:
                     member.orden = member.orden - 1
                     member.save()
             else:
                 members_to_update = Member.objects.filter(
-                    orden__lt=prev_orden, orden__gte=next_orden
+                    orden__lt=old_order, orden__gte=new_order
                 )
                 for member in members_to_update:
                     member.orden = member.orden + 1
                     member.save()
-        return super(MemberSerializer, self).update(instance, validated_data)
+
+    def update_current_invoice(self, member):
+        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
+        last_invoice = Invoice.objects.filter(
+            member=member.num_socio,
+            mes_facturacion=last_invoicing_month.id_mes_facturacion,
+            is_active=True,
+        ).first()
+        if last_invoice and last_invoice.estado == InvoiceStatus.NUEVA:
+            last_invoice.nombre = member.name
+            last_invoice.sector = member.sector
+            last_invoice.update_total()
+            last_invoice.save()
 
 
 class MemberShortSerializer(serializers.ModelSerializer):

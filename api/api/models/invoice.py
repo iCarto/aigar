@@ -200,6 +200,19 @@ class Invoice(models.Model):
         self.caudal_anterior = (
             caudal_anterior if caudal_anterior is not None else self.caudal_anterior
         )
+        return self.update_total()
+
+    def update_total(self):
+        self.cuota_fija = (
+            fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+            if self.member.solo_mecha
+            else fixed_values["CUOTA_FIJA_NORMAL"]
+        )
+        self.ahorro = (
+            fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
+            if self.member.solo_mecha
+            else fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+        )
         self.consumo = self.caudal_actual - self.caudal_anterior
         consumo_final = (
             min(self.consumo, self.member.consumo_maximo)

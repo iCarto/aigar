@@ -119,8 +119,9 @@ const createMember = ({
         solo_mecha,
         orden: parseInt(orden),
         observaciones,
-        consumo_maximo,
-        consumo_reduccion_fija,
+        consumo_maximo: consumo_maximo === "" ? null : consumo_maximo,
+        consumo_reduccion_fija:
+            consumo_reduccion_fija === "" ? null : consumo_reduccion_fija,
         tipo_socio,
         is_active,
         // comunidad: SECTORES_COMUNIDADES[this.sector],

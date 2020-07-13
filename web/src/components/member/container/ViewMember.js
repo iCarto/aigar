@@ -93,6 +93,7 @@ class ViewMember extends React.Component {
 
     handleSubmitEditMember(member) {
         this.setState({view: "view", member});
+        this.loadMember();
     }
 
     handleSuccessConnectMember() {

@@ -200,10 +200,10 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         invoice.descuento;
     if (isNaN(total)) {
         total = null;
+    } else {
+        total = total.toFixed(2);
     }
-    return createInvoice(
-        Object.assign({}, invoice, {consumo, cuota_variable, total: total.toFixed(2)})
-    );
+    return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
 };
 
 const createInvoiceForMember = (member, invoicingMonth, version) => {

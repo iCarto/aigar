@@ -113,7 +113,7 @@ class PrintInvoicesButton extends React.Component {
     get modalContentFinished() {
         return (
             <p className="alert alert-success">
-                El documento se ha generado documento correctamente.
+                El documento se ha generado correctamente.
             </p>
         );
     }

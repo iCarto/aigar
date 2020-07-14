@@ -69,7 +69,7 @@ class InvoicesList extends React.Component {
             if (this.props.showMember !== false) {
                 const memberColumns = [
                     {
-                        Header: "Nombre",
+                        Header: "Socio",
                         accessor: "nombre",
                         className: "font-weight-bold text-nowrap",
                     },

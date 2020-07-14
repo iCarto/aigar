@@ -19,7 +19,7 @@ class MonthlyInvoicingList extends React.Component {
                     }),
                 },
                 {
-                    Header: "Usuario",
+                    Header: "Socio",
                     accessor: "nombre",
                     Cell: LinkCellTable,
                     getProps: () => ({

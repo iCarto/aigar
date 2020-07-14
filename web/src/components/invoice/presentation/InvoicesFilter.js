@@ -29,7 +29,7 @@ class InvoicesFilter extends React.Component {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="name">Nombre</label>
+                    <label htmlFor="name">Socio</label>
                     <input
                         type="text"
                         className="form-control"

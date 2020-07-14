@@ -32,7 +32,7 @@ class MemberDetail extends React.Component {
                     <div className="row p-3">
                         <div className="col-md-5 offset-md-1">
                             <div className="field-label p-2 row no-gutters">
-                                <label className="col-5">Socio</label>
+                                <label className="col-5">Nº socio</label>
                                 <strong>{num_socio}</strong>
                             </div>
                             <div className="field-label p-2 row no-gutters">
@@ -40,7 +40,7 @@ class MemberDetail extends React.Component {
                                 <strong>{name}</strong>
                             </div>
                             <div className="field-label p-2 row no-gutters">
-                                <label className="col-5">Estado</label>
+                                <label className="col-5">Tipo de socio</label>
                                 {solo_mecha ? (
                                     <strong>
                                         <i className="fas fa-tint-slash mr-2" />

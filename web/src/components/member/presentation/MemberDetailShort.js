@@ -28,7 +28,7 @@ class MemberDetailShort extends React.Component {
                     {this.message}
                     <div className="col-md-6">
                         <div className="field-label p-2 row no-gutters">
-                            <label className="col-3">Socio</label>
+                            <label className="col-3">Nº socio</label>
                             <strong>{num_socio}</strong>
                         </div>
                         <div className="field-label p-2 row no-gutters">
@@ -36,7 +36,7 @@ class MemberDetailShort extends React.Component {
                             <strong>{name}</strong>
                         </div>
                         <div className="field-label p-2 row no-gutters">
-                            <label className="col-3">Estado</label>
+                            <label className="col-4">Tipo de socio</label>
                             {solo_mecha ? (
                                 <strong>
                                     <i className="fas fa-tint-slash mr-2" />

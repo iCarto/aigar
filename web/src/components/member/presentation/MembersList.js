@@ -12,7 +12,7 @@ class MembersList extends React.Component {
                     accessor: "num_socio",
                 },
                 {
-                    Header: "Nombre",
+                    Header: "Socio",
                     accessor: "name",
                     Cell: LinkCellTable,
                     getProps: () => ({
@@ -29,7 +29,7 @@ class MembersList extends React.Component {
                     accessor: "medidor",
                 },
                 {
-                    Header: "Estado",
+                    Header: "Tipo de socio",
                     accessor: "tipo_socio",
                     Cell: MemberStatusCellTable,
                     className: "text-nowrap",

@@ -19,7 +19,7 @@ class MonthlyInvoicingFilter extends React.Component {
         return (
             <form className="column p-3">
                 <div className="form-group">
-                    <label htmlFor="name">Nombre</label>
+                    <label htmlFor="name">Socio</label>
                     <input
                         type="text"
                         className="form-control"

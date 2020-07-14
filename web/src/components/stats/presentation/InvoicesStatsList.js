@@ -19,7 +19,7 @@ class InvoicesStatsList extends React.Component {
                     accessor: "num_socio",
                 },
                 {
-                    Header: "Nombre",
+                    Header: "Socio",
                     accessor: "nombre",
                 },
                 {

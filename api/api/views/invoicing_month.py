@@ -2,7 +2,7 @@ from django.db.models import Max
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
-from api.models.invoice import Invoice, fixed_values
+from api.models.invoice import Invoice, InvoiceStatus, fixed_values
 from api.models.invoicing_month import InvoicingMonth
 from api.models.member import Member
 from api.serializers.invoice import InvoiceSerializer
@@ -24,9 +24,13 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
         last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
 
         id_members = [member.num_socio for member in active_members]
-        last_month_invoices = Invoice.objects.prefetch_related("member").filter(
-            member__in=id_members,
-            mes_facturacion=last_invoicing_month.id_mes_facturacion,
+        last_month_invoices = (
+            Invoice.objects.prefetch_related("member")
+            .filter(
+                member__in=id_members,
+                mes_facturacion=last_invoicing_month.id_mes_facturacion,
+            )
+            .exclude(estado=InvoiceStatus.ANULADA)
         )
 
         new_invoicing_month["invoices"] = []

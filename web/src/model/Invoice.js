@@ -207,6 +207,8 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
 };
 
 const createInvoiceForMember = (member, invoicingMonth, version) => {
+    const invoicingMonthAnho = parseInt(invoicingMonth.anho);
+    const invoicingMonthMes = parseInt(invoicingMonth.mes);
     return createInvoice({
         numero: getNumero(
             member.num_socio,
@@ -215,8 +217,11 @@ const createInvoiceForMember = (member, invoicingMonth, version) => {
             version
         ),
         mes_facturacion: invoicingMonth.id_mes_facturacion,
-        anho: invoicingMonth.anho,
-        mes_facturado: invoicingMonth.mes,
+        anho: invoicingMonthAnho,
+        mes_facturado: invoicingMonthMes,
+        anho_limite:
+            invoicingMonthMes === 12 ? invoicingMonthAnho + 1 : invoicingMonthAnho,
+        mes_limite: (invoicingMonthMes + 1) % 12,
         estado: ESTADOS_FACTURA.NUEVA,
         num_socio: member.num_socio,
         nombre: member.name,

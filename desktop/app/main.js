@@ -4,9 +4,13 @@ const {BrowserWindow, Menu, app} = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow, splashWindow;
+let mainWindow, splashWindow, pythonServerProcess;
 
-function createWindow(mainAddr, subpy) {
+const log = function log(msg) {
+    console.log(msg);
+};
+
+function createWindow(mainAddr) {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 1600,
@@ -20,6 +24,7 @@ function createWindow(mainAddr, subpy) {
     mainWindow.maximize();
 
     setTimeout(function() {
+        log("loading: " + mainAddr);
         mainWindow.loadURL(mainAddr);
     }, 2500);
     /*
@@ -29,8 +34,8 @@ function createWindow(mainAddr, subpy) {
     /*
   mainWindow.loadURL(mainAddr, {"extraHeaders" : "pragma: no-cache\n"});
   mainWindow.webContents.reloadIgnoringCache();
-  mainWindow.webContents.session.clearCache(function(){console.log('Cache cleared')});
-  mainWindow.webContents.session.clearStorageData(function(){console.log('StorageData cleared')});
+  mainWindow.webContents.session.clearCache(function(){log('Cache cleared')});
+  mainWindow.webContents.session.clearStorageData(function(){log('StorageData cleared')});
   */
 
     if (process.platform === "linux") {
@@ -44,36 +49,47 @@ function createWindow(mainAddr, subpy) {
 
     /*
   mainWindow.on('close', function() {
-    mainWindow.webContents.session.clearCache(function(){console.log('Closed: Cache cleared')});
-    mainWindow.webContents.session.clearStorageData(function(){console.log('Closed: StorageData cleared')});
+    mainWindow.webContents.session.clearCache(function(){log('Closed: Cache cleared')});
+    mainWindow.webContents.session.clearStorageData(function(){log('Closed: StorageData cleared')});
   });
 */
 
     mainWindow.on("closed", function() {
         mainWindow = null;
-        subpy.kill("SIGINT");
+        pythonServerProcess.kill("SIGINT");
     });
 }
 
 // process.on('uncaughtException', function(err){
-//   console.log(err);
+//   log(err);
 //   for (i in err) {
-//     console.log(err[i]);
+//     log(err[i]);
 //   }
 // });
 
 app.on("ready", function() {
-    // console.log(app.getPath('userData'));
+    // log(app.getPath('userData'));
     Menu.setApplicationMenu(null);
 
     showSplash();
-
+    log("on ready");
     var spawn = require("child_process").spawn;
-    var subpy;
     if (process.platform !== "linux") {
-        subpy = spawn("./Python37/python.exe", ["./src/manage.py", "runserver_plus"]);
+        log("not linux");
+        pythonServerProcess = spawn("./Python37/python.exe", [
+            "./src/manage.py",
+            "runserver",
+            "--noreload",
+            "--nothreading",
+        ]);
     } else {
-        subpy = spawn("python", ["../../src/manage.py", "runserver_plus"]);
+        log("is linux");
+        pythonServerProcess = spawn("python", [
+            "./src/manage.py",
+            "runserver",
+            "--noreload",
+            "--nothreading",
+        ]);
     }
 
     // TODO. Esto está hecho para esperar a que se lance el servidor Python.
@@ -81,7 +97,7 @@ app.on("ready", function() {
     // después de que el servidor arrancase
     setTimeout(function() {
         var mainAddr = "http://localhost:8000";
-        createWindow(mainAddr, subpy);
+        createWindow(mainAddr);
     }, 4000);
 });
 
@@ -102,10 +118,23 @@ function showSplash() {
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== "darwin") {
-        app.quit();
+    log("window-all-closed");
+    app.quit();
+});
+
+app.on("will-quit", function() {
+    log("will-quit");
+    if (pythonServerProcess) {
+        log("Sending SIGTERM");
+        pythonServerProcess.kill("SIGTERM");
+    }
+});
+
+app.on("quit", function() {
+    log("quit");
+    if (pythonServerProcess) {
+        log("Sending SIGKILL");
+        pythonServerProcess.kill("SIGKILL");
     }
 });
 
@@ -113,7 +142,7 @@ app.on("activate", function() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
-        console.log("This should not happen");
+        log("This should not happen");
         createWindow();
     }
 });

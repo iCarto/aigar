@@ -29,7 +29,14 @@ const DataValidatorService = {
                 name: ["isNotEmpty"],
                 sector: ["isNotEmpty", "isInteger", "isPositive"],
                 orden: ["isNotEmpty", "isInteger", "isPositive"],
-                consumo_maximo: ["isInteger", "isPositive"],
+                consumo_maximo: [
+                    "isInteger",
+                    "isPositive",
+                    {
+                        type: "isHigher",
+                        param: 14,
+                    },
+                ],
                 consumo_reduccion_fija: ["isInteger", "isPositive"],
             })
         );

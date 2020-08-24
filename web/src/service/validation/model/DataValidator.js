@@ -53,6 +53,15 @@ class DataValidator extends Validator {
         }
     }
 
+    isHigher(max, value) {
+        if (!value || value === "") {
+            return;
+        }
+        if (value < max) {
+            return "El valor no puede ser inferior a " + max;
+        }
+    }
+
     length(length, value) {
         if (!value || value === "") {
             return;

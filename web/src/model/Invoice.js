@@ -170,7 +170,7 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         consumo = null;
     }
     const consumo_final =
-        (consumo_maximo ? Math.min(consumo, consumo_maximo) : consumo) -
+        (consumo_maximo != null ? Math.min(consumo, consumo_maximo) : consumo) -
         (consumo_reduccion_fija || 0);
     let cuota_variable = null;
     if (consumo_final <= 14) {

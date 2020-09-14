@@ -21,6 +21,7 @@ class InvoicesStatsList extends React.Component {
                 {
                     Header: "Socio",
                     accessor: "nombre",
+                    style: {minWidth: "210px"},
                 },
                 {
                     Header: "Sector",

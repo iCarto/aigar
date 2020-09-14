@@ -12,13 +12,12 @@ const EditableSelectCellTable = ({
     const [readOnly, setReadOnly] = React.useState(true);
 
     const onChange = e => {
-        console.log("onChange", e.target.value);
         setValue(e.target.value === "true");
     };
 
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
-        onUpdateData(row.index, id, value);
+        onUpdateData(row.original.id, id, value);
         setReadOnly(true);
     };
 

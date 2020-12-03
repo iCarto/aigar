@@ -46,10 +46,12 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "version": 1,
                 "anho": new_invoicing_month["anho"],
                 "mes_facturado": new_invoicing_month["mes"],
-                "mes_limite": (int(new_invoicing_month["mes"]) + 1) % 12,
+                "mes_limite": 1
+                if int(new_invoicing_month["mes"]) + 1 > 12
+                else int(new_invoicing_month["mes"]) + 1,
                 "anho_limite": new_invoicing_month["anho"]
                 if int(new_invoicing_month["mes"]) != 12
-                else new_invoicing_month["anho"] + 1,
+                else int(new_invoicing_month["anho"]) + 1,
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,

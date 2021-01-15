@@ -47,9 +47,13 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
                     or last_month_invoice.estado == InvoiceStatus.PENDIENTE_DE_COBRO
                 ):
                     if (
-                        last_month_invoice.pago_1_al_10
-                        + last_month_invoice.pago_11_al_30
-                    ) >= last_month_invoice.total:
+                        last_month_invoice.total is not None
+                        and (
+                            last_month_invoice.pago_1_al_10
+                            + last_month_invoice.pago_11_al_30
+                        )
+                        >= last_month_invoice.total
+                    ):
                         last_month_invoice.estado = InvoiceStatus.COBRADA
                     else:
                         last_month_invoice.estado = InvoiceStatus.NO_COBRADA

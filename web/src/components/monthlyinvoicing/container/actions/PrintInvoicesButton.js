@@ -158,6 +158,13 @@ class PrintInvoicesButton extends React.Component {
                 }
                 disabled={this.props.disabled}
                 onClick={this.openModal}
+                title={
+                    this.props.invoices &&
+                    this.props.invoices.filter(invoice => invoice.consumo === "")
+                        .length !== 0
+                        ? "No se pueden imprimir las facturas ya que alguna no tiene consumo registrado"
+                        : null
+                }
             >
                 {this.props.showIcon === true ? <i className="fa fa-print" /> : null}
                 &nbsp;

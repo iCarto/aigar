@@ -108,12 +108,12 @@ class InvoicesListPreview extends React.Component {
                         className: "cubic-metre font-weight-bold",
                     },
                     {
-                        Header: "Pago 1 al 10",
+                        Header: "Pago 1 al 15",
                         accessor: "pago_1_al_10",
                         className: "dollar",
                     },
                     {
-                        Header: "Pago 11 al 30",
+                        Header: "Pago 16 al 30",
                         accessor: "pago_11_al_30",
                         className: "dollar",
                     },

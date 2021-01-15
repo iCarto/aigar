@@ -166,11 +166,11 @@ class Invoice(models.Model):
     )
 
     pago_1_al_10 = models.FloatField(
-        null=True, blank=True, default=0, verbose_name="Pago 1 al 10", help_text=""
+        null=True, blank=True, default=0, verbose_name="Pago 1 al 15", help_text=""
     )
 
     pago_11_al_30 = models.FloatField(
-        null=True, blank=True, default=0, verbose_name="Pago 11 al 30", help_text=""
+        null=True, blank=True, default=0, verbose_name="Pago 16 al 30", help_text=""
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures
@@ -254,7 +254,7 @@ class Invoice(models.Model):
         return self
 
     def update_with_payment(self, fecha_pago, monto_pago):
-        if fecha_pago.day < 11:
+        if fecha_pago.day < 16:
             self.pago_1_al_10 = self.pago_1_al_10 + monto_pago
         else:
             self.pago_11_al_30 = self.pago_11_al_30 + monto_pago

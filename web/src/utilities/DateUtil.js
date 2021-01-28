@@ -1,7 +1,7 @@
 import moment from "moment";
 
 const BANK_DATEFORMAT = "DD/MM/YYYY";
-const TIGO_DATEFORMAT = "D-MMM-YYYY";
+const TIGO_DATEFORMAT = "YYYYMMDD";
 const API_DATEFORMAT = "YYYY-MM-DD";
 
 const DateUtil = {
@@ -29,15 +29,10 @@ const DateUtil = {
     },
 
     isValidForDataLoad(date) {
-        if (date.indexOf("-") >= 0) {
-            let values = date.split("-");
-            // Change "ENE" to "Ene" format that is supported by moment.js
-            values[1] =
-                values[1].charAt(0).toUpperCase() + values[1].slice(1).toLowerCase();
-            date = values.join("-");
-            return moment(date, TIGO_DATEFORMAT).isValid();
+        if (date.indexOf("/") >= 0) {
+            return moment(date, BANK_DATEFORMAT, true).isValid();
         }
-        return moment(date, BANK_DATEFORMAT, true).isValid();
+        return moment(date, TIGO_DATEFORMAT).isValid();
     },
 };
 

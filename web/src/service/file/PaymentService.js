@@ -11,16 +11,19 @@ const PaymentService = {
                 if (paymentRead.length === 1) {
                     paymentRead = line.split(",");
                 }
-                if (paymentRead.length === 10) {
-                    // 10 columns = Tigo Money
-                    payments.push(
-                        createPayment({
-                            num_factura: paymentRead[0],
-                            fecha: paymentRead[1],
-                            monto: paymentRead[8],
-                            errors: [],
-                        })
-                    );
+                if (paymentRead.length === 8) {
+                    // 8 columns = Tigo Money
+                    if (paymentRead[5] !== "TF") {
+                        // "TF" means "transacción fallida"
+                        payments.push(
+                            createPayment({
+                                num_factura: paymentRead[2],
+                                fecha: paymentRead[4],
+                                monto: paymentRead[3],
+                                errors: [],
+                            })
+                        );
+                    }
                 } else if (paymentRead.length === 5) {
                     // 5 columns = Banco
                     payments.push(
@@ -59,7 +62,13 @@ const PaymentService = {
     },
 
     isValidLine(line) {
-        return line.trim() !== "" && !line.startsWith("CORRELATIVO");
+        // "CORRELATIVO" or "Record" are the first word of header lines in some example files received from banks
+        // We don't know exactly that format, so we check that special words to claim that a line is valid
+        return (
+            line.trim() !== "" &&
+            !line.startsWith("CORRELATIVO") &&
+            !line.startsWith("Record")
+        );
     },
 
     mergeFileContents(contents) {

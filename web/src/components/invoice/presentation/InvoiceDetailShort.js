@@ -42,7 +42,9 @@ class InvoiceDetailShort extends React.Component {
                                     return (
                                         <div key={payment.id}>
                                             {payment.fecha} -{" "}
-                                            <span class="dollar">{payment.monto}</span>
+                                            <span className="dollar">
+                                                {payment.monto}
+                                            </span>
                                         </div>
                                     );
                                 })}

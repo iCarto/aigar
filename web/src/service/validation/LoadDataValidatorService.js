@@ -51,7 +51,7 @@ const LoadDataValidatorService = {
                 content: [
                     {
                         type: "columns",
-                        param: [5, 10],
+                        param: [5, 8],
                     },
                 ],
             })

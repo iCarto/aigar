@@ -15,7 +15,11 @@ class CSVFileValidator extends Validator {
             return "El nombre del fichero no comienza por ASCATLI";
         }
         var twoDatesFormatRegExp = new RegExp("\\d{6}.+\\d{6}");
-        if (!twoDatesFormatRegExp.test(file.name)) {
+        var oneDateFormatRegExp = new RegExp("\\d{8}");
+        if (
+            !twoDatesFormatRegExp.test(file.name) &&
+            !oneDateFormatRegExp.test(file.name)
+        ) {
             return "El nombre del fichero no contiene fechas válidas";
         }
     }

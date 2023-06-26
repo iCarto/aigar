@@ -1,9 +1,11 @@
-declare -a programs=("python3.6" "npm")
+#!/bin/bash
+
+declare -a programs=("vagrant" "python3" "npm" "mkvirtualenv" "pyenv" "shfmt" "shellcheck")
 
 ## now loop through the above array
 for program in "${programs[@]}"; do
-    if ! hash $program 2> /dev/null; then
-        echo "$program should be there. Run this script to install OS packages:"
+    if ! command -v "${program}" > /dev/null 2>&1; then
+        echo "${program} should be there. Run this script to install OS packages:"
         echo
         echo "./scripts/util/install.sh"
         echo

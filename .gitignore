@@ -4,7 +4,9 @@
 __pycache__
 *.pyc
 build/
-# dist/
+dist/
+
+
 
 
 # Javascript
@@ -20,13 +22,20 @@ node_modules/
 .vscode
 .vagrant
 *~
-ubuntu-xenial-16.04-cloudimg-console.log
+ubuntu-*-cloudimg-console.log
+
+# Scripts
+.ipynb_checkpoints
 
 
 # Project
-fixtures
-/prod
-**/migrations/0*.py
-api/api/static
-fixtures.json
+.env
+private
 desktop/gomi
+tools/fixtures
+
+back/static
+back/media
+back/back/front_build
+back/back/static
+back/**/migrations/0*.py

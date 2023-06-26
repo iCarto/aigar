@@ -1,10 +1,8 @@
 #!/bin/bash
 
-source ./scripts/util/env.sh
-
 # build the frontend
 (
-    cd $FRONTEND_PATH
+    cd front
     npm install
     npm run build
 )
@@ -23,27 +21,27 @@ fi
 
 # copy all of the backend and only the build frontend
 # --exclude=.git \
-# --include=$FRONTEND_PATH/build \
+# --include=front/build \
 # --exclude=scripts \
-# --exclude="$FRONTEND_PATH/*" \
+# --exclude="front/*" \
 rsync -avm \
-    --exclude-from="$BACKEND_PATH/.gitignore" \
-    --exclude"=$BACKEND_PATH/static" \
-    "$BACKEND_PATH" prod
+    --exclude-from="back/.gitignore" \
+    --exclude"=back/static" \
+    back prod
 
 cp api/.env prod/api
 cp api/db.sqlite3 prod/api
 cp api/db.sqlite3.empty prod/api
 
 # move the frontend to its place
-mv "$FRONTEND_PATH/build" "prod/${BACKEND_PATH}/api/static"
-mv "prod/${BACKEND_PATH}/api/static/static/js" "prod/${BACKEND_PATH}/api/static/"
-mv "prod/${BACKEND_PATH}/api/static/static/css" "prod/${BACKEND_PATH}/api/static/"
-mv "prod/${BACKEND_PATH}/api/static/static/media" "prod/${BACKEND_PATH}/api/static/"
-rm -r "prod/${BACKEND_PATH}/api/static/static/"
+mv "front/build" "prod/back/api/static"
+mv "prod/back/api/static/static/js" "prod/back/api/static/"
+mv "prod/back/api/static/static/css" "prod/back/api/static/"
+mv "prod/back/api/static/static/media" "prod/back/api/static/"
+rm -r "prod/back/api/static/static/"
 
 mkdir -p desktop/gomi
-mv "prod/${BACKEND_PATH}" desktop/gomi/src
+mv "prod/back" desktop/gomi/src
 rm -r prod
 # add a production gitignore
 # cp ./scripts/util/prod-gitignore prod/.gitignore

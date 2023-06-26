@@ -60,7 +60,7 @@ if __name__ == "__main__":
         description="""
     Given a path to a requirements file, and having pip-licenses installed,
     only shows the transitive dependencies of the requirements and not all the
-    package installed in the virtualenv
+    packages installed in the virtualenv
     """
     )
     parser.add_argument("file", help="Path to a requirements file")

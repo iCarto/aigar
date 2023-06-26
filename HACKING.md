@@ -1,96 +1,201 @@
-AIGAR: Aplicación Innovadora para la Gestión de Aguas Rurales
+In a hurry? Go to [Recap](#recap)
+
+# Conventions
+
+We asume that the following variables are set up if you are copy&pasting the commands in this file.
+
+You can use your own values.
+
+```
+# Name of the proyect. Used for virtualenv names and other stuff
+PROJECT_NAME=aigar
+
+# Base directory for the whole project. Helper folders and repos are inside
+PROJECT_ROOT_PATH="~/development/${PROJECT_NAME}"
+
+# The last deployed  version
+VERSION=$(date +%y%m%d) # like 220315
+```
 
 # Git Structure
 
--   api: Django REST API scaffolded with [generator-django-rest](https://github.com/metakermit/generator-django-rest)
--   web: React SPA frontend
--   scripts: For install, deploy and wrangling with data.
+-   back: Django REST API + Django Admin
+-   front: React SPA frontend
+-   scripts: For install, deploy, ... scripts-to-rule-them-all style
+-   db: For sqitch
+-   tools: For utilities, wrangling data and so on, ...
+-   docs
+-   server: Provisioning for Vagrant (development) and VPS (production)
 
-## Development
+## Branches and Tags
 
-Before getting started, make sure you have a virtualenv with python 3.6 active, and npm installed
+-   `main`. principal branch. Code deployed in production. Only maintainers push here.
+-   `development`. PR and development goes here. Only maintainers push here. Start your feature branch from here. After a feature is tested in staging is integrated here. Commits can be rewrited with `rebase -i` before the push
+-   `staging`. Code deployed in staging (pre production). This branch can be rewrited with `push -f` and `rebase -i`.
+-   `<xxxx>_<feature>`. Feature branches started from `development`. Can be rewrited with `push -f` and `rebase -i`
 
-If using virtualenvwrapper
+Each new deployed version should be tagged with `"${VERSION}"`
 
-```
-git clone git@gitlab.com:icarto-private/aigar.git
-mkvirtualenv -p $(which python3.6) -a aigar aigar
-```
+### Git Workflow for developing a feature
 
-To get started with development, set up the dependencies. This will install all needed stuff (for the three enviroments web, api and scripts). It's safe to launch it more than one time. It will also execute `reset_db_and_migrations.sh`
-
-```shell
-./scripts/install.sh
-```
-
-The development server can be launched with a script (frontend in 5100 and the backend in 8000) by means of honcho and Procfile.dev
+When you start a new feature.
 
 ```shell
+git branch -D staging
+# git branch -D <other_branches_not_needed>
+git pull --rebase
+git pull --rebase origin main
+git pull --rebase origin development
+git remote prune origin
+
+git co development
+git co -b <xxxx>_<feature>
+
+# Work on you branch, and before push
+
+git branch -D staging
+# git branch -D <other_branches_not_needed>
+git pull --rebase
+git pull --rebase origin main
+git pull --rebase origin development
+git remote prune origin
+
+git co <xxxx>_<feature>
+git rebase development
+
+git push origin -u <xxxx>_<feature>
+```
+
+Remember that if someone pushes also to `<xxxx>_<feature>` you must rebase also this changes
+
+```
+git pull --rebase origin <xxxx>_<feature>
+```
+
+## Pre Commit
+
+The project is setup by default with strict linters and formatters that run on pre commit. But sometimes a quick fix is needed and you want to go over the linters. Use `git commit --no-verify` or set it to `[manual]` in `.pre-commit-config.yaml`.
+
+# Pre-Requisites
+
+Check `server/bootstrap.sh` for automatized way of configuring the tools.
+
+-   [VirtualBox and Vagrant](https://gitlab.com/icarto/ikdb/blob/master/configurar_equipo/linux/virtualbox_y_vagrant.md)
+-   [nodejs y npm](https://gitlab.com/icarto/ikdb/blob/master/configurar_equipo/linux/instalar_y_actualizar_node_y_npm.md)
+-   [Virtualenwrapper](https://gitlab.com/icarto/ikdb/-/blob/master/python/python_tooling_virtualenvwrapper.md#instalaci%C3%B3n)
+-   [pyenv](https://gitlab.com/icarto/ikdb/-/blob/master/python/python_tooling_pyenv.md#instalaci%C3%B3n)
+-   [shfmt](https://gitlab.com/icarto/ikdb/-/blob/wip_linters/linters_estilo_codigo_y_formatters/estilo_codigo_y_formatters/herramientas/formatters_bash.md#configuraci%C3%B3n-icarto)
+-   [shellcheck](https://gitlab.com/icarto/ikdb/-/blob/wip_linters/linters_estilo_codigo_y_formatters/linters/5.linters_bash.md#configuraci%C3%B3n-icarto)
+
+This pre-requistes should be installed previous to the current user session. So if this is the first time you are installing it, _Log out_ from the host and _Log in_ again.
+
+Remember to keep the used ports open and unused. Check `Vagrantfile` and variables like `*_PORT`
+
+```shell
+sudo lsof -i -P -n | grep LISTEN
+```
+
+_Note_: Probably, you can avoid install things in your host accessing the Vagrant guess as it should contain all the dependencies. So you can even launch the back/front inside the Vagrant just opening the appropriate ports. But, this workflow was not tested.
+
+# First Time and Each Development Phase
+
+Most of the Development Environment setup can be done with scripts in Ubuntu 20.04. But some of then mess up with your operating system config files and ask for `sudo` access. So carefully review what is being done.
+
+A production like environment is setup with Vagrant.
+
+We strongly recommend follow this steps before each "development phase" to ensure that the latest dependencies have been upgraded.
+
+Check the [recap](#recap) section for the commands
+
+## Restore fixtures/development database
+
+Use the script
+
+```shell
+./scripts/reset_db_and_create.sh empty
+```
+
+or when a full dump restore is preferred
+
+```shell
+./server/drop_and_create_db.sh path_to_the_dump
+```
+
+# Development
+
+The common workflow:
+
+```shell
+workon "${PROJECT_NAME}"
+code . # or your favourite IDE
 ./scripts/start.sh
 ```
 
-Or, if you prefer do it _by hand_ just open two terminals:
+Instead of `start.sh` script you can open two consoles:
 
 ```shell
-cd web && npm start
-cd api && python manage.py runserver
+# Launch back
+workon "${PROJECT_NAME}"
+cd back; python manage.py runserver_plus
+
+# Lauch front
+cd front; npm start
 ```
 
-During the first development phase it will be useful drop all intermediate migrations and restore the full database each time a change is done in the model or in the data itself. This commands needs the `web/src/fixtures` folder:
+# Deployment
+
+Check `./docs/deployment.md`
+
+# Automated Test
+
+Launch all tests with `./scripts/test.sh`. Take care that this includes e2e tests and can be pretty slow.
+
+# Recap
+
+After installing the pre-requisites.
+
+## First time only
 
 ```shell
-./scripts/reset_db_and_migrations.sh
+cd "${PROJECT_ROOT_PATH}"
+git clone git@github.com:iCarto/${PROJECT_NAME}.git
 ```
 
-Take care. All these scripts **must** be launched from the root of the git repository and with the virtualenv active.
+## Each development phase
 
-## Deployment
-
-Empaquetado de la aplicación de Escritorio
+### Update repo
 
 ```shell
-./scripts/deploy.sh
-cd desktop
-vagrant halt
-vagrant up --provision
+git branch -D staging
+# git branch -D <other_branches_not_needed>
+git pull --rebase
+git pull --rebase origin main
+git pull --rebase origin development
+git remote prune origin
+
+git co development
 ```
 
-Tras esto la carpeta `desktop/gomi/$(date +%y%m%d)_aigar` contendrá la aplicación de escritorio. Puede zipearse (mejor con 7zip) y ser redistribuida.
-
-El fichero `package.json` se habrá modificado automáticamente con la nueva versión (fecha). Cuando sean versiones internas puede descartarse. Con versiones externas:
+### Prepare local enviroment
 
 ```
-git add package.json
-git commit -m "New Version: $(date +%y%m%d)"
-git tag "$(date +%y%m%d)"
-git push --tags origin master
-```
+# Clean up
+source server/variables.ini
+rmvirtualenv "${PROJECT_NAME}"
 
-### Test deployment
+# Download `fixtures` folder and put it on tools/fixtures
 
-Una forma no muy cómoda pero funcional de probar el "bundle" en linux sería:
+# Set up the dependencies
+./scripts/install.sh
 
-```
-# En un terminal dentro del virtualenv
-python desktop/gomi/$(date +%y%m%d)_aigar/src/manage.py runserver_plus
+# Use `./scripts/reset_and_create_db.sh` when you only want to recreate the db
 
-# En otro terminal
-npx electron desktop/gomi/$(date +%y%m%d)_aigar/resources/app/main.js
-```
+deactivate
 
-## Scripts
+workon "${PROJECT_NAME}"
+./scripts/test.sh
 
--   `requirements.txt` in scripts folder contains the dependencies to use the python scrips. It should be used for a different virtualenv that the application of only in development.
--   `web/src/fixtures` folder must be in place
--   `invoice_spreadsheet.py`, `member_spreadsheet.py`, `domains.py` and `database.py` are used to read the data in spreadsheets that ASCATLI is using now and transform it to json, csv, or fixtures files that can be used in the application, for develoment or for build the database. Commonly you only need to know two commands:
-
-```
-python ../scripts/database.py --hack ../web/src/fixtures/database_fileindex.csv > ../api/fixtures.json
-python manage.py loaddata fixtures.json
-```
-
-or even easier:
-
-```
-./scripts/reset_db_and_migrations.sh
+# Run the app with
+(cd back && python manage.py runserver)
+(cd front && NODE_OPTIONS=--openssl-legacy-provider npm start
 ```

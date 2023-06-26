@@ -156,6 +156,9 @@ install_app() {
     unzip_electron "${ELECTRON_URL}"
     mv "${GOMI}/src" "${GOMI}/${DATE}_aigar/"
     wine 'C:\Python37\Scripts\pip.exe' install -r "${GOMI}/${DATE}_aigar/src/requirements.txt"
+
+    # No deberíamos montar runserver_plus en en build para reducir el tamaño
+    # y dependencias
     wine 'C:\Python37\Scripts\pip.exe' install Werkzeug
     wine 'C:\Python37\Scripts\pip.exe' install django-debug-toolbar
 

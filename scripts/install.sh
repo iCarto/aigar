@@ -1,59 +1,73 @@
-#!/bin/bash
-set -e
+#!/bin/bash -i
+# We use -i to read .bashrc and have commands like rmvirtualenv available
 
-source ./scripts/util/env.sh
-source ./scripts/util/check-os-deps.sh
+set -euo pipefail
 
-[[ -z $VIRTUAL_ENV ]] && echo "El virtualenv debe estar activo" && exit 1
+this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
-# DEV stuff
-npm install
-pip install -r requirements-dev.txt
-pre-commit install --install-hooks
+bash -i "${this_dir}"/util/check-os-deps.sh
 
-if [ -z "$(command -v shfmt)" ]; then
-    echo "shfmt no está instalado. El código bash no será formateado."
+source "${this_dir}"/../server/variables.ini
+cd "${this_dir}"/..
+
+# Clean up
+command -v deactivate && deactivate
+
+: "${PROJECT_NAME}" # checks that project_name exists, if not an unbound variable is raised
+
+# virtualenv commands print weird warnings with set -u
+(set +u && rmvirtualenv "${PROJECT_NAME}")
+
+# Developer Experience Setup
+if ! pyenv versions | grep "${PYTHON_VERSION}" > /dev/null 2>&1; then
+    pyenv update
+    pyenv install "${PYTHON_VERSION}"
 fi
+PYTHON_VERSION_BINARY_PATH="$(pyenv shell "${PYTHON_VERSION}" && pyenv which python)"
+
+set +u
+# https://github.com/pexpect/pexpect/commit/71bbdf52ac153c7eaca631637ec96e63de50c2c7
+mkvirtualenv -p "${PYTHON_VERSION_BINARY_PATH}" -a . "${PROJECT_NAME}" || true
+workon "${PROJECT_NAME}"
+set -u
+
+if ! command -v deactivate; then
+    echo "Not in a virtualenv. Can not continue."
+    exit 1
+fi
+
+python -m pip install --upgrade pip
+python -m pip install --upgrade build
+
+pip install -r requirements-dev.txt
+npm install
+pre-commit clean
+pre-commit gc
+pre-commit install --install-hooks --overwrite
 
 # backend stuff
-# -------------
+bash scripts/install.back.sh
 
-## Python setup
+# frontend stuf
+bash scripts/install.front.sh
 
-pip install -r ${BACKEND_PATH}/requirements.txt
-pip install -r ${BACKEND_PATH}/requirements-dev.txt
-pip install -r scripts/requirements.txt
-
-# frontend stuff
-# -------------
-
-if [ ! -d $FRONTEND_PATH ]; then
-    create-react-app $FRONTEND_PATH
-fi
-# build the frontend
-(
-    cd $FRONTEND_PATH
-    npm install
-)
 # ./scripts/util/prod-package.sh
 
-# TODO
+# FIXME
 # link to UI
-if [[ ! -e ${BACKEND_PATH}/api/static && ! -L ${BACKEND_PATH}/api/static ]]; then
+if [[ ! -e back/back/static && ! -L back/back/static ]]; then
     echo "* linking Django app to the JS frontend"
-    CURDIR=$(pwd)
-    cd ${BACKEND_PATH}/api
-    ln -s ../../${FRONTEND_PATH}/build static
-    cd $CURDIR
+    mkdir -p "${this_dir}"/../front/build
+    cd "back/back"
+    ln -s ../../front/build front_build
+    cd "${this_dir}"
 else
     echo "* frontend already linked"
 fi
 
 # app-specific
 #-------------
-./scripts/util/setup-custom.sh
-./scripts/reset_db_and_migrations.sh
+"${this_dir}"/util/setup-custom.sh
+"${this_dir}"/reset_and_create_db.sh
 
 echo "* DONE :)"
-
-exit

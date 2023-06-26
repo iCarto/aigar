@@ -1,21 +1,30 @@
 #!/bin/bash
 
-echo "
-Estas son las dependecias y licencias usadas en AIGAR. Se incluyen únicamente aquellas dependencias usadas por la aplicación y no dependencias de desarrollo.
+NOTICE_FILEPATH=${1}
+EXCLUDE_OWN_NPM_PACKAGE=${2}
 
-Todas ellas son compatibles con la AGPL usanda para licenciar la aplicación
+if [[ ! -f "${NOTICE_FILEPATH}" ]]; then
+    echo "Create notice file before continue. Touch is enougth"
+    echo "touch ${NOTICE_FILEPATH}"
+    exit 1
+fi
+
+echo "
+Estas son las dependencias y licencias usadas en el proyecto. Se incluyen únicamente aquellas dependencias usadas por la aplicación y no dependencias de desarrollo.
+
+Todas ellas son compatibles con la AGPL usada para licenciar la aplicación.
 
 Dependencias Python:
 
-" > desktop/NOTICE
+" > "${NOTICE_FILEPATH}"
 
-pip-licenses --ignore-packages $(python scripts/python_notice.py api/requirements.txt) --with-authors --with-urls --from=meta --format=markdown >> desktop/NOTICE
+pip-licenses --ignore-packages $(python scripts/python_notice.py back/requirements.txt) --with-authors --with-urls --from=meta --format=markdown >> "${NOTICE_FILEPATH}"
 
 echo "
 Dependencias Javascript:
-" >> desktop/NOTICE
+" >> "${NOTICE_FILEPATH}"
 
-(cd web && npx license-checker --production --csv --excludePackages 'web@0.1.0') >> desktop/NOTICE
+(cd front && npx license-checker --production --csv --excludePackages "'${EXCLUDE_OWN_NPM_PACKAGE}'") >> "${NOTICE_FILEPATH}"
 
-(cd web && npx license-checker --production --summary --excludePackages 'web@0.1.0')
-pip-licenses --ignore-packages $(python scripts/python_notice.py api/requirements.txt) --with-authors --with-urls --from=meta --format=markdown --summary
+(cd front && npx license-checker --production --summary --excludePackages "'${EXCLUDE_OWN_NPM_PACKAGE}'")
+pip-licenses --ignore-packages $(python scripts/python_notice.py back/requirements.txt) --with-authors --with-urls --from=meta --format=markdown --summary

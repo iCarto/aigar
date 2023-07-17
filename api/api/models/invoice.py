@@ -1,6 +1,8 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from api.models.invoicing_month import InvoicingMonth
+
 from .member import Sectores
 
 
@@ -37,7 +39,7 @@ class Invoice(models.Model):
     )
 
     mes_facturacion = models.ForeignKey(
-        "InvoicingMonth",
+        InvoicingMonth,
         null=False,
         blank=False,
         related_name="invoices",

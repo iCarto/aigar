@@ -16,7 +16,6 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
     queryset = InvoicingMonth.objects.all()
 
     def create(self, request):
-
         new_invoicing_month = request.data
 
         active_members = Member.objects.filter(is_active=True)

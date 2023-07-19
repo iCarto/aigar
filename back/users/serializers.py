@@ -12,7 +12,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     groups = serializers.SlugRelatedField(
         many=True,
         queryset=Group.objects.all(),

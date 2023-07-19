@@ -18,7 +18,6 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-
         invoicing_month_to_close_query = InvoicingMonth.objects.filter(is_open=True)
         if invoicing_month_to_close_query.count() > 1:
             raise serializers.ValidationError(

@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Measurement(models.Model):
-
     id_lectura = models.AutoField(
         primary_key=True,
         verbose_name="Id lectura",

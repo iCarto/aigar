@@ -51,7 +51,7 @@ LOGGING = {
             "class": "logging.handlers.RotatingFileHandler",
             # IMPORTANT: replace with your desired logfile name!
             "filename": os.path.join(BASE_DIR, "api.log"),
-            "maxBytes": 50 * 10 ** 6,  # will 50 MB do?
+            "maxBytes": 50 * 10**6,  # will 50 MB do?
             "backupCount": 3,  # keep this many extra historical files
             "formatter": "timestampthread",
         },

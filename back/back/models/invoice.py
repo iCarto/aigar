@@ -27,7 +27,6 @@ class InvoiceStatus(models.TextChoices):
 
 
 class Invoice(models.Model):
-
     id_factura = models.AutoField(
         primary_key=True,
         verbose_name="Id factura",

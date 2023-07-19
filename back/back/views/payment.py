@@ -28,7 +28,6 @@ class PaymentViewSet(
     # Including these operations inside an atomic transaction improves that
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-
         # To create payments through /invocingmonth/<id>/payments
         # https://stackoverflow.com/questions/35879857/check-permissions-on-a-related-object-in-django-rest-framework
 

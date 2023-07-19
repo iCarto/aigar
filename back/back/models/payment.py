@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Payment(models.Model):
-
     id_pago = models.AutoField(
         primary_key=True,
         verbose_name="Id pago",

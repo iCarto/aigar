@@ -136,11 +136,7 @@ STATICFILES_DIRS = (root("static"),)
 
 # Django SPA - simple setup for serving modern SPAs from Django
 # https://github.com/metakermit/django-spa
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "spa.storage.SPAStaticFilesStorage",
-    },
-}
+STORAGES = {"staticfiles": {"BACKEND": "spa.storage.SPAStaticFilesStorage"}}
 
 
 # Django REST Framework

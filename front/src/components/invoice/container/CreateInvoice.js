@@ -1,58 +1,35 @@
-import React from "react";
-import {InvoiceForm} from "components/invoice/presentation";
-import {createInvoice, createInvoiceForMember, refreshInvoiceValues} from "model";
-import {DataValidatorService} from "service/validation";
+import React, {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {InvoiceService, MemberService, InvoicingMonthService} from "service/api";
+import {createInvoice, createInvoiceForMember, refreshInvoiceValues} from "model";
+import {InvoiceForm} from "components/invoice/presentation";
+import {DataValidatorService} from "service/validation";
 import CreateInvoiceSidebar from "./CreateInvoiceSidebar";
 import {ErrorMessage} from "components/common";
 
-class CreateInvoice extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            invoice: createInvoice(),
-            member: null,
-            validationErrors: [],
-            isSaving: null,
-            errorMessage: null,
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleBack = this.handleBack.bind(this);
-    }
+const CreateInvoice = ({onSubmit}) => {
+    const [invoice, setInvoice] = useState(createInvoice());
+    const [member, setMember] = useState(null);
+    const [validationErrors, setValidationErrors] = useState([]);
+    const [isSaving, setIsSaving] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
-    static getDerivedStateFromProps(props, prevState) {
-        const num_socio = props.num_socio || props.match.params.num_socio;
-        if (num_socio !== prevState.num_socio) {
-            return {
-                member: null,
-                num_socio,
-                invoice: createInvoice(),
-            };
-        }
-        return null;
-    }
+    const {num_socio} = useParams();
+    const navigate = useNavigate();
 
-    componentDidMount() {
-        this.loadDataForInvoice();
-    }
+    useEffect(() => {
+        loadDataForInvoice();
+    }, [num_socio]);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.num_socio !== this.state.num_socio) {
-            this.loadDataForInvoice();
-        }
-    }
+    const loadDataForInvoice = () => {
+        setMember(null);
+        setIsSaving(true);
+        setErrorMessage(null);
 
-    loadDataForInvoice() {
-        this.setState({
-            member: null,
-            isLoading: true,
-            errorMessage: null,
-        });
         Promise.all([
-            MemberService.getMember(this.state.num_socio),
+            MemberService.getMember(num_socio),
             InvoicingMonthService.getInvoicingMonths(),
-            InvoiceService.getInvoicesForMember(this.state.num_socio),
+            InvoiceService.getInvoicesForMember(num_socio),
         ])
             .then(result => {
                 const member = result[0];
@@ -64,117 +41,99 @@ class CreateInvoice extends React.Component {
                         invoice.mes_facturacion ===
                         invoicingMonthOpened.id_mes_facturacion
                 );
-                this.setState({
-                    member,
-                    isLoading: false,
-                    invoice: createInvoiceForMember(
+
+                setMember(member);
+                setIsSaving(false);
+                setInvoice(
+                    createInvoiceForMember(
                         member,
                         invoicingMonthOpened,
                         invoicesForMember.length + 1
-                    ),
-                });
+                    )
+                );
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido obtener los datos de la factura",
-                    isLoading: false,
-                });
+                setErrorMessage(
+                    "Se ha producido un error y no se han podido obtener los datos de la factura"
+                );
+                setIsSaving(false);
             });
-    }
+    };
 
-    handleChange(name, value) {
-        console.log("CreateInvoice.handleChange", {name}, {value});
-        this.setState((prevState, props) => {
-            const invoiceDataWithNewChange = Object.assign({}, prevState.invoice, {
-                [name]: value,
-            });
-            let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-            updatedInvoice = refreshInvoiceValues(
-                updatedInvoice,
-                this.state.member.consumo_maximo,
-                this.state.member.consumo_reduccion_fija
-            );
-            console.log({updatedInvoice});
-            return {
-                invoice: updatedInvoice,
-                validationErrors: DataValidatorService.validateInvoice(updatedInvoice),
-            };
-        });
-    }
+    const handleChange = (name, value) => {
+        const invoiceDataWithNewChange = {
+            ...invoice,
+            [name]: value,
+        };
+        let updatedInvoice = createInvoice(invoiceDataWithNewChange);
+        updatedInvoice = refreshInvoiceValues(
+            updatedInvoice,
+            member.consumo_maximo,
+            member.consumo_reduccion_fija
+        );
 
-    handleSubmit() {
-        this.setState({
-            isSaving: true,
-            errorMessage: null,
-        });
-        InvoiceService.createInvoice(this.state.invoice)
+        setInvoice(updatedInvoice);
+        setValidationErrors(DataValidatorService.validateInvoice(updatedInvoice));
+    };
+
+    const handleSubmit = () => {
+        setIsSaving(true);
+        setErrorMessage(null);
+
+        InvoiceService.createInvoice(invoice)
             .then(createdInvoice => {
-                this.setState({
-                    isSaving: false,
-                    invoice: createdInvoice,
-                });
-                if (this.props.handleSubmit) {
-                    this.props.handleSubmit(createdInvoice.id_factura);
+                setIsSaving(false);
+                setInvoice(createdInvoice);
+
+                if (onSubmit) {
+                    onSubmit(createdInvoice.id_factura);
                 } else {
-                    this.handleBack(createdInvoice.id_factura);
+                    handleBack(createdInvoice.id_factura);
                 }
             })
             .catch(error => {
                 console.log(error);
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido almacenar los datos de la factura",
-                    isSaving: false,
-                });
+                setErrorMessage(
+                    "Se ha producido un error y no se han podido almacenar los datos de la factura"
+                );
+                setIsSaving(false);
             });
-    }
+    };
 
-    handleBack() {
-        console.log("CreateInvoice.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else if (this.state.invoice.id_factura != -1) {
-            this.props.history.push("/facturas/" + this.state.invoice.id_factura);
-        } else {
-            this.props.history.push("/socios/" + this.state.num_socio);
-        }
-    }
+    const handleBack = () => {
+        // if (onClickBack) {
+        //     onClickBack();
+        // } else if (invoice.id_factura !== -1) {
+        //     navigate("/facturas/" + invoice.id_factura);
+        // } else {
+        //     navigate("/socios/" + num_socio);
+        // }
+        navigate(-1);
+    };
 
-    get sidebar() {
-        return <CreateInvoiceSidebar handleBack={this.handleBack} />;
-    }
+    const sidebar = <CreateInvoiceSidebar handleBack={handleBack} />;
+    const content = (
+        <>
+            <ErrorMessage message={errorMessage} />
+            <InvoiceForm
+                invoice={invoice}
+                member={member}
+                errors={validationErrors}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                saving={isSaving}
+            />
+        </>
+    );
 
-    get content() {
-        return (
-            <>
-                <ErrorMessage message={this.state.errorMessage} />
-                <InvoiceForm
-                    invoice={this.state.invoice}
-                    member={this.state.member}
-                    errors={this.state.validationErrors}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                    saving={this.state.isSaving}
-                />
-            </>
-        );
-    }
-
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row no-gutters h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
-                    </div>
-                </div>
+    return (
+        <>
+            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
+            <div className="col-md-10 offset-md-2">
+                <div className="container">{content}</div>
             </div>
-        );
-    }
-}
+        </>
+    );
+};
 
 export default CreateInvoice;

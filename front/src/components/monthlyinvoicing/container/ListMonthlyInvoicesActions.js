@@ -67,7 +67,8 @@ class ListMonthlyInvoicesActions extends React.Component {
             <StartInvoicingMonthButton
                 position="1"
                 invoicingMonth={this.props.selectedInvoicingMonth}
-                disabled={!this.isStartInvoicingEnabled()}
+                // disabled={!this.isStartInvoicingEnabled()}
+                disabled={this.isStartInvoicingEnabled()}
                 handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
             />
         );
@@ -78,7 +79,8 @@ class ListMonthlyInvoicesActions extends React.Component {
             <LoadMeasurementsButton
                 position="2"
                 invoicingMonth={this.props.selectedInvoicingMonth}
-                disabled={!this.isLoadMeasurementsButtonEnabled()}
+                // disabled={!this.isLoadMeasurementsButtonEnabled()}
+                disabled={this.isLoadMeasurementsButtonEnabled()}
             />
         );
     }
@@ -110,7 +112,8 @@ class ListMonthlyInvoicesActions extends React.Component {
             <LoadPaymentsButton
                 position="5"
                 invoicingMonth={this.props.selectedInvoicingMonth}
-                disabled={!this.isLoadPaymentsButtonEnabled()}
+                // disabled={!this.isLoadPaymentsButtonEnabled()}
+                disabled={this.isLoadPaymentsButtonEnabled()}
             />
         );
     }

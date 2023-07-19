@@ -1,43 +1,27 @@
-import React from "react";
-import {Spinner} from "components/common";
-import {InvoicesList} from "components/invoice/presentation";
-import {InvoiceService} from "service/api";
-import "components/common/SideBar.css";
+import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {useInvoicesTableColumns} from "../data";
 import ListInvoicesSidebar from "./ListInvoicesSidebar";
+import {EntityList} from "base/entity/components/presentational";
+import "components/common/SideBar.css";
 
-class ListInvoices extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            invoices: null,
-        };
-        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
-    }
+// TO-DO: Refactor filtering
+const ListInvoices = ({
+    invoices,
+    listView,
+    handleChangeListView,
+    handleFilterChange,
+    filter,
+}) => {
+    const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const {tableColumns} = useInvoicesTableColumns();
+    const navigate = useNavigate();
 
-    componentDidMount() {
-        this.loadInvoices();
-    }
+    useEffect(() => {
+        setFilteredInvoices(filterInvoices(invoices, filter));
+    }, [invoices, filter]);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.invoices === null) {
-            this.loadInvoices();
-        }
-    }
-
-    loadInvoices() {
-        InvoiceService.getInvoices().then(invoices => {
-            console.log("invoices", invoices);
-            this.setState({invoices});
-        });
-    }
-
-    handleClickViewInvoice(id_factura) {
-        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
-        const filteredInvoicesIds = filteredInvoices.map(invoice => invoice.id_factura);
-        this.props.handleClickViewInvoice(id_factura, filteredInvoicesIds);
-    }
-
-    filter(invoices, filter) {
+    const filterInvoices = (invoices, filter) => {
         return invoices.filter(invoice => {
             var filtered = true;
             if (filter) {
@@ -55,50 +39,49 @@ class ListInvoices extends React.Component {
                     filtered = filtered && invoice.sector === parseInt(filter.sector);
                 }
             }
-            return filtered;
+            return filtered; // Return the filtered value
         });
-    }
+    };
 
-    get sidebar() {
-        return (
-            <ListInvoicesSidebar
-                handleFilterChange={this.props.handleFilterChange}
-                handleClickCreateInvoice={this.props.handleClickCreateInvoice}
-                filter={this.props.filter}
-            />
-        );
-    }
+    const handleClickView = idFactura => {
+        navigate(idFactura);
+        // const filteredInvoices = filter(invoices, filter);
+        // const filteredInvoicesIds = filteredInvoices.map(invoice => invoice.id_factura);
+        // handleClickViewInvoice(id_factura, filteredInvoicesIds);
+    };
 
-    get content() {
-        if (this.state.invoices) {
-            return (
-                <InvoicesList
-                    invoices={this.filter(this.state.invoices, this.props.filter)}
-                    invoicesLength={this.state.invoices.length}
-                    listView={this.props.listView}
-                    handleChangeListView={this.props.handleChangeListView}
-                    handleClickViewInvoice={this.handleClickViewInvoice}
-                    filter={this.props.filter}
-                />
-            );
-        }
-        return <Spinner message="Cargando datos" />;
-    }
+    const handleClickCreateInvoice = () => {
+        //TO-DO: Implement
+        return null;
+    };
 
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row no-gutters h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
+    const sidebar = (
+        <ListInvoicesSidebar
+            handleFilterChange={handleFilterChange}
+            handleClickCreateInvoice={handleClickCreateInvoice}
+            filter={filter}
+        />
+    );
+
+    return (
+        <div className="h-100">
+            <div className="row no-gutters h-100">
+                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                    {sidebar}
+                </nav>
+                <div className="col-md-10 offset-md-2">
+                    <div className="container">
+                        <EntityList
+                            items={filteredInvoices}
+                            columns={tableColumns}
+                            listView={listView}
+                            handleChangeListView={handleChangeListView}
+                        />
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default ListInvoices;

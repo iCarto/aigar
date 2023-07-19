@@ -1,182 +1,131 @@
-import React from "react";
+import {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {InvoiceService, MemberService} from "service/api";
 import {Spinner, ErrorMessage} from "components/common";
 import {InvoiceDetail, InvoiceNavigator} from "components/invoice/presentation";
 import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
 import EditInvoice from "./EditInvoice";
-import {InvoiceService, MemberService} from "service/api";
 
-class ViewInvoice extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id_factura: null,
-            invoice: null,
-            member: null,
-            payments: null,
-            view: "view",
-            isLoading: null,
-            errorMessage: null,
-        };
-        this.handleBack = this.handleBack.bind(this);
-        this.handleClickEditInvoice = this.handleClickEditInvoice.bind(this);
-        this.handleSubmitEditInvoice = this.handleSubmitEditInvoice.bind(this);
-        this.handleBackEditInvoice = this.handleBackEditInvoice.bind(this);
-        this.handleSuccessPrintInvoices = this.handleSuccessPrintInvoices.bind(this);
-        this.handleSuccessCreateNewInvoiceVersion = this.handleSuccessCreateNewInvoiceVersion.bind(
-            this
-        );
-    }
+const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
+    const [invoice, setInvoice] = useState(null);
+    const [member, setMember] = useState(null);
+    const [payments, setPayments] = useState(null);
+    const [view, setView] = useState("view");
+    const [isLoading, setIsLoading] = useState(null);
+    const [error, setError] = useState("");
 
-    static getDerivedStateFromProps(props, prevState) {
-        const id_factura = props.id_factura || parseInt(props.match.params.id_factura);
-        if (id_factura !== prevState.id_factura) {
-            return {
-                invoice: null,
-                id_factura,
-            };
-        }
-        return null;
-    }
+    const {idFactura} = useParams();
+    const navigate = useNavigate();
 
-    componentDidMount() {
-        this.loadInvoice();
-    }
+    // useEffect(() => {
+    //     const idFacturaProp =
+    //         props.idFactura || parseInt(props.match.params.idFactura);
+    //     if (idFacturaProp !== idFactura) {
+    //         setInvoice(null);
+    //         // setIdFactura(idFacturaProp);
+    //     }
+    // }, [props.idFactura, idFactura, idFactura]);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.id_factura !== this.state.id_factura) {
-            this.loadInvoice();
-        }
-    }
+    useEffect(() => {
+        setIsLoading(true);
 
-    loadInvoice() {
-        this.setState({
-            invoice: null,
-            member: null,
-            payments: null,
-            isLoading: true,
-            errorMessage: null,
-        });
-        InvoiceService.getInvoice(this.state.id_factura)
-            .then(invoice => {
-                this.setState({
-                    invoice,
-                    isLoading: false,
+        InvoiceService.getInvoice(idFactura)
+            .then(invoiceData => {
+                setInvoice(invoiceData);
+                MemberService.getMember(invoiceData.num_socio).then(memberData => {
+                    setMember(memberData);
                 });
-                MemberService.getMember(invoice.num_socio).then(member => {
-                    this.setState({member});
+                InvoiceService.getInvoicePayments(idFactura).then(paymentsData => {
+                    setPayments(paymentsData);
                 });
-                InvoiceService.getInvoicePayments(this.state.id_factura).then(
-                    payments => {
-                        this.setState({payments});
-                    }
-                );
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido obtener los datos de la factura",
-                    isLoading: false,
-                });
+                console.log(error);
+                setError(
+                    "Se ha producido un error y no se han podido obtener los datos de la factura"
+                );
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }
+    }, [idFactura]);
 
-    handleBack() {
+    const handleBack = () => {
         console.log("ViewInvoice.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else {
-            this.props.history.push("/facturas");
-        }
-    }
+        navigate(-1);
+    };
 
-    handleClickEditInvoice() {
-        this.setState({view: "edit"});
-    }
+    const handleClickEdit = () => {
+        setView("edit");
+    };
 
-    handleBackEditInvoice() {
-        this.setState({view: "view"});
-        this.loadInvoice();
-    }
+    const handleBackEdit = () => {
+        setView("view");
+    };
 
-    handleSubmitEditInvoice(invoice) {
-        this.setState({view: "view", invoice});
-    }
+    const handleSubmitEdit = updatedItem => {
+        setView("view");
+        setInvoice(updatedItem);
+    };
 
-    handleSuccessPrintInvoices() {
-        this.loadInvoice();
-    }
+    const handleSuccessPrint = () => {};
 
-    handleSuccessCreateNewInvoiceVersion(
-        new_version_id_factura,
-        old_version_id_factura
-    ) {
-        if (this.props.handleSuccessCreateNewInvoiceVersion) {
-            this.props.handleSuccessCreateNewInvoiceVersion(
-                new_version_id_factura,
-                old_version_id_factura
-            );
-        } else {
-            this.props.history.push("/facturas/" + new_version_id_factura);
-        }
-    }
+    const handleSuccessCreateNewInvoiceVersion = (
+        new_version_idFactura,
+        old_version_idFactura
+    ) => {
+        // TO-DO: Implement (previously received function from parent component (ViewMonthlyInvoicing))
+        navigate("/facturas/" + new_version_idFactura);
+    };
 
-    get view() {
-        return (
-            <div className="row no-gutters h-100">
-                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                    <ViewInvoiceSidebar
-                        invoice={this.state.invoice}
-                        handleClickEditInvoice={this.handleClickEditInvoice}
-                        handleSuccessPrintInvoices={this.handleSuccessPrintInvoices}
-                        handleSuccessCreateNewInvoiceVersion={
-                            this.handleSuccessCreateNewInvoiceVersion
-                        }
-                        handleBack={this.handleBack}
-                    />
-                </nav>
-                <div className="col-md-10 offset-md-2">
-                    <div className="container">
-                        {this.props.navigatorIds ? (
-                            <InvoiceNavigator
-                                selectedId={this.state.id_factura}
-                                navigatorIds={this.props.navigatorIds}
-                                handleClickSelect={
-                                    this.props.handleClickSelectInNavigator
-                                }
-                            />
-                        ) : null}
-                        <ErrorMessage message={this.state.errorMessage} />
-                        <InvoiceDetail
-                            invoice={this.state.invoice}
-                            member={this.state.member}
-                            payments={this.state.payments}
+    const viewContent = (
+        <div className="row no-gutters h-100">
+            <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                <ViewInvoiceSidebar
+                    invoice={invoice}
+                    handleClickEditInvoice={handleClickEdit}
+                    handleSuccessPrintInvoices={handleSuccessPrint}
+                    handleSuccessCreateNewInvoiceVersion={
+                        handleSuccessCreateNewInvoiceVersion
+                    }
+                    handleBack={handleBack}
+                />
+            </nav>
+            <div className="col-md-10 offset-md-2">
+                <div className="container">
+                    {navigatorIds ? (
+                        <InvoiceNavigator
+                            selectedId={idFactura}
+                            navigatorIds={navigatorIds}
+                            handleClickSelect={handleClickSelectInNavigator}
                         />
-                    </div>
+                    ) : null}
+                    <ErrorMessage message={error} />
+                    <InvoiceDetail
+                        invoice={invoice}
+                        member={member}
+                        payments={payments}
+                    />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 
-    get edit() {
-        return (
-            <EditInvoice
-                id_factura={this.state.id_factura}
-                handleSubmit={this.handleSubmitEditInvoice}
-                handleBack={this.handleBackEditInvoice}
-            />
-        );
-    }
+    const editContent = (
+        <EditInvoice handleSubmit={handleSubmitEdit} handleBack={handleBackEdit} />
+    );
 
-    get content() {
-        if (this.state.isLoading) {
-            return <Spinner message="Cargando datos" />;
-        }
-        return this[this.state.view];
-    }
+    console.log({view});
 
-    render() {
-        return <div className="h-100">{this.content}</div>;
-    }
-}
+    const content = isLoading ? (
+        <Spinner message="Cargando datos" />
+    ) : view === "view" ? (
+        viewContent
+    ) : (
+        editContent
+    );
+
+    return <div className="h-100">{content}</div>;
+};
 
 export default ViewInvoice;

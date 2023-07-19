@@ -1,118 +1,98 @@
-import React from "react";
-import "components/common/SideBar.css";
+import {useEffect, useState} from "react";
+import {MemberService} from "service/api";
 import ListMembers from "./ListMembers";
 import ViewMember from "./ViewMember";
 import CreateMember from "./CreateMember";
+import "components/common/SideBar.css";
 
-class ManageMembers extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            listView: {
-                sortBy: [],
-                pageIndex: 0,
-            },
-            filter: {
-                name: "",
-                num_socio: "",
-                sector: 0,
-                tipo_socio: "",
-            },
-            selectedMember: null,
-            view: "list",
-        };
-        this.handleChangeListView = this.handleChangeListView.bind(this);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleClickViewMember = this.handleClickViewMember.bind(this);
-        this.handleBackViewMember = this.handleBackViewMember.bind(this);
-        this.handleClickCreateMember = this.handleClickCreateMember.bind(this);
-        this.handleSubmitCreateMember = this.handleSubmitCreateMember.bind(this);
-        this.handleBackCreateMember = this.handleBackCreateMember.bind(this);
-    }
+const ManageMembers = props => {
+    const [members, setMembers] = useState([]);
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [view, setView] = useState("list");
+    const [listView, setListView] = useState({
+        sortBy: [],
+        pageIndex: 0,
+    });
+    const [filter, setFilter] = useState({
+        name: "",
+        num_socio: "",
+        sector: 0,
+        tipo_socio: "",
+    });
 
-    handleChangeListView(listView) {
+    useEffect(() => {
+        MemberService.getMembers().then(members => {
+            setMembers(members);
+        });
+    }, []);
+
+    const handleChangeListView = listView => {
         console.log("handleChangeListView", {listData: listView});
-        this.setState({
-            listView,
-        });
-    }
+        setListView(listView);
+    };
 
-    handleFilterChange(newFilter) {
+    const handleFilterChange = newFilter => {
         console.log("handleFilterChange", newFilter);
-        this.setState({
-            filter: Object.assign(this.state.filter, newFilter),
-            listView: Object.assign(this.state.listView, {pageIndex: 0}),
-        });
-    }
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            ...newFilter,
+        }));
+        setListView(prevListView => ({
+            ...prevListView,
+            pageIndex: 0,
+        }));
+    };
 
-    handleClickViewMember(numero_socio) {
-        console.log("handleSelectMember", numero_socio);
-        this.setState({
-            view: "view",
-            selectedMember: numero_socio,
-        });
-    }
-
-    handleBackViewMember() {
+    const handleBackViewMember = () => {
         console.log("handleBackViewMember");
-        this.setState({
-            view: "list",
-            selectedMember: null,
-        });
-    }
+        setView("list");
+        setSelectedMember(null);
+    };
 
-    handleClickCreateMember() {
+    const handleClickCreateMember = () => {
         console.log("handleSelectCreateMember");
-        this.setState({
-            view: "create",
-        });
-    }
+        setView("create");
+    };
 
-    handleSubmitCreateMember(num_socio) {
+    const handleSubmitCreateMember = num_socio => {
         console.log("handleSubmitCreateMember", num_socio);
-        this.setState({
-            view: "view",
-            selectedMember: num_socio,
-        });
-    }
+        setView("view");
+        setSelectedMember(num_socio);
+    };
 
-    handleBackCreateMember() {
+    const handleBackCreateMember = () => {
         console.log("handleBackCreateMember");
-        this.setState({
-            view: "list",
-            selectedMember: null,
-        });
-    }
+        setView("list");
+        setSelectedMember(null);
+    };
 
-    render() {
-        if (this.state.view === "view") {
-            return (
-                <ViewMember
-                    num_socio={this.state.selectedMember}
-                    handleBack={this.handleBackViewMember}
-                    {...this.props}
-                />
-            );
-        }
-        if (this.state.view === "create") {
-            return (
-                <CreateMember
-                    handleSubmit={this.handleSubmitCreateMember}
-                    handleBack={this.handleBackCreateMember}
-                />
-            );
-        }
+    if (view === "view") {
         return (
-            <ListMembers
-                listView={this.state.listView}
-                handleChangeListView={this.handleChangeListView}
-                handleFilterChange={this.handleFilterChange}
-                handleClickViewMember={this.handleClickViewMember}
-                handleClickCreateMember={this.handleClickCreateMember}
-                filter={this.state.filter}
+            <ViewMember
+                num_socio={selectedMember}
+                handleBack={handleBackViewMember}
+                {...props}
             />
         );
     }
-}
+    if (view === "create") {
+        return (
+            <CreateMember
+                handleSubmit={handleSubmitCreateMember}
+                handleBack={handleBackCreateMember}
+            />
+        );
+    }
+    return (
+        <ListMembers
+            members={members}
+            listView={listView}
+            handleChangeListView={handleChangeListView}
+            handleFilterChange={handleFilterChange}
+            handleClickCreateMember={handleClickCreateMember}
+            filter={filter}
+        />
+    );
+};
 
 export default ManageMembers;

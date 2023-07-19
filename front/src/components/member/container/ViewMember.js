@@ -1,4 +1,5 @@
-import React from "react";
+import {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {Spinner, ErrorMessage} from "components/common";
 import {ListMemberInvoices} from "components/member/container";
 import {MemberDetail} from "components/member/presentation";
@@ -6,166 +7,117 @@ import {MemberService, InvoiceService} from "service/api";
 import ViewMemberSidebar from "./ViewMemberSidebar";
 import EditMember from "./EditMember";
 
-class ViewMember extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            member: null,
-            num_socio: null,
-            view: "view",
-            isLoading: null,
-            errorMessage: null,
-        };
-        this.handleBack = this.handleBack.bind(this);
-        this.handleClickEditMember = this.handleClickEditMember.bind(this);
-        this.handleSubmitEditMember = this.handleSubmitEditMember.bind(this);
-        this.handleBackEditMember = this.handleBackEditMember.bind(this);
-        this.handleSuccessDeletedMember = this.handleSuccessDeletedMember.bind(this);
-        this.handleSuccessConnectMember = this.handleSuccessConnectMember.bind(this);
-        this.handleSuccessDisconnectMember = this.handleSuccessDisconnectMember.bind(
-            this
-        );
-        this.handleClickNewInvoice = this.handleClickNewInvoice.bind(this);
-    }
+const ViewMember = () => {
+    const [member, setMember] = useState(null);
+    const [invoices, setInvoices] = useState(null);
+    const [view, setView] = useState("view");
+    const [isLoading, setIsLoading] = useState(null);
+    const [error, setError] = useState("");
 
-    static getDerivedStateFromProps(props, prevState) {
-        const num_socio = props.num_socio || parseInt(props.match.params.num_socio);
-        if (num_socio !== prevState.num_socio) {
-            return {
-                member: null,
-                invoices: null,
-                num_socio,
-            };
-        }
-        return null;
-    }
+    const {num_socio} = useParams();
+    const navigate = useNavigate();
 
-    componentDidMount() {
-        this.loadMember();
-    }
+    useEffect(() => {
+        setIsLoading(true);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.num_socio !== this.state.num_socio) {
-            this.loadMember();
-        }
-    }
-
-    loadMember() {
         Promise.all([
-            MemberService.getMember(this.state.num_socio),
-            InvoiceService.getInvoicesForMember(this.state.num_socio),
+            MemberService.getMember(num_socio),
+            InvoiceService.getInvoicesForMember(num_socio),
         ])
             .then(result => {
                 const member = result[0];
-                this.setState({
-                    member,
-                    invoices: result[1],
-                    isLoading: false,
-                    errorMessage: member.is_active ? null : "El socio ha sido borrado.",
-                });
+                setMember(member);
+                setInvoices(result[1]);
+                if (!member.is_active) setError("El socio ha sido borrado.");
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido obtener los datos del socio",
-                    isLoading: false,
-                });
+                console.log(error);
+                setError(
+                    "Se ha producido un error y no se han podido obtener los datos del socio"
+                );
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }
+    }, [num_socio]);
 
-    handleBack() {
-        console.log("ViewMember.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else {
-            this.props.history.push("/socios");
-        }
-    }
+    const handleBack = () => {
+        console.log("ViewInvoice.handleBack");
+        navigate(-1);
+    };
 
-    handleClickEditMember() {
-        this.setState({view: "edit"});
-    }
+    const handleClickEdit = () => {
+        setView("edit");
+    };
 
-    handleBackEditMember() {
-        this.setState({view: "view"});
-        this.loadMember();
-    }
+    const handleBackEdit = () => {
+        setView("view");
+    };
 
-    handleSubmitEditMember(member) {
-        this.setState({view: "view", member});
-        this.loadMember();
-    }
+    const handleSubmitEdit = updatedItem => {
+        setView("view");
+        setMember(updatedItem);
+    };
 
-    handleSuccessConnectMember() {
-        this.setState({view: "view"});
-        this.loadMember();
-    }
+    const handleSuccessConnectMember = () => {
+        setView("view");
+    };
 
-    handleSuccessDisconnectMember() {
-        this.setState({view: "view"});
-        this.loadMember();
-    }
+    const handleSuccessDisconnectMember = () => {
+        setView("view");
+    };
 
-    handleSuccessDeletedMember() {
-        this.handleBack();
-    }
+    const handleSuccessDeletedMember = () => {
+        handleBack();
+    };
 
-    handleClickNewInvoice() {
-        this.props.history.push("/socios/" + this.state.num_socio + "/nueva_factura");
-    }
+    const handleClickNewInvoice = () => {
+        navigate("/socios/" + num_socio + "/nueva_factura");
+    };
 
-    get view() {
-        return (
-            <div className="row no-gutters h-100">
-                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+    const viewContent = (
+        <div className="row no-gutters h-100">
+            <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                {member ? (
                     <ViewMemberSidebar
-                        member={this.state.member}
-                        numInvoices={
-                            this.state.invoices ? this.state.invoices.length : 0
-                        }
-                        handleClickEditMember={this.handleClickEditMember}
-                        handleSuccessDeletedMember={this.handleSuccessDeletedMember}
-                        handleSuccessConnectMember={this.handleSuccessConnectMember}
-                        handleSuccessDisconnectMember={
-                            this.handleSuccessDisconnectMember
-                        }
-                        handleClickNewInvoice={this.handleClickNewInvoice}
-                        handleBack={this.handleBack}
+                        member={member}
+                        numInvoices={invoices ? invoices.length : 0}
+                        handleClickEditMember={handleClickEdit}
+                        handleSuccessDeletedMember={handleSuccessDeletedMember}
+                        handleSuccessConnectMember={handleSuccessConnectMember}
+                        handleSuccessDisconnectMember={handleSuccessDisconnectMember}
+                        handleClickNewInvoice={handleClickNewInvoice}
+                        handleBack={handleBack}
                     />
-                </nav>
-                <div className="col-md-10 offset-md-2">
-                    <div className="container">
-                        <ErrorMessage message={this.state.errorMessage} />
-                        <MemberDetail member={this.state.member} />
-                        {this.state.member ? (
-                            <ListMemberInvoices invoices={this.state.invoices} />
-                        ) : null}
-                    </div>
+                ) : null}
+            </nav>
+            <div className="col-md-10 offset-md-2">
+                <div className="container">
+                    <ErrorMessage message={error} />
+                    {member ? <MemberDetail member={member} /> : null}
+                    {invoices ? <ListMemberInvoices invoices={invoices} /> : null}
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 
-    get edit() {
-        return (
-            <EditMember
-                num_socio={this.state.num_socio}
-                handleSubmit={this.handleSubmitEditMember}
-                handleBack={this.handleBackEditMember}
-            />
-        );
-    }
+    const editContent = (
+        <EditMember
+            entity={member}
+            onSubmit={handleSubmitEdit}
+            // handleBack={handleBackEdit}
+        />
+    );
 
-    get content() {
-        if (this.state.isLoading) {
-            return <Spinner message="Cargando datos" />;
-        }
-        return this[this.state.view];
-    }
+    const content = isLoading ? (
+        <Spinner message="Cargando datos" />
+    ) : view === "view" ? (
+        viewContent
+    ) : (
+        editContent
+    );
 
-    render() {
-        return <div className="h-100">{this.content}</div>;
-    }
-}
+    return <div className="h-100">{content}</div>;
+};
 
 export default ViewMember;

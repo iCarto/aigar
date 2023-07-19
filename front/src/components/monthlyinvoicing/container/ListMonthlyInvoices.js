@@ -1,61 +1,61 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {Spinner} from "components/common";
 import {InvoicingMonthService} from "service/api";
 import "components/common/SideBar.css";
 import ListMonthlyInvoicesSidebar from "./ListMonthlyInvoicesSidebar";
-import {MonthlyInvoicingList} from "../presentation";
+import {EntityList} from "base/entity/components/presentational";
+import {useMonthlyInvoicingTableColumns} from "../data";
 
-class ListMonthlyInvoices extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            invoices: null,
-        };
-        this.handleSuccessPrintInvoices = this.handleSuccessPrintInvoices.bind(this);
-        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
-    }
+const ListMonthlyInvoices = ({
+    invoices,
+    listView,
+    handleChangeListView,
+    handleFilterChange,
+    invoicingMonths,
+    selectedInvoicingMonth,
+    handleChangeInvoicingMonth,
+    handleSuccessCreateInvoices,
+    filter,
+}) => {
+    const [filteredInvoices, setFilderedInvoices] = useState(null);
+    const {tableColumns} = useMonthlyInvoicingTableColumns();
 
-    componentDidMount() {
-        console.log("ListMonthlyInvoices.componentDidMount");
-        this.loadInvoices();
-    }
+    useEffect(() => {
+        // console.log("ListMonthlyInvoices.componentDidUpdate");
+        // if (
+        //     props.selectedInvoicingMonth.id_mes_facturacion !==
+        //     prevSelectedInvoicingMonth.id_mes_facturacion
+        // ) {
+        //     loadInvoices();
+        // }
+        setFilderedInvoices(filterInvoices(invoices, filter));
+    }, [selectedInvoicingMonth]);
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log("ListMonthlyInvoices.componentDidUpdate");
-        if (
-            prevProps.selectedInvoicingMonth.id_mes_facturacion !==
-            this.props.selectedInvoicingMonth.id_mes_facturacion
-        ) {
-            this.loadInvoices();
-        }
-    }
+    // const loadInvoices = () => {
+    //     setInvoices(null);
+    //     InvoicingMonthService.getInvoicingMonthInvoices(
+    //         props.selectedInvoicingMonth.id_mes_facturacion
+    //     )
+    //         .then(invoices => {
+    //             console.log("invoices", invoices);
+    //             setInvoices(invoices);
+    //         })
+    //         .catch(error => {
+    //             setInvoices([]);
+    //         });
+    // };
 
-    loadInvoices() {
-        this.setState({invoices: null}, () => {
-            InvoicingMonthService.getInvoicingMonthInvoices(
-                this.props.selectedInvoicingMonth.id_mes_facturacion
-            )
-                .then(invoices => {
-                    console.log("invoices", invoices);
-                    this.setState({invoices});
-                })
-                .catch(error => {
-                    this.setState({invoices: []});
-                });
-        });
-    }
+    const handleSuccessPrintInvoices = () => {
+        // loadInvoices();
+    };
 
-    handleSuccessPrintInvoices() {
-        this.loadInvoices();
-    }
-
-    handleClickViewInvoice(id_factura) {
-        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
+    const handleClickViewInvoice = id_factura => {
+        const filteredInvoices = filter(invoices, filter);
         const filteredInvoicesIds = filteredInvoices.map(invoice => invoice.id_factura);
-        this.props.handleClickViewInvoice(id_factura, filteredInvoicesIds);
-    }
+        handleClickViewInvoice(id_factura, filteredInvoicesIds);
+    };
 
-    filter(invoices, filter) {
+    const filterInvoices = (invoices, filter) => {
         if (invoices) {
             return invoices.filter(invoice => {
                 var filtered = true;
@@ -82,57 +82,36 @@ class ListMonthlyInvoices extends React.Component {
             });
         }
         return null;
-    }
+    };
 
-    render() {
-        const filteredInvoices = this.filter(this.state.invoices, this.props.filter);
-        return (
-            <div className="h-100">
-                <div className="row no-gutters h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        <ListMonthlyInvoicesSidebar
-                            filter={this.props.filter}
-                            invoices={filteredInvoices}
-                            invoicingMonths={this.props.invoicingMonths}
-                            selectedInvoicingMonth={this.props.selectedInvoicingMonth}
-                            handleChangeInvoicingMonth={
-                                this.props.handleChangeInvoicingMonth
-                            }
-                            handleSuccessCreateInvoices={
-                                this.props.handleSuccessCreateInvoices
-                            }
-                            handleFilterChange={this.props.handleFilterChange}
-                            handleSuccessPrintInvoices={this.handleSuccessPrintInvoices}
+    return (
+        <div className="h-100">
+            <div className="row no-gutters h-100">
+                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                    <ListMonthlyInvoicesSidebar
+                        filter={filter}
+                        invoices={filteredInvoices}
+                        invoicingMonths={invoicingMonths}
+                        selectedInvoicingMonth={selectedInvoicingMonth}
+                        handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                        handleSuccessCreateInvoices={handleSuccessCreateInvoices}
+                        handleFilterChange={handleFilterChange}
+                        handleSuccessPrintInvoices={handleSuccessPrintInvoices}
+                    />
+                </nav>
+                <div className="col-md-10 offset-md-2">
+                    <div className="container">
+                        <EntityList
+                            items={filteredInvoices}
+                            columns={tableColumns}
+                            listView={listView}
+                            handleChangeListView={handleChangeListView}
                         />
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">
-                            {filteredInvoices ? (
-                                <>
-                                    <MonthlyInvoicingList
-                                        invoices={filteredInvoices}
-                                        invoicesLength={this.state.invoices.length}
-                                        listView={this.props.listView}
-                                        handleChangeListView={
-                                            this.props.handleChangeListView
-                                        }
-                                        handleClickViewMember={
-                                            this.props.handleClickViewMember
-                                        }
-                                        handleClickViewInvoice={
-                                            this.handleClickViewInvoice
-                                        }
-                                    />
-                                </>
-                            ) : (
-                                <Spinner message="Cargando datos" />
-                            )}
-                        </div>
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default ListMonthlyInvoices;

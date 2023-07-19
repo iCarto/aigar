@@ -5,7 +5,8 @@ class PaginatedTableNavigator extends React.Component {
         return (
             <div className="d-flex justify-content-between">
                 <div>
-                    Mostrando <strong>{this.props.length}</strong> de {this.props.total}
+                    Mostrando <strong>{this.props.length}</strong> de{" "}
+                    {this.props.length}
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination justify-content-end">

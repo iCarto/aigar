@@ -1,5 +1,5 @@
 import React from "react";
-import Chart from "chart.js";
+import {Chart as ChartJS} from "chart.js";
 
 class BarChart extends React.Component {
     constructor(props) {
@@ -8,7 +8,7 @@ class BarChart extends React.Component {
     }
 
     componentDidMount() {
-        this.chart = new Chart(this.chartRef.current, {
+        this.chart = new ChartJS(this.chartRef.current, {
             type: "bar",
             data: {
                 labels: this.getDataLabels(),

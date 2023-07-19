@@ -1,36 +1,25 @@
-import React from "react";
-import {Spinner} from "components/common";
-import {MembersList} from "components/member/presentation";
-import {MemberService} from "service/api";
-import "components/common/SideBar.css";
+import {useEffect, useState} from "react";
+import {useMembersTableColumns} from "../data/MembersTableColumns";
 import ListMembersSidebar from "./ListMembersSidebar";
+import {EntityList} from "base/entity/components/presentational";
+import "components/common/SideBar.css";
 
-class ListMembers extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            members: null,
-        };
-    }
+const ListMembers = ({
+    members,
+    listView,
+    handleChangeListView,
+    handleFilterChange,
+    handleClickCreateMember,
+    filter,
+}) => {
+    const [filteredMembers, setFilteredMembers] = useState([]);
+    const {tableColumns} = useMembersTableColumns();
 
-    componentDidMount() {
-        this.loadMembers();
-    }
+    useEffect(() => {
+        setFilteredMembers(filterMembers(members, filter));
+    }, [members, filter]);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.members === null) {
-            this.loadMembers();
-        }
-    }
-
-    loadMembers() {
-        MemberService.getMembers().then(members => {
-            console.log("members", members);
-            this.setState({members});
-        });
-    }
-
-    filter(members, filter) {
+    const filterMembers = (members, filter) => {
         return members.filter(member => {
             var filtered = true;
             if (filter) {
@@ -54,48 +43,35 @@ class ListMembers extends React.Component {
             }
             return filtered;
         });
-    }
+    };
 
-    get sidebar() {
-        return (
-            <ListMembersSidebar
-                handleFilterChange={this.props.handleFilterChange}
-                handleClickCreateMember={this.props.handleClickCreateMember}
-                filter={this.props.filter}
-            />
-        );
-    }
+    const sidebar = (
+        <ListMembersSidebar
+            handleFilterChange={handleFilterChange}
+            handleClickCreateMember={handleClickCreateMember}
+            filter={filter}
+        />
+    );
 
-    get content() {
-        if (this.state.members) {
-            return (
-                <MembersList
-                    members={this.filter(this.state.members, this.props.filter)}
-                    membersLength={this.state.members.length}
-                    listView={this.props.listView}
-                    handleChangeListView={this.props.handleChangeListView}
-                    handleClickViewMember={this.props.handleClickViewMember}
-                    filter={this.props.filter}
-                />
-            );
-        }
-        return <Spinner message="Cargando datos" />;
-    }
-
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row no-gutters h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
+    return (
+        <div className="h-100">
+            <div className="row no-gutters h-100">
+                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                    {sidebar}
+                </nav>
+                <div className="col-md-10 offset-md-2">
+                    <div className="container">
+                        <EntityList
+                            items={filteredMembers}
+                            columns={tableColumns}
+                            listView={listView}
+                            handleChangeListView={handleChangeListView}
+                        />
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default ListMembers;

@@ -1,104 +1,86 @@
-import React from "react";
-import "components/common/SideBar.css";
+import {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {InvoiceService} from "service/api";
 import ListInvoices from "./ListInvoices";
 import ViewInvoice from "./ViewInvoice";
+import "components/common/SideBar.css";
 
-class ManageInvoices extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            listView: {
-                sortBy: [],
-                pageIndex: 0,
-            },
-            filter: {
-                numero: "",
-                nombre: "",
-                sector: 0,
-            },
-            selectedInvoice: null,
-            filteredInvoicesIds: [],
-        };
-        this.handleChangeListView = this.handleChangeListView.bind(this);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleClickViewInvoice = this.handleClickViewInvoice.bind(this);
-        this.handleBackFromViewInvoice = this.handleBackFromViewInvoice.bind(this);
-        this.handleSuccessCreateNewInvoiceVersion = this.handleSuccessCreateNewInvoiceVersion.bind(
-            this
-        );
-    }
+const ManageInvoices = () => {
+    const [invoices, setInvoices] = useState([]);
+    const [listView, setListView] = useState({
+        sortBy: [],
+        pageIndex: 0,
+    });
+    const [filter, setFilter] = useState({
+        numero: "",
+        nombre: "",
+        sector: 0,
+    });
+    const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
 
-    handleChangeListView(listView) {
+    const navigate = useNavigate();
+    const {idFactura} = useParams();
+
+    useEffect(() => {
+        InvoiceService.getInvoices().then(invoices => {
+            setInvoices(invoices);
+        });
+    }, []);
+
+    console.log("ManageInvoices");
+
+    const handleChangeListView = listView => {
         console.log("handleChangeListView", {listData: listView});
-        this.setState({
-            listView,
-        });
-    }
+        setListView(listView);
+    };
 
-    handleFilterChange(newFilter) {
+    const handleFilterChange = newFilter => {
         console.log("handleFilterChange", newFilter);
-        this.setState({
-            filter: Object.assign(this.state.filter, newFilter),
-            listView: Object.assign(this.state.listView, {pageIndex: 0}),
-        });
-    }
+        setFilter(prevFilter => ({...prevFilter, ...newFilter}));
+        setListView(prevListView => ({...prevListView, pageIndex: 0}));
+    };
 
-    handleClickViewInvoice(id_factura, filteredInvoicesIds) {
-        console.log("handleClickEditInvoice", id_factura, filteredInvoicesIds);
-        if (!filteredInvoicesIds) {
-            filteredInvoicesIds = this.state.filteredInvoicesIds;
-        }
-        this.setState({
-            selectedInvoice: id_factura,
-            filteredInvoicesIds,
-        });
-    }
+    const handleClickViewInvoice = (idFactura, filteredInvoicesIds) => {
+        console.log("handleClickEditInvoice", idFactura, filteredInvoicesIds);
+        // if (!filteredInvoicesIds) {
+        //     filteredInvoicesIds = filteredInvoicesIds;
+        // }
+        // setSelectedInvoice(idFactura);
+        setFilteredInvoicesIds(filteredInvoicesIds);
+        navigate(`${idFactura}`);
+    };
 
-    handleBackFromViewInvoice() {
+    const handleBackFromViewInvoice = () => {
         console.log("handleBackEditInvoice");
-        this.setState({
-            selectedInvoice: null,
-        });
-    }
+    };
 
-    handleSuccessCreateNewInvoiceVersion(
+    const handleSuccessCreateNewInvoiceVersion = (
         new_version_id_factura,
         old_version_id_factura
-    ) {
+    ) => {
         // Replace old version id
-        const filteredInvoicesIds = this.state.filteredInvoicesIds.map(invoiceId =>
+        const updatedFilteredInvoicesIds = filteredInvoicesIds.map(invoiceId =>
             invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
         );
-        this.setState({
-            selectedInvoice: new_version_id_factura,
-            filteredInvoicesIds,
-        });
-    }
+        setFilteredInvoicesIds(updatedFilteredInvoicesIds);
+    };
 
-    render() {
-        if (this.state.selectedInvoice) {
-            return (
-                <ViewInvoice
-                    id_factura={this.state.selectedInvoice}
-                    navigatorIds={this.state.filteredInvoicesIds}
-                    handleClickSelectInNavigator={this.handleClickViewInvoice}
-                    handleSuccessCreateNewInvoiceVersion={
-                        this.handleSuccessCreateNewInvoiceVersion
-                    }
-                    handleBack={this.handleBackFromViewInvoice}
-                />
-            );
-        }
-        return (
-            <ListInvoices
-                listView={this.state.listView}
-                handleChangeListView={this.handleChangeListView}
-                handleFilterChange={this.handleFilterChange}
-                handleClickViewInvoice={this.handleClickViewInvoice}
-                filter={this.state.filter}
-            />
-        );
-    }
-}
+    return idFactura ? (
+        <ViewInvoice
+            navigatorIds={filteredInvoicesIds}
+            handleClickSelectInNavigator={handleClickViewInvoice}
+            handleSuccessCreateNewInvoiceVersion={handleSuccessCreateNewInvoiceVersion}
+            handleBack={handleBackFromViewInvoice}
+        />
+    ) : (
+        <ListInvoices
+            listView={listView}
+            invoices={invoices}
+            handleChangeListView={handleChangeListView}
+            handleFilterChange={handleFilterChange}
+            filter={filter}
+        />
+    );
+};
 
 export default ManageInvoices;

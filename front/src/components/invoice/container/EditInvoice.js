@@ -1,175 +1,117 @@
-import React from "react";
-import {Spinner, ErrorMessage} from "components/common";
-import {InvoiceForm} from "components/invoice/presentation";
+import {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {createInvoice, refreshInvoiceValues} from "model";
 import {InvoiceService, MemberService} from "service/api";
+import {Spinner, ErrorMessage} from "components/common";
+import {InvoiceForm} from "components/invoice/presentation";
 import {DataValidatorService} from "service/validation";
 import EditInvoiceSidebar from "./EditInvoiceSidebar";
 
-class EditInvoice extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id_factura: null,
-            invoice: null,
-            member: null,
-            validationErrors: null,
-            isLoading: null,
-            isSaving: null,
-            errorMessage: null,
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleBack = this.handleBack.bind(this);
-    }
+const EditInvoice = ({onSubmit = null}) => {
+    const [invoice, setInvoice] = useState(null);
+    const [member, setMember] = useState(null);
+    const [validationErrors, setValidationErrors] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
+    const [error, setError] = useState(null);
 
-    // https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#fetching-external-data-when-props-change
-    // Esto nos permitiría navegar entre miembros con algún componente de más alto nivel y solo cambiando el número de socio
-    static getDerivedStateFromProps(props, prevState) {
-        // Store prevNumFactura in state so we can compare when props change.
-        // Clear out previously-loaded data (so we don't render stale stuff).
-        const id_factura = props.id_factura || props.match.params.id_factura;
-        if (id_factura !== prevState.id_factura) {
-            return {
-                invoice: null,
-                id_factura,
-            };
-        }
-        return null;
-    }
+    const {idFactura} = useParams();
+    const navigate = useNavigate();
 
-    componentDidMount() {
-        this.loadInvoice();
-    }
+    useEffect(() => {
+        setIsLoading(true);
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.id_factura !== this.state.id_factura) {
-            this.loadInvoice();
-        }
-    }
-
-    loadInvoice() {
-        this.setState({
-            invoice: null,
-            isLoading: true,
-            errorMessage: null,
-        });
-        InvoiceService.getInvoice(this.state.id_factura)
+        InvoiceService.getInvoice(idFactura)
             .then(invoice => {
-                this.setState({
-                    invoice,
-                    isLoading: false,
-                });
+                setInvoice(invoice);
                 MemberService.getMember(invoice.num_socio).then(member => {
-                    this.setState({member});
+                    setMember(member);
                 });
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido obtener los datos de la factura",
-                    isLoading: false,
-                });
+                console.log(error);
+                setError(
+                    "Se ha producido un error y no se han podido obtener los datos de la factura"
+                );
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }
+    }, [idFactura]);
 
-    handleChange(name, value) {
+    const handleChange = (name, value) => {
         console.log("EditInvoice.handleChange", name, value);
-        this.setState((prevState, props) => {
-            const invoiceDataWithNewChange = Object.assign({}, prevState.invoice, {
-                [name]: value,
-            });
-            let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-            updatedInvoice = refreshInvoiceValues(
-                updatedInvoice,
-                this.state.member.consumo_maximo,
-                this.state.member.consumo_reduccion_fija
-            );
-            console.log({updatedInvoice});
-            return {
-                invoice: updatedInvoice,
-                validationErrors: DataValidatorService.validateInvoice(updatedInvoice),
-            };
+        const invoiceDataWithNewChange = Object.assign({}, invoice, {
+            [name]: value,
         });
-    }
+        let updatedInvoice = createInvoice(invoiceDataWithNewChange);
+        updatedInvoice = refreshInvoiceValues(
+            updatedInvoice,
+            member.consumo_maximo,
+            member.consumo_reduccion_fija
+        );
+        console.log({updatedInvoice});
+        setInvoice(updatedInvoice);
+        setValidationErrors(DataValidatorService.validateInvoice(updatedInvoice));
+    };
 
-    handleSubmit() {
-        console.log("EditMember.handleSubmit", this.state);
-        this.setState({
-            isSaving: true,
-            errorMessage: null,
-        });
-        InvoiceService.updateInvoice(this.state.invoice)
+    const handleSubmit = () => {
+        console.log("EditMember.handleSubmit", {invoice});
+        setIsLoading(true);
+
+        InvoiceService.updateInvoice(invoice)
             .then(updatedInvoice => {
-                this.setState({
-                    isSaving: false,
-                });
-                if (this.props.handleSubmit) {
-                    this.props.handleSubmit(updatedInvoice);
+                if (onSubmit) {
+                    onSubmit(updatedInvoice);
                 } else {
-                    this.handleBack();
+                    handleBack();
                 }
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido almacenar los datos de la factura",
-                    isSaving: false,
-                });
+                console.log(error);
+                setError(
+                    "Se ha producido un error y no se han podido almacenar los datos de la factura"
+                );
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }
+    };
 
-    handleBack() {
-        console.log("EditMember.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else {
-            this.props.history.push("/facturas/" + this.state.id_factura);
-        }
-    }
+    const handleBack = () => {
+        console.log("EditInvoice.handleBack");
+        navigate(-1);
+    };
 
-    get sidebar() {
-        return (
-            <EditInvoiceSidebar
-                handleBack={this.handleBack}
-                invoice={this.state.invoice}
+    const sidebar = <EditInvoiceSidebar handleBack={handleBack} invoice={invoice} />;
+
+    const content = isLoading ? (
+        <Spinner message="Cargando datos" />
+    ) : (
+        <>
+            <ErrorMessage message={error} />
+            <InvoiceForm
+                invoice={invoice}
+                member={member}
+                errors={validationErrors}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                saving={isLoading}
             />
-        );
-    }
+        </>
+    );
 
-    get content() {
-        if (this.state.isLoading) {
-            return <Spinner message="Cargando datos" />;
-        }
-        return (
-            <>
-                <ErrorMessage message={this.state.errorMessage} />
-                <InvoiceForm
-                    invoice={this.state.invoice}
-                    member={this.state.member}
-                    errors={this.state.validationErrors}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                    saving={this.state.isSaving}
-                />
-            </>
-        );
-    }
-
-    render() {
-        return (
-            <div className="h-100">
-                <div className="row no-gutters h-100">
-                    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {this.sidebar}
-                    </nav>
-                    <div className="col-md-10 offset-md-2">
-                        <div className="container">{this.content}</div>
-                    </div>
+    return (
+        <div className="h-100">
+            <div className="row no-gutters h-100">
+                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+                    {sidebar}
+                </nav>
+                <div className="col-md-10 offset-md-2">
+                    <div className="container">{content}</div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default EditInvoice;

@@ -123,7 +123,6 @@ LANGUAGE_CODE = "es-SV"
 # set your local time zone to more easily analyse data on the backend
 TIME_ZONE = "America/El_Salvador"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -137,7 +136,11 @@ STATICFILES_DIRS = (root("static"),)
 
 # Django SPA - simple setup for serving modern SPAs from Django
 # https://github.com/metakermit/django-spa
-STATICFILES_STORAGE = "spa.storage.SPAStaticFilesStorage"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "spa.storage.SPAStaticFilesStorage",
+    },
+}
 
 
 # Django REST Framework

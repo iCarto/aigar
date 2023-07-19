@@ -1,7 +1,7 @@
-from api.models.invoice import Invoice
-from api.models.invoicing_month import InvoicingMonth
-from api.models.member import Member
-from api.serializers.member import MemberExportSerializer, MemberSerializer
+from back.models.invoice import Invoice
+from back.models.invoicing_month import InvoicingMonth
+from back.models.member import Member
+from back.serializers.member import MemberExportSerializer, MemberSerializer
 from rest_framework import permissions, viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response

@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from api.models.invoicing_month import InvoicingMonth
+from back.models.invoicing_month import InvoicingMonth
 
 from .member import Sectores
 

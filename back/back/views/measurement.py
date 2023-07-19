@@ -1,12 +1,12 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
-from api.models.invoice import Invoice
-from api.models.invoicing_month import InvoicingMonth
-from api.models.measurement import Measurement
-from api.serializers.invoice import InvoiceSerializer
-from api.serializers.measurement import MeasurementSerializer
-from api.views.exceptions import ClosedMonthException
+from back.models.invoice import Invoice
+from back.models.invoicing_month import InvoicingMonth
+from back.models.measurement import Measurement
+from back.serializers.invoice import InvoiceSerializer
+from back.serializers.measurement import MeasurementSerializer
+from back.views.exceptions import ClosedMonthException
 from rest_framework import mixins, status, viewsets
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response

@@ -1,4 +1,4 @@
-from api.models.payment import Payment
+from back.models.payment import Payment
 from rest_framework import serializers
 
 

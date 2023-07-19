@@ -1,6 +1,6 @@
-from api.models.invoice import Invoice
-from api.models.member import Member
-from api.serializers.member import MemberShortSerializer
+from back.models.invoice import Invoice
+from back.models.member import Member
+from back.serializers.member import MemberShortSerializer
 from rest_framework import serializers
 
 

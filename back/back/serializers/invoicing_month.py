@@ -1,10 +1,10 @@
 from django.db import transaction
 
-from api.models.invoice import Invoice, InvoiceStatus
-from api.models.invoicing_month import InvoicingMonth
-from api.models.payment import Payment
-from api.serializers.invoice import InvoiceShortSerializer
-from api.serializers.payment import PaymentSerializer
+from back.models.invoice import Invoice, InvoiceStatus
+from back.models.invoicing_month import InvoicingMonth
+from back.models.payment import Payment
+from back.serializers.invoice import InvoiceShortSerializer
+from back.serializers.payment import PaymentSerializer
 from rest_framework import serializers
 
 

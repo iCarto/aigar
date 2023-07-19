@@ -1,31 +1,15 @@
-"""api URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from api.views.domain import DomainsView
-from api.views.invoice import InvoiceStatsView, InvoiceViewSet
-from api.views.invoicing_month import InvoicingMonthViewSet
-from api.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
-from api.views.member import MemberExportView, MemberViewSet
-from api.views.payment import PaymentInvoicePreview, PaymentViewSet
+from back.views.domain import DomainsView
+from back.views.invoice import InvoiceStatsView, InvoiceViewSet
+from back.views.invoicing_month import InvoicingMonthViewSet
+from back.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
+from back.views.member import MemberExportView, MemberViewSet
+from back.views.payment import PaymentInvoicePreview, PaymentViewSet
 from rest_framework import routers
 from rest_framework_extensions import routers
 

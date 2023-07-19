@@ -1,8 +1,8 @@
 from django.db import transaction
 
-from api.models.invoice import Invoice, InvoiceStatus, fixed_values
-from api.models.invoicing_month import InvoicingMonth
-from api.models.member import Member
+from back.models.invoice import Invoice, InvoiceStatus, fixed_values
+from back.models.invoicing_month import InvoicingMonth
+from back.models.member import Member
 from rest_framework import serializers
 
 

@@ -1,5 +1,5 @@
-from api.models.invoice import InvoiceStatus
-from api.models.member import Sectores
+from back.models.invoice import InvoiceStatus
+from back.models.member import Sectores
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 

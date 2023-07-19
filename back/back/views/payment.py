@@ -3,12 +3,12 @@ from datetime import datetime
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
-from api.models.invoice import Invoice
-from api.models.invoicing_month import InvoicingMonth
-from api.models.payment import Payment
-from api.serializers.invoice import InvoiceSerializer
-from api.serializers.payment import PaymentSerializer
-from api.views.exceptions import ClosedMonthException
+from back.models.invoice import Invoice
+from back.models.invoicing_month import InvoicingMonth
+from back.models.payment import Payment
+from back.serializers.invoice import InvoiceSerializer
+from back.serializers.payment import PaymentSerializer
+from back.views.exceptions import ClosedMonthException
 from rest_framework import mixins, status, viewsets
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response

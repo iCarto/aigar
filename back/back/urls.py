@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -21,33 +20,33 @@ class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
 admin.autodiscover()
 
 router = NestedDefaultRouter()
-router.register(r"members", MemberViewSet, basename="member")
+router.register("members", MemberViewSet, basename="member")
 
-invoices_router = router.register(r"invoices", InvoiceViewSet, basename="invoice")
+invoices_router = router.register("invoices", InvoiceViewSet, basename="invoice")
 invoices_router.register(
-    r"payments",
+    "payments",
     PaymentViewSet,
     basename="invoice-payments",
     parents_query_lookups=["factura"],
 )
 
 invoicingmonths_router = router.register(
-    r"invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"
+    "invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"
 )
 invoicingmonths_router.register(
-    r"invoices",
+    "invoices",
     InvoiceViewSet,
     basename="invoicingmonth-invoices",
     parents_query_lookups=["mes_facturacion"],
 )
 invoicingmonths_router.register(
-    r"measurements",
+    "measurements",
     MeasurementViewSet,
     basename="invoicingmonth-measurements",
     parents_query_lookups=["mes_facturacion"],
 )
 invoicingmonths_router.register(
-    r"payments",
+    "payments",
     PaymentViewSet,
     basename="invoicingmonth-payments",
     parents_query_lookups=["mes_facturacion"],

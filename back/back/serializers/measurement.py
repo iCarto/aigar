@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from back.models.invoice import Invoice
 from back.models.measurement import Measurement
 
 

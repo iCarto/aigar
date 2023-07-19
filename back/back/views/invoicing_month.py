@@ -1,12 +1,9 @@
-from django.db.models import Max, Value as V
-from django.db.models.functions import Concat
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from back.models.invoice import Invoice, InvoiceStatus, fixed_values
 from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
-from back.serializers.invoice import InvoiceSerializer
 from back.serializers.invoicing_month import InvoicingMonthSerializer
 
 

@@ -5,6 +5,9 @@ import users.constants as c
 
 
 class User(AbstractUser):
+    class Meta(AbstractUser.Meta):
+        ordering = ("username",)
+
     email = models.EmailField("email address", unique=True)
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -14,6 +17,3 @@ class User(AbstractUser):
 
     def is_member(self, group):
         return self.groups.filter(name=group).exists()
-
-    class Meta:
-        ordering = ("username",)

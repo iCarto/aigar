@@ -1,5 +1,6 @@
-from back.models.payment import Payment
 from rest_framework import serializers
+
+from back.models.payment import Payment
 
 
 class PaymentSerializer(serializers.ModelSerializer):

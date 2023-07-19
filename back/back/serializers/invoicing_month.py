@@ -1,11 +1,11 @@
 from django.db import transaction
+from rest_framework import serializers
 
 from back.models.invoice import Invoice, InvoiceStatus
 from back.models.invoicing_month import InvoicingMonth
 from back.models.payment import Payment
 from back.serializers.invoice import InvoiceShortSerializer
 from back.serializers.payment import PaymentSerializer
-from rest_framework import serializers
 
 
 class InvoicingMonthSerializer(serializers.ModelSerializer):

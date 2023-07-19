@@ -1,9 +1,9 @@
 from django.db import transaction
+from rest_framework import serializers
 
 from back.models.invoice import Invoice, InvoiceStatus, fixed_values
 from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
-from rest_framework import serializers
 
 
 class MemberSerializer(serializers.HyperlinkedModelSerializer):

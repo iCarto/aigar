@@ -1,10 +1,5 @@
-from django.db.models import Max
-from django.db.models import Value as V
+from django.db.models import Max, Value as V
 from django.db.models.functions import Concat
-
-from back.models.invoice import Invoice, InvoiceStatus, fixed_values
-from back.models.invoicing_month import InvoicingMonth
-from back.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
 from rest_framework import permissions, status, viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -13,6 +8,10 @@ from rest_framework_extensions.mixins import (
     ListUpdateModelMixin,
     NestedViewSetMixin,
 )
+
+from back.models.invoice import Invoice, InvoiceStatus, fixed_values
+from back.models.invoicing_month import InvoicingMonth
+from back.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
 
 
 class InvoiceViewSet(

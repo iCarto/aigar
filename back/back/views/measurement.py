@@ -1,5 +1,9 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from rest_framework import mixins, status, viewsets
+from rest_framework.generics import CreateAPIView
+from rest_framework.response import Response
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from back.models.invoice import Invoice
 from back.models.invoicing_month import InvoicingMonth
@@ -7,10 +11,6 @@ from back.models.measurement import Measurement
 from back.serializers.invoice import InvoiceSerializer
 from back.serializers.measurement import MeasurementSerializer
 from back.views.exceptions import ClosedMonthException
-from rest_framework import mixins, status, viewsets
-from rest_framework.generics import CreateAPIView
-from rest_framework.response import Response
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
 
 class MeasurementViewSet(

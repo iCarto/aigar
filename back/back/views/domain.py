@@ -1,7 +1,8 @@
-from back.models.invoice import InvoiceStatus
-from back.models.member import Sectores
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+
+from back.models.invoice import InvoiceStatus
+from back.models.member import Sectores
 
 
 class DomainsView(ListAPIView):

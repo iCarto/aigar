@@ -1,7 +1,6 @@
-from django.core.exceptions import ImproperlyConfigured
-
 import environ
 from corsheaders.defaults import default_headers
+from django.core.exceptions import ImproperlyConfigured
 
 
 # from .logger import LOGGING

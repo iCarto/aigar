@@ -3,6 +3,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+from rest_framework_extensions import routers
 
 from back.views.domain import DomainsView
 from back.views.invoice import InvoiceStatsView, InvoiceViewSet
@@ -10,8 +12,6 @@ from back.views.invoicing_month import InvoicingMonthViewSet
 from back.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
 from back.views.member import MemberExportView, MemberViewSet
 from back.views.payment import PaymentInvoicePreview, PaymentViewSet
-from rest_framework import routers
-from rest_framework_extensions import routers
 
 
 class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):

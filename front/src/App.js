@@ -23,8 +23,6 @@ import LoadDataWizard from "./components/common/loaddata/wizard/LoadDataWizard";
 import LoadPaymentsWizard from "./components/payments/container/LoadPaymentsWizard";
 import LoadMeasurementsWizard from "./components/measurements/container/LoadMeasurementsWizard";
 
-import DatabaseFixture from "./fixtures/database.json";
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -39,12 +37,6 @@ class App extends React.Component {
                 <MainContent database={database} />
             </BrowserRouter>
         );
-    }
-
-    componentDidMount() {
-        Promise.resolve(DatabaseFixture).then(d => {
-            this.setState({database: d});
-        });
     }
 }
 

@@ -16,12 +16,12 @@ class RangedIntegerField(models.IntegerField):
         if max_value:
             validators.append(MaxValueValidator(max_value))
         kwargs["validators"] = validators
-        super(RangedIntegerField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def formfield(self, **kwargs):
         context = {"min_value": self.min_value, "max_value": self.max_value}
         context.update(kwargs)
-        return super(RangedIntegerField, self).formfield(**context)
+        return super().formfield(**context)
 
 
 class Sectores(models.IntegerChoices):

@@ -27,7 +27,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         if instance.orden != validated_data["orden"]:
             self.update_other_members_order(instance.orden, validated_data["orden"])
 
-        updated_member = super(MemberSerializer, self).update(instance, validated_data)
+        updated_member = super().update(instance, validated_data)
 
         self.update_current_invoice(updated_member)
         return updated_member

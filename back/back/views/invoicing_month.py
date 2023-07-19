@@ -66,7 +66,7 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "mora": get_mora_value(last_month_invoice),
                 "saldo_pendiente": get_saldo_pendiente_value(last_month_invoice),
             }
-            new_invoicing_month["invoices"].append((invoice))
+            new_invoicing_month["invoices"].append(invoice)
 
         serializer = InvoicingMonthSerializer(
             data=new_invoicing_month, context={"request": request}

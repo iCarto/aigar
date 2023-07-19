@@ -45,7 +45,7 @@ class InvoiceViewSet(
         return self.filter_queryset_by_parents_lookups(queryset)
 
     def get_serializer_context(self):
-        context = super(InvoiceViewSet, self).get_serializer_context()
+        context = super().get_serializer_context()
 
         id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
         if id_mes_facturacion is not None:
@@ -106,7 +106,7 @@ class InvoiceStatsView(ListAPIView):
     serializer_class = InvoiceStatsSerializer
 
     def get_serializer_context(self):
-        context = super(InvoiceStatsView, self).get_serializer_context()
+        context = super().get_serializer_context()
 
         all_invoices = Invoice.objects.all().values(
             "id_factura",

@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
             password = validated_data.pop("password")
             instance.set_password(password)
 
-        return super(UserSerializer, self).update(instance, validated_data)
+        return super().update(instance, validated_data)
 
     class Meta:
         model = User

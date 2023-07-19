@@ -34,7 +34,7 @@ class MemberExportView(ListAPIView):
     serializer_class = MemberExportSerializer
 
     def get_serializer_context(self):
-        context = super(MemberExportView, self).get_serializer_context()
+        context = super().get_serializer_context()
 
         last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
         last_monthly_invoices = Invoice.objects.prefetch_related("member").filter(

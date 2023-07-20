@@ -1,144 +1,73 @@
-import React from "react";
-import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
-import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
-import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
-import LoadMeasurementsStep4Result from "./LoadMeasurementsStep4Result";
-import {Spinner, ErrorMessage} from "components/common";
+import {useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
 import {InvoicingMonthService} from "service/api";
+import {Spinner, ErrorMessage} from "components/common";
+import {Wizard} from "base/ui/wizard";
+import {LoadMeasurementsWizardSteps} from ".";
+import loadPaymentsAndMeasurementsSteps from "components/payments/data";
 
-class LoadMeasurementsWizard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id_mes_facturacion: null,
-            invoicingMonth: null,
-            measurements: [],
-        };
+const LoadMeasurementsWizard = () => {
+    const [measurements, setMeasurements] = useState([]);
+    const [invoices, setInvoices] = useState([]);
+    const [invoicingMonth, setInvoicingMonth] = useState(null);
 
-        this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
-        this.handleChangeInvoices = this.handleChangeInvoices.bind(this);
-    }
+    const [isValidStep, setIsValidStep] = useState(true);
 
-    static getDerivedStateFromProps(props, prevState) {
-        const id_mes_facturacion =
-            props.id_mes_facturacion || props.match.params.id_mes_facturacion;
-        if (id_mes_facturacion !== prevState.id_mes_facturacion) {
-            return {
-                invoicingMonth: null,
-                id_mes_facturacion,
-            };
-        }
-        return null;
-    }
+    // TO-DO: Review this - same state is also handled in component Wizard
+    const [currentStep, setCurrentStep] = useState(1);
 
-    componentDidMount() {
-        this.initSteps();
-        this.loadInvoicingMonth();
-    }
+    const {id_mes_facturacion} = useParams();
+    const wizardSteps = loadPaymentsAndMeasurementsSteps;
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.id_mes_facturacion !== this.state.id_mes_facturacion) {
-            this.initSteps();
-            this.loadInvoicingMonth();
-        }
-    }
-
-    initSteps() {
-        this.props.setSteps([
-            {
-                index: 1,
-                text: "Cargar archivo",
-                icon: "upload",
-                help: "Localice el fichero y súbalo al sistema.",
-            },
-            {
-                index: 2,
-                text: "Revisar lecturas",
-                icon: "table",
-                help: "Revise los datos y corrija posibles errores.",
-            },
-            {
-                index: 3,
-                text: "Revisar facturas",
-                icon: "file-invoice",
-                help: "Revise las facturas con los consumos aplicados.",
-            },
-            {
-                index: 4,
-                text: "Resultado",
-                icon: "check-circle",
-                help: "Revise el resultado de la operación.",
-            },
-        ]);
-    }
-
-    loadInvoicingMonth() {
-        InvoicingMonthService.getInvoicingMonth(this.state.id_mes_facturacion).then(
+    useEffect(() => {
+        InvoicingMonthService.getInvoicingMonth(id_mes_facturacion).then(
             invoicingMonth => {
-                this.setState({invoicingMonth});
+                setInvoicingMonth(invoicingMonth);
             }
         );
-    }
+    }, [id_mes_facturacion]);
 
-    handleChangeMeasurements(measurements) {
+    const handleChangeMeasurements = measurements => {
         console.log("handleChangeMeasurements", measurements);
-        this.setState({
-            measurements,
-        });
-    }
+        setMeasurements(measurements);
+    };
 
-    handleChangeInvoices(invoices) {
+    const handleChangeInvoices = invoices => {
         console.log("handleChangeInvoices", invoices);
-        this.setState({
-            invoices,
-        });
-    }
+        setInvoices(invoices);
+    };
 
-    render() {
-        if (this.state.invoicingMonth != null) {
-            if (this.state.invoicingMonth.is_open === true) {
-                switch (this.props.currentStep) {
-                    case 1:
-                        return (
-                            <LoadMeasurementsStep1ReadFile
-                                handleChangeMeasurements={this.handleChangeMeasurements}
-                                setIsValidStep={this.props.setIsValidStep}
-                            />
-                        );
-                    case 2:
-                        return (
-                            <LoadMeasurementsStep2MeasurementsTable
-                                measurements={this.state.measurements}
-                                handleChangeMeasurements={this.handleChangeMeasurements}
-                                setIsValidStep={this.props.setIsValidStep}
-                            />
-                        );
-                    case 3:
-                        return (
-                            <LoadMeasurementsStep3InvoicesTable
-                                id_mes_facturacion={this.state.id_mes_facturacion}
-                                measurements={this.state.measurements}
-                                invoices={this.state.invoices}
-                                handleChangeInvoices={this.handleChangeInvoices}
-                                setIsValidStep={this.props.setIsValidStep}
-                            />
-                        );
-                    case 4:
-                        return (
-                            <LoadMeasurementsStep4Result
-                                id_mes_facturacion={this.state.id_mes_facturacion}
-                                measurements={this.state.measurements}
-                                setIsValidStep={this.props.setIsValidStep}
-                            />
-                        );
-                    default:
-                        return null;
-                }
-            }
-            return <ErrorMessage message="El mes de facturación no está abierto" />;
-        }
-        return <Spinner message="Cargando mes de facturación" />;
-    }
-}
+    const handleChangeStep = currentStep => {
+        console.log(currentStep);
+        setCurrentStep(currentStep);
+    };
+
+    const validateStep = isStepValid => {
+        setIsValidStep(isStepValid);
+    };
+
+    return (
+        <Wizard
+            steps={wizardSteps}
+            isValidStep={isValidStep}
+            onChangeStep={handleChangeStep}
+        >
+            {!invoicingMonth ? (
+                <Spinner message="Cargando mes de facturación" />
+            ) : invoicingMonth.is_open ? (
+                <LoadMeasurementsWizardSteps
+                    currentStep={currentStep}
+                    onValidateStep={validateStep}
+                    measurements={measurements}
+                    invoices={invoices}
+                    onChangeMeasurements={handleChangeMeasurements}
+                    onChangeInvoices={handleChangeInvoices}
+                />
+            ) : (
+                <ErrorMessage message="El mes de facturación no está abierto" />
+            )}
+        </Wizard>
+    );
+};
 
 export default LoadMeasurementsWizard;

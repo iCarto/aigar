@@ -54,23 +54,19 @@ const ListMembers = ({
     );
 
     return (
-        <div className="h-100">
-            <div className="row no-gutters h-100">
-                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                    {sidebar}
-                </nav>
-                <div className="col-md-10 offset-md-2">
-                    <div className="container">
-                        <EntityList
-                            items={filteredMembers}
-                            columns={tableColumns}
-                            listView={listView}
-                            handleChangeListView={handleChangeListView}
-                        />
-                    </div>
+        <>
+            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
+            <div className="col-md-10 offset-md-2">
+                <div className="container">
+                    <EntityList
+                        items={filteredMembers}
+                        columns={tableColumns}
+                        listView={listView}
+                        handleChangeListView={handleChangeListView}
+                    />
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

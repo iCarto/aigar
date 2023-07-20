@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 import {
@@ -6,34 +6,34 @@ import {
     LoadDataTableFilter,
 } from "components/common/loaddata/table";
 
-class LoadMeasurementsStep3InvoicesTable extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filter: {
-                text: "",
-            },
-            measurementsWithoutInvoice: [],
-        };
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-    }
+const LoadMeasurementsStep3InvoicesTable = ({
+    id_mes_facturacion,
+    measurements,
+    onChangeInvoices,
+    onValidateStep,
+    invoices,
+}) => {
+    const [filter, setFilter] = useState({
+        text: "",
+    });
+    const [measurementsWithoutInvoice, setMeasurementsWithoutInvoice] = useState([]);
 
-    componentDidMount() {
+    useEffect(() => {
         InvoicingMonthService.previewInvoicesWithMeasurements(
-            this.props.id_mes_facturacion,
-            this.props.measurements
+            id_mes_facturacion,
+            measurements
         )
             .then(invoices => {
-                this.reviewMeasurements(this.props.measurements, invoices);
-                this.props.handleChangeInvoices(invoices);
-                this.props.setIsValidStep(true);
+                reviewMeasurements(measurements, invoices);
+                onChangeInvoices(invoices);
+                onValidateStep(true);
             })
             .catch(error => {
-                this.props.setIsValidStep(false);
+                onValidateStep(false);
             });
-    }
+    }, [id_mes_facturacion, measurements]);
 
-    reviewMeasurements(measurements, invoices) {
+    const reviewMeasurements = (measurements, invoices) => {
         let measurementsWithoutInvoice = [];
         measurements.forEach(measurement => {
             const invoice = invoices.find(
@@ -51,41 +51,36 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
                 measurementsWithoutInvoice.push(measurement.num_socio);
             }
         });
-        this.setState({measurementsWithoutInvoice});
-    }
+        setMeasurementsWithoutInvoice(measurementsWithoutInvoice);
+    };
 
-    handleFilterChange(newFilter) {
-        this.setState({
-            filter: Object.assign(this.state.filter, newFilter),
-        });
-    }
+    const handleFilterChange = newFilter => {
+        setFilter(prevState => ({...prevState, ...newFilter}));
+    };
 
-    filterByText(invoice, filterText) {
+    const filterByText = (invoice, filterText) => {
         return (
             invoice.numero.indexOf(filterText) >= 0 ||
             invoice.num_socio.toString().indexOf(filterText) >= 0 ||
-            invoice.nombre
-                .toString()
-                .toLowerCase()
-                .indexOf(filterText.toLowerCase()) >= 0
+            invoice.nombre.toLowerCase().indexOf(filterText.toLowerCase()) >= 0
         );
-    }
+    };
 
-    filter(invoices) {
+    const filterMeasurements = invoices => {
         return invoices.filter(invoice => {
             let filtered = true;
-            if (this.state.filter.text != null && this.state.filter.text !== "") {
-                filtered = this.filterByText(invoice, this.state.filter.text);
+            if (filter.text != null && filter.text !== "") {
+                filtered = filterByText(invoice, filter.text);
             }
-            if (this.state.filter.showOnlyErrors === "true") {
+            if (filter.showOnlyErrors === "true") {
                 filtered = filtered && invoice.errors.length !== 0;
             }
             return filtered;
         });
-    }
+    };
 
-    get messagesError() {
-        const totalInvoicesWithErrors = this.props.invoices.filter(
+    const messagesError = () => {
+        const totalInvoicesWithErrors = invoices.filter(
             invoice => invoice.errors.length !== 0
         ).length;
         if (totalInvoicesWithErrors !== 0) {
@@ -97,47 +92,44 @@ class LoadMeasurementsStep3InvoicesTable extends React.Component {
             );
         }
         return null;
-    }
+    };
 
-    get measurementsWithoutInvoiceError() {
-        if (this.state.measurementsWithoutInvoice.length !== 0) {
+    const measurementsWithoutInvoiceError = () => {
+        if (measurementsWithoutInvoice.length !== 0) {
             return (
                 <div className="alert alert-danger text-center" role="alert">
                     <strong>
                         Se han detectado lecturas para socios que no tienen factura:{" "}
-                        {this.state.measurementsWithoutInvoice.join(",")}
+                        {measurementsWithoutInvoice.join(",")}
                     </strong>
                 </div>
             );
         }
         return null;
-    }
+    };
 
-    render() {
-        const filteredInvoices = this.props.invoices
-            ? this.filter(this.props.invoices)
-            : [];
-        return (
-            <div className="d-flex flex-column justify-content-around">
-                {this.props.invoices ? (
-                    <>
-                        {this.measurementsWithoutInvoiceError}
-                        {this.messagesError}
-                        <LoadDataTableFilter
-                            filter={this.state.filter}
-                            handleChange={this.handleFilterChange}
-                        />
-                        <InvoicesListPreview
-                            invoices={filteredInvoices}
-                            invoicesTableType="measurements"
-                        />
-                    </>
-                ) : (
-                    <Spinner message="Cargando facturas" />
-                )}
-            </div>
-        );
-    }
-}
+    const filteredInvoices = invoices ? filterMeasurements(invoices) : [];
+
+    return (
+        <div className="d-flex flex-column justify-content-around">
+            {invoices ? (
+                <>
+                    {measurementsWithoutInvoiceError()}
+                    {messagesError()}
+                    <LoadDataTableFilter
+                        filter={filter}
+                        handleChange={handleFilterChange}
+                    />
+                    <InvoicesListPreview
+                        invoices={filteredInvoices}
+                        invoicesTableType="measurements"
+                    />
+                </>
+            ) : (
+                <Spinner message="Cargando facturas" />
+            )}
+        </div>
+    );
+};
 
 export default LoadMeasurementsStep3InvoicesTable;

@@ -1,44 +1,32 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 
-class LoadMeasurementsStep4Result extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            result: null,
-        };
-    }
+const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
+    const [result, setResult] = useState(null);
 
-    componentDidMount() {
-        InvoicingMonthService.saveMeasurements(
-            this.props.id_mes_facturacion,
-            this.props.measurements
-        )
+    useEffect(() => {
+        InvoicingMonthService.saveMeasurements(id_mes_facturacion, measurements)
             .then(invoicesUpdated => {
-                this.setState({
-                    result: true,
-                });
+                setResult(true);
             })
             .catch(error => {
-                this.setState({
-                    result: false,
-                });
+                setResult(false);
             });
-    }
+    }, [id_mes_facturacion, measurements]);
 
     /* VIEW SUBCOMPONENTS */
-    get messageError() {
+    const messageError = () => {
         return (
             <div className="alert alert-danger text-center" role="alert">
                 Se ha producido un error durante la actualización de las facturas y no
                 se han podido guardar los datos.
             </div>
         );
-    }
+    };
 
-    get inicioButton() {
+    const inicioButton = () => {
         return (
             <Link to="/">
                 <button className="btn btn-primary center" type="button">
@@ -46,29 +34,32 @@ class LoadMeasurementsStep4Result extends React.Component {
                 </button>
             </Link>
         );
-    }
+    };
 
-    get messageOk() {
+    const messageOk = () => {
         return (
             <>
                 <div className="alert alert-success text-center" role="alert">
                     Las facturas se han actualizado correctamente.
                 </div>
-                {this.inicioButton}
+                {inicioButton()}
             </>
         );
-    }
+    };
 
-    render() {
-        if (this.state.result != null) {
-            return (
-                <div className="d-flex flex-column justify-content-around align-items-center">
-                    {this.state.result === true ? this.messageOk : this.messageError}
-                </div>
-            );
-        }
-        return <Spinner message="Actualizando facturas" />;
-    }
-}
+    return (
+        <div className="d-flex flex-column justify-content-around align-items-center">
+            {result !== null ? (
+                result === true ? (
+                    messageOk()
+                ) : (
+                    messageError()
+                )
+            ) : (
+                <Spinner message="Actualizando facturas" />
+            )}
+        </div>
+    );
+};
 
 export default LoadMeasurementsStep4Result;

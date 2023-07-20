@@ -79,7 +79,7 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
     };
 
     const viewContent = (
-        <div className="row no-gutters h-100">
+        <>
             <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                 <ViewInvoiceSidebar
                     invoice={invoice}
@@ -108,14 +108,12 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
                     />
                 </div>
             </div>
-        </div>
+        </>
     );
 
     const editContent = (
         <EditInvoice handleSubmit={handleSubmitEdit} handleBack={handleBackEdit} />
     );
-
-    console.log({view});
 
     const content = isLoading ? (
         <Spinner message="Cargando datos" />
@@ -125,7 +123,7 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
         editContent
     );
 
-    return <div className="h-100">{content}</div>;
+    return content;
 };
 
 export default ViewInvoice;

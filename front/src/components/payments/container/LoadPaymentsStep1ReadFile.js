@@ -1,93 +1,64 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import {LoadDataValidatorService} from "service/validation";
 import {LoadDataFileUpload} from "components/common/loaddata/fileupload";
 import {PaymentService} from "service/file";
 
-class LoadPaymentsStep1ReadFile extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dataFiles: [],
-        };
-        this.handleLoadedDataFile = this.handleLoadedDataFile.bind(this);
-        this.handleRemoveDataFile = this.handleRemoveDataFile.bind(this);
-        this.handleChangePayments = this.handleChangePayments.bind(this);
-    }
+const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
+    const [dataFiles, setDataFiles] = useState([]);
 
-    componentDidMount() {
-        this.props.setIsValidStep(false);
-    }
+    useEffect(() => {
+        onValidateStep(false);
+    }, []);
 
     /* HANDLERS FOR UI EVENTS */
-    handleLoadedDataFile(dataFile) {
+    const handleLoadedDataFile = dataFile => {
         dataFile.errors = LoadDataValidatorService.validatePaymentsFile(dataFile);
-        this.setState(
-            prevState => {
-                const dataFiles = prevState.dataFiles;
-                dataFiles.push(dataFile);
-                return {
-                    dataFiles,
-                };
-            },
-            () => {
-                this.handleChangePayments();
-            }
-        );
-    }
+        setDataFiles(prevState => {
+            const updatedDataFiles = [...prevState, dataFile];
+            return updatedDataFiles;
+        });
+        onChangePayments();
+    };
 
-    handleRemoveDataFile(filename) {
-        this.setState(
-            prevState => {
-                const dataFiles = prevState.dataFiles;
-                const index = dataFiles.findIndex(
-                    dataFile => dataFile.file.name === filename
-                );
-                dataFiles.splice(index, 1);
-                return {
-                    dataFiles,
-                };
-            },
-            () => {
-                this.handleChangePayments();
-            }
-        );
-    }
+    const handleRemoveDataFile = filename => {
+        setDataFiles(prevState => {
+            const updatedDataFiles = prevState.filter(
+                dataFile => dataFile.file.name !== filename
+            );
+            return updatedDataFiles;
+        });
+        handleChangePayments();
+    };
 
-    handleChangePayments() {
-        const hasErrors = this.state.dataFiles.some(
-            dataFile => dataFile.errors.length !== 0
-        );
+    const handleChangePayments = () => {
+        const hasErrors = dataFiles.some(dataFile => dataFile.errors.length !== 0);
         if (!hasErrors) {
             const content = PaymentService.mergeFileContents(
-                this.state.dataFiles.map(dataFile => dataFile.content)
+                dataFiles.map(dataFile => dataFile.content)
             );
             PaymentService.getPaymentsFromCSVContent(content).then(payments => {
-                this.props.handleChangePayments(payments);
+                handleChangePayments(payments);
             });
         }
-        this.props.setIsValidStep(this.state.dataFiles.length !== 0 && !hasErrors);
-    }
+        onValidateStep(dataFiles.length !== 0 && !hasErrors);
+    };
 
     /* VIEW SUBCOMPONENTS */
 
-    get fileUpload() {
-        return (
-            <LoadDataFileUpload
-                dataFiles={this.state.dataFiles}
-                handleLoadedDataFile={this.handleLoadedDataFile}
-                handleRemoveDataFile={this.handleRemoveDataFile}
-                allowedFormats={[".csv", ".txt"]}
-            />
-        );
-    }
+    const fileUpload = (
+        <LoadDataFileUpload
+            dataFiles={dataFiles}
+            handleLoadedDataFile={handleLoadedDataFile}
+            handleRemoveDataFile={handleRemoveDataFile}
+            allowedFormats={[".csv", ".txt"]}
+        />
+    );
 
-    render() {
-        return (
-            <div className="col-12 row justify-content-center">
-                <form className="col-md-8 p-3">{this.fileUpload}</form>
-            </div>
-        );
-    }
-}
+    return (
+        <div className="col-12 row justify-content-center">
+            <form className="col-md-8 p-3">{fileUpload}</form>
+        </div>
+    );
+};
 
 export default LoadPaymentsStep1ReadFile;

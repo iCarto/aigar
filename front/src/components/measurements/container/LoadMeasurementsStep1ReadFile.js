@@ -1,94 +1,57 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {LoadDataValidatorService} from "service/validation";
 import {LoadDataFileUpload} from "components/common/loaddata/fileupload";
 import {MeasurementService} from "service/file";
 
-class LoadMeasurementsStep1ReadFile extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dataFiles: [],
-        };
-        this.handleLoadedDataFile = this.handleLoadedDataFile.bind(this);
-        this.handleRemoveDataFile = this.handleRemoveDataFile.bind(this);
-        this.handleChangeMeasurements = this.handleChangeMeasurements.bind(this);
-    }
+const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) => {
+    const [dataFiles, setDataFiles] = useState([]);
 
-    componentDidMount() {
-        this.props.setIsValidStep(false);
-    }
+    useEffect(() => {
+        onValidateStep(false);
+    }, []);
 
-    handleLoadedDataFile(dataFile) {
+    const handleLoadedDataFile = dataFile => {
         dataFile.errors = LoadDataValidatorService.validateMeasurementsFile(dataFile);
-        this.setState(
-            prevState => {
-                const dataFiles = prevState.dataFiles;
-                dataFiles.push(dataFile);
-                return {
-                    dataFiles,
-                };
-            },
-            () => {
-                this.handleChangeMeasurements();
-            }
-        );
-    }
+        setDataFiles(prevState => [...prevState, dataFile]);
+        handleChangeMeasurements();
+    };
 
-    handleRemoveDataFile(filename) {
-        this.setState(
-            prevState => {
-                const dataFiles = prevState.dataFiles;
-                const index = dataFiles.findIndex(
-                    dataFile => dataFile.file.name === filename
-                );
-                dataFiles.splice(index, 1);
-                return {
-                    dataFiles,
-                };
-            },
-            () => {
-                this.handleChangeMeasurements();
-            }
+    const handleRemoveDataFile = filename => {
+        setDataFiles(prevState =>
+            prevState.filter(dataFile => dataFile.file.name !== filename)
         );
-    }
+        handleChangeMeasurements();
+    };
 
-    handleChangeMeasurements() {
-        const hasErrors = this.state.dataFiles.some(
-            dataFile => dataFile.errors.length !== 0
-        );
+    const handleChangeMeasurements = () => {
+        const hasErrors = dataFiles.some(dataFile => dataFile.errors.length !== 0);
         if (!hasErrors) {
             const content = MeasurementService.mergeFileContents(
-                this.state.dataFiles.map(dataFile => dataFile.content)
+                dataFiles.map(dataFile => dataFile.content)
             );
             MeasurementService.getMeasurementsFromJSONContent(
                 JSON.stringify(content)
             ).then(measurements => {
-                this.props.handleChangeMeasurements(measurements);
+                onChangeMeasurements(measurements);
             });
         }
-        this.props.setIsValidStep(this.state.dataFiles.length !== 0 && !hasErrors);
-    }
+        onValidateStep(dataFiles.length !== 0 && !hasErrors);
+    };
 
-    /* VIEW SUBCOMPONENTS */
+    const fileUpload = (
+        <LoadDataFileUpload
+            dataFiles={dataFiles}
+            handleLoadedDataFile={handleLoadedDataFile}
+            handleRemoveDataFile={handleRemoveDataFile}
+            allowedFormats={[".json"]}
+        />
+    );
 
-    get fileUpload() {
-        return (
-            <LoadDataFileUpload
-                dataFiles={this.state.dataFiles}
-                handleLoadedDataFile={this.handleLoadedDataFile}
-                handleRemoveDataFile={this.handleRemoveDataFile}
-                allowedFormats={[".json"]}
-            />
-        );
-    }
-
-    render() {
-        return (
-            <div className="col-12 row justify-content-center">
-                <form className="col-md-8 p-3">{this.fileUpload}</form>
-            </div>
-        );
-    }
-}
+    return (
+        <div className="col-12 row justify-content-center">
+            <form className="col-md-8 p-3">{fileUpload}</form>
+        </div>
+    );
+};
 
 export default LoadMeasurementsStep1ReadFile;

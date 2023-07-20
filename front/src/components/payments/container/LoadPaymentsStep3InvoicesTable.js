@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 import {
@@ -6,84 +6,49 @@ import {
     LoadDataTableFilter,
 } from "components/common/loaddata/table";
 
-class LoadPaymentsStep3InvoicesTable extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filter: {
-                text: "",
-            },
-        };
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-    }
+const LoadPaymentsStep3InvoicesTable = ({
+    id_mes_facturacion,
+    payments,
+    onChangeInvoices,
+    onValidateStep,
+    invoices,
+}) => {
+    const [filter, setFilter] = useState({
+        text: "",
+        showOnlyErrors: false,
+    });
 
-    componentDidMount() {
-        InvoicingMonthService.previewInvoicesWithPayments(
-            this.props.id_mes_facturacion,
-            this.props.payments
-        )
-            .then(invoices => {
-                this.reviewInvoices(this.props.payments, invoices);
-                this.props.handleChangeInvoices(invoices);
-                this.props.setIsValidStep(true);
-            })
-            .catch(error => {
-                this.props.setIsValidStep(false);
-            });
-    }
+    const handleFilterChange = newFilter => {
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            ...newFilter,
+        }));
+    };
 
-    reviewInvoices(payments, invoices) {
-        invoices.forEach(invoice => {
-            const paymentsForInvoice = payments.filter(
-                payment => invoice.numero === payment.num_factura
-            );
-            if (paymentsForInvoice.length !== 0) {
-                if (paymentsForInvoice.length > 1) {
-                    invoice.errors.push("La factura tiene varios pagos");
-                    return;
-                }
-                if (invoice.total > invoice.pago_1_al_10 + invoice.pago_11_al_30) {
-                    invoice.errors.push("El pago no cubre el total");
-                }
-                if (invoice.total < invoice.pago_1_al_10 + invoice.pago_11_al_30) {
-                    invoice.errors.push("El pago supera el total");
-                }
-            }
-        });
-    }
-
-    handleFilterChange(newFilter) {
-        this.setState({
-            filter: Object.assign(this.state.filter, newFilter),
-        });
-    }
-
-    filterByText(invoice, filterText) {
+    const filterByText = (invoice, filterText) => {
         return (
             invoice.numero.indexOf(filterText) >= 0 ||
             invoice.num_socio.toString().indexOf(filterText) >= 0 ||
-            invoice.nombre
-                .toString()
-                .toLowerCase()
-                .indexOf(filterText.toLowerCase()) >= 0
+            invoice.nombre.toString().toLowerCase().indexOf(filterText.toLowerCase()) >=
+                0
         );
-    }
+    };
 
-    filter(invoices) {
+    const filterInvoices = invoices => {
         return invoices.filter(invoice => {
             let filtered = true;
-            if (this.state.filter.text != null && this.state.filter.text !== "") {
-                filtered = this.filterByText(invoice, this.state.filter.text);
+            if (filter.text != null && filter.text !== "") {
+                filtered = filterByText(invoice, filter.text);
             }
-            if (this.state.filter.showOnlyErrors === "true") {
+            if (filter.showOnlyErrors === "true") {
                 filtered = filtered && invoice.errors.length !== 0;
             }
             return filtered;
         });
-    }
+    };
 
-    get messagesError() {
-        const totalInvoicesWithErrors = this.props.invoices.filter(
+    const messagesError = () => {
+        const totalInvoicesWithErrors = invoices.filter(
             invoice => invoice.errors.length !== 0
         ).length;
         if (totalInvoicesWithErrors !== 0) {
@@ -95,32 +60,45 @@ class LoadPaymentsStep3InvoicesTable extends React.Component {
             );
         }
         return null;
-    }
+    };
 
-    render() {
-        const filteredInvoices = this.props.invoices
-            ? this.filter(this.props.invoices)
-            : [];
-        return (
-            <div className="d-flex flex-column justify-content-around">
-                {this.props.invoices ? (
-                    <>
-                        {this.messagesError}
-                        <LoadDataTableFilter
-                            filter={this.state.filter}
-                            handleChange={this.handleFilterChange}
-                        />
-                        <InvoicesListPreview
-                            invoices={filteredInvoices}
-                            invoicesTableType="payments"
-                        />
-                    </>
-                ) : (
-                    <Spinner message="Cargando facturas" />
-                )}
-            </div>
-        );
-    }
-}
+    useEffect(() => {
+        if (!invoices) {
+            InvoicingMonthService.previewInvoicesWithPayments(
+                id_mes_facturacion,
+                payments
+            )
+                .then(fetchedInvoices => {
+                    onChangeInvoices(fetchedInvoices);
+                    onValidateStep(true);
+                })
+                .catch(error => {
+                    onValidateStep(false);
+                });
+        }
+    }, [id_mes_facturacion, invoices, payments, onChangeInvoices, onValidateStep]);
+
+    const filteredInvoices = invoices ? filterInvoices(invoices) : [];
+
+    return (
+        <div className="d-flex flex-column justify-content-around">
+            {invoices ? (
+                <>
+                    {messagesError()}
+                    <LoadDataTableFilter
+                        filter={filter}
+                        handleChange={handleFilterChange}
+                    />
+                    <InvoicesListPreview
+                        invoices={filteredInvoices}
+                        invoicesTableType="payments"
+                    />
+                </>
+            ) : (
+                <Spinner message="Cargando facturas" />
+            )}
+        </div>
+    );
+};
 
 export default LoadPaymentsStep3InvoicesTable;

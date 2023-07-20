@@ -76,7 +76,7 @@ const ViewMember = () => {
     };
 
     const viewContent = (
-        <div className="row no-gutters h-100">
+        <>
             <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                 {member ? (
                     <ViewMemberSidebar
@@ -98,7 +98,7 @@ const ViewMember = () => {
                     {invoices ? <ListMemberInvoices invoices={invoices} /> : null}
                 </div>
             </div>
-        </div>
+        </>
     );
 
     const editContent = (
@@ -117,7 +117,7 @@ const ViewMember = () => {
         editContent
     );
 
-    return <div className="h-100">{content}</div>;
+    return content;
 };
 
 export default ViewMember;

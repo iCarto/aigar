@@ -1,14 +1,18 @@
-import React from "react";
+import {useNavigate} from "react-router-dom";
 
-class BackButton extends React.Component {
-    render() {
-        return (
-            <button onClick={this.props.handleBack} className="btn btn-light">
-                <i className="fas fa-arrow-left mr-2" />
-                Volver
-            </button>
-        );
-    }
-}
+const BackButton = () => {
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
+    return (
+        <button onClick={handleBack} className="btn btn-light">
+            <i className="fas fa-arrow-left mr-2" />
+            Volver
+        </button>
+    );
+};
 
 export default BackButton;

@@ -1,74 +1,58 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {InvoicingMonthService} from "service/api";
 import {Spinner} from "components/common";
 
-class LoadPaymentsStep4Result extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            result: null,
-        };
-    }
+const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
+    const [result, setResult] = useState(null);
 
-    componentDidMount() {
-        InvoicingMonthService.savePayments(
-            this.props.id_mes_facturacion,
-            this.props.payments
-        )
+    useEffect(() => {
+        InvoicingMonthService.savePayments(id_mes_facturacion, payments)
             .then(invoicesUpdated => {
-                this.setState({
-                    result: true,
-                });
+                setResult(true);
             })
             .catch(error => {
-                this.setState({
-                    result: false,
-                });
+                setResult(false);
             });
-    }
+    }, [id_mes_facturacion, payments]);
 
-    /* VIEW SUBCOMPONENTS */
-    get messageError() {
-        return (
-            <div className="alert alert-danger text-center" role="alert">
-                Se ha producido un error durante la actualización de las facturas y no
-                se han podido guardar los datos.
+    const messageError = () => (
+        <div className="alert alert-danger text-center" role="alert">
+            Se ha producido un error durante la actualización de las facturas y no se
+            han podido guardar los datos.
+        </div>
+    );
+
+    const inicioButton = () => (
+        <Link to="/">
+            <button className="btn btn-primary center" type="button">
+                Volver al listado de facturas <i className="fas fa-list"></i>
+            </button>
+        </Link>
+    );
+
+    const messageOk = () => (
+        <>
+            <div className="alert alert-success text-center" role="alert">
+                Las facturas se han actualizado correctamente.
             </div>
-        );
-    }
+            {inicioButton()}
+        </>
+    );
 
-    get inicioButton() {
-        return (
-            <Link to="/">
-                <button className="btn btn-primary center" type="button">
-                    Volver al listado de facturas <i className="fas fa-list"></i>
-                </button>
-            </Link>
-        );
-    }
-
-    get messageOk() {
-        return (
-            <>
-                <div className="alert alert-success text-center" role="alert">
-                    Las facturas se han actualizado correctamente.
-                </div>
-                {this.inicioButton}
-            </>
-        );
-    }
-
-    render() {
-        if (this.state.result != null) {
-            return (
-                <div className="d-flex flex-column justify-content-around align-items-center">
-                    {this.state.result === true ? this.messageOk : this.messageError}
-                </div>
-            );
-        }
-        return <Spinner message="Actualizando facturas" />;
-    }
-}
+    return (
+        <div className="d-flex flex-column justify-content-around align-items-center">
+            {result !== null ? (
+                result ? (
+                    messageOk()
+                ) : (
+                    messageError()
+                )
+            ) : (
+                <Spinner message="Actualizando facturas" />
+            )}
+        </div>
+    );
+};
 
 export default LoadPaymentsStep4Result;

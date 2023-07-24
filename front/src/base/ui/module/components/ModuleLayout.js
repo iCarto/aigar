@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 import {DrawerHeader} from "./ModuleMenu";
 import Box from "@mui/material/Box";
 
-const ModuleLayout = ({title = "", menu = null}) => {
+const ModuleLayout = ({menu = null}) => {
     return (
         // <Box sx={{display: "flex"}} role="main">
         //     {menu}
@@ -13,6 +13,7 @@ const ModuleLayout = ({title = "", menu = null}) => {
         // </Box>
         <div className="h-100">
             <div className="row no-gutters h-100">
+                {menu}
                 <Outlet />
             </div>
         </div>

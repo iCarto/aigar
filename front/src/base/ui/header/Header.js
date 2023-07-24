@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom";
 import {APP_LOGO_URL} from "aigar/config";
-import "../../../components/navbar/NavBar.css";
 
 const Header = ({hero = null, menu = null}) => {
     return (

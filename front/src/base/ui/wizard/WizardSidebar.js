@@ -1,4 +1,4 @@
-import {BackButton} from "components/common";
+import {BackButton} from "base/common";
 
 const WizardSidebar = () => {
     return (

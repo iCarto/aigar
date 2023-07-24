@@ -1,0 +1,140 @@
+import React from "react";
+import {
+    LoadPaymentsButton,
+    LoadMeasurementsButton,
+    StartInvoicingMonthButton,
+    ExportMemberButton,
+    PrintInvoicesButton,
+} from "monthlyinvoicing/container/actions";
+import {ESTADOS_FACTURA} from "invoice/model";
+
+class ListMonthlyInvoicesActions extends React.Component {
+    getOutputFilename() {
+        return (
+            "recibo_" +
+            this.props.selectedInvoicingMonth.anho +
+            "_" +
+            this.props.selectedInvoicingMonth.mes +
+            "_todos"
+        );
+    }
+
+    isPreviousInvoicingMonth() {
+        return !this.props.selectedInvoicingMonth.is_open;
+    }
+
+    isCurrentInvoicingMonth() {
+        return this.props.selectedInvoicingMonth.is_open;
+    }
+
+    isNextInvoicingMonth() {
+        return this.props.selectedInvoicingMonth.id_mes_facturacion < 0;
+    }
+
+    isStartInvoicingEnabled() {
+        return this.isNextInvoicingMonth();
+    }
+
+    isLoadMeasurementsButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(invoice => invoice.consumo === "").length !== 0
+        );
+    }
+
+    isPrintInvoiceButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(invoice => invoice.consumo === "").length === 0
+        );
+    }
+
+    isExportMembersButtonEnabled() {
+        return true;
+    }
+
+    isLoadPaymentsButtonEnabled() {
+        return (
+            this.props.invoices.length > 0 &&
+            this.props.invoices.filter(
+                invoice => invoice.estado === ESTADOS_FACTURA.PENDIENTE_DE_COBRO
+            ).length !== 0
+        );
+    }
+
+    get invoiceButton() {
+        return (
+            <StartInvoicingMonthButton
+                position="1"
+                invoicingMonth={this.props.selectedInvoicingMonth}
+                // disabled={!this.isStartInvoicingEnabled()}
+                disabled={this.isStartInvoicingEnabled()}
+                handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
+            />
+        );
+    }
+
+    get loadMeasurementsButton() {
+        return (
+            <LoadMeasurementsButton
+                position="2"
+                invoicingMonth={this.props.selectedInvoicingMonth}
+                // disabled={!this.isLoadMeasurementsButtonEnabled()}
+                disabled={this.isLoadMeasurementsButtonEnabled()}
+            />
+        );
+    }
+
+    get printInvoiceButton() {
+        return (
+            <PrintInvoicesButton
+                invoices={this.props.invoices}
+                position="3"
+                buttonTitle="Imprimir facturas"
+                outputFilename={this.getOutputFilename()}
+                disabled={!this.isPrintInvoiceButtonEnabled()}
+                handleSuccessPrintInvoices={this.props.handleSuccessPrintInvoices}
+            />
+        );
+    }
+
+    get exportMemberButton() {
+        return (
+            <ExportMemberButton
+                position="4"
+                disabled={!this.isExportMembersButtonEnabled()}
+            />
+        );
+    }
+
+    get loadPaymentsButton() {
+        return (
+            <LoadPaymentsButton
+                position="5"
+                invoicingMonth={this.props.selectedInvoicingMonth}
+                // disabled={!this.isLoadPaymentsButtonEnabled()}
+                disabled={this.isLoadPaymentsButtonEnabled()}
+            />
+        );
+    }
+
+    render() {
+        if (this.props.invoices) {
+            if (this.isNextInvoicingMonth() || this.isCurrentInvoicingMonth()) {
+                return (
+                    <div className="d-flex flex-column p-3 border-bottom">
+                        {this.invoiceButton}
+                        {this.loadMeasurementsButton}
+                        {this.printInvoiceButton}
+                        {this.exportMemberButton}
+                        {this.loadPaymentsButton}
+                    </div>
+                );
+            }
+            return null;
+        }
+        return null;
+    }
+}
+
+export default ListMonthlyInvoicesActions;

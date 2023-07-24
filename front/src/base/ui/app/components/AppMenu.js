@@ -1,5 +1,4 @@
 import {AppMenuItem} from ".";
-import "../../../../components/navbar/NavBar.css";
 
 const AppMenu = ({children = null, menuItems = []}) => {
     const navItems = menuItems.map((menuItem, index) => (

@@ -1,1 +1,1 @@
-export {default as EntityList} from "./EntityList";
+export {default as EntityListPage} from "./EntityListPage";

@@ -4,10 +4,8 @@ let ModuleConfigContext = createContext(null);
 
 export default function ModuleConfigProvider({children}) {
     const [moduleFilter, setModuleFilterInternal] = useState({
-        project: null,
-        contract: null,
-        provider: null,
-        project_field: null,
+        socio: null,
+        recibo: null,
     });
     const [moduleBasePath, setModuleBasePath] = useState(null);
 

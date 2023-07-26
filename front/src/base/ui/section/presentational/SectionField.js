@@ -60,16 +60,18 @@ const SectionField = ({
     }
 
     const labelStyle = {
-        lineHeight: {xs: 1.5, sm: 1.25},
-        mt: {xs: 0, sm: 1.5},
+        lineHeight: {xs: 1.5, sm: 1.75},
+        color: "text.secondary",
+        fontSize: "0.8rem",
+        fontWeight: "regular",
         textTransform: "uppercase",
         hyphens: "auto",
     };
 
     const valueStyle = {
-        mt: {xs: 0, sm: 1.5},
         overflowWrap: "break-word",
-        lineHeight: {xs: 1.5, sm: 1.25},
+        lineHeight: {xs: 1.5, sm: 1.75},
+        fontSize: "0.8rem",
         fontWeight: "regular",
         ...valueCustomStyle,
     };
@@ -126,15 +128,7 @@ const SectionField = ({
                 {labelIcon && (
                     <LabelIcon fontSize="small" sx={{mr: 1, color: "text.secondary"}} />
                 )}
-                {label && (
-                    <Typography
-                        variant="subtitle2"
-                        color="text.secondary"
-                        sx={labelStyle}
-                    >
-                        {label}:
-                    </Typography>
-                )}
+                {label && <Typography sx={labelStyle}>{label}:</Typography>}
             </Grid>
             <Grid item container xs="auto" sm={6} lg={valueWidth} alignItems="flex-end">
                 <Grid item>{isValueValid ? typeOfField : emptyField}</Grid>

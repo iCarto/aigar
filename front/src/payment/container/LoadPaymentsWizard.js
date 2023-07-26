@@ -1,13 +1,12 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {Wizard} from "base/ui/wizard";
-
-import {LoadPaymentsWizardSteps} from ".";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import {Spinner} from "base/common";
-import {ErrorMessage} from "base/error/components";
 import loadPaymentsAndMeasurementsSteps from "payment/data";
+import {Wizard} from "base/ui/wizard";
+import {ErrorMessage} from "base/error/components";
+import {Spinner} from "base/common";
+import {LoadPaymentsWizardSteps} from ".";
 
 const LoadPaymentsWizard = () => {
     const [payments, setPayments] = useState([]);

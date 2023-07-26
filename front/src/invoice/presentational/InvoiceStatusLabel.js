@@ -1,20 +1,14 @@
-import React from "react";
 import "./InvoiceStatus.css";
 
-class InvoiceStatusLabel extends React.Component {
-    getStatusName(estado) {
+const InvoiceStatusLabel = ({estado}) => {
+    const getStatusName = estado => {
         const result = estado.replace(/_/g, " ");
         return result.charAt(0).toUpperCase() + result.slice(1);
-    }
+    };
 
-    render() {
-        return (
-            <span className={"estado-label " + this.props.estado}>
-                {" "}
-                {this.getStatusName(this.props.estado)}
-            </span>
-        );
-    }
-}
+    return estado ? (
+        <span className={"estado-label " + estado}> {getStatusName(estado)}</span>
+    ) : null;
+};
 
 export default InvoiceStatusLabel;

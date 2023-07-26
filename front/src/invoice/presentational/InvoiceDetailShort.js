@@ -1,61 +1,45 @@
-import React from "react";
 import {DateUtil} from "utilities";
-import InvoiceStatusLabel from "./InvoiceStatusLabel";
 
-class InvoiceDetailShort extends React.Component {
-    get message() {
-        if (!this.props.invoice.is_active) {
-            return (
-                <div className="alert alert-danger">La factura ha sido anulada.</div>
-            );
-        }
-        return null;
-    }
+import {SectionField, SectionSummaryCard} from "base/ui/section/presentational";
+import {InvoiceStatusLabel} from ".";
 
-    render() {
-        if (this.props.invoice) {
-            const {numero, mes_facturado, anho, estado} = this.props.invoice;
-            return (
-                <div className="border rounded bg-light mb-3 p-1">
-                    {this.message}
-                    <div className="field-label p-2 row no-gutters">
-                        <label className="col-md-5">Recibo nº</label>
-                        <strong>{numero}</strong>
-                    </div>
-                    <div className="field-label p-2 row no-gutters">
-                        <label className="col-md-5">Mes de cobro</label>
-                        <strong>
-                            {DateUtil.getMonthName(mes_facturado)} - {anho}
-                        </strong>
-                    </div>
-                    <div className="field-label p-2 row no-gutters">
-                        <label className="col-md-5">Estado</label>
-                        <span>
-                            <InvoiceStatusLabel estado={estado} />
-                        </span>
-                    </div>
-                    {this.props.payments && this.props.payments.length !== 0 ? (
-                        <div className="field-label p-2 row no-gutters">
-                            <label className="col-md-5">Pago</label>
-                            <span>
-                                {this.props.payments.map(payment => {
-                                    return (
-                                        <div key={payment.id}>
-                                            {payment.fecha} -{" "}
-                                            <span className="dollar">
-                                                {payment.monto}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </span>
-                        </div>
-                    ) : null}
+const InvoiceDetailShort = ({invoice, payments}) => {
+    const message = !invoice?.is_active ? (
+        <div className="alert alert-danger">La factura ha sido anulada.</div>
+    ) : null;
+
+    return (
+        <SectionSummaryCard>
+            {message}
+            <SectionField label="Nº recibo" value={invoice?.numero} />
+            <SectionField
+                label="Mes de cobro"
+                value={`${DateUtil.getMonthName(invoice?.mes_facturado)} - ${
+                    invoice?.anho
+                }`}
+            />
+            <SectionField
+                label="Estado"
+                value={<InvoiceStatusLabel estado={invoice?.estado} />}
+            />
+
+            {payments?.length ? (
+                <div className="field-label p-2 row no-gutters">
+                    <label className="col-md-5">Pago</label>
+                    <span>
+                        {payments?.map(payment => {
+                            return (
+                                <div key={payment.id}>
+                                    {payment.fecha} -{" "}
+                                    <span className="dollar">{payment.monto}</span>
+                                </div>
+                            );
+                        })}
+                    </span>
                 </div>
-            );
-        }
-        return null;
-    }
-}
+            ) : null}
+        </SectionSummaryCard>
+    );
+};
 
 export default InvoiceDetailShort;

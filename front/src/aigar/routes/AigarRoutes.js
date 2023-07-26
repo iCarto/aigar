@@ -26,7 +26,6 @@ import {StatsModule} from "stats/module";
 export default function AigarRoutes() {
     return (
         <Router>
-            {/* <AuthProvider> */}
             <Routes>
                 <Route path="/" element={<AigarApp />}>
                     <Route path="" element={<MonthlyInvoicingModule />}>
@@ -67,7 +66,6 @@ export default function AigarRoutes() {
                     </Route>
                 </Route>
             </Routes>
-            {/* </AuthProvider> */}
         </Router>
     );
 }

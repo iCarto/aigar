@@ -13,7 +13,7 @@ const SectionCard = ({
 }) => {
     const cardStyle = {
         width: "100%",
-        mb: 1,
+        ...props.cardStyle,
     };
 
     const cardStyleForSidePanel = {

@@ -1,16 +1,11 @@
 import {useEffect, useState} from "react";
 import {useMembersTableColumns} from "../data/MembersTableColumns";
-import EntityListPage from "base/entity/components/presentational/EntityListPage";
+
 import {MembersFilterForm} from ".";
 import {MemberNewButton} from "member/presentational";
+import {EntityListPage} from "base/entity/components/presentational";
 
-const ListMembers = ({
-    members,
-    listView,
-    handleChangeListView,
-    handleFilterChange,
-    filter,
-}) => {
+const ListMembers = ({members, handleFilterChange, filter}) => {
     const [filteredMembers, setFilteredMembers] = useState([]);
     const {tableColumns} = useMembersTableColumns();
 
@@ -50,8 +45,6 @@ const ListMembers = ({
         <EntityListPage
             items={filteredMembers}
             columns={tableColumns}
-            listView={listView}
-            handleChangeListView={handleChangeListView}
             pageActions={pageActions}
             groupActions={false}
             filterForm={

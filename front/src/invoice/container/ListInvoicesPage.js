@@ -7,10 +7,6 @@ import {PageLayout} from "base/ui/page";
 
 const ListInvoicesPage = () => {
     const [invoices, setInvoices] = useState([]);
-    const [listView, setListView] = useState({
-        sortBy: [],
-        pageIndex: 0,
-    });
     const [filter, setFilter] = useState({
         numero: "",
         nombre: "",
@@ -26,15 +22,10 @@ const ListInvoicesPage = () => {
         });
     }, []);
 
-    const handleChangeListView = listView => {
-        console.log("handleChangeListView", {listData: listView});
-        setListView(listView);
-    };
-
     const handleFilterChange = newFilter => {
         console.log("handleFilterChange", newFilter);
         setFilter(prevFilter => ({...prevFilter, ...newFilter}));
-        setListView(prevListView => ({...prevListView, pageIndex: 0}));
+        // setListView(prevListView => ({...prevListView, pageIndex: 0}));
     };
 
     const handleClickViewInvoice = (idFactura, filteredInvoicesIds) => {
@@ -61,9 +52,7 @@ const ListInvoicesPage = () => {
     return (
         <PageLayout>
             <ListInvoices
-                listView={listView}
                 invoices={invoices}
-                handleChangeListView={handleChangeListView}
                 handleFilterChange={handleFilterChange}
                 filter={filter}
             />

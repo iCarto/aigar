@@ -75,7 +75,7 @@ const CreateMember = ({handleSubmit}) => {
             );
             return updatedMember;
         });
-        setValidationErrors(DataValidatorService.validateMember(updatedMember));
+        // setValidationErrors(DataValidatorService.validateMember(updatedMember));
         setMembersWithOrder(membersWithOrder);
     };
 
@@ -87,7 +87,7 @@ const CreateMember = ({handleSubmit}) => {
             );
             return updatedMember;
         });
-        setValidationErrors(DataValidatorService.validateMember(updatedMember));
+        // setValidationErrors(DataValidatorService.validateMember(updatedMember));
     };
 
     const handleBackAction = () => {

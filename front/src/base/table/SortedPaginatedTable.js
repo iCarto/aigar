@@ -1,14 +1,18 @@
 import {useEffect} from "react";
 import {useTable, useSortBy, usePagination} from "react-table";
-import PaginatedTableNavigator from "./PaginatedTableNavigator";
 
-const SortedPaginatedTable = ({
-    columns,
-    data,
-    listView = "view",
-    handleChangeListView = null,
-    onUpdateData = null,
-}) => {
+import {useList} from "base/entity/provider";
+import {PaginatedTableNavigator} from ".";
+
+const SortedPaginatedTable = ({columns, data, onUpdateData = null}) => {
+    const {
+        pageSize,
+        pageIndex: controlledPageIndex,
+        setPageIndex,
+        sortBy: controlledSortBy,
+        setSortBy,
+    } = useList();
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -28,9 +32,9 @@ const SortedPaginatedTable = ({
             columns,
             data,
             initialState: {
-                pageSize: 10,
-                pageIndex: listView ? listView.pageIndex : 0,
-                sortBy: listView ? listView.sortBy : [],
+                pageSize: pageSize,
+                pageIndex: controlledPageIndex,
+                sortBy: controlledSortBy,
             },
             onUpdateData,
         },
@@ -38,11 +42,10 @@ const SortedPaginatedTable = ({
         usePagination
     );
 
-    // Listening for changes in pagination or sorting and lifting up them
+    // Listening for changes in pagination or sorting and lifting them up to ListProvider
     useEffect(() => {
-        if (handleChangeListView) {
-            handleChangeListView({pageIndex, sortBy});
-        }
+        setPageIndex(pageIndex);
+        setSortBy(sortBy);
     }, [pageIndex, sortBy]);
 
     return (

@@ -8,8 +8,6 @@ const EntityListPage = ({
     columns,
     filterForm,
     pageActions = [],
-    listView,
-    handleChangeListView = null,
     groupActions = true,
 }) => {
     const displayActions = pageActions?.length > 0;
@@ -43,13 +41,7 @@ const EntityListPage = ({
                 ) : null}
             </Grid>
             <Grid item>
-                <SortedPaginatedTable
-                    columns={columns}
-                    data={items}
-                    listView={listView}
-                    handleChangeListView={handleChangeListView}
-                    onUpdateData={undefined}
-                />
+                <SortedPaginatedTable columns={columns} data={items} />
             </Grid>
         </>
     ) : (

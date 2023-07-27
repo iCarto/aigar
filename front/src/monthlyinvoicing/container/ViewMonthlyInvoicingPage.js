@@ -15,10 +15,6 @@ const ViewMonthlyInvoicingPage = () => {
     const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
     const [filteredInvoices, setFilderedInvoices] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
-    const [listView, setListView] = useState({
-        sortBy: [],
-        pageIndex: 0,
-    });
     const [filter, setFilter] = useState({
         nombre: "",
         sector: 0,
@@ -70,10 +66,10 @@ const ViewMonthlyInvoicingPage = () => {
             ...prevFilter,
             ...newFilter,
         }));
-        setListView(prevListView => ({
-            ...prevListView,
-            pageIndex: 0,
-        }));
+        // setListView(prevListView => ({
+        //     ...prevListView,
+        //     pageIndex: 0,
+        // }));
     };
 
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {
@@ -140,9 +136,7 @@ const ViewMonthlyInvoicingPage = () => {
             ) : (
                 <>
                     <ListMonthlyInvoices
-                        listView={listView}
                         handleFilterChange={handleFilterChange}
-                        // handleChangeListView={handleChangeListView}
                         filter={filter}
                         invoicingMonths={invoicingMonths}
                         invoices={invoices}

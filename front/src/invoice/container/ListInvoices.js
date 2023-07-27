@@ -5,13 +5,7 @@ import EntityListPage from "base/entity/components/presentational/EntityListPage
 import InvoicesFilterForm from "./InvoicesFilterForm";
 
 // TO-DO: Refactor filtering
-const ListInvoices = ({
-    invoices,
-    listView,
-    handleChangeListView,
-    handleFilterChange,
-    filter,
-}) => {
+const ListInvoices = ({invoices, handleFilterChange, filter}) => {
     const [filteredInvoices, setFilteredInvoices] = useState([]);
     const {tableColumns} = useInvoicesTableColumns();
     const navigate = useNavigate();
@@ -59,8 +53,6 @@ const ListInvoices = ({
             <EntityListPage
                 items={filteredInvoices}
                 columns={tableColumns}
-                listView={listView}
-                handleChangeListView={handleChangeListView}
                 filterForm={
                     <InvoicesFilterForm
                         filter={filter}

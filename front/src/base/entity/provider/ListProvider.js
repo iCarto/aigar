@@ -9,9 +9,9 @@ export default function ListProvider({children}) {
     const [elements, setElements] = useState([]);
     const [view, setView] = useState("table");
     const [filter, setFilter] = useState(null);
-    const [page, setPage] = useState(1);
-    const [size, setSize] = useState(0);
-    const [sort, setSort] = useState("id");
+    const [pageSize, setPageSize] = useState(10);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [sortBy, setSortBy] = useState([]);
     const [order, setOrder] = useState("asc");
 
     useEffect(() => {
@@ -25,17 +25,17 @@ export default function ListProvider({children}) {
         setView,
         filter,
         setFilter,
-        page,
-        setPage,
-        size,
-        setSize,
-        sort,
-        setSort,
+        pageSize,
+        setPageSize,
+        pageIndex,
+        setPageIndex,
+        sortBy,
+        setSortBy,
         order,
         setOrder,
     };
 
-    console.log({elements, filter, moduleFilter});
+    console.log({elements, filter, moduleFilter, pageIndex, sortBy});
 
     return <ListContext.Provider value={value}>{children}</ListContext.Provider>;
 }

@@ -1,64 +1,21 @@
-import React from "react";
 import {SortedPaginatedTable} from "base/table";
-import {Spinner} from "base/common";
+import {useInvoiceStatsTableColumns} from "stats/data";
 
-const InvoicingMonthCellTable = ({row, column, cell}) => {
-    const invoice = row.original.invoices.find(
-        invoice => invoice.mes_facturacion === column.getProps().invoicingMonth
+const InvoicesStatsList = ({
+    invoicesStats,
+    invoicingMonths,
+    selectedField,
+    unitClass,
+}) => {
+    const columns = useInvoiceStatsTableColumns(
+        invoicingMonths,
+        selectedField,
+        unitClass
     );
-    const value = invoice ? invoice[column.getProps().field] : null;
-    return <div className={column.getProps().className}>{value}</div>;
+
+    return invoicesStats ? (
+        <SortedPaginatedTable columns={columns} data={invoicesStats} />
+    ) : null;
 };
-
-class InvoicesStatsList extends React.Component {
-    render() {
-        if (this.props.invoicesStats) {
-            let columns = [
-                {
-                    Header: "Número",
-                    accessor: "num_socio",
-                },
-                {
-                    Header: "Socio",
-                    accessor: "nombre",
-                    style: {minWidth: "210px"},
-                },
-                {
-                    Header: "Sector",
-                    accessor: "sector",
-                },
-            ];
-            if (this.props.invoicingMonths.length > 0) {
-                const invoicingMonthsColumns = this.props.invoicingMonths.map(
-                    invoicingMonth => {
-                        return {
-                            Header:
-                                invoicingMonth.substring(4, 6) +
-                                "/" +
-                                invoicingMonth.substring(0, 4),
-                            Cell: InvoicingMonthCellTable,
-                            getProps: () => ({
-                                invoicingMonth: invoicingMonth,
-                                field: this.props.selectedField,
-                                className: this.props.unitClass,
-                            }),
-                        };
-                    }
-                );
-                columns = [...columns, ...invoicingMonthsColumns];
-            }
-
-            return (
-                <SortedPaginatedTable
-                    columns={columns}
-                    data={this.props.invoicesStats}
-                    total={this.props.invoicesStatsLength}
-                    handleChangeListView={this.props.handleChangeListView}
-                />
-            );
-        }
-        return <Spinner message="Cargando datos" />;
-    }
-}
 
 export default InvoicesStatsList;

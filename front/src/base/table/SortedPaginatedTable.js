@@ -55,7 +55,7 @@ const SortedPaginatedTable = ({columns, data, onUpdateData = null}) => {
                 className="table table-bordered table-striped table-hover"
             >
                 <thead className="thead-dark">
-                    {headerGroups.map(headerGroup => (
+                    {headerGroups?.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map(column => (
                                 // Add the sorting props to control sorting. For this example
@@ -80,7 +80,7 @@ const SortedPaginatedTable = ({columns, data, onUpdateData = null}) => {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {page.map((row, i) => {
+                    {page?.map((row, i) => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()}>

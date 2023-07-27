@@ -13,6 +13,7 @@ const PageLayout = ({sidebar = null, children}) => {
                 rowSpacing={2}
                 px={sidebar ? 2 : 3}
                 ml={sidebar ? `${LEFT_SIDEBAR_WIDTH}px` : null}
+                mb={3}
             >
                 {children}
             </Grid>

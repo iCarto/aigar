@@ -1,58 +1,55 @@
-import React from "react";
-import {Chart as ChartJS} from "chart.js";
+import {useEffect, useRef} from "react";
+import Chart from "chart.js/auto";
 
-class BarChart extends React.Component {
-    constructor(props) {
-        super(props);
-        this.chartRef = React.createRef();
-    }
+const BarChart = ({dataLabels, dataLabelsFormat, dataDatasets}) => {
+    const chartRef = useRef(null);
+    const chart = useRef(null);
 
-    componentDidMount() {
-        this.chart = new ChartJS(this.chartRef.current, {
+    useEffect(() => {
+        chart.current = new Chart(chartRef.current, {
             type: "bar",
             data: {
-                labels: this.getDataLabels(),
-                datasets: this.getDatasets(),
+                labels: getDataLabels(),
+                datasets: getDatasets(),
             },
             options: {
                 scales: {
-                    xAxes: [{stacked: true}],
-                    yAxes: [
-                        {
-                            stacked: true,
-                            ticks: {
-                                beginAtZero: true,
-                            },
-                        },
-                    ],
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                    },
                 },
             },
         });
-    }
+        return () => {
+            chart.current.destroy();
+        };
+    }, []);
 
-    componentDidUpdate() {
-        this.chart.data.labels = this.getDataLabels();
-        this.chart.data.datasets = this.getDatasets();
-        this.chart.update();
-    }
+    useEffect(() => {
+        chart.current.data.labels = getDataLabels();
+        chart.current.data.datasets = getDatasets();
+        chart.current.update();
+    }, [dataLabels, dataDatasets]);
 
-    getDataLabels() {
-        return this.props.dataLabels.map(this.props.dataLabelsFormat);
-    }
+    const getDataLabels = () => {
+        return dataLabels.map(dataLabelsFormat);
+    };
 
-    getDatasets() {
-        return this.props.dataDatasets.map(dataset => {
+    const getDatasets = () => {
+        return dataDatasets.map(dataset => {
             return {
                 label: dataset.label,
                 data: dataset.data.map(d => d.value),
                 backgroundColor: dataset.backgroundColor,
             };
         });
-    }
+    };
 
-    render() {
-        return <canvas ref={this.chartRef} />;
-    }
-}
+    return <canvas ref={chartRef} />;
+};
 
 export default BarChart;

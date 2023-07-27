@@ -20,7 +20,7 @@ import {MemberModule} from "member/module";
 import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
 import {MonthlyInvoicingModule} from "monthlyinvoicing/module";
 import {LoadPaymentsWizard} from "payment/container";
-import {ViewInvoicesStats} from "stats/container";
+import {ViewInvoicesStatsPage} from "stats/container";
 import {StatsModule} from "stats/module";
 
 export default function AigarRoutes() {
@@ -62,7 +62,7 @@ export default function AigarRoutes() {
                     </Route>
 
                     <Route path="estadisticas" element={<StatsModule />}>
-                        <Route path="" element={<ViewInvoicesStats />} />
+                        <Route path="" element={<ViewInvoicesStatsPage />} />
                     </Route>
                 </Route>
             </Routes>

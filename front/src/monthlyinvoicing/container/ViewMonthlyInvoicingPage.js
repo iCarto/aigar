@@ -5,7 +5,7 @@ import {useList} from "base/entity/provider";
 import {useFilter} from "base/filter/hooks";
 
 import {PageLayout} from "base/ui/page";
-import {ListMonthlyInvoices, ListMonthlyInvoicesSidebar} from ".";
+import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
 import {Spinner} from "base/common";
 import InvoiceStatusIcon from "invoice/presentational/InvoiceStatusIcon";
 
@@ -103,7 +103,7 @@ const ViewMonthlyInvoicingPage = () => {
             {isLoading ? (
                 <Spinner message="Cargando datos" />
             ) : (
-                <ListMonthlyInvoices
+                <ListMonthlyInvoicesPage
                     handleFilterChange={handleFilterChange}
                     invoicingMonths={invoicingMonths}
                     invoices={filteredInvoices}

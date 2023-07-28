@@ -4,19 +4,24 @@ import {MemberService} from "member/service";
 import {useList} from "base/entity/provider";
 import {useFilter} from "base/filter/hooks";
 import {PageLayout} from "base/ui/page";
+import {Spinner} from "base/common";
 import {ListMembers} from ".";
 
-const ListMembersPage = () => {
+const ViewMembersPage = () => {
     const [members, setMembers] = useState([]);
     const [filteredMembers, setFilteredMembers] = useState([]);
+    const [isLoading, setIsLoading] = useState(null);
 
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
 
     useEffect(() => {
-        MemberService.getMembers().then(members => {
-            setMembers(members);
-        });
+        setIsLoading(true);
+        MemberService.getMembers()
+            .then(members => {
+                setMembers(members);
+            })
+            .finally(() => setIsLoading(false));
     }, []);
 
     useEffect(() => {
@@ -36,12 +41,16 @@ const ListMembersPage = () => {
 
     return (
         <PageLayout>
-            <ListMembers
-                members={filteredMembers}
-                handleFilterChange={handleFilterChange}
-            />
+            {isLoading ? (
+                <Spinner message="Cargando datos" />
+            ) : (
+                <ListMembers
+                    members={filteredMembers}
+                    handleFilterChange={handleFilterChange}
+                />
+            )}
         </PageLayout>
     );
 };
 
-export default ListMembersPage;
+export default ViewMembersPage;

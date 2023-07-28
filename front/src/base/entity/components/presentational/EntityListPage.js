@@ -41,7 +41,7 @@ const EntityListPage = ({
                 ) : null}
             </Grid>
             <Grid item>
-                {items?.length ? (
+                {items ? (
                     <SortedPaginatedTable columns={columns} data={items} />
                 ) : (
                     <NoItemsMessage itemsLength={items?.length} />

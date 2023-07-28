@@ -3,7 +3,7 @@ import {AigarApp} from "aigar/ui";
 import {
     CreateInvoice,
     EditInvoice,
-    ListInvoicesPage,
+    ViewInvoicesPage,
     ManageInvoicesPage,
     ViewInvoice,
 } from "invoice/container";
@@ -12,7 +12,7 @@ import {LoadMeasurementsWizard} from "measurement/container";
 import {
     CreateMember,
     EditMember,
-    ListMembersPage,
+    ViewMembersPage,
     ManageMembersPage,
     ViewMember,
 } from "member/container";
@@ -43,7 +43,7 @@ export default function AigarRoutes() {
                     <Route path="socios" element={<MemberModule />}>
                         <Route path="nuevo" element={<CreateMember />} />
                         <Route path="" element={<ManageMembersPage />}>
-                            <Route path="" element={<ListMembersPage />} />
+                            <Route path="" element={<ViewMembersPage />} />
                         </Route>
                         <Route path=":num_socio" element={<ViewMember />} />
                         <Route path=":num_socio/modificar" element={<EditMember />} />
@@ -55,7 +55,7 @@ export default function AigarRoutes() {
 
                     <Route path="facturas" element={<InvoiceModule />}>
                         <Route path="" element={<ManageInvoicesPage />}>
-                            <Route path="" element={<ListInvoicesPage />} />
+                            <Route path="" element={<ViewInvoicesPage />} />
                         </Route>
                         <Route path=":idFactura" element={<ViewInvoice />} />
                         <Route path=":idFactura/modificar" element={<EditInvoice />} />

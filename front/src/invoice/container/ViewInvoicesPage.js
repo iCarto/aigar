@@ -5,21 +5,26 @@ import {InvoiceService} from "invoice/service";
 import {useList} from "base/entity/provider";
 import {useFilter} from "base/filter/hooks";
 import {PageLayout} from "base/ui/page";
+import {Spinner} from "base/common";
 import {ListInvoices} from ".";
 
-const ListInvoicesPage = () => {
+const ViewInvoicesPage = () => {
     const [invoices, setInvoices] = useState([]);
     const [filteredInvoices, setFilteredInvoices] = useState([]);
     const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
+    const [isLoading, setIsLoading] = useState(null);
 
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
     const navigate = useNavigate();
 
     useEffect(() => {
-        InvoiceService.getInvoices().then(invoices => {
-            setInvoices(invoices);
-        });
+        setIsLoading(true);
+        InvoiceService.getInvoices()
+            .then(invoices => {
+                setInvoices(invoices);
+            })
+            .finally(() => setIsLoading(false));
     }, []);
 
     useEffect(() => {
@@ -53,12 +58,16 @@ const ListInvoicesPage = () => {
 
     return (
         <PageLayout>
-            <ListInvoices
-                invoices={filteredInvoices}
-                handleFilterChange={handleFilterChange}
-            />
+            {isLoading ? (
+                <Spinner message="Cargando datos" />
+            ) : (
+                <ListInvoices
+                    invoices={filteredInvoices}
+                    handleFilterChange={handleFilterChange}
+                />
+            )}
         </PageLayout>
     );
 };
 
-export default ListInvoicesPage;
+export default ViewInvoicesPage;

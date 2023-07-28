@@ -20,15 +20,11 @@ const ListInvoices = ({invoices, handleFilterChange}) => {
     };
 
     return (
-        <>
-            <EntityListPage
-                items={invoices}
-                columns={tableColumns}
-                filterForm={
-                    <InvoicesFilterForm handleFilterChange={handleFilterChange} />
-                }
-            />
-        </>
+        <EntityListPage
+            items={invoices}
+            columns={tableColumns}
+            filterForm={<InvoicesFilterForm handleFilterChange={handleFilterChange} />}
+        />
     );
 };
 

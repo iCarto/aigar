@@ -3,7 +3,7 @@ import {useMonthlyInvoicingTableColumns} from "monthlyinvoicing/data";
 import {EntityListPage} from "base/entity/components/presentational";
 import {MonthlyInvoicingFilterForm} from ".";
 
-const ListMonthlyInvoices = ({invoices, handleFilterChange}) => {
+const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
     const {tableColumns} = useMonthlyInvoicingTableColumns();
 
     return (
@@ -17,4 +17,4 @@ const ListMonthlyInvoices = ({invoices, handleFilterChange}) => {
     );
 };
 
-export default ListMonthlyInvoices;
+export default ListMonthlyInvoicesPage;

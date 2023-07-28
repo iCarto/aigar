@@ -11,7 +11,7 @@ const ViewInvoiceSidebar = ({invoice}) => {
     };
 
     const menuActions = [
-        invoice.is_active ? <UpdateInvoiceButton invoice={invoice} /> : null,
+        invoice?.is_active ? <UpdateInvoiceButton invoice={invoice} /> : null,
         <PrintInvoicesButton
             invoices={[invoice]}
             showIcon={true}

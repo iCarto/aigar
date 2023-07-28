@@ -4,6 +4,7 @@ import {EditButton} from "base/common";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 import Button from "@mui/material/Button";
 
+//TO-DO: Change name to MemberSidebar
 const ViewMemberSidebar = ({member, numInvoices}) => {
     const navigate = useNavigate();
 

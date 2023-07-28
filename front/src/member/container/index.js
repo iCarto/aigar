@@ -1,6 +1,6 @@
 export {default as ManageMembersPage} from "./ManageMembersPage";
 export {default as CreateMember} from "./CreateMember";
-export {default as ListMembersPage} from "./ListMembersPage";
+export {default as ViewMembersPage} from "./ViewMembersPage";
 export {default as ListMembers} from "./ListMembers";
 export {default as ListMemberInvoices} from "./ListMemberInvoices";
 export {default as ViewMember} from "./ViewMember";

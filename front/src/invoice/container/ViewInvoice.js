@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
+
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
@@ -43,7 +44,7 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
     }, [idFactura]);
 
     return (
-        <PageLayout sidebar={member ? <ViewInvoiceSidebar invoice={invoice} /> : null}>
+        <PageLayout sidebar={<ViewInvoiceSidebar invoice={invoice} />}>
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
             {navigatorIds ? (
@@ -53,8 +54,9 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
                     handleClickSelect={handleClickSelectInNavigator}
                 />
             ) : null}
-            <ErrorMessage message={error} />
-            <InvoiceDetail invoice={invoice} member={member} payments={payments} />
+            {invoice ? (
+                <InvoiceDetail invoice={invoice} member={member} payments={payments} />
+            ) : null}
         </PageLayout>
     );
 };

@@ -3,11 +3,11 @@ import {Header} from "base/ui/header";
 
 const AppLayout = ({hero = null, menu = null, footer = null}) => {
     return (
-        <main role="main">
+        <div role="none">
             <Header hero={hero} menu={menu} />
             <Outlet />
             {footer}
-        </main>
+        </div>
     );
 };
 

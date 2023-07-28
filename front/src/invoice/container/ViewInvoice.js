@@ -1,33 +1,22 @@
 import {useState, useEffect} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
-import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
-import ViewInvoiceSidebar from "./ViewInvoiceSidebar";
-import EditInvoice from "./EditInvoice";
 import {InvoiceService} from "invoice/service";
+import {MemberService} from "member/service";
+import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
-import {MemberService} from "member/service";
+import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
+import {ViewInvoiceSidebar} from ".";
 
 const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [payments, setPayments] = useState(null);
-    const [view, setView] = useState("view");
     const [isLoading, setIsLoading] = useState(null);
     const [error, setError] = useState("");
 
     const {idFactura} = useParams();
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     const idFacturaProp =
-    //         props.idFactura || parseInt(props.match.params.idFactura);
-    //     if (idFacturaProp !== idFactura) {
-    //         setInvoice(null);
-    //         // setIdFactura(idFacturaProp);
-    //     }
-    // }, [props.idFactura, idFactura, idFactura]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -53,80 +42,21 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
             });
     }, [idFactura]);
 
-    const handleBack = () => {
-        console.log("ViewInvoice.handleBack");
-        navigate(-1);
-    };
-
-    const handleClickEdit = () => {
-        setView("edit");
-    };
-
-    const handleBackEdit = () => {
-        setView("view");
-    };
-
-    const handleSubmitEdit = updatedItem => {
-        setView("view");
-        setInvoice(updatedItem);
-    };
-
-    const handleSuccessPrint = () => {};
-
-    const handleSuccessCreateNewInvoiceVersion = (
-        new_version_idFactura,
-        old_version_idFactura
-    ) => {
-        // TO-DO: Implement (previously received function from parent component (ViewMonthlyInvoicingPage))
-        navigate("/facturas/" + new_version_idFactura);
-    };
-
-    const viewContent = (
-        <>
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                <ViewInvoiceSidebar
-                    invoice={invoice}
-                    handleClickEditInvoice={handleClickEdit}
-                    handleSuccessPrintInvoices={handleSuccessPrint}
-                    handleSuccessCreateNewInvoiceVersion={
-                        handleSuccessCreateNewInvoiceVersion
-                    }
-                    handleBack={handleBack}
+    return (
+        <PageLayout sidebar={member ? <ViewInvoiceSidebar invoice={invoice} /> : null}>
+            <ErrorMessage message={error} />
+            {isLoading ? <Spinner message="Cargando datos" /> : null}
+            {navigatorIds ? (
+                <InvoiceNavigator
+                    selectedId={idFactura}
+                    navigatorIds={navigatorIds}
+                    handleClickSelect={handleClickSelectInNavigator}
                 />
-            </nav>
-            <div className="col-md-10 offset-md-2">
-                <div className="container">
-                    {navigatorIds ? (
-                        <InvoiceNavigator
-                            selectedId={idFactura}
-                            navigatorIds={navigatorIds}
-                            handleClickSelect={handleClickSelectInNavigator}
-                        />
-                    ) : null}
-                    <ErrorMessage message={error} />
-                    <InvoiceDetail
-                        invoice={invoice}
-                        member={member}
-                        payments={payments}
-                    />
-                </div>
-            </div>
-        </>
+            ) : null}
+            <ErrorMessage message={error} />
+            <InvoiceDetail invoice={invoice} member={member} payments={payments} />
+        </PageLayout>
     );
-
-    const editContent = (
-        <EditInvoice handleSubmit={handleSubmitEdit} handleBack={handleBackEdit} />
-    );
-
-    const content = isLoading ? (
-        <Spinner message="Cargando datos" />
-    ) : view === "view" ? (
-        viewContent
-    ) : (
-        editContent
-    );
-
-    return content;
 };
 
 export default ViewInvoice;

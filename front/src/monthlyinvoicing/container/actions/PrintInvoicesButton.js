@@ -1,186 +1,53 @@
-import React from "react";
-import {
-    OperationWithConfirmationContentModal,
-    OperationWithConfirmationContentModalStatus,
-} from "base/ui/modal";
-import {DocXPrintFileService, FileService} from "base/file/service";
-import {ESTADOS_FACTURA} from "invoice/model";
-import {InvoiceService} from "invoice/service";
+import {useState} from "react";
+import {PrintInvoicesModal} from "invoice/container";
+import Button from "@mui/material/Button";
+import PrintIcon from "@mui/icons-material/Print";
 
-class PrintInvoicesButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            status: null,
-            errorMessage: null,
-        };
-        this.printInvoices = this.printInvoices.bind(this);
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-        this.onClickCancel = this.onClickCancel.bind(this);
-        this.onClickAccept = this.onClickAccept.bind(this);
-        this.onClickFinished = this.onClickFinished.bind(this);
-    }
+const PrintInvoicesButton = ({
+    invoices,
+    outputFilename,
+    showIcon = true,
+    buttonTitle = "",
+}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    printInvoices() {
-        this.setState(
-            {
-                status: OperationWithConfirmationContentModalStatus.PROGRESS,
-                errorMessage: null,
-            },
-            async () => {
-                try {
-                    console.log(this.props.invoices);
-                    const data = {
-                        invoices: this.props.invoices,
-                    };
-                    const invoicesDocument =
-                        await DocXPrintFileService.generateInvoicesDocument(
-                            data,
-                            this.props.outputFilename
-                        );
-                    FileService.saveDataToFile(
-                        invoicesDocument,
-                        this.props.outputFilename + ".docx",
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    );
-                    InvoiceService.updateInvoiceStatus(
-                        this.props.invoices
-                            .filter(invoice => invoice.estado === ESTADOS_FACTURA.NUEVA)
-                            .map(invoice => invoice.id_factura),
-                        ESTADOS_FACTURA.PENDIENTE_DE_COBRO
-                    )
-                        .then(result => {
-                            this.setState({
-                                status: OperationWithConfirmationContentModalStatus.SUCCESS,
-                                errorMessage: null,
-                            });
-                        })
-                        .catch(error => {
-                            console.log(error);
-                            this.setState({
-                                status: OperationWithConfirmationContentModalStatus.ERROR,
-                                errorMessage:
-                                    "No se ha podido actualizar el estado de la factura.",
-                            });
-                        });
-                } catch (err) {
-                    console.log(err);
-                    this.setState({
-                        status: OperationWithConfirmationContentModalStatus.ERROR,
-                        errorMessage: "No se ha podido generar el documento.",
-                    });
-                }
-            }
-        );
-    }
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
 
-    openModal() {
-        this.setState({status: OperationWithConfirmationContentModalStatus.START});
-    }
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
-    closeModal() {
-        this.setState({status: null});
-    }
+    //TO-DO: Check if this works for ListMonthlyInvoicesActions too
+    const isDisabled =
+        invoices?.length &&
+        invoices.filter(invoice => invoice.consumo === "").length !== 0;
 
-    onClickCancel() {
-        this.closeModal();
-    }
-
-    onClickAccept() {
-        this.printInvoices();
-    }
-
-    onClickFinished() {
-        this.closeModal();
-        this.props.handleSuccessPrintInvoices();
-    }
-
-    get modalContentStart() {
-        return (
-            <p>
-                Procederá a imprimir{" "}
-                {this.props.invoices && this.props.invoices.length === 1
-                    ? "la factura"
-                    : "las facturas"}
-                . ¿Ha revisado previamente si es necesario añadir otros importes como
-                asambleas, nuevos derechos, reconexiones, traspasos...?
-            </p>
-        );
-    }
-
-    get modalContentFinished() {
-        return (
-            <p className="alert alert-success">
-                El documento se ha generado correctamente.
-            </p>
-        );
-    }
-
-    get modalContentError() {
-        return (
-            <>
-                Se ha producido un error y no se han podido generar el documento.
-                <br />
-                <strong>
-                    {this.state.errorMessage ? this.state.errorMessage.message : null}
-                </strong>
-            </>
-        );
-    }
-
-    get modal() {
-        return (
-            <OperationWithConfirmationContentModal
-                modal={this.state.modal}
-                status={this.state.status}
-                modalTitle="Imprimir facturas"
-                modalContentStart={this.modalContentStart}
-                modalContentFinished={this.modalContentFinished}
-                modalAcceptText="Imprimir"
-                modalAcceptIcon="print"
-                spinnerMessage="Generando documento"
-                modalErrorText={this.modalContentError}
-                onClickCancel={this.onClickCancel}
-                onClickAccept={this.onClickAccept}
-                onClickFinished={this.onClickFinished}
-            />
-        );
-    }
-
-    get button() {
-        return (
-            <button
-                className={
-                    "btn mt-1 mb-1 " +
-                    (this.props.disabled ? "btn-secondary" : "btn-primary")
-                }
-                disabled={this.props.disabled}
-                onClick={this.openModal}
+    return (
+        <>
+            <Button
+                onClick={handleOpenModal}
+                disabled={isDisabled}
+                variant="contained"
+                startIcon={showIcon ? <PrintIcon fontSize="small" /> : null}
                 title={
-                    this.props.invoices &&
-                    this.props.invoices.filter(invoice => invoice.consumo === "")
-                        .length !== 0
+                    isDisabled
                         ? "No se pueden imprimir las facturas ya que alguna no tiene consumo registrado"
                         : null
                 }
+                fullWidth
             >
-                {this.props.showIcon === true ? <i className="fa fa-print" /> : null}
-                &nbsp;
-                {this.props.position ? this.props.position + "." : null}&nbsp;
-                {this.props.buttonTitle ? this.props.buttonTitle : "Imprimir factura"}
-            </button>
-        );
-    }
-
-    render() {
-        return !this.props.hidden ? (
-            <>
-                {this.button}
-                {this.modal}
-            </>
-        ) : null;
-    }
-}
+                {buttonTitle || "Imprimir"}
+            </Button>
+            <PrintInvoicesModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                invoices={invoices}
+                outputFilename={outputFilename}
+            />
+        </>
+    );
+};
 
 export default PrintInvoicesButton;

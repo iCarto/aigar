@@ -24,13 +24,7 @@ const AigarMenu = () => {
         },
     ];
 
-    return (
-        <AppMenu menuItems={menuItems}>
-            {/* <MenuItem sx={{marginLeft: "auto"}}>
-                <AccountMenu />
-            </MenuItem> */}
-        </AppMenu>
-    );
+    return <AppMenu menuItems={menuItems}></AppMenu>;
 };
 
 export default AigarMenu;

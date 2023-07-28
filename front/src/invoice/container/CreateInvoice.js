@@ -13,12 +13,14 @@ import {
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {PageLayout} from "base/ui/page";
+import {Spinner} from "base/common";
 
 const CreateInvoice = ({onSubmit}) => {
     const [invoice, setInvoice] = useState(createInvoice());
     const [member, setMember] = useState(null);
     const [validationErrors, setValidationErrors] = useState([]);
-    const [isSaving, setIsSaving] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
 
     const {num_socio} = useParams();
@@ -30,7 +32,7 @@ const CreateInvoice = ({onSubmit}) => {
 
     const loadDataForInvoice = () => {
         setMember(null);
-        setIsSaving(true);
+        setIsLoading(true);
         setErrorMessage(null);
 
         Promise.all([
@@ -50,7 +52,7 @@ const CreateInvoice = ({onSubmit}) => {
                 );
 
                 setMember(member);
-                setIsSaving(false);
+                setIsLoading(false);
                 setInvoice(
                     createInvoiceForMember(
                         member,
@@ -63,7 +65,7 @@ const CreateInvoice = ({onSubmit}) => {
                 setErrorMessage(
                     "Se ha producido un error y no se han podido obtener los datos de la factura"
                 );
-                setIsSaving(false);
+                setIsLoading(false);
             });
     };
 
@@ -84,12 +86,12 @@ const CreateInvoice = ({onSubmit}) => {
     };
 
     const handleSubmit = () => {
-        setIsSaving(true);
+        setIsLoading(true);
         setErrorMessage(null);
 
         InvoiceService.createInvoice(invoice)
             .then(createdInvoice => {
-                setIsSaving(false);
+                setIsLoading(false);
                 setInvoice(createdInvoice);
 
                 if (onSubmit) {
@@ -103,7 +105,7 @@ const CreateInvoice = ({onSubmit}) => {
                 setErrorMessage(
                     "Se ha producido un error y no se han podido almacenar los datos de la factura"
                 );
-                setIsSaving(false);
+                setIsLoading(false);
             });
     };
 
@@ -118,7 +120,7 @@ const CreateInvoice = ({onSubmit}) => {
         navigate(-1);
     };
 
-    const sidebar = <CreateInvoiceSidebar handleBack={handleBack} />;
+    const sidebar = <CreateInvoiceSidebar />;
     const content = (
         <>
             <ErrorMessage message={errorMessage} />
@@ -128,18 +130,15 @@ const CreateInvoice = ({onSubmit}) => {
                 errors={validationErrors}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
-                saving={isSaving}
+                saving={isLoading}
             />
         </>
     );
 
     return (
-        <>
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
-            <div className="col-md-10 offset-md-2">
-                <div className="container">{content}</div>
-            </div>
-        </>
+        <PageLayout sidebar={sidebar}>
+            {isLoading ? <Spinner message="Cargando datos" /> : content}
+        </PageLayout>
     );
 };
 

@@ -1,17 +1,25 @@
 import {useNavigate} from "react-router-dom";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
 
-const EditButton = () => {
+const EditButton = ({onClick = null, disabled = false}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
+        if (onClick) onClick();
         navigate("modificar");
     };
 
     return (
-        <button onClick={handleClick} className="btn btn-primary mt-1 mb-1">
-            <i className="fas fa-edit mr-2" />
+        <Button
+            onClick={handleClick}
+            variant="contained"
+            startIcon={<EditIcon fontSize="small" />}
+            disabled={disabled}
+            fullWidth
+        >
             Modificar
-        </button>
+        </Button>
     );
 };
 

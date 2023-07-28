@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {MemberService} from "member/service";
 import ListMembers from "./ListMembers";
+import {PageLayout} from "base/ui/page";
 
 const ListMembersPage = () => {
     const [members, setMembers] = useState([]);
@@ -43,13 +44,15 @@ const ListMembersPage = () => {
     };
 
     return (
-        <ListMembers
-            members={members}
-            listView={listView}
-            handleChangeListView={handleChangeListView}
-            handleFilterChange={handleFilterChange}
-            filter={filter}
-        />
+        <PageLayout>
+            <ListMembers
+                members={members}
+                listView={listView}
+                handleChangeListView={handleChangeListView}
+                handleFilterChange={handleFilterChange}
+                filter={filter}
+            />
+        </PageLayout>
     );
 };
 

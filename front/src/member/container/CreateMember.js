@@ -1,68 +1,54 @@
-import React from "react";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {DomainService} from "aigar/domain/service";
+import {MemberService} from "member/service";
 import {MemberForm} from "member/presentational";
-
 import {DataValidatorService} from "validation";
-
 import CreateMemberSidebar from "./CreateMemberSidebar";
 import {createMember} from "member/model";
-import {DomainService} from "aigar/domain/service";
 import {ErrorMessage} from "base/error/components";
-import {MemberService} from "member/service";
+import {PageLayout} from "base/ui/page";
+import {Spinner} from "base/common";
 
-class CreateMember extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            domain: {
-                sectors: [],
-            },
-            member: createMember(),
-            validationErrors: [],
-            isSaving: null,
-            errorMessage: null,
-            membersWithOrder: [],
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleChangeOrder = this.handleChangeOrder.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleBack = this.handleBack.bind(this);
-    }
+const CreateMember = ({handleSubmit}) => {
+    const [domain, setDomain] = useState({sectors: []});
+    const [member, setMember] = useState(createMember());
+    const [validationErrors, setValidationErrors] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [membersWithOrder, setMembersWithOrder] = useState([]);
+    const [isLoading, setIsLoading] = useState(null);
 
-    componentDidMount() {
-        this.loadDomains();
-    }
+    const navigate = useNavigate();
 
-    loadDomains() {
+    useEffect(() => {
+        loadDomains();
+    }, []);
+
+    const loadDomains = () => {
         console.log("loadDomains");
         Promise.all([DomainService.getSectors(), MemberService.getMembers()]).then(
             results => {
-                const membersWithOrder = this.getMembersWithOrder(results[1]);
+                const membersWithOrder = getMembersWithOrder(results[1]);
                 // Add the new member to list at last position
                 const orderForNewMember =
                     membersWithOrder[membersWithOrder.length - 1].order + 1;
                 membersWithOrder.push({
-                    id: this.state.member.num_socio,
+                    id: member.num_socio,
                     order: orderForNewMember,
                     name: "<<Nuevo socio>>",
                 });
-                this.setState(prevState => {
-                    return {
-                        member: createMember(
-                            Object.assign({}, prevState.member, {
-                                orden: orderForNewMember,
-                            })
-                        ),
-                        domain: {
-                            sectors: results[0],
-                        },
-                        membersWithOrder,
-                    };
-                });
+                setMember(prevState =>
+                    createMember(
+                        Object.assign({}, prevState.member, {orden: orderForNewMember})
+                    )
+                );
+                setDomain({sectors: results[0]});
+                setMembersWithOrder(membersWithOrder);
             }
         );
-    }
+    };
 
-    getMembersWithOrder(members) {
+    const getMembersWithOrder = members => {
         let membersWithOrder = members
             .filter(member => member.is_active)
             .map(member => {
@@ -76,106 +62,81 @@ class CreateMember extends React.Component {
             return a.order - b.order;
         });
         return membersWithOrder;
-    }
+    };
 
-    handleChangeOrder(name, membersWithOrder) {
+    const handleChangeOrder = (name, membersWithOrder) => {
         const orderForItem = membersWithOrder.find(
-            item => item.id === this.state.member.num_socio
+            item => item.id === member.num_socio
         ).order;
         console.log("EditMember.handleChangeOrder", name, orderForItem);
-        this.setState((prevState, props) => {
+        setMember(prevState => {
             const updatedMember = createMember(
                 Object.assign({}, prevState.member, {[name]: orderForItem})
             );
-            return {
-                member: updatedMember,
-                validationErrors: DataValidatorService.validateMember(updatedMember),
-                membersWithOrder,
-            };
+            return updatedMember;
         });
-    }
+        setValidationErrors(DataValidatorService.validateMember(updatedMember));
+        setMembersWithOrder(membersWithOrder);
+    };
 
-    handleChange(name, value) {
+    const handleChange = (name, value) => {
         console.log("CreateMember.handleChange", {name}, {value});
-        this.setState((prevState, props) => {
+        setMember(prevState => {
             const updatedMember = createMember(
                 Object.assign({}, prevState.member, {[name]: value})
             );
-            return {
-                member: updatedMember,
-                validationErrors: DataValidatorService.validateMember(updatedMember),
-            };
+            return updatedMember;
         });
-    }
+        setValidationErrors(DataValidatorService.validateMember(updatedMember));
+    };
 
-    handleSubmit() {
-        this.setState({
-            isSaving: true,
-            errorMessage: null,
-        });
-        MemberService.createMember(this.state.member)
+    const handleBackAction = () => {
+        navigate(-1);
+    };
+
+    const handleSubmitAction = () => {
+        setIsLoading(true);
+        setErrorMessage(null);
+        MemberService.createMember(member)
             .then(createdMember => {
-                this.setState({
-                    isSaving: false,
-                });
-                if (this.props.handleSubmit) {
-                    this.props.handleSubmit(createdMember.num_socio);
+                setIsLoading(false);
+                if (handleSubmit) {
+                    handleSubmit(createdMember.num_socio);
                 } else {
-                    this.handleBack();
+                    handleBackAction();
                 }
             })
             .catch(error => {
-                this.setState({
-                    errorMessage:
-                        "Se ha producido un error y no se han podido almacenar los datos del socio",
-                    isSaving: false,
-                });
+                console.log(error);
+                setErrorMessage(
+                    "Se ha producido un error y no se han podido almacenar los datos del socio"
+                );
+                setIsLoading(false);
             });
-    }
+    };
 
-    handleBack() {
-        console.log("CreateMember.handleBack");
-        if (this.props.handleBack) {
-            this.props.handleBack();
-        } else {
-            this.props.history.push("/socios");
-        }
-    }
+    const sidebar = <CreateMemberSidebar />;
+    const content = (
+        <>
+            <ErrorMessage message={errorMessage} />
+            <MemberForm
+                member={member}
+                errors={validationErrors}
+                handleChange={handleChange}
+                handleSubmit={handleSubmitAction}
+                sectorsDomain={domain.sectors}
+                membersWithOrder={membersWithOrder}
+                handleChangeOrder={handleChangeOrder}
+                saving={isLoading}
+            />
+        </>
+    );
 
-    get sidebar() {
-        return <CreateMemberSidebar handleBack={this.handleBack} />;
-    }
-
-    get content() {
-        return (
-            <>
-                <ErrorMessage message={this.state.errorMessage} />
-                <MemberForm
-                    member={this.state.member}
-                    errors={this.state.validationErrors}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                    sectorsDomain={this.state.domain.sectors}
-                    membersWithOrder={this.state.membersWithOrder}
-                    handleChangeOrder={this.handleChangeOrder}
-                    saving={this.state.isSaving}
-                />
-            </>
-        );
-    }
-
-    render() {
-        return (
-            <>
-                <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                    {this.sidebar}
-                </nav>
-                <div className="col-md-10 offset-md-2">
-                    <div className="container">{this.content}</div>
-                </div>
-            </>
-        );
-    }
-}
+    return (
+        <PageLayout sidebar={sidebar}>
+            {isLoading ? <Spinner message="Cargando datos" /> : content}
+        </PageLayout>
+    );
+};
 
 export default CreateMember;

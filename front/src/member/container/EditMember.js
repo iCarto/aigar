@@ -1,14 +1,15 @@
 import {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 
+import {MemberService} from "member/service";
+import {DomainService} from "aigar/domain/service";
+import {createMember} from "member/model";
 import {MemberForm} from "member/presentational";
 import {DataValidatorService} from "validation";
 import EditMemberSidebar from "./EditMemberSidebar";
-import {DomainService} from "aigar/domain/service";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
-import {createMember} from "member/model";
-import {MemberService} from "member/service";
+import {PageLayout} from "base/ui/page";
 
 //TO-DO: Abstraer (see EditInvoice y crear DomainProvider)
 const EditMember = ({onSubmit = null}) => {
@@ -80,7 +81,7 @@ const EditMember = ({onSubmit = null}) => {
                 if (onSubmit) {
                     onSubmit(updatedMember);
                 } else {
-                    handleBack();
+                    navigate(-1);
                 }
             })
             .catch(error => {
@@ -94,12 +95,7 @@ const EditMember = ({onSubmit = null}) => {
             });
     };
 
-    const handleBack = () => {
-        console.log("EditMember.handleBack");
-        navigate(-1);
-    };
-
-    const sidebar = <EditMemberSidebar handleBack={handleBack} />;
+    const sidebar = <EditMemberSidebar />;
 
     const content = isLoading ? (
         <Spinner message="Cargando datos" />
@@ -120,12 +116,9 @@ const EditMember = ({onSubmit = null}) => {
     );
 
     return (
-        <>
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
-            <div className="col-md-10 offset-md-2">
-                <div className="container">{content}</div>
-            </div>
-        </>
+        <PageLayout sidebar={sidebar}>
+            {isLoading ? <Spinner message="Cargando datos" /> : content}
+        </PageLayout>
     );
 };
 

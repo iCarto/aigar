@@ -9,6 +9,7 @@ import {createInvoice, refreshInvoiceValues} from "invoice/model";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {ErrorMessage} from "base/error/components";
+import {PageLayout} from "base/ui/page";
 
 const EditInvoice = ({onSubmit = null}) => {
     const [invoice, setInvoice] = useState(null);
@@ -81,11 +82,10 @@ const EditInvoice = ({onSubmit = null}) => {
     };
 
     const handleBack = () => {
-        console.log("EditInvoice.handleBack");
         navigate(-1);
     };
 
-    const sidebar = <EditInvoiceSidebar handleBack={handleBack} invoice={invoice} />;
+    const sidebar = <EditInvoiceSidebar />;
 
     const content = isLoading ? (
         <Spinner message="Cargando datos" />
@@ -104,12 +104,9 @@ const EditInvoice = ({onSubmit = null}) => {
     );
 
     return (
-        <>
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
-            <div className="col-md-10 offset-md-2">
-                <div className="container">{content}</div>
-            </div>
-        </>
+        <PageLayout sidebar={sidebar}>
+            {isLoading ? <Spinner message="Cargando datos" /> : content}
+        </PageLayout>
     );
 };
 

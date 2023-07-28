@@ -3,6 +3,7 @@ import WizardStepInfo from "./WizardStepInfo";
 import WizardStepper from "./WizardStepper";
 import WizardButtons from "./WizardButtons";
 import WizardSidebar from "./WizardSidebar";
+import {PageLayout} from "../page";
 
 const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -58,14 +59,7 @@ const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
         </div>
     );
 
-    return (
-        <>
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">{sidebar}</nav>
-            <div className="col-md-10 offset-md-2">
-                <div className="container">{content}</div>
-            </div>
-        </>
-    );
+    return <PageLayout sidebar={sidebar}>{content}</PageLayout>;
 };
 
 export default Wizard;

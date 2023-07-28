@@ -1,5 +1,2 @@
-export {default as Modal, ModalBody, ModalHeader, ModalFooter} from "./Modal";
-export {
-    default as OperationWithConfirmationContentModal,
-    OperationWithConfirmationContentModalStatus,
-} from "./OperationWithConfirmationContentModal";
+export {default as Modal} from "./Modal";
+export {default as OperationWithConfirmationModal} from "./OperationWithConfirmationModal";

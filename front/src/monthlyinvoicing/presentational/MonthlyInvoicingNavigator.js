@@ -1,135 +1,117 @@
-import React from "react";
 import {DateUtil} from "utilities";
 import {IconButtonLink} from "base/common";
 
-class MonthlyInvoicingNavigator extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleMonthChangePrevious = this.handleMonthChangePrevious.bind(this);
-        this.handleMonthChangeNext = this.handleMonthChangeNext.bind(this);
-        this.handleMonthSelected = this.handleMonthSelected.bind(this);
-        this.handleYearSelected = this.handleYearSelected.bind(this);
-    }
-
-    getInvoicingMonthCurrentIndex() {
-        return this.props.invoicingMonths.findIndex(
+const MonthlyInvoicingNavigator = ({
+    invoicingMonths,
+    selectedInvoicingMonth,
+    handleChangeInvoicingMonth,
+}) => {
+    const getInvoicingMonthCurrentIndex = () => {
+        return invoicingMonths.findIndex(
             invoicingMonth =>
-                invoicingMonth.mes === this.props.selectedInvoicingMonth.mes &&
-                invoicingMonth.anho === this.props.selectedInvoicingMonth.anho
+                invoicingMonth.mes === selectedInvoicingMonth.mes &&
+                invoicingMonth.anho === selectedInvoicingMonth.anho
         );
-    }
+    };
 
-    handleMonthChangePrevious() {
-        this.props.handleChangeInvoicingMonth(
-            this.props.invoicingMonths[this.getInvoicingMonthCurrentIndex() - 1]
+    const handleMonthChangePrevious = () => {
+        handleChangeInvoicingMonth(
+            invoicingMonths[getInvoicingMonthCurrentIndex() - 1]
         );
-    }
+    };
 
-    handleMonthChangeNext() {
-        this.props.handleChangeInvoicingMonth(
-            this.props.invoicingMonths[this.getInvoicingMonthCurrentIndex() + 1]
+    const handleMonthChangeNext = () => {
+        handleChangeInvoicingMonth(
+            invoicingMonths[getInvoicingMonthCurrentIndex() + 1]
         );
-    }
+    };
 
-    handleMonthSelected(event) {
+    const handleMonthSelected = event => {
         const month = event.target.value;
-        const newSelectedInvoicingMonth = this.props.invoicingMonths.find(
+        const newSelectedInvoicingMonth = invoicingMonths.find(
             invoicingMonth =>
                 invoicingMonth.mes === month &&
-                invoicingMonth.anho === this.props.selectedInvoicingMonth.anho
+                invoicingMonth.anho === selectedInvoicingMonth.anho
         );
-        this.props.handleChangeInvoicingMonth(newSelectedInvoicingMonth);
-    }
+        handleChangeInvoicingMonth(newSelectedInvoicingMonth);
+    };
 
-    handleYearSelected(event) {
+    const handleYearSelected = event => {
         const year = event.target.value;
-        let newSelectedInvoicingMonth = this.props.invoicingMonths.find(
+        let newSelectedInvoicingMonth = invoicingMonths.find(
             invoicingMonth =>
-                invoicingMonth.mes === this.props.selectedInvoicingMonth.mes &&
+                invoicingMonth.mes === selectedInvoicingMonth.mes &&
                 invoicingMonth.anho === year
         );
         // If the month for selected year doesn't exist, the first month of year is selected
         if (!newSelectedInvoicingMonth) {
-            newSelectedInvoicingMonth = this.props.invoicingMonths.find(
+            newSelectedInvoicingMonth = invoicingMonths.find(
                 invoicingMonth => invoicingMonth.anho === year
             );
         }
-        this.props.handleChangeInvoicingMonth(newSelectedInvoicingMonth);
-    }
+        handleChangeInvoicingMonth(newSelectedInvoicingMonth);
+    };
 
-    isPreviousButtonDisabled() {
-        return this.getInvoicingMonthCurrentIndex() === 0;
-    }
+    const isPreviousButtonDisabled = () => {
+        return getInvoicingMonthCurrentIndex() === 0;
+    };
 
-    isNextButtonDisabled() {
-        return (
-            this.getInvoicingMonthCurrentIndex() ===
-            this.props.invoicingMonths.length - 1
-        );
-    }
+    const isNextButtonDisabled = () => {
+        return getInvoicingMonthCurrentIndex() === invoicingMonths.length - 1;
+    };
 
-    get monthOptions() {
-        const selectedYear = this.props.selectedInvoicingMonth.anho;
-        const months = this.props.invoicingMonths
-            .filter(invoicingMonth => invoicingMonth.anho === selectedYear)
-            .map(invoicingMonth => invoicingMonth.mes);
-        return months.map(month => {
+    const monthOptions = invoicingMonths
+        .filter(invoicingMonth => invoicingMonth.anho === selectedInvoicingMonth.anho)
+        .map(invoicingMonth => {
             return (
-                <option key={month} value={month}>
-                    {DateUtil.getShortMonthName(month)}
+                <option key={invoicingMonth.mes} value={invoicingMonth.mes}>
+                    {DateUtil.getShortMonthName(invoicingMonth.mes)}
                 </option>
             );
         });
-    }
 
-    get yearOptions() {
-        const years = this.props.invoicingMonths.map(
-            invoicingMonth => invoicingMonth.anho
-        );
-        const yearsWithoutRepeated = [...new Set(years)];
-        return yearsWithoutRepeated.map(year => {
-            return (
-                <option key={year} value={year}>
-                    {year}
-                </option>
-            );
-        });
-    }
-
-    render() {
+    const yearOptions = [
+        ...new Set(invoicingMonths.map(invoicingMonth => invoicingMonth.anho)),
+    ].map(year => {
         return (
-            <form className="form-inline d-flex justify-content-around pt-2 pb-1">
-                <IconButtonLink
-                    icon="chevron-circle-left"
-                    onClick={this.handleMonthChangePrevious}
-                    disabled={this.isPreviousButtonDisabled()}
-                />
-                <div className="row">
-                    <select
-                        className="custom-select"
-                        id="inlineFormCustomSelectPref"
-                        value={this.props.selectedInvoicingMonth.mes}
-                        onChange={this.handleMonthSelected}
-                    >
-                        {this.monthOptions}
-                    </select>
-                    <select
-                        className="custom-select"
-                        id="inlineFormCustomSelectPref"
-                        value={this.props.selectedInvoicingMonth.anho}
-                        onChange={this.handleYearSelected}
-                    >
-                        {this.yearOptions}
-                    </select>
-                </div>
-                <IconButtonLink
-                    icon="chevron-circle-right"
-                    handleClick={this.handleMonthChangeNext}
-                    disabled={this.isNextButtonDisabled()}
-                />
-            </form>
+            <option key={year} value={year}>
+                {year}
+            </option>
         );
-    }
-}
+    });
+
+    return (
+        <form className="form-inline d-flex justify-content-around pt-2 pb-1">
+            <IconButtonLink
+                icon="chevron-circle-left"
+                onClick={handleMonthChangePrevious}
+                disabled={isPreviousButtonDisabled()}
+            />
+            <div className="row">
+                <select
+                    className="custom-select"
+                    id="inlineFormCustomSelectPref"
+                    value={selectedInvoicingMonth.mes}
+                    onChange={handleMonthSelected}
+                >
+                    {monthOptions}
+                </select>
+                <select
+                    className="custom-select"
+                    id="inlineFormCustomSelectPref"
+                    value={selectedInvoicingMonth.anho}
+                    onChange={handleYearSelected}
+                >
+                    {yearOptions}
+                </select>
+            </div>
+            <IconButtonLink
+                icon="chevron-circle-right"
+                onClick={handleMonthChangeNext}
+                disabled={isNextButtonDisabled()}
+            />
+        </form>
+    );
+};
 
 export default MonthlyInvoicingNavigator;

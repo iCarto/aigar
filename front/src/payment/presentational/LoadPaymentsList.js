@@ -1,97 +1,83 @@
-import React from "react";
+import {useState} from "react";
+import {MemberViewModal} from "member/presentational";
 import {
     SortedTable,
     EditableTextCellTable,
     EditableDateCellTable,
     LinkCellTable,
 } from "base/table";
-import {MemberViewModal} from "member/presentational";
 
-class LoadPaymentsList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showMemberModal: null,
-            selectedMemberForModal: null,
-        };
-        this.handleClickViewMember = this.handleClickViewMember.bind(this);
-        this.onClickCancelViewMember = this.onClickCancelViewMember.bind(this);
-    }
+const LoadPaymentsList = ({payments, onUpdatePayment}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
 
-    handleClickViewMember(num_socio) {
-        this.setState({
-            showMemberModal: true,
-            selectedMemberForModal: num_socio,
-        });
-    }
+    const handleClickViewMember = num_socio => {
+        setIsModalOpen(true);
+        setSelectedMemberForModal(num_socio);
+    };
 
-    onClickCancelViewMember() {
-        this.setState({
-            showMemberModal: null,
-            selectedMemberForModal: null,
-        });
-    }
+    const onClickCancelViewMember = () => {
+        setIsModalOpen(false);
+        setSelectedMemberForModal(null);
+    };
 
-    get modal() {
+    const modal = (
+        <MemberViewModal
+            num_socio={selectedMemberForModal}
+            isOpen={isModalOpen}
+            onClose={onClickCancelViewMember}
+        />
+    );
+
+    if (payments) {
+        const columns = [
+            {
+                Header: "Socio",
+                accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
+                Cell: LinkCellTable,
+                getProps: () => ({
+                    handleClick: handleClickViewMember,
+                    linkAccessor: "num_socio",
+                }),
+            },
+            {
+                Header: "Sector",
+                accessor: "sector",
+            },
+            {
+                Header: "Nº Factura",
+                accessor: "num_factura",
+                Cell: EditableTextCellTable,
+            },
+            {
+                Header: "Fecha",
+                accessor: "fecha",
+                Cell: EditableDateCellTable,
+            },
+            {
+                Header: "Monto",
+                accessor: "monto",
+            },
+        ];
+
         return (
-            <MemberViewModal
-                num_socio={this.state.selectedMemberForModal}
-                showModal={this.state.showMemberModal}
-                onClickCancel={this.onClickCancelViewMember}
-            />
+            <>
+                <div
+                    className="overflow-auto border rounded"
+                    style={{maxHeight: "450px"}}
+                >
+                    <SortedTable
+                        columns={columns}
+                        data={payments}
+                        onUpdateData={onUpdatePayment}
+                    />
+                </div>
+                {modal}
+            </>
         );
     }
 
-    render() {
-        if (this.props.payments) {
-            const columns = [
-                {
-                    Header: "Socio",
-                    accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
-                    Cell: LinkCellTable,
-                    getProps: () => ({
-                        handleClick: this.handleClickViewMember,
-                        linkAccessor: "num_socio",
-                    }),
-                },
-                {
-                    Header: "Sector",
-                    accessor: "sector",
-                },
-                {
-                    Header: "Nº Factura",
-                    accessor: "num_factura",
-                    Cell: EditableTextCellTable,
-                },
-                {
-                    Header: "Fecha",
-                    accessor: "fecha",
-                    Cell: EditableDateCellTable,
-                },
-                {
-                    Header: "Monto",
-                    accessor: "monto",
-                },
-            ];
-
-            return (
-                <>
-                    <div
-                        className="overflow-auto border rounded"
-                        style={{maxHeight: "450px"}}
-                    >
-                        <SortedTable
-                            columns={columns}
-                            data={this.props.payments}
-                            onUpdateData={this.props.onUpdatePayment}
-                        />
-                    </div>
-                    {this.modal}
-                </>
-            );
-        }
-        return null;
-    }
-}
+    return null;
+};
 
 export default LoadPaymentsList;

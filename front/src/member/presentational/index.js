@@ -1,7 +1,4 @@
-export {
-    default as MemberDeleteButtonModal,
-    MemberDeleteStatus,
-} from "./MemberDeleteButtonModal";
+export {default as DeleteMemberModal} from "./DeleteMemberModal";
 export {default as MemberDetail} from "./MemberDetail";
 export {default as MemberDetailShort} from "./MemberDetailShort";
 export {default as MemberForm} from "./MemberForm";

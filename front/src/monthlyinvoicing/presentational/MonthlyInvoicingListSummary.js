@@ -1,14 +1,10 @@
-import React from "react";
-
-class MonthlyInvoicingListSummary extends React.Component {
-    render() {
-        return (
-            <div>
-                Mostrando <strong>{this.props.filteredInvoicesLength}</strong> de{" "}
-                {this.props.invoicesLength} facturas
-            </div>
-        );
-    }
-}
+const MonthlyInvoicingListSummary = ({filteredInvoicesLength, invoicesLength}) => {
+    return (
+        <div>
+            Mostrando <strong>{filteredInvoicesLength}</strong> de {invoicesLength}{" "}
+            facturas
+        </div>
+    );
+};
 
 export default MonthlyInvoicingListSummary;

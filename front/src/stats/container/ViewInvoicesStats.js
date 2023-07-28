@@ -9,7 +9,6 @@ import ViewInvoicesStatsSidebar from "./ViewInvoicesStatsSidebar";
 import {BarChart} from "base/chart";
 import {InvoiceService} from "invoice/service";
 import {createMemberInvoiceGroups} from "member/model";
-import "base/ui/mainpage/SideBar.css";
 
 class ViewInvoicesStats extends React.Component {
     constructor(props) {

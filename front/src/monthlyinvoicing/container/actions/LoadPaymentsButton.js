@@ -1,25 +1,13 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import {ButtonLink} from "base/navigation/components";
 
-class LoadPaymentsButton extends React.Component {
-    get button() {
-        return (
-            <Link
-                to={"/cargarpagos/" + this.props.invoicingMonth.id_mes_facturacion}
-                className={
-                    "btn mt-1 mb-1 " +
-                    (this.props.disabled ? "btn-secondary disabled" : "btn-primary")
-                }
-            >
-                {this.props.position ? this.props.position + ". " : null}
-                Importar pagos
-            </Link>
-        );
-    }
-
-    render() {
-        return !this.props.hidden ? this.button : null;
-    }
-}
+const LoadPaymentsButton = ({invoicingMonth, disabled}) => {
+    return (
+        <ButtonLink
+            text="5. Importar pagos"
+            to={`/cargarpagos/${invoicingMonth.id_mes_facturacion}`}
+            disabled={disabled}
+        />
+    );
+};
 
 export default LoadPaymentsButton;

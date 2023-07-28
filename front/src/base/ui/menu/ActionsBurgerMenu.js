@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const ActionsMenu = ({children}) => {
+const ActionsBurgerMenu = ({children}) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const openSettingsMenu = Boolean(anchorEl);
 
@@ -72,4 +72,4 @@ const ActionsMenu = ({children}) => {
     );
 };
 
-export default ActionsMenu;
+export default ActionsBurgerMenu;

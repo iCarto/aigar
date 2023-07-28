@@ -1,34 +1,35 @@
-import React from "react";
 import {MonthlyInvoicingNavigator} from "../presentational";
-import ListMonthlyInvoicesActions from "./ListMonthlyInvoicesActions";
+import {ActionsSidebarMenu} from "base/ui/menu";
+import {getMonthlyInvoicesActions} from "./actions";
 
-class ListMonthlyInvoicesSidebar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleDateChange = this.handleDateChange.bind(this);
-    }
+const ListMonthlyInvoicesSidebar = ({
+    selectedInvoicingMonth,
+    invoicingMonths,
+    handleChangeInvoicingMonth,
+    invoices,
+    handleFilterChange,
+}) => {
+    const actions = getMonthlyInvoicesActions(selectedInvoicingMonth, invoices);
 
-    handleDateChange(year, month) {
-        this.props.handleFilterChange({month, year});
-    }
+    const handleDateChange = (year, month) => {
+        handleFilterChange({month, year});
+    };
 
-    render() {
-        return (
-            <div className="sidebar-sticky d-flex flex-column">
-                <MonthlyInvoicingNavigator
-                    selectedInvoicingMonth={this.props.selectedInvoicingMonth}
-                    invoicingMonths={this.props.invoicingMonths}
-                    handleChangeInvoicingMonth={this.props.handleChangeInvoicingMonth}
-                />
-                <ListMonthlyInvoicesActions
-                    selectedInvoicingMonth={this.props.selectedInvoicingMonth}
-                    invoices={this.props.invoices}
-                    handleSuccessCreateInvoices={this.props.handleSuccessCreateInvoices}
-                    handleSuccessPrintInvoices={this.props.handleSuccessPrintInvoices}
-                />
-            </div>
-        );
-    }
-}
+    const isCurrentInvoicingMonth = selectedInvoicingMonth.is_open;
+    const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;
+
+    return (
+        <>
+            <MonthlyInvoicingNavigator
+                selectedInvoicingMonth={selectedInvoicingMonth}
+                invoicingMonths={invoicingMonths}
+                handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+            />
+            {isStartInvoicingEnabled || isCurrentInvoicingMonth ? (
+                <ActionsSidebarMenu menuActions={actions} />
+            ) : null}
+        </>
+    );
+};
 
 export default ListMonthlyInvoicesSidebar;

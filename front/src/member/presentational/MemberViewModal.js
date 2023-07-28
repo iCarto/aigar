@@ -1,115 +1,57 @@
-import React from "react";
-import {Modal, ModalHeader, ModalBody, ModalFooter} from "base/ui/modal";
+import {useState, useEffect} from "react";
+import {Modal} from "base/ui/modal";
 import {MemberService} from "member/service";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {ListMemberInvoices} from "member/container";
-import MemberDetail from "./MemberDetail";
+import {MemberDetail} from ".";
 
-class MemberViewModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            member: null,
-            num_socio: null,
-            isLoading: null,
-            errorMessage: null,
-        };
-    }
+const MemberViewModal = ({num_socio, isOpen, onClose}) => {
+    const [member, setMember] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
-    static getDerivedStateFromProps(props, prevState) {
-        const num_socio = props.num_socio;
-        if (num_socio !== prevState.num_socio) {
-            return {
-                member: null,
-                num_socio,
-            };
-        }
-        return null;
-    }
+    useEffect(() => {
+        loadMember();
+    }, [num_socio]);
 
-    componentDidMount() {
-        this.loadMember();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.num_socio !== this.state.num_socio) {
-            this.loadMember();
-        }
-    }
-
-    loadMember() {
-        if (this.state.num_socio) {
-            this.setState({
-                isLoading: true,
-                errorMessage: null,
-            });
-            MemberService.getMember(this.state.num_socio)
+    const loadMember = () => {
+        if (num_socio) {
+            setIsLoading(true);
+            MemberService.getMember(num_socio)
                 .then(member => {
-                    this.setState({
-                        member,
-                        isLoading: false,
-                    });
+                    setMember(member);
+                    setIsLoading(false);
                 })
                 .catch(error => {
-                    this.setState({
-                        errorMessage:
-                            "Se ha producido un error y no se han podido obtener los datos del socio",
-                        isLoading: false,
-                    });
+                    console.log(error);
+                    setErrorMessage(
+                        "Se ha producido un error y no se han podido obtener los datos del socio"
+                    );
+                    setIsLoading(false);
                 });
         }
-    }
+    };
 
-    get content() {
-        return (
-            <>
-                <ModalHeader>
-                    <h3>Detalle del socio</h3>
-                    <button
-                        type="button"
-                        className="close"
-                        aria-label="Close"
-                        onClick={this.props.onClickCancel}
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </ModalHeader>
-                <ModalBody>
-                    {this.state.isLoading === true ? (
-                        <Spinner message="Cargando datos" />
-                    ) : (
-                        <>
-                            <ErrorMessage message={this.state.errorMessage} />
-                            <MemberDetail member={this.state.member} />
-                            {this.state.member ? (
-                                <ListMemberInvoices
-                                    num_socio={this.state.member.num_socio}
-                                />
-                            ) : null}
-                        </>
-                    )}
-                </ModalBody>
-                <ModalFooter>
-                    <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={this.props.onClickCancel}
-                    >
-                        Cerrar
-                    </button>
-                </ModalFooter>
-            </>
-        );
-    }
+    const modalHeader = "Detalle del/de la socio/a";
+    const modalBody = isLoading ? (
+        <Spinner message="Cargando datos" />
+    ) : (
+        <>
+            <ErrorMessage message={errorMessage} />
+            <MemberDetail member={member} />
+            {member ? <ListMemberInvoices invoices={member.invoices} /> : null}
+        </>
+    );
 
-    render() {
-        return (
-            <Modal isOpen={this.props.showModal === true} size="xl">
-                {this.content}
-            </Modal>
-        );
-    }
-}
+    return (
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            header={modalHeader}
+            body={modalBody}
+        />
+    );
+};
 
 export default MemberViewModal;

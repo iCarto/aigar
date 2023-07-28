@@ -1,90 +1,38 @@
-import React from "react";
-import {MemberDeleteButtonModal, MemberDeleteStatus} from "../presentational";
-import {MemberService} from "member/service";
+import {useState} from "react";
+import {DeleteMemberModal} from "../presentational";
 
-class DeleteMemberButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            status: null,
-        };
-        this.deleteMember = this.deleteMember.bind(this);
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-        this.onClickCancel = this.onClickCancel.bind(this);
-        this.onClickAccept = this.onClickAccept.bind(this);
-        this.onClickFinished = this.onClickFinished.bind(this);
-    }
+import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
 
-    deleteMember() {
-        console.log("DeleteMemberButton.deleteMember");
-        this.setState({status: MemberDeleteStatus.PROGRESS}, () => {
-            MemberService.deleteMember(this.props.member)
-                .then(deletedMember => {
-                    this.setState({status: MemberDeleteStatus.SUCCESS});
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.setState({status: MemberDeleteStatus.ERROR});
-                });
-        });
-    }
+const DeleteMemberButton = ({member}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    openModal() {
-        this.setState({status: MemberDeleteStatus.START});
-    }
+    const handleClick = () => {
+        setIsModalOpen(true);
+    };
 
-    closeModal() {
-        this.setState({status: null});
-    }
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
-    onClickCancel() {
-        this.closeModal();
-    }
-
-    onClickAccept() {
-        this.deleteMember();
-    }
-
-    onClickFinished() {
-        this.closeModal();
-        this.props.handleSuccessDeletedMember();
-    }
-
-    get modal() {
-        return (
-            <MemberDeleteButtonModal
-                member={this.props.member}
-                modal={this.state.modal}
-                status={this.state.status}
-                onClickCancel={this.onClickCancel}
-                onClickAccept={this.onClickAccept}
-                onClickFinished={this.onClickFinished}
-            />
-        );
-    }
-
-    get button() {
-        return (
-            <button
-                className="btn btn-secondary mt-4 mb-1"
-                disabled={this.props.disabled}
-                onClick={this.openModal}
+    return (
+        <>
+            <Button
+                onClick={handleClick}
+                variant="contained"
+                color="warning"
+                startIcon={<DeleteIcon fontSize="small" />}
+                fullWidth
             >
-                <i className="fas fa-trash mr-2" />
                 Eliminar
-            </button>
-        );
-    }
-
-    render() {
-        return !this.props.hidden ? (
-            <>
-                {this.button}
-                {this.modal}
-            </>
-        ) : null;
-    }
-}
+            </Button>
+            <DeleteMemberModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                member={member}
+            />
+        </>
+    );
+};
 
 export default DeleteMemberButton;

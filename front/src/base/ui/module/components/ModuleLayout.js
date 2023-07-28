@@ -11,12 +11,12 @@ const ModuleLayout = ({menu = null}) => {
         //         <Outlet />
         //     </Box>
         // </Box>
-        <div className="h-100">
+        <main className="h-100" role="main">
             <div className="row no-gutters h-100">
                 {menu}
                 <Outlet />
             </div>
-        </div>
+        </main>
     );
 };
 

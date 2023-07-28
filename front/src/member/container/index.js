@@ -1,9 +1,14 @@
+export {default as ManageMembersPage} from "./ManageMembersPage";
 export {default as CreateMember} from "./CreateMember";
 export {default as ListMembersPage} from "./ListMembersPage";
-export {default as DeleteMemberButton} from "./DeleteMemberButton";
-export {default as EditMember} from "./EditMember";
 export {default as ListMembers} from "./ListMembers";
 export {default as ListMemberInvoices} from "./ListMemberInvoices";
-export {default as ManageMembersPage} from "./ManageMembersPage";
 export {default as ViewMember} from "./ViewMember";
+export {default as ViewMemberSidebar} from "./ViewMemberSidebar";
+export {default as EditMember} from "./EditMember";
 export {default as MembersFilterForm} from "./MembersFilterForm";
+export {default as ConnectMemberButton} from "./ConnectMemberButton";
+export {default as ConnectMemberModal} from "./ConnectMemberModal";
+export {default as DisconnectMemberButton} from "./DisconnectMemberButton";
+export {default as DisconnectMemberModal} from "./DisconnectMemberModal";
+export {default as DeleteMemberButton} from "./DeleteMemberButton";

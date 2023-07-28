@@ -1,1 +1,2 @@
-export {default as ActionsMenu} from "./ActionsMenu";
+export {default as ActionsBurgerMenu} from "./ActionsBurgerMenu";
+export {default as ActionsSidebarMenu} from "./ActionsSidebarMenu";

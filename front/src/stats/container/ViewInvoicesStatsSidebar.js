@@ -1,6 +1,5 @@
 import React from "react";
 import ViewInvoicesStatsFilter from "./ViewInvoicesStatsFilter";
-import "base/ui/mainpage/SideBar.css";
 
 class ViewInvoicesStatsSidebar extends React.Component {
     render() {

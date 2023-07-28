@@ -2,13 +2,19 @@ import {useEffect, useState} from "react";
 
 import ListMonthlyInvoices from "./ListMonthlyInvoices";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import "base/ui/mainpage/SideBar.css";
+import {PageLayout} from "base/ui/page";
+import {ListMonthlyInvoicesSidebar} from ".";
+import {Spinner} from "base/common";
+import {NoItemsMessage} from "base/error/components";
+import InvoiceStatusIcon from "invoice/presentational/InvoiceStatusIcon";
 
 const ViewMonthlyInvoicingPage = () => {
-    const [invoices, setInvoices] = useState(null);
+    const [invoices, setInvoices] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState(null);
     const [selectedInvoicingMonth, setSelectedInvoicingMonth] = useState(null);
     const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
+    const [filteredInvoices, setFilderedInvoices] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
     const [listView, setListView] = useState({
         sortBy: [],
         pageIndex: 0,
@@ -20,7 +26,14 @@ const ViewMonthlyInvoicingPage = () => {
         estado: 0,
     });
 
+    console.log(invoices);
+
     useEffect(() => {
+        setFilderedInvoices(filterInvoices(invoices, filter));
+    }, [selectedInvoicingMonth, filter]);
+
+    useEffect(() => {
+        setIsLoading(true);
         let invoicingMonthOpened;
         InvoicingMonthService.getInvoicingMonths()
             .then(invoicingMonths => {
@@ -47,7 +60,8 @@ const ViewMonthlyInvoicingPage = () => {
                         console.log(error);
                         setInvoices([]);
                     })
-            );
+            )
+            .finally(() => setIsLoading(false));
     }, []);
 
     const handleFilterChange = newFilter => {
@@ -67,11 +81,6 @@ const ViewMonthlyInvoicingPage = () => {
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
-    const handleSuccessCreateInvoices = () => {
-        console.log("handleSuccessCreateInvoices");
-        // loadInvoicingMonths();
-    };
-
     const handleSuccessCreateNewInvoiceVersion = (
         new_version_id_factura,
         old_version_id_factura
@@ -83,22 +92,67 @@ const ViewMonthlyInvoicingPage = () => {
         setFilteredInvoicesIds(filteredInvoicesIdsNew);
     };
 
+    const filterInvoices = (invoices, filter) => {
+        if (invoices) {
+            return invoices.filter(invoice => {
+                var filtered = true;
+                if (filter) {
+                    if (filter.nombre) {
+                        filtered =
+                            filtered &&
+                            invoice.nombre
+                                .toLowerCase()
+                                .indexOf(filter.nombre.toLowerCase()) >= 0;
+                    }
+                    if (filter.sector) {
+                        filtered =
+                            filtered && invoice.sector === parseInt(filter.sector);
+                    }
+                    if (filter.tipo_socio) {
+                        filtered = filtered && invoice.tipo_socio === filter.tipo_socio;
+                    }
+                    if (filter.estado) {
+                        filtered = filtered && invoice.estado === filter.estado;
+                    }
+                }
+                return filtered;
+            });
+        }
+        return null;
+    };
+
     return (
-        <>
-            {selectedInvoicingMonth && invoices ? (
-                <ListMonthlyInvoices
-                    listView={listView}
-                    handleFilterChange={handleFilterChange}
-                    // handleChangeListView={handleChangeListView}
-                    filter={filter}
-                    invoicingMonths={invoicingMonths}
-                    invoices={invoices}
-                    selectedInvoicingMonth={selectedInvoicingMonth}
-                    handleChangeInvoicingMonth={handleChangeInvoicingMonth}
-                    handleSuccessCreateInvoices={handleSuccessCreateInvoices}
-                />
-            ) : null}
-        </>
+        <PageLayout
+            sidebar={
+                selectedInvoicingMonth && invoices ? (
+                    <ListMonthlyInvoicesSidebar
+                        invoices={filteredInvoices}
+                        invoicingMonths={invoicingMonths}
+                        selectedInvoicingMonth={selectedInvoicingMonth}
+                        handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                        handleFilterChange={undefined}
+                    />
+                ) : null
+            }
+        >
+            {isLoading ? (
+                <Spinner message="Cargando datos" />
+            ) : (
+                <>
+                    <ListMonthlyInvoices
+                        listView={listView}
+                        handleFilterChange={handleFilterChange}
+                        // handleChangeListView={handleChangeListView}
+                        filter={filter}
+                        invoicingMonths={invoicingMonths}
+                        invoices={invoices}
+                        selectedInvoicingMonth={selectedInvoicingMonth}
+                        handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                    />
+                    <NoItemsMessage itemsLength={invoices?.length} />
+                </>
+            )}
+        </PageLayout>
     );
 };
 

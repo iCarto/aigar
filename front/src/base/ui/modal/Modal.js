@@ -1,80 +1,14 @@
-//Modal component
-import React, {Component} from "react";
+import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
 
-export const ModalHeader = props => {
-    return <div className="modal-header">{props.children}</div>;
+const Modal = ({isOpen, onClose, header = null, body, footer = null}) => {
+    return (
+        <Dialog open={isOpen} onClose={onClose}>
+            <DialogTitle>{header}</DialogTitle>
+            <DialogContent>{body}</DialogContent>
+            <DialogActions>{footer}</DialogActions>
+        </Dialog>
+    );
 };
-
-export const ModalBody = props => {
-    return <div className="modal-body">{props.children}</div>;
-};
-
-export const ModalFooter = props => {
-    return <div className="modal-footer">{props.children}</div>;
-};
-
-class Modal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            modalShow: "",
-            display: "none",
-        };
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-    }
-
-    openModal() {
-        this.setState({
-            modalShow: "show",
-            display: "block",
-        });
-    }
-
-    closeModal() {
-        this.setState({
-            modalShow: "",
-            display: "none",
-        });
-    }
-
-    componentDidMount() {
-        this.props.isOpen ? this.openModal() : this.closeModal();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.isOpen !== this.props.isOpen) {
-            this.props.isOpen ? this.openModal() : this.closeModal();
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                <div
-                    className={"modal-backdrop show " + this.state.modalShow}
-                    style={{display: this.state.display}}
-                />
-                <div
-                    className={"modal fade " + this.state.modalShow}
-                    tabIndex="-1"
-                    role="dialog"
-                    aria-hidden="true"
-                    style={{display: this.state.display}}
-                >
-                    <div
-                        className={
-                            "modal-dialog modal-dialog-scrollable " +
-                            (this.props.size ? "modal-" + this.props.size : "")
-                        }
-                        role="document"
-                    >
-                        <div className="modal-content">{this.props.children}</div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
 
 export default Modal;

@@ -19,7 +19,7 @@ const Header = ({hero = null, menu = null}) => {
                 <span className="navbar-toggler-icon"></span>
             </button>
 
-            <div className="collapse navbar-collapse" id="navbarmenu">
+            <div className="collapse navbar-collapse" id="navbarmenu" role="menu">
                 {menu ? menu : null}
             </div>
         </nav>

@@ -1,4 +1,4 @@
-const IconButtonLink = ({onClick, disabled, icon}) => {
+const IconButtonLink = ({onClick, icon, disabled = false}) => {
     const handleClickEvent = () => {
         onClick();
     };

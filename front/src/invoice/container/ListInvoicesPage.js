@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
 import ListInvoices from "./ListInvoices";
+import {PageLayout} from "base/ui/page";
 
 const ListInvoicesPage = () => {
     const [invoices, setInvoices] = useState([]);
@@ -57,15 +58,17 @@ const ListInvoicesPage = () => {
         setFilteredInvoicesIds(updatedFilteredInvoicesIds);
     };
 
-    return invoices ? (
-        <ListInvoices
-            listView={listView}
-            invoices={invoices}
-            handleChangeListView={handleChangeListView}
-            handleFilterChange={handleFilterChange}
-            filter={filter}
-        />
-    ) : null;
+    return (
+        <PageLayout>
+            <ListInvoices
+                listView={listView}
+                invoices={invoices}
+                handleChangeListView={handleChangeListView}
+                handleFilterChange={handleFilterChange}
+                filter={filter}
+            />
+        </PageLayout>
+    );
 };
 
 export default ListInvoicesPage;

@@ -15,7 +15,8 @@ export default function ListProvider({children}) {
     const [order, setOrder] = useState("asc");
 
     useEffect(() => {
-        setFilter({...filter, ...moduleFilter});
+        // setFilter({...filter, ...moduleFilter});
+        setFilter({...filter});
     }, [moduleFilter]);
 
     let value = {
@@ -35,7 +36,7 @@ export default function ListProvider({children}) {
         setOrder,
     };
 
-    console.log({elements, filter, moduleFilter, pageIndex, sortBy});
+    console.log({elements, filter, pageIndex, sortBy});
 
     return <ListContext.Provider value={value}>{children}</ListContext.Provider>;
 }

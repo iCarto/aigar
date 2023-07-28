@@ -1,13 +1,10 @@
 import {MembersFilterFormFields} from "../presentational";
 import {DomainProvider} from "aigar/domain/provider";
 
-const MembersFilterForm = ({filter, handleFilterChange}) => {
+const MembersFilterForm = ({handleFilterChange}) => {
     return (
         <DomainProvider>
-            <MembersFilterFormFields
-                filter={filter}
-                handleChange={handleFilterChange}
-            />
+            <MembersFilterFormFields handleChange={handleFilterChange} />
         </DomainProvider>
     );
 };

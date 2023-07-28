@@ -2,18 +2,18 @@ import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
-import ListInvoices from "./ListInvoices";
+import {useList} from "base/entity/provider";
+import {useFilter} from "base/filter/hooks";
 import {PageLayout} from "base/ui/page";
+import {ListInvoices} from ".";
 
 const ListInvoicesPage = () => {
     const [invoices, setInvoices] = useState([]);
-    const [filter, setFilter] = useState({
-        numero: "",
-        nombre: "",
-        sector: 0,
-    });
+    const [filteredInvoices, setFilteredInvoices] = useState([]);
     const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
 
+    const {filter, setFilter} = useList();
+    const {filterFunction} = useFilter();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,10 +22,12 @@ const ListInvoicesPage = () => {
         });
     }, []);
 
+    useEffect(() => {
+        setFilteredInvoices(filterFunction(invoices));
+    }, [invoices, filter]);
+
     const handleFilterChange = newFilter => {
-        console.log("handleFilterChange", newFilter);
         setFilter(prevFilter => ({...prevFilter, ...newFilter}));
-        // setListView(prevListView => ({...prevListView, pageIndex: 0}));
     };
 
     const handleClickViewInvoice = (idFactura, filteredInvoicesIds) => {
@@ -52,9 +54,8 @@ const ListInvoicesPage = () => {
     return (
         <PageLayout>
             <ListInvoices
-                invoices={invoices}
+                invoices={filteredInvoices}
                 handleFilterChange={handleFilterChange}
-                filter={filter}
             />
         </PageLayout>
     );

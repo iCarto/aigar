@@ -1,6 +1,6 @@
 import {ActionsBurgerMenu} from "base/ui/menu";
-import {Spinner} from "base/common";
 import {SortedPaginatedTable} from "base/table";
+import {NoItemsMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
 
 const EntityListPage = ({
@@ -13,7 +13,7 @@ const EntityListPage = ({
     const displayActions = pageActions?.length > 0;
     const groupedActions = <ActionsBurgerMenu>{pageActions}</ActionsBurgerMenu>;
 
-    return items?.length ? (
+    return (
         <>
             <Grid item container alignItems="flex-end">
                 {filterForm ? (
@@ -41,11 +41,13 @@ const EntityListPage = ({
                 ) : null}
             </Grid>
             <Grid item>
-                <SortedPaginatedTable columns={columns} data={items} />
+                {items?.length ? (
+                    <SortedPaginatedTable columns={columns} data={items} />
+                ) : (
+                    <NoItemsMessage itemsLength={items?.length} />
+                )}
             </Grid>
         </>
-    ) : (
-        <Spinner message="Cargando datos" />
     );
 };
 

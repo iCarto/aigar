@@ -1,8 +1,19 @@
 import {useDomain} from "aigar/domain/provider";
+import {useList} from "base/entity/provider";
 import Grid from "@mui/material/Grid";
 
-const MonthlyInvoicingFilterFormFields = ({filter, handleChange}) => {
+const MonthlyInvoicingFilterFormFields = ({handleChange}) => {
     const {sectors, memberTypes, invoiceStatus} = useDomain();
+    const {filter} = useList();
+
+    const handleInputChange = event => {
+        const name = event.target.name;
+        const value =
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value;
+        handleChange({[name]: value});
+    };
 
     return (
         <Grid component="form" container spacing={1} flexDirection="row">
@@ -12,8 +23,8 @@ const MonthlyInvoicingFilterFormFields = ({filter, handleChange}) => {
                     type="text"
                     className="form-control"
                     name="nombre"
-                    value={filter.nombre}
-                    onChange={handleChange}
+                    value={filter?.nombre}
+                    onChange={handleInputChange}
                 />
             </Grid>
             <Grid item xs={3}>
@@ -21,8 +32,8 @@ const MonthlyInvoicingFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="sector"
-                    value={filter.sector}
-                    onChange={handleChange}
+                    value={filter?.sector}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {sectors.map(sector => (
@@ -37,8 +48,8 @@ const MonthlyInvoicingFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="tipo_socio"
-                    value={filter.tipo_socio}
-                    onChange={handleChange}
+                    value={filter?.tipo_socio}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {memberTypes.map(memberType => (
@@ -53,8 +64,8 @@ const MonthlyInvoicingFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="estado"
-                    value={filter.estado}
-                    onChange={handleChange}
+                    value={filter?.estado}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {invoiceStatus.map(invoiceStatus => (

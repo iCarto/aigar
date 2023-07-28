@@ -1,18 +1,20 @@
 import {useDomain} from "aigar/domain/provider";
+import {useList} from "base/entity/provider";
 import {DateUtil} from "utilities";
 import Grid from "@mui/material/Grid";
 
-const InvoicesStatsFilterFormFields = ({filter, handleChange}) => {
+const InvoicesStatsFilterFormFields = ({handleChange}) => {
     const {sectors, invoicingMonths} = useDomain();
+    const {filter} = useList();
 
-    // TO-DO: Refactor this
-    const handleFieldChange = event => {
+    // TO-DO: Refactor this in all filter forms
+    const handleInputChange = event => {
         const name = event.target.name;
         const value =
             event.target.type === "checkbox"
                 ? event.target.checked
                 : event.target.value;
-        handleChange(name, value);
+        handleChange({[name]: value});
     };
 
     return (
@@ -22,8 +24,8 @@ const InvoicesStatsFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="sector"
-                    value={filter.sector}
-                    onChange={handleFieldChange}
+                    value={filter?.sector}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {sectors.map(sector => (
@@ -38,8 +40,8 @@ const InvoicesStatsFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="startInvoicingMonth"
-                    value={filter.startInvoicingMonth}
-                    onChange={handleFieldChange}
+                    value={filter?.startInvoicingMonth}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {invoicingMonths.map(invoicingMonth => (
@@ -58,8 +60,8 @@ const InvoicesStatsFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="endInvoicingMonth"
-                    value={filter.endInvoicingMonth}
-                    onChange={handleFieldChange}
+                    value={filter?.endInvoicingMonth}
+                    onChange={handleInputChange}
                 >
                     <option></option>
                     {invoicingMonths.map(invoicingMonth => (

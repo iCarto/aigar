@@ -1,8 +1,10 @@
 import {useDomain} from "aigar/domain/provider";
+import {useList} from "base/entity/provider";
 import Grid from "@mui/material/Grid";
 
-const MembersFilterFormFields = ({filter, handleChange}) => {
+const MembersFilterFormFields = ({handleChange}) => {
     const {sectors, memberTypes} = useDomain();
+    const {filter} = useList();
 
     const handleInputChange = event => {
         const name = event.target.name;
@@ -21,7 +23,7 @@ const MembersFilterFormFields = ({filter, handleChange}) => {
                     type="text"
                     className="form-control"
                     name="num_socio"
-                    value={filter.num_socio}
+                    value={filter?.num_socio}
                     onChange={handleInputChange}
                 />
             </Grid>
@@ -31,7 +33,7 @@ const MembersFilterFormFields = ({filter, handleChange}) => {
                     type="text"
                     className="form-control"
                     name="name"
-                    value={filter.name}
+                    value={filter?.name}
                     onChange={handleInputChange}
                 />
             </Grid>
@@ -40,7 +42,7 @@ const MembersFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="sector"
-                    value={filter.sector}
+                    value={filter?.sector}
                     onChange={handleInputChange}
                 >
                     <option></option>
@@ -56,7 +58,7 @@ const MembersFilterFormFields = ({filter, handleChange}) => {
                 <select
                     className="form-control"
                     name="tipo_socio"
-                    value={filter.tipo_socio}
+                    value={filter?.tipo_socio}
                     onChange={handleInputChange}
                 >
                     <option></option>

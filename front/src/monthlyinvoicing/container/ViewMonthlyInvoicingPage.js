@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 
-import ListMonthlyInvoices from "./ListMonthlyInvoices";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useList} from "base/entity/provider";
+import {useFilter} from "base/filter/hooks";
+
 import {PageLayout} from "base/ui/page";
-import {ListMonthlyInvoicesSidebar} from ".";
+import {ListMonthlyInvoices, ListMonthlyInvoicesSidebar} from ".";
 import {Spinner} from "base/common";
-import {NoItemsMessage} from "base/error/components";
 import InvoiceStatusIcon from "invoice/presentational/InvoiceStatusIcon";
 
 const ViewMonthlyInvoicingPage = () => {
@@ -15,18 +16,11 @@ const ViewMonthlyInvoicingPage = () => {
     const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
     const [filteredInvoices, setFilderedInvoices] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
-    const [filter, setFilter] = useState({
-        nombre: "",
-        sector: 0,
-        tipo_socio: 0,
-        estado: 0,
-    });
+
+    const {filter, setFilter} = useList();
+    const {filterFunction} = useFilter();
 
     console.log(invoices);
-
-    useEffect(() => {
-        setFilderedInvoices(filterInvoices(invoices, filter));
-    }, [selectedInvoicingMonth, filter]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -60,6 +54,10 @@ const ViewMonthlyInvoicingPage = () => {
             .finally(() => setIsLoading(false));
     }, []);
 
+    useEffect(() => {
+        setFilderedInvoices(filterFunction(invoices));
+    }, [selectedInvoicingMonth, invoices, filter]);
+
     const handleFilterChange = newFilter => {
         console.log("handleFilterChange", newFilter);
         setFilter(prevFilter => ({
@@ -88,35 +86,6 @@ const ViewMonthlyInvoicingPage = () => {
         setFilteredInvoicesIds(filteredInvoicesIdsNew);
     };
 
-    const filterInvoices = (invoices, filter) => {
-        if (invoices) {
-            return invoices.filter(invoice => {
-                var filtered = true;
-                if (filter) {
-                    if (filter.nombre) {
-                        filtered =
-                            filtered &&
-                            invoice.nombre
-                                .toLowerCase()
-                                .indexOf(filter.nombre.toLowerCase()) >= 0;
-                    }
-                    if (filter.sector) {
-                        filtered =
-                            filtered && invoice.sector === parseInt(filter.sector);
-                    }
-                    if (filter.tipo_socio) {
-                        filtered = filtered && invoice.tipo_socio === filter.tipo_socio;
-                    }
-                    if (filter.estado) {
-                        filtered = filtered && invoice.estado === filter.estado;
-                    }
-                }
-                return filtered;
-            });
-        }
-        return null;
-    };
-
     return (
         <PageLayout
             sidebar={
@@ -134,17 +103,13 @@ const ViewMonthlyInvoicingPage = () => {
             {isLoading ? (
                 <Spinner message="Cargando datos" />
             ) : (
-                <>
-                    <ListMonthlyInvoices
-                        handleFilterChange={handleFilterChange}
-                        filter={filter}
-                        invoicingMonths={invoicingMonths}
-                        invoices={invoices}
-                        selectedInvoicingMonth={selectedInvoicingMonth}
-                        handleChangeInvoicingMonth={handleChangeInvoicingMonth}
-                    />
-                    <NoItemsMessage itemsLength={invoices?.length} />
-                </>
+                <ListMonthlyInvoices
+                    handleFilterChange={handleFilterChange}
+                    invoicingMonths={invoicingMonths}
+                    invoices={filteredInvoices}
+                    selectedInvoicingMonth={selectedInvoicingMonth}
+                    handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                />
             )}
         </PageLayout>
     );

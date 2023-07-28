@@ -1,17 +1,10 @@
 import {InvoicesStatsFilterFormFields} from "stats/presentational";
 import {DomainProvider} from "aigar/domain/provider";
 
-const InvoicesStatsFilterForm = ({filter, onFilterChange}) => {
-    const handleFilterChange = (name, value) => {
-        onFilterChange({[name]: value});
-    };
-
+const InvoicesStatsFilterForm = ({handleFilterChange}) => {
     return (
         <DomainProvider>
-            <InvoicesStatsFilterFormFields
-                filter={filter}
-                handleChange={handleFilterChange}
-            />
+            <InvoicesStatsFilterFormFields handleChange={handleFilterChange} />
         </DomainProvider>
     );
 };

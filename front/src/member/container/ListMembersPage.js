@@ -1,22 +1,17 @@
 import {useEffect, useState} from "react";
-import {MemberService} from "member/service";
 
+import {MemberService} from "member/service";
 import {useList} from "base/entity/provider";
+import {useFilter} from "base/filter/hooks";
 import {PageLayout} from "base/ui/page";
 import {ListMembers} from ".";
 
 const ListMembersPage = () => {
     const [members, setMembers] = useState([]);
-    const [filter, setFilter] = useState({
-        name: "",
-        num_socio: "",
-        sector: 0,
-        tipo_socio: "",
-    });
+    const [filteredMembers, setFilteredMembers] = useState([]);
 
-    const {pageIndex, pageSize, orderBy} = useList();
-
-    console.log({pageIndex, pageSize, orderBy});
+    const {filter, setFilter} = useList();
+    const {filterFunction} = useFilter();
 
     useEffect(() => {
         MemberService.getMembers().then(members => {
@@ -24,8 +19,11 @@ const ListMembersPage = () => {
         });
     }, []);
 
+    useEffect(() => {
+        setFilteredMembers(filterFunction(members));
+    }, [members, filter]);
+
     const handleFilterChange = newFilter => {
-        console.log("handleFilterChange", newFilter);
         setFilter(prevFilter => ({
             ...prevFilter,
             ...newFilter,
@@ -39,9 +37,8 @@ const ListMembersPage = () => {
     return (
         <PageLayout>
             <ListMembers
-                members={members}
+                members={filteredMembers}
                 handleFilterChange={handleFilterChange}
-                filter={filter}
             />
         </PageLayout>
     );

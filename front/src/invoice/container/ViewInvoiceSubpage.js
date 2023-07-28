@@ -8,9 +8,9 @@ import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
-import {ViewInvoiceSidebar} from ".";
+import {InvoicePageSidebar} from ".";
 
-const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
+const ViewInvoiceSubpage = ({navigatorIds, handleClickSelectInNavigator}) => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [payments, setPayments] = useState(null);
@@ -44,7 +44,7 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
     }, [idFactura]);
 
     return (
-        <PageLayout sidebar={<ViewInvoiceSidebar invoice={invoice} />}>
+        <PageLayout sidebar={<InvoicePageSidebar invoice={invoice} />}>
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
             {navigatorIds ? (
@@ -61,4 +61,4 @@ const ViewInvoice = ({navigatorIds, handleClickSelectInNavigator}) => {
     );
 };
 
-export default ViewInvoice;
+export default ViewInvoiceSubpage;

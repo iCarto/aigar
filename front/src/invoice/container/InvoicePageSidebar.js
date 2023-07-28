@@ -2,7 +2,7 @@ import {PrintInvoicesButton} from "monthlyinvoicing/container/actions";
 import {ActionsSidebarMenu} from "base/ui/menu";
 import {UpdateInvoiceButton} from ".";
 
-const ViewInvoiceSidebar = ({invoice}) => {
+const InvoicePageSidebar = ({invoice}) => {
     const getOutputFilename = () => {
         if (invoice) {
             return "recibo_" + invoice.numero;
@@ -24,4 +24,4 @@ const ViewInvoiceSidebar = ({invoice}) => {
     );
 };
 
-export default ViewInvoiceSidebar;
+export default InvoicePageSidebar;

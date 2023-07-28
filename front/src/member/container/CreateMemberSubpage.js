@@ -10,7 +10,7 @@ import {ErrorMessage} from "base/error/components";
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 
-const CreateMember = ({handleSubmit}) => {
+const CreateMemberSubpage = ({handleSubmit}) => {
     const [domain, setDomain] = useState({sectors: []});
     const [member, setMember] = useState(createMember());
     const [validationErrors, setValidationErrors] = useState([]);
@@ -68,7 +68,7 @@ const CreateMember = ({handleSubmit}) => {
         const orderForItem = membersWithOrder.find(
             item => item.id === member.num_socio
         ).order;
-        console.log("EditMember.handleChangeOrder", name, orderForItem);
+        console.log("EditMemberSubpage.handleChangeOrder", name, orderForItem);
         setMember(prevState => {
             const updatedMember = createMember(
                 Object.assign({}, prevState.member, {[name]: orderForItem})
@@ -80,7 +80,7 @@ const CreateMember = ({handleSubmit}) => {
     };
 
     const handleChange = (name, value) => {
-        console.log("CreateMember.handleChange", {name}, {value});
+        console.log("CreateMemberSubpage.handleChange", {name}, {value});
         setMember(prevState => {
             const updatedMember = createMember(
                 Object.assign({}, prevState.member, {[name]: value})
@@ -139,4 +139,4 @@ const CreateMember = ({handleSubmit}) => {
     );
 };
 
-export default CreateMember;
+export default CreateMemberSubpage;

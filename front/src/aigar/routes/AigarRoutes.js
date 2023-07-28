@@ -1,20 +1,20 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {AigarApp} from "aigar/ui";
 import {
-    CreateInvoice,
-    EditInvoice,
+    CreateInvoiceSubpage,
+    EditInvoiceSubpage,
     ViewInvoicesPage,
     ManageInvoicesPage,
-    ViewInvoice,
+    ViewInvoiceSubpage,
 } from "invoice/container";
 import {InvoiceModule} from "invoice/module";
 import {LoadMeasurementsWizard} from "measurement/container";
 import {
-    CreateMember,
-    EditMember,
+    CreateMemberSubpage,
+    EditMemberSubpage,
     ViewMembersPage,
     ManageMembersPage,
-    ViewMember,
+    ViewMemberSubpage,
 } from "member/container";
 import {MemberModule} from "member/module";
 import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
@@ -41,15 +41,18 @@ export default function AigarRoutes() {
                     </Route>
 
                     <Route path="socios" element={<MemberModule />}>
-                        <Route path="nuevo" element={<CreateMember />} />
+                        <Route path="nuevo" element={<CreateMemberSubpage />} />
                         <Route path="" element={<ManageMembersPage />}>
                             <Route path="" element={<ViewMembersPage />} />
                         </Route>
-                        <Route path=":num_socio" element={<ViewMember />} />
-                        <Route path=":num_socio/modificar" element={<EditMember />} />
+                        <Route path=":num_socio" element={<ViewMemberSubpage />} />
+                        <Route
+                            path=":num_socio/modificar"
+                            element={<EditMemberSubpage />}
+                        />
                         <Route
                             path=":num_socio/nueva_factura"
-                            element={<CreateInvoice />}
+                            element={<CreateInvoiceSubpage />}
                         />
                     </Route>
 
@@ -57,8 +60,11 @@ export default function AigarRoutes() {
                         <Route path="" element={<ManageInvoicesPage />}>
                             <Route path="" element={<ViewInvoicesPage />} />
                         </Route>
-                        <Route path=":idFactura" element={<ViewInvoice />} />
-                        <Route path=":idFactura/modificar" element={<EditInvoice />} />
+                        <Route path=":idFactura" element={<ViewInvoiceSubpage />} />
+                        <Route
+                            path=":idFactura/modificar"
+                            element={<EditInvoiceSubpage />}
+                        />
                     </Route>
 
                     <Route path="estadisticas" element={<StatsModule />}>

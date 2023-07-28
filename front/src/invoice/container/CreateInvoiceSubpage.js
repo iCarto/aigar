@@ -16,7 +16,7 @@ import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 
-const CreateInvoice = ({onSubmit}) => {
+const CreateInvoiceSubpage = ({onSubmit}) => {
     const [invoice, setInvoice] = useState(createInvoice());
     const [member, setMember] = useState(null);
     const [validationErrors, setValidationErrors] = useState([]);
@@ -142,4 +142,4 @@ const CreateInvoice = ({onSubmit}) => {
     );
 };
 
-export default CreateInvoice;
+export default CreateInvoiceSubpage;

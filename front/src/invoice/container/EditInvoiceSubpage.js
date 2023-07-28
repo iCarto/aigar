@@ -11,7 +11,7 @@ import {MemberService} from "member/service";
 import {ErrorMessage} from "base/error/components";
 import {PageLayout} from "base/ui/page";
 
-const EditInvoice = ({onSubmit = null}) => {
+const EditInvoiceSubpage = ({onSubmit = null}) => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [validationErrors, setValidationErrors] = useState(null);
@@ -43,7 +43,7 @@ const EditInvoice = ({onSubmit = null}) => {
     }, [idFactura]);
 
     const handleChange = (name, value) => {
-        console.log("EditInvoice.handleChange", name, value);
+        console.log("EditInvoiceSubpage.handleChange", name, value);
         const invoiceDataWithNewChange = Object.assign({}, invoice, {
             [name]: value,
         });
@@ -59,7 +59,7 @@ const EditInvoice = ({onSubmit = null}) => {
     };
 
     const handleSubmit = () => {
-        console.log("EditMember.handleSubmit", {invoice});
+        console.log("EditMemberSubpage.handleSubmit", {invoice});
         setIsLoading(true);
 
         InvoiceService.updateInvoice(invoice)
@@ -110,4 +110,4 @@ const EditInvoice = ({onSubmit = null}) => {
     );
 };
 
-export default EditInvoice;
+export default EditInvoiceSubpage;

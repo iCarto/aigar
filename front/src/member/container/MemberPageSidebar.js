@@ -4,8 +4,7 @@ import {EditButton} from "base/common";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 import Button from "@mui/material/Button";
 
-//TO-DO: Change name to MemberSidebar
-const ViewMemberSidebar = ({member, numInvoices}) => {
+const MemberPageSidebar = ({member, numInvoices}) => {
     const navigate = useNavigate();
 
     const handleClickNewInvoice = () => {
@@ -28,4 +27,4 @@ const ViewMemberSidebar = ({member, numInvoices}) => {
     return <ActionsSidebarMenu menuActions={menuActions} showBackButton />;
 };
 
-export default ViewMemberSidebar;
+export default MemberPageSidebar;

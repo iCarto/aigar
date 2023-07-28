@@ -11,8 +11,8 @@ import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {PageLayout} from "base/ui/page";
 
-//TO-DO: Abstraer (see EditInvoice y crear DomainProvider)
-const EditMember = ({onSubmit = null}) => {
+//TO-DO: Abstraer (see EditInvoiceSubpage)
+const EditMemberSubpage = ({onSubmit = null}) => {
     const [member, setMember] = useState(null);
     const [membersWithOrder, setMembersWithOrder] = useState([]);
     const [domain, setDomain] = useState({
@@ -58,7 +58,7 @@ const EditMember = ({onSubmit = null}) => {
 
     const handleChangeOrder = (name, membersWithOrder) => {
         const orderForItem = membersWithOrder.find(item => item.id === num_socio).order;
-        console.log("EditMember.handleChangeOrder", name, orderForItem);
+        console.log("EditMemberSubpage.handleChangeOrder", name, orderForItem);
         const updatedMember = createMember(
             Object.assign({}, member, {[name]: orderForItem})
         );
@@ -68,7 +68,7 @@ const EditMember = ({onSubmit = null}) => {
     };
 
     const handleChange = (name, value) => {
-        console.log("EditMember.handleChange", name, value);
+        console.log("EditMemberSubpage.handleChange", name, value);
         const updatedMember = createMember(Object.assign({}, member, {[name]: value}));
         // setMember(updatedMember);
         setValidationErrors(DataValidatorService.validateMember(updatedMember));
@@ -122,4 +122,4 @@ const EditMember = ({onSubmit = null}) => {
     );
 };
 
-export default EditMember;
+export default EditMemberSubpage;

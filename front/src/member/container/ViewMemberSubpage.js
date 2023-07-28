@@ -3,14 +3,14 @@ import {useParams} from "react-router-dom";
 
 import {ListMemberInvoices} from "member/container";
 import {MemberDetail} from "member/presentational";
-import ViewMemberSidebar from "./ViewMemberSidebar";
+import MemberPageSidebar from "./MemberPageSidebar";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {PageLayout} from "base/ui/page";
 
-const ViewMember = () => {
+const ViewMemberSubpage = () => {
     const [member, setMember] = useState(null);
     const [invoices, setInvoices] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
@@ -46,7 +46,7 @@ const ViewMember = () => {
         <PageLayout
             sidebar={
                 member ? (
-                    <ViewMemberSidebar
+                    <MemberPageSidebar
                         member={member}
                         numInvoices={invoices?.length || 0}
                     />
@@ -61,4 +61,4 @@ const ViewMember = () => {
     );
 };
 
-export default ViewMember;
+export default ViewMemberSubpage;

@@ -29,6 +29,10 @@ known_first_party = [
     "back",
 ] # Ajustar en cada proyecto
 
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "back.settings"
+python_files = ["test_*.py"]
+
 [build-system]
 requires = ["setuptools==65.5.0"]
 build-backend = "setuptools.build_meta"
@@ -47,15 +51,29 @@ dependencies = [
     "Django==4.2",
     "django-cors-headers==3.14.0",
     "django-environ==0.10.0",
-    "django-extensions==3.2.1",
     "django-filter==23.1",
     "django-spa==0.3.6",
     "djangorestframework==3.14.0",
     "djangorestframework-simplejwt==5.2.2",
     "drf-extensions==0.7.1",
-    "django-debug-toolbar==4.0.0",
 ]
 
+# https://stackoverflow.com/questions/75490231/
+[project.optional-dependencies]
+test = [
+    "pytest==7.4.0",
+    "pytest-django==4.5.2",
+    "selenium==4.8.3",
+    "webdriver-manager==3.8.6",
+    "factory_boy==3.3.0",
+]
+dev = [
+    "django-debug-toolbar==4.0.0",
+    "django-extensions==3.2.1",
+    # "aigar[test]",
+]
+
+all = ["aigar[dev, test]"]
 
 [tool.setuptools]
 package-dir = { "aigar" = "back" }

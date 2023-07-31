@@ -4,4 +4,4 @@
 # set -o pipefail:  fail the whole pipeline on first error
 set -euo pipefail
 
-echo "Nothing to do here"
+pytest --log-cli-level=Warning back

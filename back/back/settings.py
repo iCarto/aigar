@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "back",
     "users",
+    "domains",
 ]
 
 MIDDLEWARE = [

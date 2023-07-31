@@ -27,6 +27,7 @@ known_first_party = [
     "users",
     "app",
     "back",
+    "domains",
 ] # Ajustar en cada proyecto
 
 [tool.pytest.ini_options]

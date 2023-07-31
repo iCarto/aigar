@@ -44,7 +44,7 @@ if [[ "${DATABASE_CONTROL_CHANGES_MODE}" == "sqitch" ]]; then
         sqitch deploy
     )
 else
-    # Crea las migraciones. migrations/__ini__.py debe existir para que se cree la
+    # Crea las migraciones. migrations/__init__.py debe existir para que se cree la
     # migración inicial de una app o debe invocarse la app de forma concreta
     # python manage.py makemigrations users
     python "${this_dir}/../back/manage.py" makemigrations
@@ -57,7 +57,21 @@ else
         DROP TABLE back_invoicingmonth; ALTER TABLE api_invoicingmonth RENAME TO back_invoicingmonth;
         DROP TABLE back_measurement; ALTER TABLE api_measurement RENAME TO back_measurement;
         DROP TABLE back_payment; ALTER TABLE api_payment RENAME TO back_payment;
-    "
+
+        INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
+            ('Tihuapa norte', 'Tihuapa norte', 4)
+            , ('Tlacuxtli', 'Tlacuxtli', 3)
+        ;
+        INSERT INTO domains_zone (name, code, locality_short_name) VALUES
+            ('1 - Tihuapa norte', '1', 'Tihuapa norte')
+            , ('2 - Tihuapa norte', '2', 'Tihuapa norte')
+            , ('3 - Tihuapa norte', '3', 'Tihuapa norte')
+            , ('4 - Tihuapa norte', '4', 'Tihuapa norte')
+            , ('5 - Tlacuxtli', '5', 'Tlacuxtli')
+            , ('6 - Tlacuxtli', '6', 'Tlacuxtli')
+            , ('7 - Tlacuxtli', '7', 'Tlacuxtli')
+        ;
+        "
 fi
 
 if [[ -f ${this_dir}/../back/manage.py ]]; then

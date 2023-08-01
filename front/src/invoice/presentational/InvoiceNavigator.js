@@ -1,60 +1,42 @@
-import React from "react";
+import {useNavigate} from "react-router-dom";
 
-class InvoiceNavigator extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClickPreviousInvoice = this.handleClickPreviousInvoice.bind(this);
-        this.handleClickNextInvoice = this.handleClickNextInvoice.bind(this);
-    }
+const InvoiceNavigator = ({navigatorIds, currentInvoiceId, path}) => {
+    const navigate = useNavigate();
 
-    findSelectedIndex() {
-        return this.props.navigatorIds.findIndex(id => id === this.props.selectedId);
-    }
+    const currentInvoiceIndex = navigatorIds.indexOf(parseInt(currentInvoiceId));
+    const isPreviousButtonDisabled = currentInvoiceIndex === 0;
+    const isNextButtonDisabled = currentInvoiceIndex === navigatorIds.length - 1;
 
-    handleClickPreviousInvoice() {
-        this.props.handleClickSelect(
-            this.props.navigatorIds[this.findSelectedIndex() - 1]
-        );
-    }
+    const handleClickPreviousInvoice = () => {
+        navigate(`/${path}/${navigatorIds[currentInvoiceIndex - 1]}`);
+    };
 
-    handleClickNextInvoice() {
-        this.props.handleClickSelect(
-            this.props.navigatorIds[this.findSelectedIndex() + 1]
-        );
-    }
+    const handleClickNextInvoice = () => {
+        navigate(`/${path}/${navigatorIds[currentInvoiceIndex + 1]}`);
+    };
 
-    isPreviousButtonDisabled() {
-        return this.findSelectedIndex() === 0;
-    }
-
-    isNextButtonDisabled() {
-        return this.findSelectedIndex() === this.props.navigatorIds.length - 1;
-    }
-
-    render() {
-        return (
-            <div className="text-center mb-2" style={{borderBottom: "1px solid #ccc"}}>
-                <form className="form-inline d-flex justify-content-between m-1">
-                    <button
-                        type="button"
-                        className="btn mr-1"
-                        onClick={this.handleClickPreviousInvoice}
-                        disabled={this.isPreviousButtonDisabled()}
-                    >
-                        &laquo; Factura anterior
-                    </button>
-                    <button
-                        type="button"
-                        className="btn ml-1"
-                        onClick={this.handleClickNextInvoice}
-                        disabled={this.isNextButtonDisabled()}
-                    >
-                        Siguiente factura &raquo;
-                    </button>
-                </form>
-            </div>
-        );
-    }
-}
+    return (
+        <div className="text-center mb-2" style={{borderBottom: "1px solid #ccc"}}>
+            <form className="form-inline d-flex justify-content-between m-1">
+                <button
+                    type="button"
+                    className="btn mr-1"
+                    onClick={handleClickPreviousInvoice}
+                    disabled={isPreviousButtonDisabled}
+                >
+                    &laquo; Factura anterior
+                </button>
+                <button
+                    type="button"
+                    className="btn ml-1"
+                    onClick={handleClickNextInvoice}
+                    disabled={isNextButtonDisabled}
+                >
+                    Siguiente factura &raquo;
+                </button>
+            </form>
+        </div>
+    );
+};
 
 export default InvoiceNavigator;

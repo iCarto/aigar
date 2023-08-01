@@ -1,7 +1,11 @@
 import {BackButton} from "base/common";
 import MenuList from "@mui/material/MenuList";
 
-const ActionsSidebarMenu = ({menuActions = null, showBackButton = false}) => {
+const ActionsSidebarMenu = ({
+    menuActions = null,
+    showBackButton = false,
+    urlPathBack = "",
+}) => {
     return (
         <MenuList
             sx={{
@@ -10,7 +14,7 @@ const ActionsSidebarMenu = ({menuActions = null, showBackButton = false}) => {
                 alignItems: "center",
             }}
         >
-            {showBackButton ? <BackButton /> : null}
+            {showBackButton ? <BackButton path={urlPathBack} /> : null}
             {menuActions?.length
                 ? menuActions.map((action, index) => {
                       return (

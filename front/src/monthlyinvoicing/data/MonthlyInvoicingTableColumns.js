@@ -34,7 +34,7 @@ export function useMonthlyInvoicingTableColumns() {
             className: "text-center",
             getProps: () => ({
                 linkAccessor: "id_factura",
-                path: "facturas",
+                path: "facturas_mes",
             }),
         },
         {

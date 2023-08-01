@@ -7,8 +7,6 @@ import {
     ManageInvoicesPage,
     ViewInvoiceSubpage,
 } from "invoice/container";
-import {InvoiceModule} from "invoice/module";
-import {LoadMeasurementsWizard} from "measurement/container";
 import {
     CreateMemberSubpage,
     EditMemberSubpage,
@@ -16,12 +14,14 @@ import {
     ManageMembersPage,
     ViewMemberSubpage,
 } from "member/container";
-import {MemberModule} from "member/module";
-import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
 import {MonthlyInvoicingModule} from "monthlyinvoicing/module";
-import {LoadPaymentsWizard} from "payment/container";
-import {ViewInvoicesStatsPage} from "stats/container";
+import {MemberModule} from "member/module";
+import {InvoiceModule} from "invoice/module";
 import {StatsModule} from "stats/module";
+import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
+import {ViewInvoicesStatsPage} from "stats/container";
+import {LoadMeasurementsWizard} from "measurement/container";
+import {LoadPaymentsWizard} from "payment/container";
 
 export default function AigarRoutes() {
     return (
@@ -30,6 +30,10 @@ export default function AigarRoutes() {
                 <Route path="/" element={<AigarApp />}>
                     <Route path="" element={<MonthlyInvoicingModule />}>
                         <Route path="" element={<ViewMonthlyInvoicingPage />} />
+                        <Route
+                            path="facturas_mes/:idFactura"
+                            element={<ViewInvoiceSubpage />}
+                        />
                         <Route
                             path="cargarpagos/:id_mes_facturacion"
                             element={<LoadPaymentsWizard />}

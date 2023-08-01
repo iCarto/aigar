@@ -3,14 +3,16 @@ import {useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
+import {useInvoicesList} from "invoice/provider";
 
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
 import {InvoicePageSidebar} from ".";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
-const ViewInvoiceSubpage = ({navigatorIds, handleClickSelectInNavigator}) => {
+const ViewInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [payments, setPayments] = useState(null);
@@ -18,6 +20,14 @@ const ViewInvoiceSubpage = ({navigatorIds, handleClickSelectInNavigator}) => {
     const [error, setError] = useState("");
 
     const {idFactura} = useParams();
+    const allInvoicesList = useInvoicesList();
+    const monthlyInvoicesList = useMonthlyInvoicingList();
+
+    const invoicesIds =
+        allInvoicesList?.invoicesIds || monthlyInvoicesList?.invoicesIds;
+
+    const urlPath = allInvoicesList ? "facturas" : "facturas_mes";
+    const urlPathBack = allInvoicesList ? "/facturas" : "/";
 
     useEffect(() => {
         setIsLoading(true);
@@ -44,14 +54,16 @@ const ViewInvoiceSubpage = ({navigatorIds, handleClickSelectInNavigator}) => {
     }, [idFactura]);
 
     return (
-        <PageLayout sidebar={<InvoicePageSidebar invoice={invoice} />}>
+        <PageLayout
+            sidebar={<InvoicePageSidebar invoice={invoice} urlPathBack={urlPathBack} />}
+        >
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
-            {navigatorIds ? (
+            {invoicesIds?.length ? (
                 <InvoiceNavigator
-                    selectedId={idFactura}
-                    navigatorIds={navigatorIds}
-                    handleClickSelect={handleClickSelectInNavigator}
+                    currentInvoiceId={idFactura}
+                    navigatorIds={invoicesIds}
+                    path={urlPath}
                 />
             ) : null}
             {invoice ? (

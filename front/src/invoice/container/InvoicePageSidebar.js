@@ -2,7 +2,7 @@ import {PrintInvoicesButton} from "monthlyinvoicing/container/actions";
 import {ActionsSidebarMenu} from "base/ui/menu";
 import {UpdateInvoiceButton} from ".";
 
-const InvoicePageSidebar = ({invoice}) => {
+const InvoicePageSidebar = ({invoice, urlPathBack = ""}) => {
     const getOutputFilename = () => {
         if (invoice) {
             return "recibo_" + invoice.numero;
@@ -20,7 +20,11 @@ const InvoicePageSidebar = ({invoice}) => {
     ];
 
     return (
-        <ActionsSidebarMenu menuActions={invoice ? menuActions : null} showBackButton />
+        <ActionsSidebarMenu
+            menuActions={invoice ? menuActions : null}
+            showBackButton
+            urlPathBack={urlPathBack}
+        />
     );
 };
 

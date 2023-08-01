@@ -1,31 +1,18 @@
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
-import {InvoiceService} from "invoice/service";
 import {useList} from "base/entity/provider";
+import {useInvoicesList} from "invoice/provider";
 import {useFilter} from "base/filter/hooks";
+
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ListInvoices} from ".";
 
 const ViewInvoicesPage = () => {
-    const [invoices, setInvoices] = useState([]);
-    const [filteredInvoices, setFilteredInvoices] = useState([]);
-    const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
-    const [isLoading, setIsLoading] = useState(null);
-
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        setIsLoading(true);
-        InvoiceService.getInvoices()
-            .then(invoices => {
-                setInvoices(invoices);
-            })
-            .finally(() => setIsLoading(false));
-    }, []);
+    const {invoices, filteredInvoices, setFilteredInvoices, isLoading} =
+        useInvoicesList();
 
     useEffect(() => {
         setFilteredInvoices(filterFunction(invoices));
@@ -35,26 +22,17 @@ const ViewInvoicesPage = () => {
         setFilter(prevFilter => ({...prevFilter, ...newFilter}));
     };
 
-    const handleClickViewInvoice = (idFactura, filteredInvoicesIds) => {
-        console.log("handleClickEditInvoice", idFactura, filteredInvoicesIds);
-        // if (!filteredInvoicesIds) {
-        //     filteredInvoicesIds = filteredInvoicesIds;
-        // }
-        // setSelectedInvoice(idFactura);
-        setFilteredInvoicesIds(filteredInvoicesIds);
-        navigate(`${idFactura}`);
-    };
-
-    const handleSuccessCreateNewInvoiceVersion = (
-        new_version_id_factura,
-        old_version_id_factura
-    ) => {
-        // Replace old version id
-        const updatedFilteredInvoicesIds = filteredInvoicesIds.map(invoiceId =>
-            invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
-        );
-        setFilteredInvoicesIds(updatedFilteredInvoicesIds);
-    };
+    // TO-DO: Review if this is still needed somehow
+    // const handleSuccessCreateNewInvoiceVersion = (
+    //     new_version_id_factura,
+    //     old_version_id_factura
+    // ) => {
+    //     // Replace old version id
+    //     const updatedFilteredInvoicesIds = filteredInvoicesIds.map(invoiceId =>
+    //         invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
+    //     );
+    //     setFilteredInvoicesIds(updatedFilteredInvoicesIds);
+    // };
 
     return (
         <PageLayout>

@@ -1,90 +1,52 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
-import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useList} from "base/entity/provider";
 import {useFilter} from "base/filter/hooks";
 
-import {PageLayout} from "base/ui/page";
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
+import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
-import InvoiceStatusIcon from "invoice/presentational/InvoiceStatusIcon";
 
 const ViewMonthlyInvoicingPage = () => {
-    const [invoices, setInvoices] = useState([]);
-    const [invoicingMonths, setInvoicingMonths] = useState(null);
-    const [selectedInvoicingMonth, setSelectedInvoicingMonth] = useState(null);
-    const [filteredInvoicesIds, setFilteredInvoicesIds] = useState([]);
-    const [filteredInvoices, setFilderedInvoices] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
-
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
-
-    console.log(invoices);
-
-    useEffect(() => {
-        setIsLoading(true);
-        let invoicingMonthOpened;
-        InvoicingMonthService.getInvoicingMonths()
-            .then(invoicingMonths => {
-                invoicingMonthOpened = invoicingMonths.find(
-                    invoicingMonth => invoicingMonth.is_open
-                );
-                // Next month add to allow the creation of a new monthly invoicing process
-                setInvoicingMonths([
-                    ...invoicingMonths,
-                    InvoicingMonthService.getNextInvoicingMonthToCreate(
-                        invoicingMonthOpened
-                    ),
-                ]);
-                setSelectedInvoicingMonth(invoicingMonthOpened);
-            })
-            .then(() =>
-                InvoicingMonthService.getInvoicingMonthInvoices(
-                    invoicingMonthOpened.id_mes_facturacion
-                )
-                    .then(invoices => {
-                        setInvoices(invoices);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        setInvoices([]);
-                    })
-            )
-            .finally(() => setIsLoading(false));
-    }, []);
+    const {
+        invoices,
+        filteredInvoices,
+        setFilteredInvoices,
+        invoicingMonths,
+        selectedInvoicingMonth,
+        setSelectedInvoicingMonth,
+        isLoading,
+    } = useMonthlyInvoicingList();
 
     useEffect(() => {
-        setFilderedInvoices(filterFunction(invoices));
+        setFilteredInvoices(filterFunction(invoices));
     }, [selectedInvoicingMonth, invoices, filter]);
 
     const handleFilterChange = newFilter => {
-        console.log("handleFilterChange", newFilter);
         setFilter(prevFilter => ({
             ...prevFilter,
             ...newFilter,
         }));
-        // setListView(prevListView => ({
-        //     ...prevListView,
-        //     pageIndex: 0,
-        // }));
     };
 
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {
-        console.log("handleChangeInvoicingMonth");
+        console.log("handleChangeInvoicingMonth", selectedInvoicingMonth);
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
-    const handleSuccessCreateNewInvoiceVersion = (
-        new_version_id_factura,
-        old_version_id_factura
-    ) => {
-        // Replace old version id
-        const filteredInvoicesIdsNew = filteredInvoicesIds.map(invoiceId =>
-            invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
-        );
-        setFilteredInvoicesIds(filteredInvoicesIdsNew);
-    };
+    // const handleSuccessCreateNewInvoiceVersion = (
+    //     new_version_id_factura,
+    //     old_version_id_factura
+    // ) => {
+    //     // Replace old version id
+    //     const filteredInvoicesIdsNew = filteredInvoicesIds.map(invoiceId =>
+    //         invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
+    //     );
+    //     setFilteredInvoicesIds(filteredInvoicesIdsNew);
+    // };
 
     return (
         <PageLayout
@@ -104,10 +66,10 @@ const ViewMonthlyInvoicingPage = () => {
                 <Spinner message="Cargando datos" />
             ) : (
                 <ListMonthlyInvoicesPage
-                    handleFilterChange={handleFilterChange}
-                    invoicingMonths={invoicingMonths}
                     invoices={filteredInvoices}
+                    invoicingMonths={invoicingMonths}
                     selectedInvoicingMonth={selectedInvoicingMonth}
+                    handleFilterChange={handleFilterChange}
                     handleChangeInvoicingMonth={handleChangeInvoicingMonth}
                 />
             )}

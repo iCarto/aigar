@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
@@ -14,7 +13,7 @@ from back.views.payment import PaymentInvoicePreview, PaymentViewSet
 
 
 class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
-    pass
+    """NestedDefaultRouter."""
 
 
 admin.autodiscover()
@@ -73,15 +72,11 @@ urlpatterns = [
     path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too
-    path("admin/", admin.site.urls),
+    path("gestion/", admin.site.urls),
 ]
 
-if settings.DEPLOYMENT == "dev":
-    urlpatterns = urlpatterns + static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
 
 if settings.DEBUG:
-    import debug_toolbar
+    import debug_toolbar  # noqa: WPS433
 
     urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]

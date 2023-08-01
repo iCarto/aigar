@@ -1,3 +1,5 @@
+import os
+
 import environ
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
@@ -82,7 +84,7 @@ ROOT_URLCONF = "back.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

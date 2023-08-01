@@ -1,4 +1,5 @@
 import moment from "moment";
+import "moment/locale/es";
 
 const BANK_DATEFORMAT = "DD/MM/YYYY";
 const TIGO_DATEFORMAT = "YYYYMMDD";
@@ -6,6 +7,7 @@ const API_DATEFORMAT = "YYYY-MM-DD";
 
 const DateUtil = {
     getMonthName(monthNumber) {
+        moment.locale("es");
         const month = moment.months(parseInt(monthNumber) - 1);
         return month.charAt(0).toLocaleUpperCase() + month.slice(1);
     },

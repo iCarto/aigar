@@ -1,140 +1,91 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {DomainService} from "aigar/domain/service";
+
 import {MemberService} from "member/service";
-import {MemberForm} from "member/presentational";
 import {DataValidatorService} from "validation";
-import CreateMemberSidebar from "./CreateMemberSidebar";
 import {createMember} from "member/model";
-import {ErrorMessage} from "base/error/components";
+import {useMembersList} from "member/provider";
+
 import {PageLayout} from "base/ui/page";
-import {Spinner} from "base/common";
+import {MemberForm} from "member/presentational";
+import {CreateMemberSidebar} from ".";
 
-const CreateMemberSubpage = ({handleSubmit}) => {
-    const [domain, setDomain] = useState({sectors: []});
+const CreateMemberSubpage = () => {
     const [member, setMember] = useState(createMember());
+    const [membersList, setMembersList] = useState([]);
     const [validationErrors, setValidationErrors] = useState([]);
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [membersWithOrder, setMembersWithOrder] = useState([]);
-    const [isLoading, setIsLoading] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
 
+    const {sortedMembersList} = useMembersList();
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadDomains();
-    }, []);
+        assignNewMemberOrder();
+    }, [sortedMembersList]);
 
-    const loadDomains = () => {
-        console.log("loadDomains");
-        Promise.all([DomainService.getSectors(), MemberService.getMembers()]).then(
-            results => {
-                const membersWithOrder = getMembersWithOrder(results[1]);
-                // Add the new member to list at last position
-                const orderForNewMember =
-                    membersWithOrder[membersWithOrder.length - 1].order + 1;
-                membersWithOrder.push({
-                    id: member.num_socio,
-                    order: orderForNewMember,
-                    name: "<<Nuevo socio>>",
-                });
-                setMember(prevState =>
-                    createMember(
-                        Object.assign({}, prevState.member, {orden: orderForNewMember})
-                    )
-                );
-                setDomain({sectors: results[0]});
-                setMembersWithOrder(membersWithOrder);
-            }
-        );
-    };
+    const assignNewMemberOrder = () => {
+        // Assign an order to the new member and add it to the last position in the list
+        const orderForNewMember =
+            sortedMembersList.length > 0
+                ? sortedMembersList[sortedMembersList.length - 1].order + 1
+                : 1;
+        const newMember = {
+            id: member.num_socio,
+            order: orderForNewMember,
+            name: "<<Nuevo socio>>",
+        };
 
-    const getMembersWithOrder = members => {
-        let membersWithOrder = members
-            .filter(member => member.is_active)
-            .map(member => {
-                return {
-                    id: member.num_socio,
-                    order: member.orden,
-                    name: member.name,
-                };
-            });
-        membersWithOrder.sort((a, b) => {
-            return a.order - b.order;
+        const updatedMember = createMember({
+            ...member,
+            orden: orderForNewMember,
         });
-        return membersWithOrder;
+        const updatedMembers = [...sortedMembersList, newMember];
+
+        setMembersList(updatedMembers);
+        setMember(updatedMember);
     };
 
-    const handleChangeOrder = (name, membersWithOrder) => {
-        const orderForItem = membersWithOrder.find(
-            item => item.id === member.num_socio
-        ).order;
-        console.log("EditMemberSubpage.handleChangeOrder", name, orderForItem);
-        setMember(prevState => {
-            const updatedMember = createMember(
-                Object.assign({}, prevState.member, {[name]: orderForItem})
-            );
-            return updatedMember;
-        });
-        // setValidationErrors(DataValidatorService.validateMember(updatedMember));
-        setMembersWithOrder(membersWithOrder);
+    const handleUpdateForm = updatedMember => {
+        setValidationErrors(DataValidatorService.validateMember(updatedMember));
+        setMember(updatedMember);
     };
 
-    const handleChange = (name, value) => {
-        console.log("CreateMemberSubpage.handleChange", {name}, {value});
-        setMember(prevState => {
-            const updatedMember = createMember(
-                Object.assign({}, prevState.member, {[name]: value})
-            );
-            return updatedMember;
-        });
-        // setValidationErrors(DataValidatorService.validateMember(updatedMember));
+    const handleUpdateMembersList = updatedList => {
+        setMembersList(updatedList);
     };
 
-    const handleBackAction = () => {
-        navigate(-1);
-    };
-
-    const handleSubmitAction = () => {
-        setIsLoading(true);
-        setErrorMessage(null);
-        MemberService.createMember(member)
+    const handleSubmit = updatedMember => {
+        setIsSaving(true);
+        MemberService.createMember({updatedMember})
             .then(createdMember => {
-                setIsLoading(false);
-                if (handleSubmit) {
-                    handleSubmit(createdMember.num_socio);
-                } else {
-                    handleBackAction();
-                }
+                navigate(`/socios/${createdMember.num_socio}`);
             })
             .catch(error => {
                 console.log(error);
                 setErrorMessage(
-                    "Se ha producido un error y no se han podido almacenar los datos del socio"
+                    "Se ha producido un error y no se han podido almacenar los datos."
                 );
-                setIsLoading(false);
+            })
+            .finally(() => {
+                setIsSaving(false);
             });
     };
 
     const sidebar = <CreateMemberSidebar />;
-    const content = (
-        <>
-            <ErrorMessage message={errorMessage} />
-            <MemberForm
-                member={member}
-                errors={validationErrors}
-                handleChange={handleChange}
-                handleSubmit={handleSubmitAction}
-                sectorsDomain={domain.sectors}
-                membersWithOrder={membersWithOrder}
-                handleChangeOrder={handleChangeOrder}
-                saving={isLoading}
-            />
-        </>
-    );
 
     return (
         <PageLayout sidebar={sidebar}>
-            {isLoading ? <Spinner message="Cargando datos" /> : content}
+            <MemberForm
+                member={member}
+                membersList={membersList}
+                onSubmit={handleSubmit}
+                onUpdate={handleUpdateForm}
+                onUpdateMembersList={handleUpdateMembersList}
+                isSaving={isSaving}
+                error={errorMessage}
+                validationErrors={validationErrors}
+            />
         </PageLayout>
     );
 };

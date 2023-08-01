@@ -3,7 +3,7 @@ import {DateUtil} from "utilities";
 import {SectionField, SectionSummaryCard} from "base/ui/section/presentational";
 import {InvoiceStatusLabel} from ".";
 
-const InvoiceDetailShort = ({invoice, payments}) => {
+const InvoiceDetailShort = ({invoice, payments = []}) => {
     const message = !invoice?.is_active ? (
         <div className="alert alert-danger">La factura ha sido anulada.</div>
     ) : null;

@@ -1,22 +1,22 @@
 import {useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {InvoiceForm} from "invoice/presentational";
-import {DataValidatorService} from "validation";
-import EditInvoiceSidebar from "./EditInvoiceSidebar";
-import {Spinner} from "base/common";
 
-import {createInvoice, refreshInvoiceValues} from "invoice/model";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
-import {ErrorMessage} from "base/error/components";
+import {DataValidatorService} from "validation";
+
+import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";
+import {EditInvoiceSidebar} from ".";
+import {Spinner} from "base/common";
 
 const EditInvoiceSubpage = ({onSubmit = null}) => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
-    const [validationErrors, setValidationErrors] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
-    const [error, setError] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validationErrors, setValidationErrors] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const {idFactura} = useParams();
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
             })
             .catch(error => {
                 console.log(error);
-                setError(
+                setErrorMessage(
                     "Se ha producido un error y no se han podido obtener los datos de la factura"
                 );
             })
@@ -42,70 +42,51 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
             });
     }, [idFactura]);
 
-    const handleChange = (name, value) => {
-        console.log("EditInvoiceSubpage.handleChange", name, value);
-        const invoiceDataWithNewChange = Object.assign({}, invoice, {
-            [name]: value,
-        });
-        let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-        updatedInvoice = refreshInvoiceValues(
-            updatedInvoice,
-            member.consumo_maximo,
-            member.consumo_reduccion_fija
-        );
-        console.log({updatedInvoice});
-        setInvoice(updatedInvoice);
+    const handleUpdateForm = updatedInvoice => {
         setValidationErrors(DataValidatorService.validateInvoice(updatedInvoice));
+        setInvoice(updatedInvoice);
     };
 
     const handleSubmit = () => {
-        console.log("EditMemberSubpage.handleSubmit", {invoice});
-        setIsLoading(true);
+        console.log("EditInvoiceSubpage.handleSubmit", {invoice});
+        setIsSaving(true);
 
         InvoiceService.updateInvoice(invoice)
             .then(updatedInvoice => {
                 if (onSubmit) {
                     onSubmit(updatedInvoice);
                 } else {
-                    handleBack();
+                    navigate(-1);
                 }
             })
             .catch(error => {
                 console.log(error);
-                setError(
+                setErrorMessage(
                     "Se ha producido un error y no se han podido almacenar los datos de la factura"
                 );
             })
             .finally(() => {
-                setIsLoading(false);
+                setIsSaving(false);
             });
-    };
-
-    const handleBack = () => {
-        navigate(-1);
     };
 
     const sidebar = <EditInvoiceSidebar />;
 
-    const content = isLoading ? (
-        <Spinner message="Cargando datos" />
-    ) : (
-        <>
-            <ErrorMessage message={error} />
-            <InvoiceForm
-                invoice={invoice}
-                member={member}
-                errors={validationErrors}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                saving={isLoading}
-            />
-        </>
-    );
-
     return (
         <PageLayout sidebar={sidebar}>
-            {isLoading ? <Spinner message="Cargando datos" /> : content}
+            {isLoading ? (
+                <Spinner message="Cargando datos" />
+            ) : invoice ? (
+                <InvoiceForm
+                    invoice={invoice}
+                    member={member}
+                    onSubmit={handleSubmit}
+                    onUpdate={handleUpdateForm}
+                    isSaving={isSaving}
+                    error={errorMessage}
+                    validationErrors={validationErrors}
+                />
+            ) : null}
         </PageLayout>
     );
 };

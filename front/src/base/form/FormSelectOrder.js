@@ -1,15 +1,7 @@
-import React from "react";
-
-class FormSelectOrder extends React.Component {
-    constructor(props) {
-        super();
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    updateOrders(newOrden) {
-        const prevOrden = this.props.field.value;
-        let elements = this.props.elements;
-        elements = elements.map(item => {
+const FormSelectOrder = ({label, name, field, elements, onChange}) => {
+    const updateOrders = newOrden => {
+        const prevOrden = field.value;
+        let updatedElements = elements.map(item => {
             let orden = item.order;
             if (prevOrden < newOrden) {
                 if (orden === prevOrden) {
@@ -30,40 +22,39 @@ class FormSelectOrder extends React.Component {
                 name: item.name,
             };
         });
-        elements.sort((a, b) => {
+
+        updatedElements.sort((a, b) => {
             return a.order - b.order;
         });
-        this.props.handleChange(this.props.name, elements);
-    }
 
-    handleChange(event) {
-        this.updateOrders(parseInt(event.target.value));
-    }
+        return updatedElements;
+    };
 
-    render() {
-        return (
-            <div className="form-group">
-                <label htmlFor={this.props.name}>{this.props.label}</label>
-                <select
-                    className="form-control"
-                    name={this.props.name}
-                    onChange={this.handleChange}
-                    value={this.props.field.value}
-                    size={10}
-                >
-                    <option value={0}></option>
-                    {this.props.elements.map(element => (
-                        <option key={element.order} value={element.order}>
-                            {element.order} - {element.name}
-                        </option>
-                    ))}
-                </select>
-                <div className="invalid-feedback d-block">
-                    {this.props.field.errors}
-                </div>
-            </div>
-        );
-    }
-}
+    const handleChangeEvent = event => {
+        const updatedList = updateOrders(parseInt(event.target.value));
+        onChange(name, updatedList);
+    };
+
+    return (
+        <div className="form-group">
+            <label htmlFor={name}>{label}</label>
+            <select
+                className="form-control"
+                name={name}
+                onChange={handleChangeEvent}
+                value={field.value}
+                size={10}
+            >
+                <option value={0}></option>
+                {elements.map(element => (
+                    <option key={element.order} value={element.order}>
+                        {element.order} - {element.name}
+                    </option>
+                ))}
+            </select>
+            <div className="invalid-feedback d-block">{field.errors}</div>
+        </div>
+    );
+};
 
 export default FormSelectOrder;

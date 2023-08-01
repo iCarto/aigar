@@ -1,11 +1,13 @@
 export {default as ManageMembersPage} from "./ManageMembersPage";
 export {default as CreateMemberSubpage} from "./CreateMemberSubpage";
+export {default as CreateMemberSidebar} from "./CreateMemberSidebar";
 export {default as ViewMembersPage} from "./ViewMembersPage";
 export {default as ListMembers} from "./ListMembers";
 export {default as ListMemberInvoices} from "./ListMemberInvoices";
 export {default as ViewMemberSubpage} from "./ViewMemberSubpage";
 export {default as MemberPageSidebar} from "./MemberPageSidebar";
 export {default as EditMemberSubpage} from "./EditMemberSubpage";
+export {default as EditMemberSidebar} from "./EditMemberSidebar";
 export {default as MembersFilterForm} from "./MembersFilterForm";
 export {default as ConnectMemberButton} from "./ConnectMemberButton";
 export {default as ConnectMemberModal} from "./ConnectMemberModal";

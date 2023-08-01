@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 const MemberNewButton = () => {
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate("/socios/nuevo");
+        navigate("/socios/nuevo/crear");
     };
 
     return (

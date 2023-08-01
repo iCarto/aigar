@@ -1,21 +1,12 @@
-import {useNavigate} from "react-router-dom";
 import {ActionsSidebarMenu} from "base/ui/menu";
 import {EditButton} from "base/common";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
-import Button from "@mui/material/Button";
+import {CreateInvoiceButton} from "invoice/presentational";
 
 const MemberPageSidebar = ({member, numInvoices}) => {
-    const navigate = useNavigate();
-
-    const handleClickNewInvoice = () => {
-        navigate("/socios/" + member.num_socio + "/nueva_factura");
-    };
-
     const menuActions = [
-        numInvoices === 0 ? (
-            <Button onClick={handleClickNewInvoice}>Crear factura</Button>
-        ) : null,
         <EditButton />,
+        <CreateInvoiceButton disabled={numInvoices} />,
         member.solo_mecha ? (
             <ConnectMemberButton member={member} />
         ) : (

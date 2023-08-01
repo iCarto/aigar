@@ -11,7 +11,7 @@ const AppMenuItem = ({
     ...props
 }) => {
     return (
-        <NavLink to={to} activeClassName="active" className="nav-link">
+        <NavLink to={to} className="nav-link">
             {text}
         </NavLink>
     );

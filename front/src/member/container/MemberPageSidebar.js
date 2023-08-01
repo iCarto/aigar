@@ -6,7 +6,7 @@ import {CreateInvoiceButton} from "invoice/presentational";
 const MemberPageSidebar = ({member, numInvoices}) => {
     const menuActions = [
         <EditButton />,
-        <CreateInvoiceButton disabled={numInvoices} />,
+        <CreateInvoiceButton disabled={!!numInvoices} />,
         member.solo_mecha ? (
             <ConnectMemberButton member={member} />
         ) : (

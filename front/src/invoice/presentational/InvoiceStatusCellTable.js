@@ -1,4 +1,3 @@
-import React from "react";
 import InvoiceStatusLabel from "./InvoiceStatusLabel";
 
 const InvoiceStatusCellTable = ({cell}) => {

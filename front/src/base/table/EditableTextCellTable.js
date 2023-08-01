@@ -1,5 +1,5 @@
 // https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/master/examples/editable-data
-import React from "react";
+import {useEffect, useState} from "react";
 
 const EditableTextCellTable = ({
     cell: {value: initialValue},
@@ -8,8 +8,8 @@ const EditableTextCellTable = ({
     onUpdateData, // This is a custom function that we supplied to our table instance
 }) => {
     // We need to keep and update the state of the cell normally
-    const [value, setValue] = React.useState(initialValue);
-    const [readOnly, setReadOnly] = React.useState(true);
+    const [value, setValue] = useState(initialValue);
+    const [readOnly, setReadOnly] = useState(true);
 
     const onChange = e => {
         setValue(e.target.value);
@@ -22,7 +22,7 @@ const EditableTextCellTable = ({
     };
 
     // If the initialValue is changed external, sync it up with our state
-    React.useEffect(() => {
+    useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
 

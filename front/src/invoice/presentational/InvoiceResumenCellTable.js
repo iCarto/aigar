@@ -1,4 +1,3 @@
-import React from "react";
 import InvoiceStatusIcon from "./InvoiceStatusIcon";
 
 const InvoiceResumenCellTable = ({cell}) => {

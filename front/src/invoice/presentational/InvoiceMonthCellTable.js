@@ -1,4 +1,3 @@
-import React from "react";
 import {DateUtil} from "utilities";
 
 const InvoiceMonthCellTable = ({row}) => {

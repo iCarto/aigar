@@ -1,5 +1,3 @@
-import React from "react";
-
 const InvoiceGroupFieldsCellTable = ({row}) => {
     return (
         <div className="small text-nowrap">

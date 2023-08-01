@@ -1,5 +1,3 @@
-import React from "react";
-
 const MemberStatusCellTable = ({row, column, cell}) => {
     const showOnlyIcons = column.getProps && column.getProps().showOnlyIcons === true;
     if (cell.value === "eliminado")

@@ -1,8 +1,8 @@
 import factory
 
+from back.tests.base_factory import BaseFactory
 from domains.models.locality import Locality
 from domains.models.zone import Zone, build_name as build_zone_name
-from domains.tests.base_factory import BaseFactory
 
 
 class LocalityFactory(BaseFactory[Locality]):  # type: ignore

@@ -7,4 +7,6 @@ export {default as InvoicesFilterFormFields} from "./InvoicesFilterFormFields";
 export {default as InvoiceResumenCellTable} from "./InvoiceResumenCellTable";
 export {default as InvoiceStatusCellTable} from "./InvoiceStatusCellTable";
 export {default as InvoiceStatusLabel} from "./InvoiceStatusLabel";
+export {default as InvoiceGroupFieldsCellTable} from "./InvoiceGroupFieldsCellTable";
+export {default as InvoiceMonthCellTable} from "./InvoiceMonthCellTable";
 export {default as CreateInvoiceButton} from "./CreateInvoiceButton";

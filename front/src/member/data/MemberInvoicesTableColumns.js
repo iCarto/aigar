@@ -1,9 +1,18 @@
-import {InvoiceStatusCellTable} from "invoice/presentational";
-import InvoiceGroupFieldsCellTable from "invoice/presentational/InvoiceGroupFieldsCellTable";
-import InvoiceMonthCellTable from "invoice/presentational/InvoiceMonthCellTable";
+import {
+    InvoiceGroupFieldsCellTable,
+    InvoiceMonthCellTable,
+    InvoiceStatusCellTable,
+} from "invoice/presentational";
 
 export function useMemberInvoicesTableColumns() {
     const tableColumns = [
+        {
+            Header: "Número",
+            accessor: "numero",
+            getProps: () => ({
+                linkAccessor: "id_factura",
+            }),
+        },
         {
             Header: "Mes",
             accessor: "mes_facturacion",

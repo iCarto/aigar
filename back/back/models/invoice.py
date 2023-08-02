@@ -1,9 +1,7 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from back.models.invoicing_month import InvoicingMonth
-
-from .member import Sectores
+from domains.models.zone import Zone
 
 
 fixed_values = {
@@ -27,6 +25,11 @@ class InvoiceStatus(models.TextChoices):
 
 
 class Invoice(models.Model):
+    class Meta(object):
+        verbose_name = "factura"
+        verbose_name_plural = "facturas"
+        ordering = ("id_factura",)
+
     id_factura = models.AutoField(
         primary_key=True,
         verbose_name="Id factura",
@@ -37,37 +40,12 @@ class Invoice(models.Model):
         null=False, blank=False, unique=False, verbose_name="Version", help_text=""
     )
 
-    mes_facturacion = models.ForeignKey(
-        InvoicingMonth,
-        null=False,
-        blank=False,
-        related_name="invoices",
-        related_query_name="invoice",
-        on_delete=models.CASCADE,
-    )
-
-    member = models.ForeignKey(
-        "Member",
-        null=False,
-        blank=False,
-        related_query_name="invoice",
-        on_delete=models.CASCADE,
-    )
-
     nombre = models.CharField(
         max_length=100,
         null=False,
         blank=False,
         unique=False,
         verbose_name="Nombre socio",
-        help_text="",
-    )
-
-    sector = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        choices=Sectores.choices,
-        verbose_name="Sector",
         help_text="",
     )
 
@@ -184,17 +162,39 @@ class Invoice(models.Model):
         blank=False, null=False, default=True, verbose_name="", help_text=""
     )
 
+    member = models.ForeignKey(
+        "Member",
+        null=False,
+        blank=False,
+        related_query_name="invoice",
+        on_delete=models.CASCADE,
+    )
+
+    mes_facturacion = models.ForeignKey(
+        InvoicingMonth,
+        null=False,
+        blank=False,
+        related_name="invoices",
+        related_query_name="invoice",
+        on_delete=models.CASCADE,
+    )
+
+    sector = models.ForeignKey(
+        Zone,
+        on_delete=models.RESTRICT,
+        to_field="name",
+        blank=False,
+        null=False,
+        db_column="zone_name",
+        verbose_name="sector / comunidad",
+    )
+
     def __str__(self):
         return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
 
     def get_absolute_url(self):
         # TODO
         return f"/factura/{self.id_factura}/"
-
-    class Meta:
-        verbose_name = "factura"
-        verbose_name_plural = "facturas"
-        ordering = ("id_factura",)
 
     def update_with_measurement(self, caudal_actual, caudal_anterior):
         self.caudal_actual = int(caudal_actual)

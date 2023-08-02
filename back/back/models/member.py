@@ -4,16 +4,6 @@ from back.fields import RangedIntegerField
 from domains.models.zone import Zone
 
 
-class Sectores(models.IntegerChoices):
-    UNO = 1, ("TIHUAPA NORTE")
-    DOS = 2, ("TIHUAPA NORTE")
-    TRES = 3, ("TIHUAPA NORTE")
-    CUATRO = 4, ("TIHUAPA NORTE")
-    CINCO = 5, ("TLACUXTLI")
-    SEIS = 6, ("TLACUXTLI")
-    SIETE = 7, ("TLACUXTLI")
-
-
 class Member(models.Model):
     # Actualmente el número de socio es representado como un entero y no se "formatea"
     # de otro modo (ie: "015"). Tan sólo se hace 0-pad a cuatro caracteres para que

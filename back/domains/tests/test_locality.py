@@ -9,14 +9,6 @@ from domains.tests import factories
 pytestmark = pytest.mark.django_db
 
 
-def test_not_remove_with_members():
-    """Locality that have members assigned can not be removed."""
-
-
-def test_number_of_sectors_must_be_valid():
-    """The field `number_of_sectors` must match the real number of sectors."""
-
-
 def test_names_must_processed_on_create():
     """`name` and `short_name` should be normalized when creating a Locality."""
     locality = factories.LocalityFactory.build(

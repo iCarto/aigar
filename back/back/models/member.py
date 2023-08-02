@@ -1,6 +1,7 @@
 from django.db import models
 
 from back.fields import RangedIntegerField
+from domains.models.zone import Zone
 
 
 class Sectores(models.IntegerChoices):
@@ -46,14 +47,6 @@ class Member(models.Model):
         blank=False,
         unique=False,
         verbose_name="Nombre",
-        help_text="",
-    )
-
-    sector = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        choices=Sectores.choices,
-        verbose_name="Sector",
         help_text="",
     )
 
@@ -104,6 +97,16 @@ class Member(models.Model):
 
     is_active = models.BooleanField(
         blank=False, null=False, default=True, verbose_name="", help_text=""
+    )
+
+    sector = models.ForeignKey(
+        Zone,
+        on_delete=models.RESTRICT,
+        to_field="name",
+        blank=False,
+        null=False,
+        db_column="zone_name",
+        verbose_name="sector / comunidad",
     )
 
     def __str__(self):

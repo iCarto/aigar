@@ -3,7 +3,7 @@ const InvoicingMonthCellTable = ({row, column}) => {
         invoice => invoice.mes_facturacion === column.invoicingMonth
     );
     const value = invoice ? invoice[column.field] : null;
-    return <div className={column.className}>{value}</div>;
+    return value;
 };
 
 export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unitClass) {

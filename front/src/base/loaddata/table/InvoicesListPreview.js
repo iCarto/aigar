@@ -33,7 +33,7 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
                 accessor: d => `${d.num_socio} - ${d.nombre}`,
                 Cell: LinkCellTable,
                 getProps: () => ({
-                    handleClick: handleClickViewMember,
+                    handleClickWithItem: handleClickViewMember,
                     linkAccessor: "num_socio",
                 }),
             },

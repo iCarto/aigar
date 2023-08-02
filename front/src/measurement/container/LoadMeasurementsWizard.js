@@ -40,7 +40,6 @@ const LoadMeasurementsWizard = () => {
     };
 
     const handleChangeStep = currentStep => {
-        console.log(currentStep);
         setCurrentStep(currentStep);
     };
 

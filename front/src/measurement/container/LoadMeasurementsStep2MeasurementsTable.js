@@ -6,22 +6,36 @@ import {createMeasurement} from "measurement/model";
 
 const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,
-    onValidateStep,
     onChangeMeasurements,
+    onValidateStep,
 }) => {
     const [filter, setFilter] = useState({
         text: "",
         props: false,
     });
 
+    useEffect(() => {
+        reviewMeasurements(measurements);
+    }, []);
+
+    const handleUpdateMeasurement = (rowId, columnId, value) => {
+        const updatedMeasurements = measurements.map((measurement, index) => {
+            if (measurement.id === rowId) {
+                const updatedMeasurement = createMeasurement({
+                    ...measurements[index],
+                    [columnId]: value,
+                });
+                return updatedMeasurement;
+            }
+            return measurement;
+        });
+        reviewMeasurements(updatedMeasurements);
+    };
+
     const getMeasurementsTotalErrors = measurements => {
         return measurements.filter(measurement => measurement.errors.length !== 0)
             .length;
     };
-
-    useEffect(() => {
-        reviewMeasurements(measurements);
-    }, [measurements]);
 
     const reviewMeasurements = measurements => {
         const measurementsWithErrors = measurements.map(measurement => {
@@ -60,21 +74,7 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         });
     };
 
-    const onUpdateMeasurement = (rowId, columnId, value) => {
-        const updatedMeasurements = measurements.map((measurement, index) => {
-            if (measurement.id === rowId) {
-                const updatedMeasurement = createMeasurement({
-                    ...measurements[index],
-                    [columnId]: value,
-                });
-                return updatedMeasurement;
-            }
-            return measurement;
-        });
-        reviewMeasurements(updatedMeasurements);
-    };
-
-    const messagesError = () => {
+    const getErrorMessages = () => {
         const totalRegistersWithErrors = getMeasurementsTotalErrors(measurements);
         if (totalRegistersWithErrors !== 0) {
             return (
@@ -92,12 +92,11 @@ const LoadMeasurementsStep2MeasurementsTable = ({
 
     return (
         <div className="d-flex flex-column justify-content-around">
-            {messagesError()}
+            {getErrorMessages()}
             <LoadDataTableFilter filter={filter} handleChange={handleFilterChange} />
             <LoadMeasurementsList
                 measurements={measurementsFiltered}
-                handleFilterChange={handleFilterChange}
-                onUpdateMeasurement={onUpdateMeasurement}
+                onUpdateMeasurement={handleUpdateMeasurement}
             />
         </div>
     );

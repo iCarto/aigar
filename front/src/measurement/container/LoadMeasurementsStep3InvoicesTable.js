@@ -27,6 +27,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
                 onValidateStep(true);
             })
             .catch(error => {
+                console.log(error);
                 onValidateStep(false);
             });
     }, [id_mes_facturacion, measurements]);

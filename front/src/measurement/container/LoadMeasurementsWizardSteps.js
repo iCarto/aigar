@@ -1,8 +1,10 @@
 import {useParams} from "react-router-dom";
-import LoadMeasurementsStep1ReadFile from "./LoadMeasurementsStep1ReadFile";
-import LoadMeasurementsStep2MeasurementsTable from "./LoadMeasurementsStep2MeasurementsTable";
-import LoadMeasurementsStep3InvoicesTable from "./LoadMeasurementsStep3InvoicesTable";
-import LoadMeasurementsStep4Result from "./LoadMeasurementsStep4Result";
+import {
+    LoadMeasurementsStep1ReadFile,
+    LoadMeasurementsStep2MeasurementsTable,
+    LoadMeasurementsStep3InvoicesTable,
+    LoadMeasurementsStep4Result,
+} from ".";
 
 const LoadMeasurementsWizardSteps = ({
     currentStep,

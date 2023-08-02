@@ -29,14 +29,14 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
         />
     );
 
-    if (measurements) {
+    if (measurements.length) {
         const columns = [
             {
                 Header: "Socio",
                 accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
                 Cell: LinkCellTable,
                 getProps: () => ({
-                    handleClick: handleClickViewMember,
+                    handleClickWithItem: handleClickViewMember,
                     linkAccessor: "num_socio",
                 }),
             },

@@ -38,8 +38,8 @@ const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
         />,
         <LoadMeasurementsButton
             invoicingMonth={selectedInvoicingMonth}
-            disabled={!isLoadMeasurementsButtonEnabled}
-            // disabled={isLoadMeasurementsButtonEnabled}
+            // disabled={!isLoadMeasurementsButtonEnabled}
+            disabled={isLoadMeasurementsButtonEnabled}
         />,
         <PrintInvoicesButton
             invoices={invoices}
@@ -50,7 +50,7 @@ const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
         <ExportMemberButton disabled={false} />,
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
-            // disabled={!isLoadPaymentsButtonEnabled}
+            disabled={!isLoadPaymentsButtonEnabled}
             // disabled={isLoadPaymentsButtonEnabled}
         />,
     ];

@@ -1,5 +1,6 @@
 const PaginatedTableNavigator = ({
     length,
+    totalItems,
     canPreviousPage,
     gotoPage,
     previousPage,
@@ -12,7 +13,7 @@ const PaginatedTableNavigator = ({
     return (
         <div className="d-flex justify-content-between">
             <div>
-                Mostrando <strong>{length}</strong> de {length}
+                Mostrando <strong>{length}</strong> de {totalItems}
             </div>
             <nav aria-label="Page navigation example">
                 <ul className="pagination justify-content-end">

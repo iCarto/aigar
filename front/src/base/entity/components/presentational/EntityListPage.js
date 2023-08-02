@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 
 const EntityListPage = ({
     items,
+    totalItems,
     columns,
     filterForm,
     pageActions = [],
@@ -42,7 +43,11 @@ const EntityListPage = ({
             </Grid>
             <Grid item>
                 {items.length ? (
-                    <SortedPaginatedTable columns={columns} data={items} />
+                    <SortedPaginatedTable
+                        columns={columns}
+                        data={items}
+                        totalItems={totalItems}
+                    />
                 ) : (
                     <NoItemsMessage itemsLength={items?.length} />
                 )}

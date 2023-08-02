@@ -4,7 +4,7 @@ import {useTable, useSortBy, usePagination} from "react-table";
 import {useList} from "base/entity/provider";
 import {PaginatedTableNavigator} from ".";
 
-const SortedPaginatedTable = ({columns, data, onUpdateData = null}) => {
+const SortedPaginatedTable = ({columns, data, totalItems, onUpdateData = null}) => {
     const {
         pageSize,
         pageIndex: controlledPageIndex,
@@ -105,6 +105,7 @@ const SortedPaginatedTable = ({columns, data, onUpdateData = null}) => {
             </table>
             <PaginatedTableNavigator
                 length={data.length}
+                totalItems={totalItems}
                 canPreviousPage={canPreviousPage}
                 previousPage={previousPage}
                 canNextPage={canNextPage}

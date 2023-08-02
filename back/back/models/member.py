@@ -1,27 +1,6 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-
-# https://stackoverflow.com/questions/849142/
-class RangedIntegerField(models.IntegerField):
-    def __init__(self, min_value=None, max_value=None, **kwargs):
-        self.min_value = min_value
-        self.max_value = max_value
-        if "validators" in kwargs:
-            validators = kwargs["validators"]
-        else:
-            validators = []
-        if min_value:
-            validators.append(MinValueValidator(min_value))
-        if max_value:
-            validators.append(MaxValueValidator(max_value))
-        kwargs["validators"] = validators
-        super().__init__(**kwargs)
-
-    def formfield(self, **kwargs):
-        context = {"min_value": self.min_value, "max_value": self.max_value}
-        context.update(kwargs)
-        return super().formfield(**context)
+from back.fields import RangedIntegerField
 
 
 class Sectores(models.IntegerChoices):
@@ -34,23 +13,12 @@ class Sectores(models.IntegerChoices):
     SIETE = 7, ("TLACUXTLI")
 
 
-# Django recomienda usar minúsculas para los modelos y crea tablas: api_member
-# TODO: No se debería permitir borrar socios de la base de datos. Sólo marcarlos
-# como inactivos. Por ejemplo si muere un socio. Su número no debería ser reutilizado
-# y deberían poder revisarse sus datos pero no debería ser eliminado. Ahora se está
-# haciendo un models.PROTECT en la FK de Invoice para evitarlo. Y se crea el campo
-# is_active como idea de futuro
-
-
 class Member(models.Model):
-    # Por defecto django añade un campo `id serial not null primary key`
-    # Dudo si num_socio debería ser String. Y también si deberíamos mantener el
-    # campo id por defecto
     # Actualmente el número de socio es representado como un entero y no se "formatea"
     # de otro modo (ie: "015"). Tan sólo se hace 0-pad a cuatro caracteres para que
     # las facturas tengan un número uniforme de caracteres.
     # Definirlo como Entero Autoincremental simplifica crear el siguiente número,
-    # validar el valor, cambiar el formato.
+    # validar el valor, cambiar el formato. Es un override del `id` por defecto de Django.
 
     # El número de socio es no editable por el usuario, y se calcula automáticamente.
     # El número de socio es "único", no se reutilizan números ya usados. Pero se permite
@@ -58,7 +26,12 @@ class Member(models.Model):
     # usuario. En lugar de usar el -1 podríamos hacer este método async y calcularlo
     # a través de la API, pero en caso de varios usuarios podría haber problemas de
     # concurrencia y siempre habría que recalcular. Sólo afecta a crear nuevo socio, es
-    #  aceptable, no mostrar el nuevo número hasta después de "salvar"
+    # aceptable, no mostrar el nuevo número hasta después de "salvar"
+
+    class Meta(object):
+        verbose_name = "socio"
+        verbose_name_plural = "socios"
+        ordering = ("num_socio",)
 
     num_socio = models.AutoField(
         primary_key=True,
@@ -76,7 +49,6 @@ class Member(models.Model):
         help_text="",
     )
 
-    # Entero por el mismo razonamiento que para `num_socio` */
     sector = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
@@ -85,7 +57,6 @@ class Member(models.Model):
         help_text="",
     )
 
-    # Tiene sentido fijar un max_length exacto?
     medidor = models.CharField(
         max_length=30,
         null=True,
@@ -135,16 +106,9 @@ class Member(models.Model):
         blank=False, null=False, default=True, verbose_name="", help_text=""
     )
 
-    # comunidad. Automático en front a partir de sector
-
     def __str__(self):
         return f"{self.num_socio} - {self.name}"
 
     def get_absolute_url(self):
         # TODO
         return f"/socios/{self.num_socio}/"
-
-    class Meta:
-        verbose_name = "socio"
-        verbose_name_plural = "socios"
-        ordering = ("num_socio",)

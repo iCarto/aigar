@@ -1,37 +1,55 @@
-"""StrictCharField is a customized version of CharField.
-
-Applies philosophy "Parse don't validate" to enforce some rules:
-
-* `empty_strings_allowed = False` so it does not convert `None` to `''` by default
-* Remove leading and trailing whitespaces
-* Replace newline, tab and multiple consecutive spaces with a single space
-* Remove unicode control characters
-* Apply the str.<self.apply> method to the input
-* `max_lenght` by default is `256`
-* `min_length` by default is `2`
-
-Example:
-    name = StrictCharField(
-        null=False,
-        blank=False,
-        apply='capitalize',
-        min_length=3,
-    )
-
-Notes:
-    * Revisar implementación. Se están sobreescribiendo muchos métodos pero la doc no es
-      clara, y el código fuente de Django tampoco.
-    * Revisar naming. ¿NormalizedCharField?, ¿EnforzedCharField?
-"""
-
-
 import unicodedata
 
 from django.core import validators
 from django.db import models
 
 
+class RangedIntegerField(models.IntegerField):
+    # https://stackoverflow.com/questions/849142/
+    def __init__(self, min_value=None, max_value=None, **kwargs):
+        self.min_value = min_value
+        self.max_value = max_value
+        kwargs.setdefault("validators", [])
+        if min_value:
+            kwargs["validators"].append(validators.MinValueValidator(min_value))
+        if max_value:
+            kwargs["validators"].append(validators.MaxValueValidator(max_value))
+
+        super().__init__(**kwargs)
+
+    def formfield(self, **kwargs):
+        context = {"min_value": self.min_value, "max_value": self.max_value}
+        context.update(kwargs)
+        return super().formfield(**context)
+
+
 class StrictCharField(models.CharField):
+    """StrictCharField is a customized version of CharField.
+
+    Applies philosophy "Parse don't validate" to enforce some rules:
+
+    * `empty_strings_allowed = False` so it does not convert `None` to `''` by default
+    * Remove leading and trailing whitespaces
+    * Replace newline, tab and multiple consecutive spaces with a single space
+    * Remove unicode control characters
+    * Apply the str.<self.apply> method to the input
+    * `max_lenght` by default is `256`
+    * `min_length` by default is `2`
+
+    Example:
+        name = StrictCharField(
+            null=False,
+            blank=False,
+            apply='capitalize',
+            min_length=3,
+        )
+
+    Notes:
+        * Revisar implementación. Se están sobreescribiendo muchos métodos pero la doc no es
+          clara, y el código fuente de Django tampoco.
+        * Revisar naming. ¿NormalizedCharField?, ¿EnforzedCharField?
+    """
+
     description = "CharField with enforzed constraints"
     empty_strings_allowed = False
 

@@ -7,13 +7,12 @@ const ListMonthlyInvoicesSidebar = ({
     invoicingMonths,
     handleChangeInvoicingMonth,
     invoices,
-    handleFilterChange,
 }) => {
     const actions = getMonthlyInvoicesActions(selectedInvoicingMonth, invoices);
 
-    const handleDateChange = (year, month) => {
-        handleFilterChange({month, year});
-    };
+    // const handleDateChange = (year, month) => {
+    //     handleFilterChange({month, year});
+    // };
 
     const isCurrentInvoicingMonth = selectedInvoicingMonth.is_open;
     const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;

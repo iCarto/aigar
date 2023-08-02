@@ -1,27 +1,22 @@
 import {useState} from "react";
-import WizardStepInfo from "./WizardStepInfo";
-import WizardStepper from "./WizardStepper";
-import WizardButtons from "./WizardButtons";
-import WizardSidebar from "./WizardSidebar";
+
 import {PageLayout} from "../page";
+import {WizardButtons, WizardSidebar, WizardStepInfo, WizardStepper} from ".";
 
 const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
     const [currentStep, setCurrentStep] = useState(1);
 
     const handleNextStep = () => {
-        setCurrentStep(prevStep =>
-            prevStep >= steps?.length - 1 ? steps?.length : prevStep + 1
-        );
-        handleChangeStep();
+        const newStep =
+            currentStep >= steps?.length - 1 ? steps?.length : currentStep + 1;
+        setCurrentStep(newStep);
+        onChangeStep(newStep);
     };
 
     const handlePrevStep = () => {
-        setCurrentStep(prevStep => (prevStep <= 1 ? 1 : prevStep - 1));
-        handleChangeStep();
-    };
-
-    const handleChangeStep = () => {
-        onChangeStep(currentStep);
+        const newStep = currentStep <= 1 ? 1 : currentStep - 1;
+        setCurrentStep(newStep);
+        onChangeStep(newStep);
     };
 
     const stepper = steps ? (
@@ -49,7 +44,10 @@ const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
     const sidebar = <WizardSidebar />;
 
     const content = (
-        <div className="d-flex flex-column justify-content-between">
+        <div
+            className="d-flex flex-column justify-content-between"
+            style={{marginTop: "24px"}}
+        >
             <div className="mb-4">{stepper}</div>
             <div className="rounded-top">{stepInfo}</div>
             <div className="border p-3">{children}</div>

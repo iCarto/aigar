@@ -7,7 +7,12 @@ import {
 } from "stats/presentational";
 import Grid from "@mui/material/Grid";
 
-const ListInvoicesStatsPage = ({invoices, onChangeStatsField, currentField}) => {
+const ListInvoicesStatsPage = ({
+    invoices,
+    totalInvoices,
+    onChangeStatsField,
+    currentField,
+}) => {
     const fields = [
         {key: "monto", text: "Monto", unit: "$", unitClass: "dollar"},
         {key: "consumo", text: "Consumo", unit: "㎥", unitClass: "cubic-metre"},
@@ -68,6 +73,7 @@ const ListInvoicesStatsPage = ({invoices, onChangeStatsField, currentField}) => 
             </Grid>
             <Grid item>
                 <InvoicesStatsList
+                    totalInvoices={totalInvoices}
                     invoicingMonths={invoicingMonths}
                     invoicesStats={memberInvoiceGroups}
                     selectedField={currentField}

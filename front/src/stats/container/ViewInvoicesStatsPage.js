@@ -54,6 +54,7 @@ const ViewInvoicesStatsPage = () => {
                     {filteredInvoices?.length ? (
                         <ListInvoicesStatsPage
                             invoices={filteredInvoices}
+                            totalInvoices={invoices.length}
                             onChangeStatsField={handleChangeStatsField}
                             currentField={selectedField}
                         />

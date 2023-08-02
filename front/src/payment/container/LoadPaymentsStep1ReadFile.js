@@ -13,20 +13,16 @@ const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
     /* HANDLERS FOR UI EVENTS */
     const handleLoadedDataFile = dataFile => {
         dataFile.errors = LoadDataValidatorService.validatePaymentsFile(dataFile);
-        setDataFiles(prevState => {
-            const updatedDataFiles = [...prevState, dataFile];
-            return updatedDataFiles;
-        });
-        onChangePayments();
+        const updatedDataFiles = [...dataFiles, dataFile];
+        setDataFiles(updatedDataFiles);
+        handleChangePayments();
     };
 
     const handleRemoveDataFile = filename => {
-        setDataFiles(prevState => {
-            const updatedDataFiles = prevState.filter(
-                dataFile => dataFile.file.name !== filename
-            );
-            return updatedDataFiles;
-        });
+        const updatedDataFiles = dataFiles.filter(
+            dataFile => dataFile.file.name !== filename
+        );
+        setDataFiles(updatedDataFiles);
         handleChangePayments();
     };
 
@@ -37,26 +33,23 @@ const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
                 dataFiles.map(dataFile => dataFile.content)
             );
             PaymentService.getPaymentsFromCSVContent(content).then(payments => {
-                handleChangePayments(payments);
+                onChangePayments(payments);
             });
         }
+        console.log({dataFiles});
         onValidateStep(dataFiles.length !== 0 && !hasErrors);
     };
 
-    /* VIEW SUBCOMPONENTS */
-
-    const fileUpload = (
-        <LoadDataFileUpload
-            dataFiles={dataFiles}
-            handleLoadedDataFile={handleLoadedDataFile}
-            handleRemoveDataFile={handleRemoveDataFile}
-            allowedFormats={[".csv", ".txt"]}
-        />
-    );
-
     return (
         <div className="col-12 row justify-content-center">
-            <form className="col-md-8 p-3">{fileUpload}</form>
+            <form className="col-md-8 p-3">
+                <LoadDataFileUpload
+                    dataFiles={dataFiles}
+                    handleLoadedDataFile={handleLoadedDataFile}
+                    handleRemoveDataFile={handleRemoveDataFile}
+                    allowedFormats={[".csv", ".txt"]}
+                />
+            </form>
         </div>
     );
 };

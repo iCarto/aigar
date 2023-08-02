@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 
 const LinkCellTable = ({row, column, cell}) => {
     const navigate = useNavigate();
-    const {linkAccessor, path, handleClick} = column.getProps();
+    const {linkAccessor, path, handleClick, handleClickWithItem} = column.getProps();
 
     const url = path
         ? `${path}/${row.original[linkAccessor]}`
@@ -10,7 +10,8 @@ const LinkCellTable = ({row, column, cell}) => {
 
     const handleClickLink = () => {
         if (handleClick) handleClick();
-        navigate(url);
+        else if (handleClickWithItem) handleClickWithItem(row.original[linkAccessor]);
+        else navigate(url);
     };
 
     return (

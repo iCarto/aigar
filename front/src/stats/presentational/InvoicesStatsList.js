@@ -3,6 +3,7 @@ import {useInvoiceStatsTableColumns} from "stats/data";
 
 const InvoicesStatsList = ({
     invoicesStats,
+    totalInvoices,
     invoicingMonths,
     selectedField,
     unitClass,
@@ -14,7 +15,11 @@ const InvoicesStatsList = ({
     );
 
     return invoicesStats ? (
-        <SortedPaginatedTable columns={columns} data={invoicesStats} />
+        <SortedPaginatedTable
+            columns={columns}
+            data={invoicesStats}
+            totalItems={totalInvoices}
+        />
     ) : null;
 };
 

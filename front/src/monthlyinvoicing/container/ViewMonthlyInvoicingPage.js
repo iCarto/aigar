@@ -32,8 +32,9 @@ const ViewMonthlyInvoicingPage = () => {
         }));
     };
 
+    console.log(selectedInvoicingMonth);
+
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {
-        console.log("handleChangeInvoicingMonth", selectedInvoicingMonth);
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
@@ -57,7 +58,7 @@ const ViewMonthlyInvoicingPage = () => {
                         invoicingMonths={invoicingMonths}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         handleChangeInvoicingMonth={handleChangeInvoicingMonth}
-                        handleFilterChange={undefined}
+                        // handleFilterChange={undefined}
                     />
                 ) : null
             }
@@ -68,10 +69,10 @@ const ViewMonthlyInvoicingPage = () => {
                 <ListMonthlyInvoicesPage
                     invoices={filteredInvoices}
                     totalInvoices={invoices.length}
-                    invoicingMonths={invoicingMonths}
-                    selectedInvoicingMonth={selectedInvoicingMonth}
+                    // invoicingMonths={invoicingMonths}
+                    // selectedInvoicingMonth={selectedInvoicingMonth}
                     handleFilterChange={handleFilterChange}
-                    handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                    // handleChangeInvoicingMonth={handleChangeInvoicingMonth}
                 />
             )}
         </PageLayout>

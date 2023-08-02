@@ -5,16 +5,33 @@ import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 
 const LoadPaymentsStep3InvoicesTable = ({
-    id_mes_facturacion,
+    invoices,
     payments,
+    id_mes_facturacion,
     onChangeInvoices,
     onValidateStep,
-    invoices,
 }) => {
     const [filter, setFilter] = useState({
         text: "",
         showOnlyErrors: false,
     });
+
+    useEffect(() => {
+        if (!invoices.length) {
+            InvoicingMonthService.previewInvoicesWithPayments(
+                id_mes_facturacion,
+                payments
+            )
+                .then(fetchedInvoices => {
+                    onChangeInvoices(fetchedInvoices);
+                    onValidateStep(true);
+                })
+                .catch(error => {
+                    console.log(error);
+                    onValidateStep(false);
+                });
+        }
+    }, [id_mes_facturacion, invoices, payments]);
 
     const handleFilterChange = newFilter => {
         setFilter(prevFilter => ({
@@ -45,7 +62,9 @@ const LoadPaymentsStep3InvoicesTable = ({
         });
     };
 
-    const messagesError = () => {
+    const filteredInvoices = invoices ? filterInvoices(invoices) : [];
+
+    const getErrorMessages = () => {
         const totalInvoicesWithErrors = invoices.filter(
             invoice => invoice.errors.length !== 0
         ).length;
@@ -60,29 +79,11 @@ const LoadPaymentsStep3InvoicesTable = ({
         return null;
     };
 
-    useEffect(() => {
-        if (!invoices) {
-            InvoicingMonthService.previewInvoicesWithPayments(
-                id_mes_facturacion,
-                payments
-            )
-                .then(fetchedInvoices => {
-                    onChangeInvoices(fetchedInvoices);
-                    onValidateStep(true);
-                })
-                .catch(error => {
-                    onValidateStep(false);
-                });
-        }
-    }, [id_mes_facturacion, invoices, payments, onChangeInvoices, onValidateStep]);
-
-    const filteredInvoices = invoices ? filterInvoices(invoices) : [];
-
     return (
         <div className="d-flex flex-column justify-content-around">
             {invoices ? (
                 <>
-                    {messagesError()}
+                    {getErrorMessages()}
                     <LoadDataTableFilter
                         filter={filter}
                         handleChange={handleFilterChange}

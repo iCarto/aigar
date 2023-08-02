@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
-import {Modal} from "base/ui/modal";
 import {MemberService} from "member/service";
+import {Modal} from "base/ui/modal";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {ListMemberInvoices} from "member/container";
@@ -39,8 +39,10 @@ const MemberViewModal = ({num_socio, isOpen, onClose}) => {
     ) : (
         <>
             <ErrorMessage message={errorMessage} />
-            <MemberDetail member={member} />
-            {member ? <ListMemberInvoices invoices={member.invoices} /> : null}
+            {member ? <MemberDetail member={member} /> : null}
+            {member?.invoices ? (
+                <ListMemberInvoices invoices={member.invoices} />
+            ) : null}
         </>
     );
 

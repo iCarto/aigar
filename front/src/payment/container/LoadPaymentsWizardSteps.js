@@ -1,8 +1,10 @@
 import {useParams} from "react-router-dom";
-import LoadPaymentsStep1ReadFile from "./LoadPaymentsStep1ReadFile";
-import LoadPaymentsStep2PaymentsTable from "./LoadPaymentsStep2PaymentsTable";
-import LoadPaymentsStep3InvoicesTable from "./LoadPaymentsStep3InvoicesTable";
-import LoadPaymentsStep4Result from "./LoadPaymentsStep4Result";
+import {
+    LoadPaymentsStep1ReadFile,
+    LoadPaymentsStep2PaymentsTable,
+    LoadPaymentsStep3InvoicesTable,
+    LoadPaymentsStep4Result,
+} from ".";
 
 const LoadPaymentsWizardSteps = ({
     currentStep,

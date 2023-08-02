@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 
 const MemberDetail = ({member}) => {
     const getMessage = () => {
-        if (!member.is_active) {
+        if (!member?.is_active) {
             return (
                 <div className="alert alert-danger">
                     Este usuario se encuentra eliminado del sistema.
@@ -40,7 +40,6 @@ const MemberDetail = ({member}) => {
                         label="Sector"
                         value={`${member?.sector} - ${member?.comunidad}`}
                     />
-                    <SectionField label="Observaciones" value={member?.observaciones} />
                 </Grid>
                 <Grid item xs={6}>
                     <SectionField label="Orden" value={member?.orden} />
@@ -53,6 +52,9 @@ const MemberDetail = ({member}) => {
                         label="Consumo reducción fija"
                         value={member?.consumo_reduccion_fija}
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <SectionField label="Observaciones" value={member?.observaciones} />
                 </Grid>
             </Grid>
         </SectionCard>

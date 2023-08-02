@@ -50,7 +50,7 @@ const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
         <ExportMemberButton disabled={false} />,
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
-            disabled={!isLoadPaymentsButtonEnabled}
+            // disabled={!isLoadPaymentsButtonEnabled}
             // disabled={isLoadPaymentsButtonEnabled}
         />,
     ];

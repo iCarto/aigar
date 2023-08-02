@@ -46,6 +46,7 @@ const ViewMembersPage = () => {
             ) : (
                 <ListMembers
                     members={filteredMembers}
+                    totalMembers={members.length}
                     handleFilterChange={handleFilterChange}
                 />
             )}

@@ -4,7 +4,7 @@ import {EntityListPage} from "base/entity/components/presentational";
 import {MemberNewButton} from "member/presentational";
 import {MembersFilterForm} from ".";
 
-const ListMembers = ({members, handleFilterChange}) => {
+const ListMembers = ({members, totalMembers, handleFilterChange}) => {
     const {tableColumns} = useMembersTableColumns();
 
     const pageActions = [<MemberNewButton />];
@@ -12,6 +12,7 @@ const ListMembers = ({members, handleFilterChange}) => {
     return (
         <EntityListPage
             items={members}
+            totalItems={totalMembers}
             columns={tableColumns}
             pageActions={pageActions}
             groupActions={false}

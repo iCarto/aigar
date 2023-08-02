@@ -13,12 +13,24 @@ const LoadPaymentsStep2PaymentsTable = ({
     onChangePayments,
     onValidateStep,
 }) => {
-    const [loading, setLoading] = useState(false);
+    const [invoices, setInvoices] = useState([]);
+    // TO-DO: Handle filter from useList()
     const [filter, setFilter] = useState({
         text: "",
         showOnlyErrors: false,
     });
-    const [invoices, setInvoices] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        InvoicingMonthService.getInvoicingMonthInvoices(id_mes_facturacion).then(
+            invoices => {
+                setInvoices(invoices);
+                reviewPayments(payments, invoices);
+                setLoading(false);
+            }
+        );
+    }, [id_mes_facturacion]);
 
     const handleFilterChange = newFilter => {
         setFilter(prevFilter => ({
@@ -38,14 +50,15 @@ const LoadPaymentsStep2PaymentsTable = ({
             }
             return payment;
         });
-        reviewPayments(updatedPayments);
+        console.log({updatedPayments});
+        reviewPayments(updatedPayments, invoices);
     };
 
     const getPaymentsTotalErrors = payments => {
         return payments.filter(payment => payment.errors.length !== 0).length;
     };
 
-    const findInvoiceForPayment = payment => {
+    const findInvoiceForPayment = (payment, invoices) => {
         let invoiceForPayment = invoices.find(
             invoice => invoice.numero === payment.num_factura
         );
@@ -57,9 +70,9 @@ const LoadPaymentsStep2PaymentsTable = ({
         return invoiceForPayment;
     };
 
-    const reviewPayments = payments => {
-        const paymentsWithErrors = payments.map(payment => {
-            const invoiceForPayment = findInvoiceForPayment(payment);
+    const reviewPayments = (payments, invoices) => {
+        const paymentsWithErrors = payments?.map(payment => {
+            const invoiceForPayment = findInvoiceForPayment(payment, invoices);
             let invoiceFieldsForPayment = {};
             if (invoiceForPayment) {
                 invoiceFieldsForPayment = {
@@ -104,29 +117,18 @@ const LoadPaymentsStep2PaymentsTable = ({
         });
     };
 
-    useEffect(() => {
-        setLoading(true);
-        InvoicingMonthService.getInvoicingMonthInvoices(id_mes_facturacion).then(
-            invoices => {
-                setInvoices(invoices);
-                setLoading(false);
-                reviewPayments(payments);
-            }
-        );
-    }, [id_mes_facturacion, payments]);
-
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
     if (loading) {
         return <Spinner message="Verificando pagos" />;
     }
 
-    if (payments) {
+    if (payments.length) {
         const paymentsFiltered = filterPayments(payments);
 
         return (
             <div className="d-flex flex-column justify-content-around">
-                {totalRegistersWithErrors !== 0 && (
+                {totalRegistersWithErrors && (
                     <div className="alert alert-danger text-center" role="alert">
                         Existen <strong>{totalRegistersWithErrors}</strong> registros
                         con error de un total de <strong>{payments.length}</strong>{" "}
@@ -139,7 +141,6 @@ const LoadPaymentsStep2PaymentsTable = ({
                 />
                 <LoadPaymentsList
                     payments={paymentsFiltered}
-                    handleFilterChange={handleFilterChange}
                     onUpdatePayment={handleUpdatePayment}
                 />
             </div>

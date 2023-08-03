@@ -1,15 +1,14 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers
 from rest_framework_extensions import routers
 
-from back.views.domain import DomainsView
 from back.views.invoice import InvoiceStatsView, InvoiceViewSet
 from back.views.invoicing_month import InvoicingMonthViewSet
 from back.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
 from back.views.member import MemberExportView, MemberViewSet
 from back.views.payment import PaymentInvoicePreview, PaymentViewSet
+from domains import urls as domains_urls
 
 
 class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
@@ -51,7 +50,6 @@ invoicingmonths_router.register(
     parents_query_lookups=["mes_facturacion"],
 )
 
-
 urlpatterns = [
     # The following SPA settings are handled in Django-SPA
     # - everything not matched in Django's urlpatterns goes to /
@@ -69,7 +67,8 @@ urlpatterns = [
     ),
     path("api/members/export", MemberExportView.as_view()),
     path("api/invoices/stats", InvoiceStatsView.as_view()),
-    path("api/domains/<str:entity>", DomainsView.as_view()),
+    # path("api/domains/<str:entity>", DomainsView.as_view()),
+    path("api/domains/", include(domains_urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too
     path("gestion/", admin.site.urls),

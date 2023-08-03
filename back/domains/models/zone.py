@@ -86,12 +86,12 @@ class Zone(models.Model):
     def locality_short_name(self) -> str:
         return self.locality_id
 
-    # def delete(self, *args, **kwargs):
-    #      # solo si no quedan derivados
-    #      if self.name == "Yoko Ono's blog":
-    #         return  # Does not allow to delete
-    #     else:
-    #         super().delete(*args, **kwargs)  # Call the "real" save() method.
+    @property
+    def long_name(self) -> str:
+        locality_long_name = self.locality.name
+        if self.code:
+            return f"{self.code} - {locality_long_name}"
+        return locality_long_name
 
 
 def build_name(code, locality_short_name):

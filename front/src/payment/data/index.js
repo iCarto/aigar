@@ -1,7 +1,7 @@
 const loadPaymentsAndMeasurementsSteps = [
     {
         index: 1,
-        text: "Cargar archivo",
+        text: "Cargar archivos",
         icon: "upload",
         help: "Localice el fichero y súbalo al sistema.",
     },

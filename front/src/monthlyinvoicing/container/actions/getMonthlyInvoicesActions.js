@@ -51,7 +51,7 @@ const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
             // disabled={!isLoadPaymentsButtonEnabled}
-            // disabled={isLoadPaymentsButtonEnabled}
+            disabled={isLoadPaymentsButtonEnabled}
         />,
     ];
 

@@ -6,12 +6,12 @@ import {
     createInvoicingMonths,
     invoicing_months_api_adapter,
     invoicing_month_api_adapter,
-} from "model";
+} from "monthlyinvoicing/model";
 import {
     payments_api_adapter,
     createPayments,
     payments_front_adapter,
-} from "model/Payment";
+} from "payment/model";
 
 const InvoicingMonthService = {
     getNextInvoicingMonthToCreate(invoicingMonth) {

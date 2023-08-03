@@ -3,7 +3,7 @@ import {useLocation} from "react-router-dom";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
-import {DateUtil} from "utilities";
+import {DateUtil} from "base/format/utilities";
 import {OperationWithConfirmationModal} from "base/ui/modal";
 
 const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => {

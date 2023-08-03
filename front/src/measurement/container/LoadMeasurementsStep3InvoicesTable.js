@@ -3,7 +3,8 @@ import {useEffect, useState} from "react";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {Spinner} from "base/common";
-import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
+import {InvoicesListPreview} from "invoice/presentational";
+import {LoadDataTableFilter} from "loaddata/presentational";
 
 const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,

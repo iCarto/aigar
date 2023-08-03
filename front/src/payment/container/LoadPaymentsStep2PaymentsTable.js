@@ -1,12 +1,12 @@
 import {useState, useEffect} from "react";
-import {LoadDataValidatorService} from "validation";
-
-import {Spinner} from "base/common";
-import {LoadPaymentsList} from "../presentational";
-import {LoadDataTableFilter} from "base/loaddata/table";
-import createPayment from "model/Payment";
+import {LoadDataValidatorService} from "validation/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {createPayment} from "payment/model";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
+
+import {LoadPaymentsList} from "../presentational";
+import {LoadDataTableFilter} from "loaddata/presentational";
+import {Spinner} from "base/common";
 
 const LoadPaymentsStep2PaymentsTable = ({
     id_mes_facturacion,

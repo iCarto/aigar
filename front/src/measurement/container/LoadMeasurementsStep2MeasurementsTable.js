@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
-import {LoadDataValidatorService} from "validation";
+import {LoadDataValidatorService} from "validation/service";
 import {createMeasurement} from "measurement/model";
 import {LoadMeasurementsList} from "../presentational";
-import {LoadDataTableFilter} from "base/loaddata/table";
+import {LoadDataTableFilter} from "loaddata/presentational";
 
 const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,

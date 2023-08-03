@@ -1,4 +1,4 @@
-import {DateUtil} from "utilities";
+import {DateUtil} from "base/format/utilities";
 import {IconButtonLink} from "base/common";
 
 const MonthlyInvoicingNavigator = ({

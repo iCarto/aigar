@@ -1,8 +1,6 @@
 export {
-    default as createPayment,
-    createPayments,
-    payment_api_adapter,
-    payments_api_adapter,
-    payment_front_adapter,
-    payments_front_adapter,
-} from "./Payment";
+    default as createInvoicingMonth,
+    invoicing_month_api_adapter,
+    createInvoicingMonths,
+    invoicing_months_api_adapter,
+} from "./InvoicingMonth";

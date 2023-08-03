@@ -1,9 +1,9 @@
-import LoadDataFilesInput from "../presentation/LoadDataFilesInput";
+import {LoadDataFilesInput} from ".";
 
-const LoadDataFileUpload = ({
+const LoadDataFileUploadArea = ({
+    dataFiles,
     allowedFormats,
     handleLoadedDataFile,
-    dataFiles,
     handleRemoveDataFile,
 }) => {
     const RemoveButton = ({filename}) => {
@@ -45,7 +45,6 @@ const LoadDataFileUpload = ({
 
     return (
         <div className="form-group">
-            <label htmlFor="fileUpload">Seleccione el fichero</label>
             <div name="fileUpload" className="form-control-file">
                 <LoadDataFilesInput
                     allowedFormats={allowedFormats}
@@ -60,4 +59,4 @@ const LoadDataFileUpload = ({
     );
 };
 
-export default LoadDataFileUpload;
+export default LoadDataFileUploadArea;

@@ -1,4 +1,4 @@
-import createPayment from "model/Payment";
+import {createPayment} from "payment/model";
 
 const PaymentService = {
     getPaymentsFromCSVContent: function (content) {

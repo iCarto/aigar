@@ -2,7 +2,8 @@ import {useState, useEffect} from "react";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
-import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
+import {LoadDataTableFilter} from "loaddata/presentational";
+import {InvoicesListPreview} from "invoice/presentational";
 import {Spinner} from "base/common";
 
 const LoadPaymentsStep3InvoicesTable = ({

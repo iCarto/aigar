@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
-import {LoadDataValidatorService} from "validation";
-import {LoadDataFileUpload} from "base/loaddata/fileupload";
 import {PaymentService} from "payment/service";
+import {LoadDataValidatorService} from "validation/service";
+import {LoadDataFileUploadArea} from "loaddata/presentational";
 
 const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
     const [dataFiles, setDataFiles] = useState([]);
@@ -10,40 +10,44 @@ const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
         onValidateStep(false);
     }, []);
 
-    /* HANDLERS FOR UI EVENTS */
     const handleLoadedDataFile = dataFile => {
         dataFile.errors = LoadDataValidatorService.validatePaymentsFile(dataFile);
-        const updatedDataFiles = [...dataFiles, dataFile];
-        setDataFiles(updatedDataFiles);
-        handleChangePayments();
+        setDataFiles(prevDataFiles => {
+            const updatedDataFiles = [...prevDataFiles, dataFile];
+            handleChangePayments(updatedDataFiles);
+            return updatedDataFiles;
+        });
     };
 
     const handleRemoveDataFile = filename => {
-        const updatedDataFiles = dataFiles.filter(
-            dataFile => dataFile.file.name !== filename
-        );
-        setDataFiles(updatedDataFiles);
-        handleChangePayments();
+        setDataFiles(prevDataFiles => {
+            const updatedDataFiles = prevDataFiles.filter(
+                dataFile => dataFile.file.name !== filename
+            );
+            handleChangePayments(updatedDataFiles);
+            return updatedDataFiles;
+        });
     };
 
-    const handleChangePayments = () => {
-        const hasErrors = dataFiles.some(dataFile => dataFile.errors.length !== 0);
+    const handleChangePayments = updatedDataFiles => {
+        const hasErrors = updatedDataFiles.some(
+            dataFile => dataFile.errors.length !== 0
+        );
         if (!hasErrors) {
             const content = PaymentService.mergeFileContents(
-                dataFiles.map(dataFile => dataFile.content)
+                updatedDataFiles.map(dataFile => dataFile.content)
             );
             PaymentService.getPaymentsFromCSVContent(content).then(payments => {
                 onChangePayments(payments);
             });
         }
-        console.log({dataFiles});
-        onValidateStep(dataFiles.length !== 0 && !hasErrors);
+        onValidateStep(updatedDataFiles.length !== 0 && !hasErrors);
     };
 
     return (
         <div className="col-12 row justify-content-center">
             <form className="col-md-8 p-3">
-                <LoadDataFileUpload
+                <LoadDataFileUploadArea
                     dataFiles={dataFiles}
                     handleLoadedDataFile={handleLoadedDataFile}
                     handleRemoveDataFile={handleRemoveDataFile}

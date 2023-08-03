@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 
+import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {Spinner} from "base/common";
 import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
-import {InvoicingMonthService} from "monthlyinvoicing/service";
 
 const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,
@@ -13,8 +14,10 @@ const LoadMeasurementsStep3InvoicesTable = ({
 }) => {
     const [filter, setFilter] = useState({
         text: "",
+        showOnlyErrors: false,
     });
     const [measurementsWithoutInvoice, setMeasurementsWithoutInvoice] = useState([]);
+    const {filterMonthlyData} = useFilterMonthlyData();
 
     useEffect(() => {
         InvoicingMonthService.previewInvoicesWithMeasurements(
@@ -57,31 +60,12 @@ const LoadMeasurementsStep3InvoicesTable = ({
         setFilter(prevState => ({...prevState, ...newFilter}));
     };
 
-    const filterByText = (invoice, filterText) => {
-        return (
-            invoice.numero.indexOf(filterText) >= 0 ||
-            invoice.num_socio.toString().indexOf(filterText) >= 0 ||
-            invoice.nombre.toLowerCase().indexOf(filterText.toLowerCase()) >= 0
-        );
+    const getTotalErrors = items => {
+        return items.filter(item => item.errors.length !== 0).length;
     };
 
-    const filterMeasurements = invoices => {
-        return invoices.filter(invoice => {
-            let filtered = true;
-            if (filter.text != null && filter.text !== "") {
-                filtered = filterByText(invoice, filter.text);
-            }
-            if (filter.showOnlyErrors === "true") {
-                filtered = filtered && invoice.errors.length !== 0;
-            }
-            return filtered;
-        });
-    };
-
-    const messagesError = () => {
-        const totalInvoicesWithErrors = invoices.filter(
-            invoice => invoice.errors.length !== 0
-        ).length;
+    const getErrorMessages = () => {
+        const totalInvoicesWithErrors = getTotalErrors(invoices);
         if (totalInvoicesWithErrors !== 0) {
             return (
                 <div className="alert alert-warning text-center" role="alert">
@@ -93,7 +77,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
         return null;
     };
 
-    const measurementsWithoutInvoiceError = () => {
+    const getMeasurementsWithoutInvoiceError = () => {
         if (measurementsWithoutInvoice.length !== 0) {
             return (
                 <div className="alert alert-danger text-center" role="alert">
@@ -107,17 +91,17 @@ const LoadMeasurementsStep3InvoicesTable = ({
         return null;
     };
 
-    const filteredInvoices = invoices ? filterMeasurements(invoices) : [];
+    const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
 
     return (
         <div className="d-flex flex-column justify-content-around">
             {invoices ? (
                 <>
-                    {measurementsWithoutInvoiceError()}
-                    {messagesError()}
+                    {getMeasurementsWithoutInvoiceError()}
+                    {getErrorMessages()}
                     <LoadDataTableFilter
                         filter={filter}
-                        handleChange={handleFilterChange}
+                        onChange={handleFilterChange}
                     />
                     <InvoicesListPreview
                         invoices={filteredInvoices}

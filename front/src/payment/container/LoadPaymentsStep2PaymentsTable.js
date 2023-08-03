@@ -6,6 +6,7 @@ import {LoadPaymentsList} from "../presentational";
 import {LoadDataTableFilter} from "base/loaddata/table";
 import createPayment from "model/Payment";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 
 const LoadPaymentsStep2PaymentsTable = ({
     id_mes_facturacion,
@@ -14,12 +15,13 @@ const LoadPaymentsStep2PaymentsTable = ({
     onValidateStep,
 }) => {
     const [invoices, setInvoices] = useState([]);
-    // TO-DO: Handle filter from useList()
     const [filter, setFilter] = useState({
         text: "",
         showOnlyErrors: false,
     });
     const [loading, setLoading] = useState(false);
+
+    const {filterMonthlyData} = useFilterMonthlyData();
 
     useEffect(() => {
         setLoading(true);
@@ -32,13 +34,6 @@ const LoadPaymentsStep2PaymentsTable = ({
         );
     }, [id_mes_facturacion]);
 
-    const handleFilterChange = newFilter => {
-        setFilter(prevFilter => ({
-            ...prevFilter,
-            ...newFilter,
-        }));
-    };
-
     const handleUpdatePayment = (rowId, columnId, value) => {
         const updatedPayments = payments.map(payment => {
             if (payment.id === rowId) {
@@ -50,7 +45,6 @@ const LoadPaymentsStep2PaymentsTable = ({
             }
             return payment;
         });
-        console.log({updatedPayments});
         reviewPayments(updatedPayments, invoices);
     };
 
@@ -95,26 +89,11 @@ const LoadPaymentsStep2PaymentsTable = ({
         onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0);
     };
 
-    const filterByText = (payment, filterText) => {
-        return (
-            payment.nombre_socio.indexOf(filterText) >= 0 ||
-            payment.num_socio.toString().indexOf(filterText) >= 0 ||
-            payment.num_factura.toString().indexOf(filterText) >= 0 ||
-            payment.fecha.toString().indexOf(filterText) >= 0
-        );
-    };
-
-    const filterPayments = payments => {
-        return payments.filter(payment => {
-            let filtered = true;
-            if (filter.text !== null && filter.text !== "") {
-                filtered = filterByText(payment, filter.text);
-            }
-            if (filter.showOnlyErrors === "true") {
-                filtered = filtered && payment.errors.length !== 0;
-            }
-            return filtered;
-        });
+    const handleFilterChange = newFilter => {
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            ...newFilter,
+        }));
     };
 
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
@@ -124,7 +103,7 @@ const LoadPaymentsStep2PaymentsTable = ({
     }
 
     if (payments.length) {
-        const paymentsFiltered = filterPayments(payments);
+        const paymentsFiltered = filterMonthlyData(payments, filter);
 
         return (
             <div className="d-flex flex-column justify-content-around">
@@ -135,10 +114,7 @@ const LoadPaymentsStep2PaymentsTable = ({
                         registros leídos.
                     </div>
                 )}
-                <LoadDataTableFilter
-                    filter={filter}
-                    handleChange={handleFilterChange}
-                />
+                <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
                 <LoadPaymentsList
                     payments={paymentsFiltered}
                     onUpdatePayment={handleUpdatePayment}

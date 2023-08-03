@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
 
-import {Spinner} from "base/common";
-import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
+import {InvoicesListPreview, LoadDataTableFilter} from "base/loaddata/table";
+import {Spinner} from "base/common";
 
 const LoadPaymentsStep3InvoicesTable = ({
     invoices,
@@ -15,6 +16,10 @@ const LoadPaymentsStep3InvoicesTable = ({
         text: "",
         showOnlyErrors: false,
     });
+
+    const {filterMonthlyData} = useFilterMonthlyData();
+
+    const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
 
     useEffect(() => {
         if (!invoices.length) {
@@ -40,30 +45,6 @@ const LoadPaymentsStep3InvoicesTable = ({
         }));
     };
 
-    const filterByText = (invoice, filterText) => {
-        return (
-            invoice.numero.indexOf(filterText) >= 0 ||
-            invoice.num_socio.toString().indexOf(filterText) >= 0 ||
-            invoice.nombre.toString().toLowerCase().indexOf(filterText.toLowerCase()) >=
-                0
-        );
-    };
-
-    const filterInvoices = invoices => {
-        return invoices.filter(invoice => {
-            let filtered = true;
-            if (filter.text != null && filter.text !== "") {
-                filtered = filterByText(invoice, filter.text);
-            }
-            if (filter.showOnlyErrors === "true") {
-                filtered = filtered && invoice.errors.length !== 0;
-            }
-            return filtered;
-        });
-    };
-
-    const filteredInvoices = invoices ? filterInvoices(invoices) : [];
-
     const getErrorMessages = () => {
         const totalInvoicesWithErrors = invoices.filter(
             invoice => invoice.errors.length !== 0
@@ -86,7 +67,7 @@ const LoadPaymentsStep3InvoicesTable = ({
                     {getErrorMessages()}
                     <LoadDataTableFilter
                         filter={filter}
-                        handleChange={handleFilterChange}
+                        onChange={handleFilterChange}
                     />
                     <InvoicesListPreview
                         invoices={filteredInvoices}

@@ -1,13 +1,13 @@
 import {useState, useEffect} from "react";
 import _ from "underscore";
 
-const LoadDataTableFilter = ({filter, handleChange}) => {
+const LoadDataTableFilter = ({filter, onChange}) => {
     const [text, setText] = useState(filter.text);
     const [showOnlyErrors, setShowOnlyErrors] = useState(filter.showOnlyErrors);
 
     useEffect(() => {
         const handleChangeDebounced = _.debounce(function () {
-            handleChange({
+            onChange({
                 text: text,
                 showOnlyErrors: showOnlyErrors,
             });
@@ -16,14 +16,17 @@ const LoadDataTableFilter = ({filter, handleChange}) => {
         return () => {
             handleChangeDebounced.cancel();
         };
-    }, [text, showOnlyErrors, handleChange]);
+    }, [text, showOnlyErrors]);
 
     const handleTextChange = event => {
         setText(event.target.value);
+        onChange({text: event.target.value});
     };
 
     const handleShowOnlyErrorsChange = event => {
-        setShowOnlyErrors(event.target.value);
+        const value = JSON.parse(event.target.value);
+        setShowOnlyErrors(value);
+        onChange({showOnlyErrors: value});
     };
 
     const selectShowOnlyErrors = (

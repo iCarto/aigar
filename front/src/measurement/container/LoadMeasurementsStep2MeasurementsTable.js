@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
+import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadDataValidatorService} from "validation";
+import {createMeasurement} from "measurement/model";
 import {LoadMeasurementsList} from "../presentational";
 import {LoadDataTableFilter} from "base/loaddata/table";
-import {createMeasurement} from "measurement/model";
 
 const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,
@@ -11,8 +12,10 @@ const LoadMeasurementsStep2MeasurementsTable = ({
 }) => {
     const [filter, setFilter] = useState({
         text: "",
-        props: false,
+        showOnlyErrors: false,
     });
+
+    const {filterMonthlyData} = useFilterMonthlyData();
 
     useEffect(() => {
         reviewMeasurements(measurements);
@@ -32,7 +35,7 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         reviewMeasurements(updatedMeasurements);
     };
 
-    const getMeasurementsTotalErrors = measurements => {
+    const getTotalErrors = measurements => {
         return measurements.filter(measurement => measurement.errors.length !== 0)
             .length;
     };
@@ -45,37 +48,15 @@ const LoadMeasurementsStep2MeasurementsTable = ({
             });
         });
         onChangeMeasurements(measurementsWithErrors);
-        onValidateStep(getMeasurementsTotalErrors(measurementsWithErrors) === 0);
+        onValidateStep(getTotalErrors(measurementsWithErrors) === 0);
     };
 
     const handleFilterChange = newFilter => {
         setFilter(prevState => ({...prevState, ...newFilter}));
     };
 
-    const filterByText = (measurement, filterText) => {
-        return (
-            measurement.nombre_socio.toLowerCase().indexOf(filterText.toLowerCase()) >=
-                0 ||
-            measurement.num_socio.toString().indexOf(filterText) >= 0 ||
-            measurement.medidor.toString().indexOf(filterText) >= 0
-        );
-    };
-
-    const filterMeasurements = measurements => {
-        return measurements.filter(measurement => {
-            let filtered = true;
-            if (filter.text != null && filter.text !== "") {
-                filtered = filterByText(measurement, filter.text);
-            }
-            if (filter.showOnlyErrors === "true") {
-                filtered = filtered && measurement.errors.length !== 0;
-            }
-            return filtered;
-        });
-    };
-
     const getErrorMessages = () => {
-        const totalRegistersWithErrors = getMeasurementsTotalErrors(measurements);
+        const totalRegistersWithErrors = getTotalErrors(measurements);
         if (totalRegistersWithErrors !== 0) {
             return (
                 <div className="alert alert-danger text-center" role="alert">
@@ -88,14 +69,14 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         return null;
     };
 
-    const measurementsFiltered = filterMeasurements(measurements);
+    const filteredMeasurements = filterMonthlyData(measurements, filter);
 
     return (
         <div className="d-flex flex-column justify-content-around">
             {getErrorMessages()}
-            <LoadDataTableFilter filter={filter} handleChange={handleFilterChange} />
+            <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
             <LoadMeasurementsList
-                measurements={measurementsFiltered}
+                measurements={filteredMeasurements}
                 onUpdateMeasurement={handleUpdateMeasurement}
             />
         </div>

@@ -49,6 +49,7 @@ const LoadPaymentsWizard = () => {
 
     return (
         <Wizard
+            heading="Importar pagos"
             steps={wizardSteps}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}

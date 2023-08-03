@@ -49,6 +49,7 @@ const LoadMeasurementsWizard = () => {
 
     return (
         <Wizard
+            heading="Importar lecturas"
             steps={wizardSteps}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}

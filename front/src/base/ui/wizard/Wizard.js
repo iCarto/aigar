@@ -1,9 +1,10 @@
 import {useState} from "react";
 
 import {PageLayout} from "../page";
+import {PageHeading} from "../heading";
 import {WizardButtons, WizardSidebar, WizardStepInfo, WizardStepper} from ".";
 
-const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
+const Wizard = ({heading, steps, isValidStep, onChangeStep, children}) => {
     const [currentStep, setCurrentStep] = useState(1);
 
     const handleNextStep = () => {
@@ -46,9 +47,10 @@ const Wizard = ({steps, isValidStep, onChangeStep, children}) => {
     const content = (
         <div
             className="d-flex flex-column justify-content-between"
-            style={{marginTop: "24px"}}
+            style={{marginTop: "12px"}}
         >
-            <div className="mb-4">{stepper}</div>
+            <PageHeading heading={heading} />
+            <div className="mb-4 mt-3">{stepper}</div>
             <div className="rounded-top">{stepInfo}</div>
             <div className="border p-3">{children}</div>
             <div className="border-left border-right border-bottom rounded-bottom p-3">

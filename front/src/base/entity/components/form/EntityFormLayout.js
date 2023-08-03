@@ -1,7 +1,7 @@
+import {PageHeading} from "base/ui/heading";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 
 const EntityFormLayout = ({
     onSubmit,
@@ -14,13 +14,7 @@ const EntityFormLayout = ({
     return (
         <Grid container component="form" onSubmit={onSubmit} justifyContent="center">
             <Grid item my={2} xs={12}>
-                <Typography
-                    component="h1"
-                    variant="h6"
-                    sx={{textAlign: "center", textTransform: "upperCase"}}
-                >
-                    {formTitle}
-                </Typography>
+                <PageHeading heading={formTitle} />
             </Grid>
             {error ? <ErrorMessage message={error} /> : null}
             {form}

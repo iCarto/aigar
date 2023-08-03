@@ -100,7 +100,3 @@ class Member(models.Model):
 
     def __str__(self):
         return f"{self.num_socio} - {self.name}"
-
-    def get_absolute_url(self):
-        # TODO
-        return f"/socios/{self.num_socio}/"

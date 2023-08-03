@@ -4,11 +4,11 @@ from back.models.payment import Payment
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    id_pago = serializers.ReadOnlyField()
-
-    class Meta:
+    class Meta(object):
         model = Payment
         fields = "__all__"
+
+    id_pago = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         payment = Payment.objects.create(**validated_data)

@@ -5,16 +5,15 @@ from back.models.invoice import Invoice, InvoiceStatus
 from back.models.invoicing_month import InvoicingMonth
 from back.models.payment import Payment
 from back.serializers.invoice import InvoiceShortSerializer
-from back.serializers.payment import PaymentSerializer
 
 
 class InvoicingMonthSerializer(serializers.ModelSerializer):
-    id_mes_facturacion = serializers.ReadOnlyField()
-    invoices = InvoiceShortSerializer(many=True, write_only=True, required=False)
-
-    class Meta:
+    class Meta(object):
         model = InvoicingMonth
         fields = "__all__"
+
+    id_mes_facturacion = serializers.ReadOnlyField()
+    invoices = InvoiceShortSerializer(many=True, write_only=True, required=False)
 
     @transaction.atomic
     def create(self, validated_data):

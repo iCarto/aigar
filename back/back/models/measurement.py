@@ -2,6 +2,11 @@ from django.db import models
 
 
 class Measurement(models.Model):
+    class Meta(object):
+        verbose_name = "lectura"
+        verbose_name_plural = "lecturas"
+        ordering = ("id_lectura",)
+
     id_lectura = models.AutoField(
         primary_key=True,
         verbose_name="Id lectura",
@@ -56,12 +61,3 @@ class Measurement(models.Model):
 
     def __str__(self):
         return f"{self.id_lectura} - {self.mes_facturacion} - {self.factura} - {self.caudal_anterior} - {self.caudal_actual} - {self.consumo}"
-
-    def get_absolute_url(self):
-        # TODO
-        return f"/lectura/{self.id_factura}/"
-
-    class Meta:
-        verbose_name = "lectura"
-        verbose_name_plural = "lecturas"
-        ordering = ("id_lectura",)

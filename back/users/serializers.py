@@ -5,12 +5,25 @@ from .models import User
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta(object):
         model = Group
         fields = ("url", "id", "name")
 
 
 class UserSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = User
+        fields = (
+            "url",
+            "id",
+            "username",
+            "first_name",
+            "groups",
+            "last_login",
+            "password",
+        )
+        extra_kwargs = {"password": {"write_only": True, "required": False}}
+
     groups = serializers.SlugRelatedField(
         many=True,
         queryset=Group.objects.all(),
@@ -37,16 +50,3 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
-
-    class Meta:
-        model = User
-        fields = (
-            "url",
-            "id",
-            "username",
-            "first_name",
-            "groups",
-            "last_login",
-            "password",
-        )
-        extra_kwargs = {"password": {"write_only": True, "required": False}}

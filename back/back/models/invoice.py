@@ -191,10 +191,6 @@ class Invoice(models.Model):
     def __str__(self):
         return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
 
-    def get_absolute_url(self):
-        # TODO
-        return f"/factura/{self.id_factura}/"
-
     def update_with_measurement(self, caudal_actual, caudal_anterior):
         self.caudal_actual = int(caudal_actual)
         self.caudal_anterior = (

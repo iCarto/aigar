@@ -2,7 +2,7 @@ from django.db import models
 
 
 class InvoicingMonth(models.Model):
-    class Meta:
+    class Meta(object):
         unique_together = (("anho", "mes"),)
 
     id_mes_facturacion = models.TextField(
@@ -32,7 +32,3 @@ class InvoicingMonth(models.Model):
 
     def __str__(self):
         return f"{self.anho} - {self.mes} - {self.is_open}"
-
-    def get_absolute_url(self):
-        # TODO
-        return f"/mes_facturacion/{self.id_factura}/"

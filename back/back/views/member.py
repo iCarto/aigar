@@ -11,7 +11,6 @@ from back.serializers.member import MemberExportSerializer, MemberSerializer
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
-    # permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         queryset = Member.objects.all()

@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Payment(models.Model):
-    class Meta:
+    class Meta(object):
         verbose_name = "pago"
         verbose_name_plural = "pagos"
         ordering = ("id_pago",)
@@ -45,7 +45,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.id_pago} - {self.mes_facturacion} - {self.factura} - {self.fecha} - {self.monto}"
-
-    def get_absolute_url(self):
-        # TODO
-        return f"/pago/{self.id_factura}/"

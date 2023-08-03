@@ -7,11 +7,11 @@ from back.models.member import Member
 
 
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
-    num_socio = serializers.ReadOnlyField()
-
-    class Meta:
+    class Meta(object):
         model = Member
         fields = "__all__"
+
+    num_socio = serializers.ReadOnlyField()
 
     @transaction.atomic
     def create(self, validated_data):
@@ -65,7 +65,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MemberShortSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta(object):
         model = Member
         fields = [
             "num_socio",
@@ -78,18 +78,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
 
 
 class MemberExportSerializer(serializers.ModelSerializer):
-    id = serializers.SerializerMethodField()
-    num_socio = serializers.ReadOnlyField()
-    lectura_anterior = serializers.SerializerMethodField()
-    lectura = serializers.SerializerMethodField()
-    consumo_calculado = serializers.SerializerMethodField()
-    tarifa_calculada = serializers.SerializerMethodField()
-    cambio_medidor = serializers.SerializerMethodField()
-    cuota_fija = serializers.SerializerMethodField()
-    comision = serializers.SerializerMethodField()
-    ahorro = serializers.SerializerMethodField()
-
-    class Meta:
+    class Meta(object):
         model = Member
         fields = [
             "id",
@@ -107,6 +96,17 @@ class MemberExportSerializer(serializers.ModelSerializer):
             "comision",
             "ahorro",
         ]
+
+    id = serializers.SerializerMethodField()
+    num_socio = serializers.ReadOnlyField()
+    lectura_anterior = serializers.SerializerMethodField()
+    lectura = serializers.SerializerMethodField()
+    consumo_calculado = serializers.SerializerMethodField()
+    tarifa_calculada = serializers.SerializerMethodField()
+    cambio_medidor = serializers.SerializerMethodField()
+    cuota_fija = serializers.SerializerMethodField()
+    comision = serializers.SerializerMethodField()
+    ahorro = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return obj.num_socio

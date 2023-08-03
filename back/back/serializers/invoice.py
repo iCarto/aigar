@@ -6,16 +6,16 @@ from back.serializers.member import MemberShortSerializer
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Invoice
+        exclude = ("member",)
+
     id_factura = serializers.ReadOnlyField()
     num_socio = serializers.PrimaryKeyRelatedField(
         source="member", queryset=Member.objects.all()
     )
     member_data = serializers.SerializerMethodField()
     resumen = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Invoice
-        exclude = ("member",)
 
     def get_member_data(self, obj):
         member_data_serializer = MemberShortSerializer(
@@ -39,7 +39,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceShortSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta(object):
         model = Invoice
         fields = [
             "version",
@@ -65,14 +65,7 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
 
 
 class InvoiceStatsSerializer(serializers.ModelSerializer):
-    num_socio = serializers.IntegerField(source="member.num_socio")
-    mes_abierto = serializers.SerializerMethodField()
-    monto = serializers.SerializerMethodField()
-    deuda = serializers.SerializerMethodField()
-    mora_por_retraso = serializers.SerializerMethodField()
-    mora_por_impago = serializers.SerializerMethodField()
-
-    class Meta:
+    class Meta(object):
         model = Invoice
         fields = [
             "mes_facturacion",
@@ -90,6 +83,13 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "deuda",
             "total",
         ]
+
+    num_socio = serializers.IntegerField(source="member.num_socio")
+    mes_abierto = serializers.SerializerMethodField()
+    monto = serializers.SerializerMethodField()
+    deuda = serializers.SerializerMethodField()
+    mora_por_retraso = serializers.SerializerMethodField()
+    mora_por_impago = serializers.SerializerMethodField()
 
     def get_mes_abierto(self, obj):
         last_invoicing_month = self.context.get("last_invoicing_month", None)

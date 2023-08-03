@@ -21,7 +21,6 @@ class InvoiceViewSet(
     viewsets.ModelViewSet,
 ):
     serializer_class = InvoiceSerializer
-    # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         queryset = Invoice.objects.prefetch_related("member").order_by(

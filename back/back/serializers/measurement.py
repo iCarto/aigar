@@ -4,11 +4,11 @@ from back.models.measurement import Measurement
 
 
 class MeasurementSerializer(serializers.ModelSerializer):
-    id_pago = serializers.ReadOnlyField()
-
-    class Meta:
+    class Meta(object):
         model = Measurement
         fields = "__all__"
+
+    id_pago = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         validated_data["consumo"] = validated_data.get(

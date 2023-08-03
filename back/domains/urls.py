@@ -7,4 +7,7 @@ from domains import views
 router = routers.SimpleRouter()
 router.register("zones", views.ZoneViewSet)
 
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("estados", views.invoice_status_view),
+    path("", include(router.urls)),
+]

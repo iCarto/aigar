@@ -10,3 +10,4 @@ export {default as InvoiceStatusLabel} from "./InvoiceStatusLabel";
 export {default as InvoiceGroupFieldsCellTable} from "./InvoiceGroupFieldsCellTable";
 export {default as InvoiceMonthCellTable} from "./InvoiceMonthCellTable";
 export {default as CreateInvoiceButton} from "./CreateInvoiceButton";
+export {default as InvoicesListPreview} from "./InvoicesListPreview";

@@ -1,6 +1,6 @@
-import CSVFileValidator from "./model/CSVFileValidator";
-import DataValidator from "./model/DataValidator";
-import JSONFileValidator from "./model/JSONFileValidator";
+import CSVFileValidator from "validation/model/CSVFileValidator";
+import DataValidator from "validation/model/DataValidator";
+import JSONFileValidator from "validation/model/JSONFileValidator";
 
 const LoadDataValidatorService = {
     validateFile(fileObject, validator) {

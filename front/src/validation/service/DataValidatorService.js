@@ -1,4 +1,4 @@
-import DataValidator from "./model/DataValidator";
+import DataValidator from "../model/DataValidator";
 
 const DataValidatorService = {
     validateEntry(entryObject, validator) {

@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
-import {DataValidatorService} from "validation";
+import {DataValidatorService} from "validation/service";
 
 import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";

@@ -1,4 +1,4 @@
-import {DateUtil} from "utilities";
+import {DateUtil} from "base/format/utilities";
 
 import {SectionField, SectionSummaryCard} from "base/ui/section/presentational";
 import {InvoiceStatusLabel} from ".";

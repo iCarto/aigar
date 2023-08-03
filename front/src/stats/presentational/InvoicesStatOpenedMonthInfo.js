@@ -1,4 +1,4 @@
-import {NumberUtil} from "utilities";
+import {NumberUtil} from "base/format/utilities";
 
 const InvoicesStatOpenedMonthInfo = ({invoices}) => {
     const debt = invoices

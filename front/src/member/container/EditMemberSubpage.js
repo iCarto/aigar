@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 
 import {MemberService} from "member/service";
-import {DataValidatorService} from "validation";
+import {DataValidatorService} from "validation/service";
 import {createMember} from "member/model";
 import {useMembersList} from "member/provider";
 

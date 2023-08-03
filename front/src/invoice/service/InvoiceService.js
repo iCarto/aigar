@@ -5,7 +5,7 @@ import {
     invoice_api_adapter,
     createInvoice,
 } from "invoice/model";
-import {createPayments, payments_front_adapter} from "model/Payment";
+import {createPayments, payments_front_adapter} from "payment/model";
 
 const InvoiceService = {
     getInvoices() {

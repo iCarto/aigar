@@ -4,7 +4,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import {DataValidatorService} from "validation";
+import {DataValidatorService} from "validation/service";
+
 import {createInvoice, createInvoiceForMember} from "invoice/model";
 
 import {InvoiceForm} from "invoice/presentational";

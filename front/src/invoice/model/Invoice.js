@@ -1,4 +1,4 @@
-import {NumberUtil} from "utilities";
+import {NumberUtil} from "base/format/utilities";
 import {getTipoSocio} from "../../member/model/Member";
 
 const SECTORES_COMUNIDADES = {

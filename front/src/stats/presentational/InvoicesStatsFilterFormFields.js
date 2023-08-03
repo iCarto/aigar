@@ -1,6 +1,6 @@
 import {useDomain} from "aigar/domain/provider";
 import {useList} from "base/entity/provider";
-import {DateUtil} from "utilities";
+import {DateUtil} from "base/format/utilities";
 import Grid from "@mui/material/Grid";
 
 const InvoicesStatsFilterFormFields = ({handleChange}) => {

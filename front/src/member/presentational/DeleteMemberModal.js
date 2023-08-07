@@ -19,7 +19,7 @@ const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
 
     const onClickFinished = () => {
         closeModal();
-        navigate("socios");
+        navigate("/socios");
     };
 
     const deleteMember = () => {

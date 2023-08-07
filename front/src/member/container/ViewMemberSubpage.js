@@ -29,7 +29,6 @@ const ViewMemberSubpage = () => {
                 const member = result[0];
                 setMember(member);
                 setInvoices(result[1]);
-                if (!member.is_active) setError("El socio ha sido borrado.");
             })
             .catch(error => {
                 console.log(error);

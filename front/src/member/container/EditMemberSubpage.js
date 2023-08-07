@@ -17,7 +17,7 @@ const EditMemberSubpage = () => {
     const [error, setError] = useState("");
     const [isSaving, setIsSaving] = useState(null);
 
-    const {sortedMembersList} = useMembersList();
+    const {sortedMembersList, fetchMembersList} = useMembersList();
     const {num_socio} = useParams();
     const navigate = useNavigate();
 
@@ -32,6 +32,7 @@ const EditMemberSubpage = () => {
         setIsSaving(true);
         MemberService.updateMember(updatedMember)
             .then(() => {
+                fetchMembersList();
                 navigate(`/socios/${num_socio}`);
             })
             .catch(error => {

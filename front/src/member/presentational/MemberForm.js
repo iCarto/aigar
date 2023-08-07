@@ -38,19 +38,20 @@ const MemberForm = ({
     const formData = getFormDataFromProps();
 
     const handleChange = (name, value) => {
-        const updatedMember = createMember(Object.assign({}, member, {[name]: value}));
+        const updatedMember = createMember({...member, [name]: value});
         onUpdate(updatedMember);
     };
 
-    const handleChangeOrder = (name, updatedMembersList) => {
+    const handleChangeOrder = updatedMembersList => {
         const orderForItem = updatedMembersList.find(
-            item => item.id === member.num_socio
+            item => item.id === member?.num_socio
         ).order;
 
         const updatedMember = createMember({
             ...member,
-            name: orderForItem,
+            orden: orderForItem,
         });
+
         onUpdateMembersList(updatedMembersList);
         onUpdate(updatedMember);
     };

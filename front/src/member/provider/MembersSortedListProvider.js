@@ -7,11 +7,15 @@ export default function MemberSortedListProvider({children}) {
     const [sortedMembersList, setSortedMembersList] = useState([]);
 
     useEffect(() => {
+        fetchMembersList();
+    }, []);
+
+    const fetchMembersList = () => {
         MemberService.getMembers().then(members => {
             const sortedList = sortMembers(members);
             setSortedMembersList(sortedList);
         });
-    }, []);
+    };
 
     const sortMembers = members => {
         let membersWithOrder = members
@@ -31,6 +35,9 @@ export default function MemberSortedListProvider({children}) {
 
     let value = {
         sortedMembersList,
+        setSortedMembersList,
+        sortMembers,
+        fetchMembersList,
     };
 
     return (

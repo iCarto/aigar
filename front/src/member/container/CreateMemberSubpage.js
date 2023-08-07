@@ -17,7 +17,7 @@ const CreateMemberSubpage = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
-    const {sortedMembersList} = useMembersList();
+    const {sortedMembersList, fetchMembersList} = useMembersList();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,6 +59,7 @@ const CreateMemberSubpage = () => {
         setIsSaving(true);
         MemberService.createMember(updatedMember)
             .then(createdMember => {
+                fetchMembersList();
                 navigate(`/socios/${createdMember.num_socio}`);
             })
             .catch(error => {
@@ -76,16 +77,18 @@ const CreateMemberSubpage = () => {
 
     return (
         <PageLayout sidebar={sidebar}>
-            <MemberForm
-                member={member}
-                membersList={membersList}
-                onSubmit={handleSubmit}
-                onUpdate={handleUpdateForm}
-                onUpdateMembersList={handleUpdateMembersList}
-                isSaving={isSaving}
-                error={errorMessage}
-                validationErrors={validationErrors}
-            />
+            {membersList ? (
+                <MemberForm
+                    member={member}
+                    membersList={membersList}
+                    onSubmit={handleSubmit}
+                    onUpdate={handleUpdateForm}
+                    onUpdateMembersList={handleUpdateMembersList}
+                    isSaving={isSaving}
+                    error={errorMessage}
+                    validationErrors={validationErrors}
+                />
+            ) : null}
         </PageLayout>
     );
 };

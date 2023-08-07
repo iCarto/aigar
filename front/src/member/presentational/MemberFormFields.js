@@ -19,8 +19,8 @@ This component doesn't manage state because the state is stored in the parent co
 const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
     const {sectors} = useDomain();
 
-    const handleChangeOrder = (name, updatedList) => {
-        onChangeOrder(name, updatedList);
+    const handleChangeOrder = (clickedIndex, updatedList) => {
+        onChangeOrder(clickedIndex, updatedList);
     };
 
     const handleChangeField = event => {
@@ -76,13 +76,15 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                     field={formData?.medidor}
                     onChange={handleChangeField}
                 />
-                <FormSelectOrder
-                    label="Orden Ruta"
-                    name="orden"
-                    field={formData?.orden}
-                    elements={members}
-                    onChange={handleChangeOrder}
-                />
+                {members && formData?.orden ? (
+                    <FormSelectOrder
+                        label="Orden Ruta"
+                        name="orden"
+                        field={formData?.orden}
+                        items={members}
+                        onChange={handleChangeOrder}
+                    />
+                ) : null}
                 <FormInput
                     label="Consumo máximo"
                     name="consumo_maximo"

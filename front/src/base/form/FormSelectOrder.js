@@ -1,7 +1,10 @@
-const FormSelectOrder = ({label, name, field, elements, onChange}) => {
-    const updateOrders = newOrden => {
+const FormSelectOrder = ({label, name, field, items, onChange}) => {
+    const handleChangeEvent = event => {
+        const newOrden = parseInt(event.target.value);
+
         const prevOrden = field.value;
-        let updatedElements = elements.map(item => {
+        let updatedItems = items;
+        updatedItems = items.map(item => {
             let orden = item.order;
             if (prevOrden < newOrden) {
                 if (orden === prevOrden) {
@@ -22,17 +25,11 @@ const FormSelectOrder = ({label, name, field, elements, onChange}) => {
                 name: item.name,
             };
         });
-
-        updatedElements.sort((a, b) => {
+        updatedItems.sort((a, b) => {
             return a.order - b.order;
         });
 
-        return updatedElements;
-    };
-
-    const handleChangeEvent = event => {
-        const updatedList = updateOrders(parseInt(event.target.value));
-        onChange(name, updatedList);
+        onChange(updatedItems);
     };
 
     return (
@@ -45,14 +42,14 @@ const FormSelectOrder = ({label, name, field, elements, onChange}) => {
                 value={field.value}
                 size={10}
             >
-                <option value={0}></option>
-                {elements.map(element => (
-                    <option key={element.order} value={element.order}>
+                <option value=""></option>
+                {items?.map((element, index) => (
+                    <option key={index} value={element.order}>
                         {element.order} - {element.name}
                     </option>
                 ))}
             </select>
-            <div className="invalid-feedback d-block">{field.errors}</div>
+            <div className="invalid-feedback d-block">{field?.errors}</div>
         </div>
     );
 };

@@ -18,8 +18,41 @@ const MemberDetail = ({member}) => {
             {getMessage()}
             <Grid container>
                 <Grid item xs={6}>
-                    <SectionField label="Nº socio/a" value={member?.num_socio} />
-                    <SectionField label="Nombre" value={member?.name} />
+                    <SectionField
+                        label="Nombre"
+                        value={member?.name}
+                        containerWidth="short"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <SectionField
+                        label="Nº socio/a"
+                        value={member?.num_socio}
+                        containerWidth="short"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <SectionField
+                        label="Medidor"
+                        value={member?.medidor}
+                        containerWidth="short"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <SectionField
+                        label="Orden"
+                        value={member?.orden}
+                        containerWidth="short"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <SectionField
+                        label="Sector"
+                        value={`${member?.sector} - ${member?.comunidad}`}
+                        containerWidth="short"
+                    />
+                </Grid>
+                <Grid item xs={6}>
                     <SectionField
                         label="Tipo de socio/a"
                         value={
@@ -35,22 +68,21 @@ const MemberDetail = ({member}) => {
                                 </strong>
                             )
                         }
-                    />
-                    <SectionField
-                        label="Sector"
-                        value={`${member?.sector} - ${member?.comunidad}`}
+                        containerWidth="short"
                     />
                 </Grid>
                 <Grid item xs={6}>
-                    <SectionField label="Orden" value={member?.orden} />
-                    <SectionField label="Medidor" value={member?.medidor} />
                     <SectionField
                         label="Consumo máximo"
                         value={member?.consumo_maximo}
+                        containerWidth="short"
                     />
+                </Grid>
+                <Grid item xs={6}>
                     <SectionField
                         label="Consumo reducción fija"
                         value={member?.consumo_reduccion_fija}
+                        containerWidth="short"
                     />
                 </Grid>
                 <Grid item xs={12}>

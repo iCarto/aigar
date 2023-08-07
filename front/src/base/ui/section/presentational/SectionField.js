@@ -33,7 +33,6 @@ const SectionField = ({
     labelIcon = null,
     containerWidth = "",
     valueCustomStyle = {},
-    customValueStyle = null,
     linkPath = null,
     editButton = false,
     editButtonPath = "",
@@ -78,11 +77,7 @@ const SectionField = ({
 
     const regularField = (
         <>
-            <Typography
-                variant="subtitle2"
-                component="p"
-                sx={{...valueStyle, ...customValueStyle} || valueStyle}
-            >
+            <Typography variant="subtitle2" component="p" sx={valueStyle}>
                 {value}
             </Typography>
             {helperText && <SectionFieldHelpText text={helperText} />}
@@ -130,7 +125,14 @@ const SectionField = ({
                 )}
                 {label && <Typography sx={labelStyle}>{label}:</Typography>}
             </Grid>
-            <Grid item container xs="auto" sm={6} lg={valueWidth} alignItems="flex-end">
+            <Grid
+                item
+                container
+                xs="auto"
+                sm={6}
+                lg={valueWidth}
+                alignItems="flex-start"
+            >
                 <Grid item>{isValueValid ? typeOfField : emptyField}</Grid>
                 {editButton ? (
                     <Grid item xs={1}>

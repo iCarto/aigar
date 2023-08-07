@@ -57,7 +57,7 @@ const CreateMemberSubpage = () => {
 
     const handleSubmit = updatedMember => {
         setIsSaving(true);
-        MemberService.createMember({updatedMember})
+        MemberService.createMember(updatedMember)
             .then(createdMember => {
                 navigate(`/socios/${createdMember.num_socio}`);
             })

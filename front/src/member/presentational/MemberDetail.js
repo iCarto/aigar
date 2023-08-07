@@ -48,7 +48,7 @@ const MemberDetail = ({member}) => {
                 <Grid item xs={6}>
                     <SectionField
                         label="Sector"
-                        value={`${member?.sector} - ${member?.comunidad}`}
+                        value={`${member?.sector}`}
                         containerWidth="short"
                     />
                 </Grid>

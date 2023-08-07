@@ -32,10 +32,7 @@ const MemberDetailShort = ({member}) => {
                 />
             </Grid>
             <Grid item xs={6}>
-                <SectionField
-                    label="Sector"
-                    value={`${member?.sector} - ${member?.comunidad}`}
-                />
+                <SectionField label="Sector" value={`${member?.sector}`} />
                 <SectionField label="Consumo máximo" value={member?.consumo_maximo} />
                 <SectionField
                     label="Consumo reducción fija"

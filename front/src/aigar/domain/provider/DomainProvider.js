@@ -6,9 +6,16 @@ let DomainContext = createContext(null);
 
 export default function DomainProvider({children}) {
     const [sectors, setSectors] = useState([]);
+    const [sectorsLong, setSectorsLong] = useState([]);
     const [memberTypes, setMemberTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
+
+    const sortInvoicingMonths = invoicingMonths => {
+        return invoicingMonths.sort(
+            (a, b) => b.id_mes_facturacion - a.id_mes_facturacion
+        );
+    };
 
     useEffect(() => {
         Promise.all([
@@ -17,25 +24,17 @@ export default function DomainProvider({children}) {
             DomainService.getInvoiceStatus(),
             InvoicingMonthService.getInvoicingMonths(),
         ]).then(([sectors, memberTypes, invoiceStatus, invoicingMonths]) => {
-            setSectors(sectors);
+            setSectors(sectors.short);
+            setSectorsLong(sectors.long);
             setMemberTypes(memberTypes);
             setInvoiceStatus(invoiceStatus);
-            //TO-DO: Refactor sorting
-            invoicingMonths.sort((a, b) => {
-                if (a.id_mes_facturacion < b.id_mes_facturacion) {
-                    return 1;
-                }
-                if (a.id_mes_facturacion > b.id_mes_facturacion) {
-                    return -1;
-                }
-                return 0;
-            });
-            setInvoicingMonths(invoicingMonths);
+            setInvoicingMonths(sortInvoicingMonths(invoicingMonths));
         });
     }, []);
 
     let value = {
         sectors,
+        sectorsLong,
         memberTypes,
         invoiceStatus,
         invoicingMonths,

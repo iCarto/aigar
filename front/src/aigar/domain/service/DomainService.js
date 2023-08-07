@@ -2,13 +2,17 @@ import {ApiService} from "base/api/service";
 
 const DomainService = {
     getSectors() {
-        return ApiService.get("/domains/sectores").then(response => {
-            return response.map(domainEntity => {
-                return {
-                    key: domainEntity[0],
-                    value: domainEntity[0] + " - " + domainEntity[1],
-                };
-            });
+        return ApiService.get("/domains/zones").then(response => {
+            const shortNames = response.map(domainEntity => ({
+                value: domainEntity.name,
+            }));
+            const longNames = response.map(domainEntity => ({
+                value: domainEntity.long_name,
+            }));
+            return {
+                short: shortNames,
+                long: longNames,
+            };
         });
     },
 

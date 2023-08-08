@@ -18,7 +18,8 @@ const DisconnectMemberButton = ({member}) => {
         <>
             <Button
                 onClick={handleClick}
-                variant="contained"
+                variant="outlined"
+                color="error"
                 startIcon={<FormatColorResetIcon fontSize="small" />}
                 fullWidth
             >

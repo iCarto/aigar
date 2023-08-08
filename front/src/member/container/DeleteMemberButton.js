@@ -19,8 +19,8 @@ const DeleteMemberButton = ({member}) => {
         <>
             <Button
                 onClick={handleClick}
-                variant="contained"
-                color="warning"
+                variant="outlined"
+                color="error"
                 startIcon={<DeleteIcon fontSize="small" />}
                 fullWidth
             >

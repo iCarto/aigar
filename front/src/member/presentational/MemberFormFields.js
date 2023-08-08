@@ -32,19 +32,21 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
     return (
         <Grid container columnSpacing={{xs: 3, xl: 5}} justifyContent="center" my={2}>
             <Grid item xs={5} xl={3}>
-                <FormInput
-                    label="Número"
-                    name="num_socio"
-                    field={formData?.num_socio}
-                    onChange={handleChangeField}
-                    readOnly={true}
-                    small={true}
-                    info={
-                        formData?.num_socio.value === -1
-                            ? "El número de socio se calculará cuando pulse Salvar"
-                            : ""
-                    }
-                />
+                {formData?.num_socio.value === -1 ? null : (
+                    <FormInput
+                        label="Número"
+                        name="num_socio"
+                        field={formData?.num_socio}
+                        onChange={handleChangeField}
+                        readOnly={true}
+                        small={true}
+                        info={
+                            formData?.num_socio.value === -1
+                                ? "El número de socio se calculará cuando pulse Salvar"
+                                : ""
+                        }
+                    />
+                )}
                 <FormInput
                     label="Nombre"
                     name="name"

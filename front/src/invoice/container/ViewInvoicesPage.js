@@ -41,6 +41,7 @@ const ViewInvoicesPage = () => {
             ) : (
                 <ListInvoices
                     invoices={filteredInvoices}
+                    totalInvoices={invoices.length}
                     handleFilterChange={handleFilterChange}
                 />
             )}

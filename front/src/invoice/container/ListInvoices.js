@@ -3,7 +3,7 @@ import {useInvoicesTableColumns} from "../data";
 import EntityListPage from "base/entity/components/presentational/EntityListPage";
 import InvoicesFilterForm from "./InvoicesFilterForm";
 
-const ListInvoices = ({invoices, handleFilterChange}) => {
+const ListInvoices = ({invoices, totalInvoices, handleFilterChange}) => {
     const {tableColumns} = useInvoicesTableColumns();
     const navigate = useNavigate();
 
@@ -22,6 +22,7 @@ const ListInvoices = ({invoices, handleFilterChange}) => {
     return (
         <EntityListPage
             items={invoices}
+            totalItems={totalInvoices}
             columns={tableColumns}
             filterForm={<InvoicesFilterForm handleFilterChange={handleFilterChange} />}
         />

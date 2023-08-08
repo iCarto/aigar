@@ -46,8 +46,8 @@ const MembersFilterFormFields = ({handleChange}) => {
                     onChange={handleInputChange}
                 >
                     <option></option>
-                    {sectors.map(sector => (
-                        <option key={sector.key} value={sector.key}>
+                    {sectors.map((sector, index) => (
+                        <option key={index} value={sector.key}>
                             {sector.value}
                         </option>
                     ))}
@@ -62,8 +62,8 @@ const MembersFilterFormFields = ({handleChange}) => {
                     onChange={handleInputChange}
                 >
                     <option></option>
-                    {memberTypes.map(memberType => (
-                        <option key={memberType.key} value={memberType.key}>
+                    {memberTypes.map((memberType, index) => (
+                        <option key={index} value={memberType.key}>
                             {memberType.value}
                         </option>
                     ))}

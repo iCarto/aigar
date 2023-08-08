@@ -8,15 +8,7 @@ import {
 } from "monthlyinvoicing/container/actions";
 
 const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
-    const getOutputFilename = () => {
-        return (
-            "recibo_" +
-            selectedInvoicingMonth.anho +
-            "_" +
-            selectedInvoicingMonth.mes +
-            "_todos"
-        );
-    };
+    const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
 
     const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;
 
@@ -38,20 +30,20 @@ const getMonthlyInvoicesActions = (selectedInvoicingMonth, invoices) => {
         />,
         <LoadMeasurementsButton
             invoicingMonth={selectedInvoicingMonth}
-            // disabled={!isLoadMeasurementsButtonEnabled}
-            disabled={isLoadMeasurementsButtonEnabled}
+            disabled={!isLoadMeasurementsButtonEnabled}
+            // disabled={isLoadMeasurementsButtonEnabled}
         />,
         <PrintInvoicesButton
             invoices={invoices}
             buttonTitle="3. Imprimir facturas"
-            outputFilename={getOutputFilename()}
+            outputFilename={outputFilename}
             showIcon={false}
         />,
         <ExportMemberButton disabled={false} />,
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
-            // disabled={!isLoadPaymentsButtonEnabled}
-            disabled={isLoadPaymentsButtonEnabled}
+            disabled={!isLoadPaymentsButtonEnabled}
+            // disabled={isLoadPaymentsButtonEnabled}
         />,
     ];
 

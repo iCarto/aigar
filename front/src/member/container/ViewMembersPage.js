@@ -35,10 +35,6 @@ const ViewMembersPage = () => {
         }));
     };
 
-    const handleSubmitCreateMember = num_socio => {
-        console.log("handleSubmitCreateMember", num_socio);
-    };
-
     return (
         <PageLayout>
             {isLoading ? (

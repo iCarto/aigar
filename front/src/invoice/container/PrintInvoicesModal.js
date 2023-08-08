@@ -4,6 +4,7 @@ import {InvoiceService} from "invoice/service";
 import {ESTADOS_FACTURA} from "invoice/model";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";
+import {useNavigateWithReload} from "base/navigation/hooks";
 
 const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -14,15 +15,13 @@ const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename})
         setErrorMessage(null);
 
         try {
-            console.log(invoices);
             const data = {
                 invoices: invoices,
             };
-            const invoicesDocument =
-                await DocXPrintFileService.generateInvoicesDocument(
-                    data,
-                    outputFilename
-                );
+            const invoicesDocument = await DocXPrintFileService.generateInvoicesDocument(
+                data,
+                outputFilename
+            );
             FileService.saveDataToFile(
                 invoicesDocument,
                 outputFilename + ".docx",
@@ -47,23 +46,28 @@ const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename})
                         "No se ha podido actualizar el estado de la factura."
                     );
                 });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
             setOperationStatus(ModalOperationStatus.ERROR);
             setErrorMessage("No se ha podido generar el documento.");
         }
     };
 
-    const closeModal = () => {
+    const handleClose = () => {
+        setErrorMessage(null);
         onClose();
     };
 
-    const onClickAccept = () => {
+    const handleClickAccept = () => {
         printInvoices();
     };
 
-    const onClickFinished = () => {
-        closeModal();
+    const navigate = useNavigateWithReload();
+
+    const handleClickFinished = () => {
+        navigate("", true);
+        setOperationStatus(ModalOperationStatus.START);
+        handleClose();
     };
 
     const modalContentStart = (
@@ -92,9 +96,9 @@ const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename})
     return isOpen ? (
         <OperationWithConfirmationModal
             operationStatus={operationStatus}
-            onClose={closeModal}
-            onClickAccept={onClickAccept}
-            onClickFinished={onClickFinished}
+            onClose={handleClose}
+            onClickAccept={handleClickAccept}
+            onClickFinished={handleClickFinished}
             modalTitle="Imprimir facturas"
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}

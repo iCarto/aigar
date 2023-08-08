@@ -1,7 +1,7 @@
 import {DomainProvider} from "aigar/domain/provider";
 import {EntityFormLayout} from "base/entity/components/form";
 import {ESTADOS_FACTURA, createInvoice, refreshInvoiceValues} from "invoice/model";
-import {MemberDetailShort} from "member/presentational";
+import {MemberDetail} from "member/presentational";
 import {InvoiceDetailShort, InvoiceFormFields} from ".";
 import Grid from "@mui/material/Grid";
 
@@ -66,7 +66,7 @@ const InvoiceForm = ({
             <DomainProvider>
                 <Grid container columnSpacing={1} alignItems="stretch">
                     <Grid item xs={8}>
-                        <MemberDetailShort member={member} />
+                        <MemberDetail member={member} isSummary />
                     </Grid>
                     <Grid item xs={4}>
                         <InvoiceDetailShort invoice={invoice} />

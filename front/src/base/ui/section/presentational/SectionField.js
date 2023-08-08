@@ -33,6 +33,7 @@ const SectionField = ({
     labelIcon = null,
     containerWidth = "",
     valueCustomStyle = {},
+    highlightValue = false,
     linkPath = null,
     editButton = false,
     editButtonPath = "",
@@ -71,7 +72,7 @@ const SectionField = ({
         overflowWrap: "break-word",
         lineHeight: {xs: 1.5, sm: 1.75},
         fontSize: "0.8rem",
-        fontWeight: "regular",
+        fontWeight: highlightValue ? "600" : "regular",
         ...valueCustomStyle,
     };
 

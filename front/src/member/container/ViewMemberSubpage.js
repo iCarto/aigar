@@ -1,14 +1,14 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {ListMemberInvoices} from "member/container";
+import {ListMemberInvoices, MemberPageSidebar} from "member/container";
 import {MemberDetail} from "member/presentational";
-import MemberPageSidebar from "./MemberPageSidebar";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {PageLayout} from "base/ui/page";
+import Grid from "@mui/material/Grid";
 
 const ViewMemberSubpage = () => {
     const [member, setMember] = useState(null);
@@ -54,8 +54,16 @@ const ViewMemberSubpage = () => {
         >
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
-            {member ? <MemberDetail member={member} /> : null}
-            {invoices ? <ListMemberInvoices invoices={invoices} /> : null}
+            {member ? (
+                <Grid item>
+                    <MemberDetail member={member} />
+                </Grid>
+            ) : null}
+            {invoices ? (
+                <Grid item>
+                    <ListMemberInvoices invoices={invoices} />
+                </Grid>
+            ) : null}
         </PageLayout>
     );
 };

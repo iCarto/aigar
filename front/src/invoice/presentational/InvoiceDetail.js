@@ -1,4 +1,4 @@
-import {MemberDetailShort} from "member/presentational";
+import {MemberDetail} from "member/presentational";
 import {SectionCard} from "base/ui/section/presentational";
 import {InvoiceDetailShort} from ".";
 
@@ -10,7 +10,7 @@ const InvoiceDetail = ({invoice, member, payments}) => {
             <Grid container columnSpacing={1} alignItems="stretch">
                 {member ? (
                     <Grid item xs={8}>
-                        <MemberDetailShort member={member} />
+                        <MemberDetail member={member} isSummary />
                     </Grid>
                 ) : null}
                 {invoice ? (

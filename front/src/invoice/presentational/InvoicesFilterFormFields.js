@@ -1,7 +1,7 @@
 import {useDomain} from "aigar/domain/provider";
 import {useList} from "base/entity/provider";
-import Grid from "@mui/material/Grid";
 import {FormSelect} from "base/form";
+import Grid from "@mui/material/Grid";
 
 const InvoicesFilterFormFields = ({handleChange}) => {
     const {sectors} = useDomain();
@@ -43,7 +43,7 @@ const InvoicesFilterFormFields = ({handleChange}) => {
                     label="Sector"
                     name="sector"
                     options={sectors}
-                    handleChange={handleInputChange}
+                    onChange={handleInputChange}
                     value={filter?.sector}
                 />
             </Grid>

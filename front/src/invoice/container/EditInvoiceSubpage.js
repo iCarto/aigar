@@ -48,7 +48,6 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
     };
 
     const handleSubmit = () => {
-        console.log("EditInvoiceSubpage.handleSubmit", {invoice});
         setIsSaving(true);
 
         InvoiceService.updateInvoice(invoice)
@@ -56,7 +55,7 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
                 if (onSubmit) {
                     onSubmit(updatedInvoice);
                 } else {
-                    navigate(-1);
+                    navigate(`/facturas/${updatedInvoice.id_factura}`);
                 }
             })
             .catch(error => {

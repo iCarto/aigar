@@ -79,7 +79,7 @@ const CreateInvoiceSubpage = () => {
         InvoiceService.createInvoice(invoice)
             .then(createdInvoice => {
                 setInvoice(createdInvoice);
-                navigate(`facturas/${createdInvoice.id_factura}`);
+                navigate(`/facturas/${createdInvoice.id_factura}`);
             })
             .catch(error => {
                 console.log(error);

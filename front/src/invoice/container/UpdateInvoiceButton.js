@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {ESTADOS_FACTURA} from "invoice/model";
-import {UpdateInvoiceModal} from ".";
 import {EditButton} from "base/common";
+import {UpdateInvoiceModal} from ".";
 
 const UpdateInvoiceButton = ({invoice}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +25,11 @@ const UpdateInvoiceButton = ({invoice}) => {
         <>
             <EditButton
                 onClick={handleClick}
-                disabled={invoice.estado !== ESTADOS_FACTURA.NUEVA}
+                text={
+                    invoice.estado === ESTADOS_FACTURA.NUEVA
+                        ? "Modificar"
+                        : "Nueva versión"
+                }
             />
             <UpdateInvoiceModal
                 isOpen={isModalOpen}

@@ -24,7 +24,6 @@ const UpdateInvoiceModal = ({isOpen = false, onClose, invoice}) => {
     };
 
     const createNewInvoiceVersion = () => {
-        console.log("StartInvoicingMonthButton.startInvoicingMonth");
         setOperationStatus(ModalOperationStatus.PROGRESS);
         InvoiceService.createNewInvoiceVersion(invoice.id_factura)
             .then(invoiceNewVersion => {

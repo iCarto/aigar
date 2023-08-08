@@ -22,18 +22,6 @@ const ViewInvoicesPage = () => {
         setFilter(prevFilter => ({...prevFilter, ...newFilter}));
     };
 
-    // TO-DO: Review if this is still needed somehow
-    // const handleSuccessCreateNewInvoiceVersion = (
-    //     new_version_id_factura,
-    //     old_version_id_factura
-    // ) => {
-    //     // Replace old version id
-    //     const updatedFilteredInvoicesIds = filteredInvoicesIds.map(invoiceId =>
-    //         invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
-    //     );
-    //     setFilteredInvoicesIds(updatedFilteredInvoicesIds);
-    // };
-
     return (
         <PageLayout>
             {isLoading ? (

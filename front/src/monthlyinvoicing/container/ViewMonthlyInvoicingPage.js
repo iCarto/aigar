@@ -32,22 +32,9 @@ const ViewMonthlyInvoicingPage = () => {
         }));
     };
 
-    console.log(selectedInvoicingMonth);
-
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
-
-    // const handleSuccessCreateNewInvoiceVersion = (
-    //     new_version_id_factura,
-    //     old_version_id_factura
-    // ) => {
-    //     // Replace old version id
-    //     const filteredInvoicesIdsNew = filteredInvoicesIds.map(invoiceId =>
-    //         invoiceId === old_version_id_factura ? new_version_id_factura : invoiceId
-    //     );
-    //     setFilteredInvoicesIds(filteredInvoicesIdsNew);
-    // };
 
     return (
         <PageLayout

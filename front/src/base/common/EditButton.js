@@ -2,12 +2,12 @@ import {useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 
-const EditButton = ({onClick = null, disabled = false}) => {
+const EditButton = ({text = "", onClick = null, disabled = false}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
         if (onClick) onClick();
-        navigate("modificar");
+        else navigate("modificar");
     };
 
     return (
@@ -18,7 +18,7 @@ const EditButton = ({onClick = null, disabled = false}) => {
             disabled={disabled}
             fullWidth
         >
-            Modificar
+            {text || "Modificar"}
         </Button>
     );
 };

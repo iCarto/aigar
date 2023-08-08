@@ -5,6 +5,8 @@ import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
 import invoiceTemplatePath from "assets/print-templates/invoice/Modelo_Factura_ASCATLI.docx";
 import {DateUtil, NumberUtil} from "base/format/utilities";
 
+window.Buffer = window.Buffer || require("buffer").Buffer;
+
 const DocXPrintFileService = {
     async getLogoAscatli() {
         const IMAGE_WITDH = 2.4;

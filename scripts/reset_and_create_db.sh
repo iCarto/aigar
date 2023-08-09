@@ -85,7 +85,6 @@ else
                 END
                 , medidor, solo_mecha, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at, is_active
             FROM api_member;
-
         DROP TABLE api_member;
 
         INSERT INTO back_invoice
@@ -102,12 +101,76 @@ else
                     WHEN 6 THEN '6 - Tlacuxtli'
                     WHEN 7 THEN '7 - Tlacuxtli'
                 END
-        FROM api_invoice;
+            FROM api_invoice;
         DROP TABLE api_invoice;
 
-        DROP TABLE back_invoicingmonth; ALTER TABLE api_invoicingmonth RENAME TO back_invoicingmonth;
-        DROP TABLE back_measurement; ALTER TABLE api_measurement RENAME TO back_measurement;
-        DROP TABLE back_payment; ALTER TABLE api_payment RENAME TO back_payment;
+        INSERT INTO back_invoicingmonth
+        (
+            id_mes_facturacion,
+            anho,
+            mes,
+            is_open,
+            created_at,
+            updated_at
+        )
+        SELECT
+            id_mes_facturacion,
+            anho,
+            mes,
+            is_open,
+            created_at,
+            updated_at
+        FROM api_invoicingmonth;
+        DROP TABLE api_invoicingmonth;
+
+        INSERT INTO back_measurement
+        (
+            id_lectura,
+            caudal_anterior,
+            caudal_actual,
+            consumo,
+            cambio_medidor,
+            medidor,
+            created_at,
+            updated_at,
+            factura_id,
+            mes_facturacion_id
+        )
+        SELECT
+            id_lectura,
+            caudal_anterior,
+            caudal_actual,
+            consumo,
+            cambio_medidor,
+            medidor,
+            created_at,
+            updated_at,
+            factura_id,
+            mes_facturacion_id
+        FROM api_measurement;
+        DROP TABLE api_measurement;
+
+        INSERT INTO back_payment
+        (
+            id_pago,
+            fecha,
+            monto,
+            created_at,
+            updated_at,
+            factura_id,
+            mes_facturacion_id
+        )
+        SELECT
+            id_pago,
+            fecha,
+            monto,
+            created_at,
+            updated_at,
+            factura_id,
+            mes_facturacion_id
+        FROM api_payment;
+        DROP TABLE api_payment;
+
         "
 fi
 

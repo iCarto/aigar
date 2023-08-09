@@ -5,6 +5,7 @@ import PrintIcon from "@mui/icons-material/Print";
 
 const PrintInvoicesButton = ({
     invoices,
+    onDataUpdate = null,
     outputFilename,
     showIcon = true,
     buttonTitle = "",
@@ -44,6 +45,7 @@ const PrintInvoicesButton = ({
             <PrintInvoicesModal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
+                onDataUpdate={onDataUpdate}
                 invoices={invoices}
                 outputFilename={outputFilename}
             />

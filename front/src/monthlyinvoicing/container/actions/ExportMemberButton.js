@@ -1,10 +1,10 @@
 import {useState} from "react";
 import {MemberService} from "member/service";
-import {Spinner} from "base/common";
 import {FileService} from "base/file/service";
+import {Spinner} from "base/common";
 import Button from "@mui/material/Button";
 
-const ExportMemberButton = ({disabled}) => {
+const ExportMemberButton = ({disabled = false}) => {
     const [loading, setLoading] = useState(false);
     const [messageError, setMessageError] = useState(null);
 

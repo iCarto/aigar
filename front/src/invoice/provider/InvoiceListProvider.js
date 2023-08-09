@@ -6,8 +6,9 @@ let InvoicesListContext = createContext(null);
 export default function InvoicesListProvider({children}) {
     const [invoices, setInvoices] = useState([]);
     const [filteredInvoices, setFilteredInvoices] = useState([]);
-    const [isLoading, setIsLoading] = useState(null);
     const [invoicesIds, setInvoicesIds] = useState([]);
+    const [isLoading, setIsLoading] = useState(null);
+    const [isDataUpdated, setIsDataUpdated] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -18,7 +19,7 @@ export default function InvoicesListProvider({children}) {
             })
             .catch(error => console.log(error))
             .finally(() => setIsLoading(false));
-    }, []);
+    }, [isDataUpdated]);
 
     useEffect(() => {
         if (filteredInvoices.length) {
@@ -36,6 +37,7 @@ export default function InvoicesListProvider({children}) {
         invoicesIds,
         setInvoicesIds,
         isLoading,
+        setIsDataUpdated,
     };
 
     return (

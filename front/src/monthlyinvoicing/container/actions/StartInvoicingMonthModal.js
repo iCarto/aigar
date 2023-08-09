@@ -5,6 +5,7 @@ import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {DateUtil} from "base/format/utilities";
 import {OperationWithConfirmationModal} from "base/ui/modal";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -14,28 +15,26 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
     const location = useLocation();
     const basePath = location.pathname;
 
-    const closeModal = () => {
-        onClose();
-    };
+    const {setIsDataUpdated} = useMonthlyInvoicingList();
 
-    const onClickAccept = () => {
+    const handleClickAccept = () => {
         startInvoicingMonth();
     };
 
-    const onClickFinished = () => {
-        closeModal();
+    const handleClickFinished = () => {
+        onClose();
         navigate(basePath, true);
     };
 
     const startInvoicingMonth = () => {
-        console.log("StartInvoicingMonthModal.startInvoicingMonth");
         setOperationStatus(ModalOperationStatus.PROGRESS);
         setErrorMessage(null);
 
         InvoicingMonthService.startInvoicingMonth(invoicingMonth, false)
-            .then(invoicingMonth => {
+            .then(() => {
                 setOperationStatus(ModalOperationStatus.SUCCESS);
                 setErrorMessage(null);
+                setIsDataUpdated(prevState => !prevState);
             })
             .catch(error => {
                 console.log(error);
@@ -69,9 +68,9 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
     return isOpen ? (
         <OperationWithConfirmationModal
             operationStatus={operationStatus}
-            onClose={closeModal}
-            onClickAccept={onClickAccept}
-            onClickFinished={onClickFinished}
+            onClose={onClose}
+            onClickAccept={handleClickAccept}
+            onClickFinished={handleClickFinished}
             modalTitle="Iniciar mes de facturación"
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}

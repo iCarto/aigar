@@ -1,11 +1,20 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {Spinner} from "base/common";
+import {useNavigateWithReload} from "base/navigation/hooks";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
     const [result, setResult] = useState(null);
+    const {setIsDataUpdated} = useMonthlyInvoicingList();
+
+    const navigate = useNavigateWithReload();
+
+    const handleClick = () => {
+        setIsDataUpdated(prevState => !prevState);
+        navigate("/", true);
+    };
 
     useEffect(() => {
         InvoicingMonthService.saveMeasurements(id_mes_facturacion, measurements)
@@ -18,7 +27,6 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
             });
     }, [id_mes_facturacion, measurements]);
 
-    /* VIEW SUBCOMPONENTS */
     const ErrorMessage = () => {
         return (
             <div className="alert alert-danger text-center" role="alert">
@@ -30,11 +38,13 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
 
     const BackToInvoicesButton = () => {
         return (
-            <Link to="/">
-                <button className="btn btn-primary center" type="button">
-                    Volver al listado de facturas <i className="fas fa-list"></i>
-                </button>
-            </Link>
+            <button
+                className="btn btn-primary center"
+                type="button"
+                onClick={handleClick}
+            >
+                Volver al listado de facturas <i className="fas fa-list"></i>
+            </button>
         );
     };
 

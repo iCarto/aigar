@@ -10,6 +10,7 @@ export default function MonthlyInvoicingListProvider({children}) {
     const [invoicingMonths, setInvoicingMonths] = useState([]);
     const [selectedInvoicingMonth, setSelectedInvoicingMonth] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
+    const [isDataUpdated, setIsDataUpdated] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -39,7 +40,7 @@ export default function MonthlyInvoicingListProvider({children}) {
                     .catch(error => console.log(error))
             )
             .finally(() => setIsLoading(false));
-    }, []);
+    }, [isDataUpdated]);
 
     useEffect(() => {
         if (filteredInvoices.length) {
@@ -61,6 +62,7 @@ export default function MonthlyInvoicingListProvider({children}) {
         selectedInvoicingMonth,
         setSelectedInvoicingMonth,
         isLoading,
+        setIsDataUpdated,
     };
 
     return (

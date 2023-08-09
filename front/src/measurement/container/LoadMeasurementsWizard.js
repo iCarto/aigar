@@ -1,10 +1,10 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {Wizard} from "base/ui/wizard";
-import {LoadMeasurementsWizardSteps} from ".";
-import loadPaymentsAndMeasurementsSteps from "payment/data";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import loadPaymentsAndMeasurementsSteps from "payment/data";
+import {LoadMeasurementsWizardSteps} from ".";
+import {Wizard} from "base/ui/wizard";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 
@@ -12,7 +12,6 @@ const LoadMeasurementsWizard = () => {
     const [measurements, setMeasurements] = useState([]);
     const [invoices, setInvoices] = useState([]);
     const [invoicingMonth, setInvoicingMonth] = useState(null);
-
     const [isValidStep, setIsValidStep] = useState(true);
 
     // TO-DO: Review this - same state is also handled in component Wizard

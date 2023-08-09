@@ -23,9 +23,7 @@ function useFilter() {
     }
 
     function filterByTextFunction(item, filterText, searchProperties) {
-        console.log(item);
         return searchProperties.some(property => {
-            console.log(item[property]);
             const value = String(item[property]).toLowerCase();
             const searchText = filterText.toLowerCase();
 

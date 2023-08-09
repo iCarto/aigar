@@ -4,9 +4,14 @@ import {InvoiceService} from "invoice/service";
 import {ESTADOS_FACTURA} from "invoice/model";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";
-import {useNavigateWithReload} from "base/navigation/hooks";
 
-const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename}) => {
+const PrintInvoicesModal = ({
+    invoices,
+    isOpen = false,
+    onDataUpdate = null,
+    onClose,
+    outputFilename,
+}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
     const [errorMessage, setErrorMessage] = useState(null);
 
@@ -38,6 +43,7 @@ const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename})
                 .then(result => {
                     setOperationStatus(ModalOperationStatus.SUCCESS);
                     setErrorMessage(null);
+                    if (onDataUpdate) onDataUpdate();
                 })
                 .catch(error => {
                     console.log(error);
@@ -62,10 +68,7 @@ const PrintInvoicesModal = ({isOpen = false, onClose, invoices, outputFilename})
         printInvoices();
     };
 
-    const navigate = useNavigateWithReload();
-
     const handleClickFinished = () => {
-        navigate("", true);
         setOperationStatus(ModalOperationStatus.START);
         handleClose();
     };

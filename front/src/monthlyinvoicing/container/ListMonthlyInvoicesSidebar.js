@@ -1,6 +1,14 @@
+import {ESTADOS_FACTURA} from "invoice/model";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {MonthlyInvoicingNavigator} from "../presentational";
 import {ActionsSidebarMenu} from "base/ui/menu";
-import {getMonthlyInvoicesActions} from "./actions";
+import {
+    ExportMemberButton,
+    LoadMeasurementsButton,
+    LoadPaymentsButton,
+    PrintInvoicesButton,
+    StartInvoicingMonthButton,
+} from "./actions";
 
 const ListMonthlyInvoicesSidebar = ({
     selectedInvoicingMonth,
@@ -8,7 +16,11 @@ const ListMonthlyInvoicesSidebar = ({
     handleChangeInvoicingMonth,
     invoices,
 }) => {
-    const actions = getMonthlyInvoicesActions(selectedInvoicingMonth, invoices);
+    const {setIsDataUpdated} = useMonthlyInvoicingList();
+
+    const handleDataUpdate = () => {
+        setIsDataUpdated(prevState => !prevState);
+    };
 
     // const handleDateChange = (year, month) => {
     //     handleFilterChange({month, year});
@@ -16,6 +28,44 @@ const ListMonthlyInvoicesSidebar = ({
 
     const isCurrentInvoicingMonth = selectedInvoicingMonth.is_open;
     const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;
+
+    const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
+
+    const isLoadMeasurementsButtonEnabled =
+        invoices?.length > 0 &&
+        invoices?.filter(invoice => invoice.consumo === "").length !== 0;
+
+    const isLoadPaymentsButtonEnabled =
+        invoices?.length > 0 &&
+        invoices?.filter(
+            invoice => invoice.estado === ESTADOS_FACTURA.PENDIENTE_DE_COBRO
+        ).length !== 0;
+
+    const menuActions = [
+        <StartInvoicingMonthButton
+            invoicingMonth={selectedInvoicingMonth}
+            disabled={!isStartInvoicingEnabled}
+            // disabled={isStartInvoicingEnabled}
+        />,
+        <LoadMeasurementsButton
+            invoicingMonth={selectedInvoicingMonth}
+            disabled={!isLoadMeasurementsButtonEnabled}
+            // disabled={isLoadMeasurementsButtonEnabled}
+        />,
+        <PrintInvoicesButton
+            buttonTitle="3. Imprimir facturas"
+            invoices={invoices}
+            onDataUpdate={handleDataUpdate}
+            outputFilename={outputFilename}
+            showIcon={false}
+        />,
+        <ExportMemberButton />,
+        <LoadPaymentsButton
+            invoicingMonth={selectedInvoicingMonth}
+            disabled={!isLoadPaymentsButtonEnabled}
+            // disabled={isLoadPaymentsButtonEnabled}
+        />,
+    ];
 
     return (
         <>
@@ -25,7 +75,7 @@ const ListMonthlyInvoicesSidebar = ({
                 handleChangeInvoicingMonth={handleChangeInvoicingMonth}
             />
             {isStartInvoicingEnabled || isCurrentInvoicingMonth ? (
-                <ActionsSidebarMenu menuActions={actions} />
+                <ActionsSidebarMenu menuActions={menuActions} />
             ) : null}
         </>
     );

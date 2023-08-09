@@ -3,6 +3,8 @@ export {default as SectionSummaryCard} from "./SectionSummaryCard";
 export {default as SectionCardHeaderAction} from "./SectionCardHeaderAction";
 export {default as SectionActionsMenu} from "./SectionActionsMenu";
 export {default as SectionField} from "./SectionField";
+export {default as SectionFieldLabel} from "./SectionFieldLabel";
+export {default as SectionFieldValue} from "./SectionFieldValue";
 export {default as SectionFieldHelpText} from "./SectionFieldHelpText";
 export {default as SectionFieldEditButton} from "./SectionFieldEditButton";
 export {default as SectionHeading} from "./SectionHeading";

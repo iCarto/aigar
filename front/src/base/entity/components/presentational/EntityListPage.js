@@ -1,6 +1,7 @@
 import {ActionsBurgerMenu} from "base/ui/menu";
 import {SortedPaginatedTable} from "base/table";
 import {NoItemsMessage} from "base/error/components";
+import {EntityListFilterForm} from "../form";
 import Grid from "@mui/material/Grid";
 
 const EntityListPage = ({
@@ -18,8 +19,16 @@ const EntityListPage = ({
         <>
             <Grid item container alignItems="flex-end">
                 {filterForm ? (
-                    <Grid item xs={10} md={8}>
-                        {filterForm}
+                    <Grid
+                        item
+                        container
+                        component="form"
+                        xs={10}
+                        md={8}
+                        flexDirection="row"
+                        columnSpacing={1}
+                    >
+                        <EntityListFilterForm filterForm={filterForm} />
                     </Grid>
                 ) : null}
                 {displayActions ? (

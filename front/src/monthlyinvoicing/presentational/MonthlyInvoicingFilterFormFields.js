@@ -1,81 +1,53 @@
-import {useDomain} from "aigar/domain/provider";
-import {useList} from "base/entity/provider";
+import {FormSelect} from "base/form";
 import Grid from "@mui/material/Grid";
 
-const MonthlyInvoicingFilterFormFields = ({handleChange}) => {
-    const {sectors, memberTypes, invoiceStatus} = useDomain();
-    const {filter} = useList();
-
+const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
     const handleInputChange = event => {
         const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;
-        handleChange({[name]: value});
+        const value = event.target.value;
+        onFieldChange({[name]: value});
     };
 
     return (
-        <Grid component="form" container spacing={1} flexDirection="row">
-            <Grid item xs={3}>
-                <label htmlFor="name">Socio</label>
+        <>
+            <Grid item xs>
+                <label htmlFor="nombre">Socio</label>
                 <input
                     type="text"
                     className="form-control"
                     name="nombre"
-                    value={filter?.nombre}
+                    value={fields.nombre}
                     onChange={handleInputChange}
                 />
             </Grid>
-            <Grid item xs={3}>
-                <label htmlFor="sector">Sector</label>
-                <select
-                    className="form-control"
+            <Grid item xs>
+                <FormSelect
+                    label="Sector"
                     name="sector"
-                    value={filter?.sector}
+                    options={domains.sectors}
                     onChange={handleInputChange}
-                >
-                    <option></option>
-                    {sectors.map(sector => (
-                        <option key={sector.key} value={sector.key}>
-                            {sector.value}
-                        </option>
-                    ))}
-                </select>
+                    value={fields.sector}
+                />
             </Grid>
-            <Grid item xs={3}>
-                <label htmlFor="tipo_socio">Tipo de socio</label>
-                <select
-                    className="form-control"
+            <Grid item xs>
+                <FormSelect
+                    label="Tipo de socio"
                     name="tipo_socio"
-                    value={filter?.tipo_socio}
+                    options={domains.memberTypes}
                     onChange={handleInputChange}
-                >
-                    <option></option>
-                    {memberTypes.map(memberType => (
-                        <option key={memberType.key} value={memberType.key}>
-                            {memberType.value}
-                        </option>
-                    ))}
-                </select>
+                    value={fields.tipo_socio}
+                />
             </Grid>
-            <Grid item xs={3}>
-                <label htmlFor="estado">Estado</label>
-                <select
-                    className="form-control"
+            <Grid item xs>
+                <FormSelect
+                    label="Estado"
                     name="estado"
-                    value={filter?.estado}
+                    options={domains.invoiceStatus}
                     onChange={handleInputChange}
-                >
-                    <option></option>
-                    {invoiceStatus.map(invoiceStatus => (
-                        <option key={invoiceStatus.key} value={invoiceStatus.key}>
-                            {invoiceStatus.value}
-                        </option>
-                    ))}
-                </select>
+                    value={fields.estado}
+                />
             </Grid>
-        </Grid>
+        </>
     );
 };
 

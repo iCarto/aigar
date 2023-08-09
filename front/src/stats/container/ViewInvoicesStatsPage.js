@@ -6,6 +6,7 @@ import {PageLayout} from "base/ui/page";
 import {NoItemsMessage} from "base/error/components";
 import {Spinner} from "base/common";
 import {InvoicesStatsFilterForm, ListInvoicesStatsPage} from ".";
+import {EntityListFilterForm} from "base/entity/components/form";
 import Grid from "@mui/material/Grid";
 
 const ViewInvoicesStatsPage = () => {
@@ -45,9 +46,21 @@ const ViewInvoicesStatsPage = () => {
             ) : (
                 <>
                     <Grid item container alignItems="flex-end">
-                        <Grid item xs={10} md={8} sx={{zIndex: 1}}>
-                            <InvoicesStatsFilterForm
-                                handleFilterChange={handleFilterChange}
+                        <Grid
+                            item
+                            container
+                            xs={10}
+                            md={8}
+                            columnSpacing={1}
+                            alignItems="flex-end"
+                            sx={{zIndex: 1}}
+                        >
+                            <EntityListFilterForm
+                                filterForm={
+                                    <InvoicesStatsFilterForm
+                                        handleFilterChange={handleFilterChange}
+                                    />
+                                }
                             />
                         </Grid>
                     </Grid>

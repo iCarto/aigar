@@ -1,53 +1,45 @@
-import {useDomain} from "aigar/domain/provider";
-import {useList} from "base/entity/provider";
 import {FormSelect} from "base/form";
 import Grid from "@mui/material/Grid";
 
-const InvoicesFilterFormFields = ({handleChange}) => {
-    const {sectors} = useDomain();
-    const {filter} = useList();
-
+const InvoicesFilterFormFields = ({onFieldChange, fields, domains}) => {
     const handleInputChange = event => {
         const name = event.target.name;
-        const value =
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value;
-        handleChange({[name]: value});
+        const value = event.target.value;
+        onFieldChange({[name]: value});
     };
 
     return (
-        <Grid component="form" container spacing={1} flexDirection="row">
-            <Grid item xs={3}>
+        <>
+            <Grid item xs>
                 <label htmlFor="name">Número</label>
                 <input
                     type="text"
                     className="form-control"
                     name="numero"
-                    value={filter?.numero}
+                    value={fields.numero}
                     onChange={handleInputChange}
                 />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs>
                 <label htmlFor="name">Socio</label>
                 <input
                     type="text"
                     className="form-control"
                     name="nombre"
-                    value={filter?.nombre}
+                    value={fields.nombre}
                     onChange={handleInputChange}
                 />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs>
                 <FormSelect
                     label="Sector"
                     name="sector"
-                    options={sectors}
+                    options={domains.sectors}
                     onChange={handleInputChange}
-                    value={filter?.sector}
+                    value={fields.sector}
                 />
             </Grid>
-        </Grid>
+        </>
     );
 };
 

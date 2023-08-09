@@ -45,7 +45,6 @@ const ViewMonthlyInvoicingPage = () => {
                         invoicingMonths={invoicingMonths}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         handleChangeInvoicingMonth={handleChangeInvoicingMonth}
-                        // handleFilterChange={undefined}
                     />
                 ) : null
             }
@@ -56,10 +55,7 @@ const ViewMonthlyInvoicingPage = () => {
                 <ListMonthlyInvoicesPage
                     invoices={filteredInvoices}
                     totalInvoices={invoices.length}
-                    // invoicingMonths={invoicingMonths}
-                    // selectedInvoicingMonth={selectedInvoicingMonth}
                     handleFilterChange={handleFilterChange}
-                    // handleChangeInvoicingMonth={handleChangeInvoicingMonth}
                 />
             )}
         </PageLayout>

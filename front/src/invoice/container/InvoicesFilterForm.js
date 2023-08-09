@@ -1,11 +1,25 @@
-import {DomainProvider} from "aigar/domain/provider";
+import {useList} from "base/entity/provider";
 import {InvoicesFilterFormFields} from "../presentational";
+import {useDomain} from "aigar/domain/provider";
 
 const InvoicesFilterForm = ({handleFilterChange}) => {
+    const {filter} = useList();
+    const {sectors} = useDomain();
+
+    const fields = {
+        numero: filter?.numero || "",
+        nombre: filter?.nombre || "",
+        sector: filter?.sector || "",
+    };
+
     return (
-        <DomainProvider>
-            <InvoicesFilterFormFields handleChange={handleFilterChange} />
-        </DomainProvider>
+        <>
+            <InvoicesFilterFormFields
+                onFieldChange={handleFilterChange}
+                fields={fields}
+                domains={{sectors}}
+            />
+        </>
     );
 };
 

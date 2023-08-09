@@ -1,11 +1,26 @@
+import {useList} from "base/entity/provider";
 import {MembersFilterFormFields} from "../presentational";
-import {DomainProvider} from "aigar/domain/provider";
+import {useDomain} from "aigar/domain/provider";
 
 const MembersFilterForm = ({handleFilterChange}) => {
+    const {filter} = useList();
+    const {sectors, memberTypes} = useDomain();
+
+    const fields = {
+        num_socio: filter?.num_socio || "",
+        name: filter?.name || "",
+        sector: filter?.sector || "",
+        tipo_socio: filter?.tipo_socio || "",
+    };
+
     return (
-        <DomainProvider>
-            <MembersFilterFormFields handleChange={handleFilterChange} />
-        </DomainProvider>
+        <>
+            <MembersFilterFormFields
+                onFieldChange={handleFilterChange}
+                fields={fields}
+                domains={{sectors, memberTypes}}
+            />
+        </>
     );
 };
 

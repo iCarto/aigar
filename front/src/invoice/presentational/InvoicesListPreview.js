@@ -26,7 +26,7 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
         />
     );
 
-    if (invoices) {
+    if (invoices.length) {
         const columns = [
             {
                 Header: "Socio",

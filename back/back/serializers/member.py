@@ -59,7 +59,8 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         if last_invoice and last_invoice.estado == InvoiceStatus.NUEVA:
             last_invoice.nombre = member.name
             last_invoice.sector = member.sector
-            last_invoice.update_total()
+            if last_invoice.caudal_actual is not None:
+                last_invoice.update_total()
             last_invoice.save()
 
 

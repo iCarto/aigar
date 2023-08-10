@@ -2,7 +2,8 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import loadPaymentsAndMeasurementsSteps from "payment/data";
+import {loadMeasurementsSteps} from "payment/data";
+
 import {LoadMeasurementsWizardSteps} from ".";
 import {Wizard} from "base/ui/wizard";
 import {Spinner} from "base/common";
@@ -18,7 +19,6 @@ const LoadMeasurementsWizard = () => {
     const [currentStep, setCurrentStep] = useState(1);
 
     const {id_mes_facturacion} = useParams();
-    const wizardSteps = loadPaymentsAndMeasurementsSteps;
 
     useEffect(() => {
         InvoicingMonthService.getInvoicingMonth(id_mes_facturacion).then(
@@ -49,7 +49,7 @@ const LoadMeasurementsWizard = () => {
     return (
         <Wizard
             heading="Importar lecturas"
-            steps={wizardSteps}
+            steps={loadMeasurementsSteps}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >

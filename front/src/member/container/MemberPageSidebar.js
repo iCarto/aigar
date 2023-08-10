@@ -15,7 +15,13 @@ const MemberPageSidebar = ({member, numInvoices}) => {
         <DeleteMemberButton member={member} />,
     ];
 
-    return <ActionsSidebarMenu menuActions={menuActions} showBackButton />;
+    return (
+        <ActionsSidebarMenu
+            menuActions={menuActions}
+            showBackButton
+            urlPathBack="/socios"
+        />
+    );
 };
 
 export default MemberPageSidebar;

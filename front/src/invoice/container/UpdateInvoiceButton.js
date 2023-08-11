@@ -11,7 +11,7 @@ const UpdateInvoiceButton = ({invoice}) => {
 
     const handleClick = () => {
         if (invoice.estado === ESTADOS_FACTURA.NUEVA) {
-            navigate("modificar");
+            navigate(`/facturas/${invoice.id_factura}/modificar`);
         } else {
             setIsModalOpen(true);
         }

@@ -72,6 +72,7 @@ test = [
 dev = [
     "django-debug-toolbar==4.0.0",
     "django-extensions==3.2.1",
+    "vulture==2.7",
     # "aigar[test]",
 ]
 
@@ -85,3 +86,48 @@ include-package-data = true
 # *.css *.woff *.svg *.js *.gif *.ico *.png *.jpg *.html *.js.map
 "aigar.static" = ["**"]
 "aigar.templates" = ["**"]
+
+[tool.vulture]
+# Configuration for vulture: https://github.com/jendrikseipp/vulture
+# Install in your virtual environment and run:
+# python -m vulture | tail -r | less
+# The below configuration tries to remove some false positives, but there are
+# still many, for example for model properties used only in templates.
+# See also:
+# https://adamj.eu/tech/2023/07/12/django-clean-up-unused-code-vulture/
+exclude = ["*/settings.py", "*/settings/*.py", "*/migrations/*.py"]
+ignore_decorators = [
+    # Django
+    "@receiver",
+    "@register.filter",
+    "@register.inclusion_tag",
+    "@register.simple_tag",
+    # django.contrib.admin
+    "@admin.action",
+    "@admin.display",
+    "@admin.register",
+    # pytest
+    "@pytest.fixture",
+    "@factory.post_generation",
+]
+ignore_names = [
+    # Django
+    "*Config",     # AppConfig subclasses
+    "*Middleware",
+    "clean_*",
+    "Meta",
+    "urlpatterns",
+    # django.contrib.admin
+    "get_extra",
+    "get_fieldsets",
+    "has_add_permission",
+    "has_change_permission",
+    "has_delete_permission",
+    "has_view_permission",
+    "lookups",
+
+]
+paths = ["back"]
+sort_by_size = true
+verbose = true
+min_confidence = 0

@@ -10,7 +10,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         exclude = ("member",)
 
-    id_factura = serializers.ReadOnlyField()
     num_socio = serializers.PrimaryKeyRelatedField(
         source="member", queryset=Member.objects.all()
     )

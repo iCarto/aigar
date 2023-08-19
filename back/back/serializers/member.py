@@ -11,8 +11,6 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         model = Member
         fields = "__all__"
 
-    num_socio = serializers.ReadOnlyField()
-
     @transaction.atomic
     def create(self, validated_data):
         orden = validated_data["orden"]
@@ -98,7 +96,6 @@ class MemberExportSerializer(serializers.ModelSerializer):
         ]
 
     id = serializers.SerializerMethodField()
-    num_socio = serializers.ReadOnlyField()
     lectura_anterior = serializers.SerializerMethodField()
     lectura = serializers.SerializerMethodField()
     consumo_calculado = serializers.SerializerMethodField()

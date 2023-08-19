@@ -8,8 +8,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = "__all__"
 
-    id_pago = serializers.ReadOnlyField()
-
     def create(self, validated_data):
         payment = Payment.objects.create(**validated_data)
 

@@ -12,6 +12,7 @@ class InvoicingMonth(models.Model):
         unique=True,
         verbose_name="Identificador",
         help_text="",
+        editable=False,
     )
 
     anho = models.TextField(

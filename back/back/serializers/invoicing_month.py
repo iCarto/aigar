@@ -12,7 +12,6 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
         model = InvoicingMonth
         fields = "__all__"
 
-    id_mes_facturacion = serializers.ReadOnlyField()
     invoices = InvoiceShortSerializer(many=True, write_only=True, required=False)
 
     @transaction.atomic

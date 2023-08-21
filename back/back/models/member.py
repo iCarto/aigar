@@ -95,7 +95,6 @@ class Member(models.Model):
         to_field="name",
         blank=False,
         null=False,
-        db_column="zone_name",
         verbose_name="sector / comunidad",
     )
 

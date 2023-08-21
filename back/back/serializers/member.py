@@ -6,7 +6,7 @@ from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
 
 
-class MemberSerializer(serializers.HyperlinkedModelSerializer):
+class MemberSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
         fields = "__all__"

@@ -100,3 +100,7 @@ class Member(models.Model):
 
     def __str__(self):
         return f"{self.num_socio} - {self.name}"
+
+    def inactive(self) -> None:
+        self.is_active = False
+        self.save()

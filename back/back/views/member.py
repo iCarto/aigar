@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
 
 from back.models.invoice import Invoice
 from back.models.invoicing_month import InvoicingMonth
@@ -12,21 +11,8 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
 
-    def list(self, request):
-        queryset = Member.objects.all()
-        serializer = MemberSerializer(queryset, many=True, context={"request": request})
-        return Response(serializer.data)
-
-    # Override destroy method to set Member as inactive
-    def destroy(self, request, *args, **kwargs):
-        member = self.get_object()
-        member.is_active = False
-        member.save()
-        return Response(
-            MemberSerializer(
-                context={"request": request}, instance=self.get_object()
-            ).data
-        )
+    def perform_destroy(self, instance):
+        instance.inactive()
 
 
 class MemberExportView(ListAPIView):

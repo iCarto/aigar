@@ -12,15 +12,6 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     @transaction.atomic
-    def create(self, validated_data):
-        orden = validated_data["orden"]
-        members_to_update = Member.objects.filter(orden__gte=orden)
-        for member in members_to_update:
-            member.orden = member.orden + 1
-            member.save()
-        return Member.objects.create(**validated_data)
-
-    @transaction.atomic
     def update(self, instance, validated_data):
         if instance.orden != validated_data["orden"]:
             self.update_other_members_order(instance.orden, validated_data["orden"])

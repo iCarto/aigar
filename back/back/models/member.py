@@ -1,7 +1,19 @@
-from django.db import models
+from typing import Any
+
+from django.db import models, transaction
 
 from back.fields import RangedIntegerField
 from domains.models.zone import Zone
+
+
+class MemberManager(models.Manager):
+    @transaction.atomic
+    def create(self, **kwargs: Any) -> Any:
+        orden = kwargs["orden"]
+        Member.objects.select_for_update().filter(orden__gte=orden).update(
+            orden=models.F("orden") + 1
+        )
+        return super().create(**kwargs)
 
 
 class Member(models.Model):
@@ -23,6 +35,8 @@ class Member(models.Model):
         verbose_name = "socio"
         verbose_name_plural = "socios"
         ordering = ("num_socio",)
+
+    objects = MemberManager()
 
     num_socio = models.AutoField(
         primary_key=True,
@@ -54,11 +68,8 @@ class Member(models.Model):
         blank=False, null=False, default=False, verbose_name="Sólo Mecha", help_text=""
     )
 
-    # Entero. Orden del recorrido ¿ruta? sería un nombre alternativo válido
-    # Si se mete uno nuevo por el medio mover todo el resto de rutas a mano es un lio.
-    # Habría que buscar una solución
-    # TODO: Review this: https://stackoverflow.com/questions/29067045/
-    # Deberíamos poder fijar un orden máximo igual al número de socios activos
+    # TODO: Deberíamos poder fijar un orden máximo igual al número de socios activos
+    # TODO: #4228
     orden = RangedIntegerField(
         null=False,
         blank=False,

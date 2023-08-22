@@ -1,7 +1,13 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
-from back.models.invoice import Invoice, InvoiceStatus, fixed_values
+from back.models.fixed_values import (
+    get_derecho_value,
+    get_mora_value,
+    get_reconexion_value,
+    get_saldo_pendiente_value,
+)
+from back.models.invoice import Invoice, InvoiceStatus
 from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
 from back.serializers.invoicing_month import InvoicingMonthSerializer
@@ -14,7 +20,7 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
     def create(self, request):
         new_invoicing_month = request.data
 
-        active_members = Member.objects.filter(is_active=True)
+        active_members: list[Member] = Member.objects.filter(is_active=True)
 
         last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
 
@@ -50,9 +56,9 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "member": member.num_socio,
                 "nombre": member.name,
                 "sector": member.sector,
-                "cuota_fija": get_cuota_fija_value(member),
-                "comision": get_comision_value(),
-                "ahorro": get_ahorro_value(member),
+                "cuota_fija": member.cuota_fija,
+                "comision": member.comision,
+                "ahorro": member.ahorro,
                 "caudal_anterior": last_month_invoice.caudal_actual
                 if last_month_invoice
                 else 0,
@@ -70,58 +76,3 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# TODO Donde sería el lugar adecuado para situar estos métodos?
-def get_comision_value():
-    return fixed_values["COMISION"]
-
-
-def get_cuota_fija_value(member):
-    return (
-        fixed_values["CUOTA_FIJA_SOLO_MECHA"]
-        if member.solo_mecha
-        else fixed_values["CUOTA_FIJA_NORMAL"]
-    )
-
-
-def get_ahorro_value(member):
-    return (
-        fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
-        if member.solo_mecha
-        else fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
-    )
-
-
-def get_derecho_value(last_month_invoice):
-    if last_month_invoice is None:
-        return 400
-    return 0
-
-
-def get_reconexion_value(member, last_month_invoice):
-    # TODO Comprobar que la factura anterior fue emitida para un socio con solo mecha
-    # pero ahora el socio está activo. Nos basamos en el campo de cuota_fija o creamos un nuevo campo?
-    if (
-        last_month_invoice is not None
-        and member.solo_mecha == False
-        and last_month_invoice.cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
-    ):
-        return 10
-    return 0
-
-
-def get_mora_value(last_month_invoice):
-    if last_month_invoice is not None and last_month_invoice.pago_1_al_10 == 0:
-        return 1
-    return 0
-
-
-def get_saldo_pendiente_value(last_month_invoice):
-    if last_month_invoice is not None:
-        return (
-            (last_month_invoice.total or 0)
-            - last_month_invoice.pago_1_al_10
-            - last_month_invoice.pago_11_al_30
-        )
-    return 0

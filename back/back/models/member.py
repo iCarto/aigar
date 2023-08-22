@@ -1,7 +1,8 @@
 from django.db import models, transaction
 
 from back.fields import RangedIntegerField
-from back.models.invoice import Invoice, fixed_values
+from back.models.fixed_values import fixed_values
+from back.models.invoice import Invoice
 from domains.models.zone import Zone
 
 

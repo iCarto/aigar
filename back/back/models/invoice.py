@@ -4,18 +4,6 @@ from back.models.invoicing_month import InvoicingMonth
 from domains.models.zone import Zone
 
 
-fixed_values = {
-    "COMISION": 0.28,
-    "AHORRO_MANO_DE_OBRA_NORMAL": 0.25,
-    "AHORRO_MANO_DE_OBRA_SOLO_MECHA": 0,
-    "CUOTA_FIJA_NORMAL": 5.72,
-    "CUOTA_FIJA_SOLO_MECHA": 2.72,
-    "CUOTA_VARIABLE_MENOS_14": 0,
-    "CUOTA_VARIABLE_14_20": 0.75,
-    "CUOTA_VARIABLE_MAS_20": 2.5,
-}
-
-
 class InvoiceStatus(models.TextChoices):
     NUEVA = "nueva"
     PENDIENTE_DE_COBRO = "pendiente_de_cobro"

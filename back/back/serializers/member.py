@@ -1,8 +1,6 @@
-from django.db import transaction
 from rest_framework import serializers
 
-from back.models.invoice import Invoice, InvoiceStatus, fixed_values
-from back.models.invoicing_month import InvoicingMonth
+from back.models.invoice import fixed_values
 from back.models.member import Member
 
 
@@ -10,26 +8,6 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
         fields = "__all__"
-
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        updated_member = super().update(instance, validated_data)
-        self.update_current_invoice(updated_member)
-        return updated_member
-
-    def update_current_invoice(self, member):
-        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
-        last_invoice = Invoice.objects.filter(
-            member=member.num_socio,
-            mes_facturacion=last_invoicing_month.id_mes_facturacion,
-            is_active=True,
-        ).first()
-        if last_invoice and last_invoice.estado == InvoiceStatus.NUEVA:
-            last_invoice.nombre = member.name
-            last_invoice.sector = member.sector
-            if last_invoice.caudal_actual is not None:
-                last_invoice.update_total()
-            last_invoice.save()
 
 
 class MemberShortSerializer(serializers.ModelSerializer):

@@ -1,33 +1,12 @@
 import pytest
 from django.forms.models import model_to_dict
 
+from back.models.invoice import InvoiceStatus
 from back.models.member import Member
-from back.tests.factories import MemberFactory, InvoicingMonthFactory
-from domains.tests.factories import ZoneFactory
+from back.tests.factories import InvoiceFactory, MemberFactory
 
 
 pytestmark = pytest.mark.django_db
-
-
-@pytest.fixture
-def five_members_in_order() -> list[Member]:
-    members = [MemberFactory.create(orden=orden) for orden in range(0, 5)]
-    for orden in range(0, 5):
-        assert members[orden].orden == orden
-    return members
-
-
-@pytest.fixture
-def new_member_data() -> dict:
-    return {
-        "name": "foo",
-        "medidor": "123456",
-        "solo_mecha": False,
-        "orden": 2,
-        "observaciones": "",
-        "is_active": True,
-        "sector": ZoneFactory.create().name,
-    }
 
 
 def test_delete_member(api_client):
@@ -79,7 +58,6 @@ def test_create_member_move_subsequent_order(
 
 
 def test_update_member_move_preceding_order(api_client, five_members_in_order):
-    InvoicingMonthFactory.create()
     d = model_to_dict(
         five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"orden": 1}
@@ -92,7 +70,6 @@ def test_update_member_move_preceding_order(api_client, five_members_in_order):
 
 
 def test_update_member_move_subsequent_order(api_client, five_members_in_order):
-    InvoicingMonthFactory.create()
     d = model_to_dict(
         five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"orden": 4}
@@ -102,3 +79,19 @@ def test_update_member_move_subsequent_order(api_client, five_members_in_order):
         member.refresh_from_db()
 
     assert [m.orden for m in five_members_in_order] == [0, 1, 2, 4, 3]
+
+
+def test_update_member_with_invoices(api_client):
+    invoice = InvoiceFactory.create(
+        estado=InvoiceStatus.NUEVA, is_active=True, mes_facturacion__is_open=True
+    )
+    d = model_to_dict(
+        invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
+    ) | {"name": "foo bar", "solo_mecha": True}
+    response = api_client.put(f"/api/members/{d['num_socio']}/", d)
+    assert response.status_code == 200
+    invoice.refresh_from_db()
+    assert invoice.nombre == "foo bar"
+    assert invoice.member.name == "foo bar"
+    assert invoice.member.solo_mecha
+    assert invoice.total == pytest.approx(12.75)

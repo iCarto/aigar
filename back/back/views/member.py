@@ -1,5 +1,4 @@
 from django.db import transaction
-
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 
@@ -18,7 +17,7 @@ class MemberViewSet(viewsets.ModelViewSet):
         Member.objects.update_orden(
             new_order=serializer.validated_data["orden"], old_order=None
         )
-        return super().perform_create(serializer)
+        super().perform_create(serializer)
 
     @transaction.atomic
     def perform_update(self, serializer):
@@ -26,7 +25,7 @@ class MemberViewSet(viewsets.ModelViewSet):
             new_order=serializer.validated_data["orden"],
             old_order=serializer.instance.orden,
         )
-        return super().perform_update(serializer)
+        super().perform_update(serializer)
 
     def perform_destroy(self, instance):
         instance.inactive()

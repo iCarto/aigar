@@ -24,11 +24,29 @@ class InvoiceStatus(models.TextChoices):
     ANULADA = "anulada"
 
 
+class InvoiceManager(models.Manager):
+    def member_updated(self, member):
+        last_invoice = Invoice.objects.filter(
+            member=member,
+            mes_facturacion__is_open=True,
+            is_active=True,
+            estado=InvoiceStatus.NUEVA,
+        ).first()
+        if last_invoice:
+            last_invoice.nombre = member.name
+            last_invoice.sector = member.sector
+            if last_invoice.caudal_actual is not None:
+                last_invoice.update_total()
+            last_invoice.save()
+
+
 class Invoice(models.Model):
     class Meta(object):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
+
+    objects = InvoiceManager()
 
     id_factura = models.AutoField(
         primary_key=True,

@@ -1,6 +1,7 @@
-from django.db import models
+from django.db import models, transaction
 
 from back.fields import RangedIntegerField
+from back.models.invoice import Invoice
 from domains.models.zone import Zone
 
 
@@ -122,6 +123,11 @@ class Member(models.Model):
 
     def __str__(self):
         return f"{self.num_socio} - {self.name}"
+
+    def save(self, **kwargs) -> None:
+        with transaction.atomic():
+            super().save(**kwargs)
+            Invoice.objects.member_updated(self)
 
     def inactive(self) -> None:
         self.is_active = False

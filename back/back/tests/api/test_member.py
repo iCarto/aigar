@@ -37,7 +37,7 @@ def test_create_member_first_order(api_client):
     api_client.post("/api/members/", data)
     assert Member.objects.all().count() == 2
     assert Member.objects.get(pk=2).orden == 0
-    assert Member.objects.get(pk=1).orden == 3
+    assert Member.objects.get(pk=1).orden == 2  # not need to increase orden
 
 
 def test_create_member_order_move_others(api_client):

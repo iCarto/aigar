@@ -10,9 +10,10 @@ class MemberManager(models.Manager):
     @transaction.atomic
     def create(self, **kwargs: Any) -> Any:
         orden = kwargs["orden"]
-        Member.objects.select_for_update().filter(orden__gte=orden).update(
-            orden=models.F("orden") + 1
-        )
+        if Member.objects.filter(orden=orden).exists():
+            Member.objects.select_for_update().filter(orden__gte=orden).update(
+                orden=models.F("orden") + 1
+            )
         return super().create(**kwargs)
 
 

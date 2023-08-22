@@ -13,30 +13,9 @@ class MemberSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        if instance.orden != validated_data["orden"]:
-            self.update_other_members_order(instance.orden, validated_data["orden"])
-
         updated_member = super().update(instance, validated_data)
-
         self.update_current_invoice(updated_member)
         return updated_member
-
-    def update_other_members_order(self, old_order, new_order):
-        if old_order != new_order:
-            if old_order < new_order:
-                members_to_update = Member.objects.filter(
-                    orden__gt=old_order, orden__lte=new_order
-                )
-                for member in members_to_update:
-                    member.orden = member.orden - 1
-                    member.save()
-            else:
-                members_to_update = Member.objects.filter(
-                    orden__lt=old_order, orden__gte=new_order
-                )
-                for member in members_to_update:
-                    member.orden = member.orden + 1
-                    member.save()
 
     def update_current_invoice(self, member):
         last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()

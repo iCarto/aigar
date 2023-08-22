@@ -1,20 +1,30 @@
-from typing import Any
-
-from django.db import models, transaction
+from django.db import models
 
 from back.fields import RangedIntegerField
 from domains.models.zone import Zone
 
 
 class MemberManager(models.Manager):
-    @transaction.atomic
-    def create(self, **kwargs: Any) -> Any:
-        orden = kwargs["orden"]
-        if Member.objects.filter(orden=orden).exists():
-            Member.objects.select_for_update().filter(orden__gte=orden).update(
-                orden=models.F("orden") + 1
-            )
-        return super().create(**kwargs)
+    def update_orden(self, new_order: int, old_order: int | None = None) -> None:
+        if old_order == new_order:
+            return
+        if not Member.objects.filter(orden=new_order).exists():
+            return
+
+        if old_order:
+            # update
+            if old_order < new_order:
+                filter_ = models.Q(orden__gt=old_order, orden__lte=new_order)
+                update = models.F("orden") - 1
+            else:
+                filter_ = models.Q(orden__lt=old_order, orden__gte=new_order)
+                update = models.F("orden") + 1
+        else:
+            # create
+            filter_ = models.Q(orden__gte=new_order)
+            update = models.F("orden") + 1
+
+        Member.objects.select_for_update().filter(filter_).update(orden=update)
 
 
 class Member(models.Model):

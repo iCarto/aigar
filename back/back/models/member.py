@@ -1,7 +1,7 @@
 from django.db import models, transaction
 
 from back.fields import RangedIntegerField
-from back.models.invoice import Invoice
+from back.models.invoice import Invoice, fixed_values
 from domains.models.zone import Zone
 
 
@@ -128,6 +128,38 @@ class Member(models.Model):
         with transaction.atomic():
             super().save(**kwargs)
             Invoice.objects.member_updated(self)
+
+    @property
+    def cuota_fija(self):
+        if self.solo_mecha:
+            return fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+        return fixed_values["CUOTA_FIJA_NORMAL"]
+
+    @property
+    def ahorro(self):
+        if self.solo_mecha:
+            return fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
+        return fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+
+    @property
+    def comision(self):
+        return fixed_values["COMISION"]
+
+    @property
+    def lectura_anterior(self):
+        last_invoice = (
+            Invoice.objects.filter(mes_facturacion__is_open=True)
+            .values_list("caudal_actual", "caudal_anterior")
+            .filter(member_id=self.num_socio)
+            .first()
+        )
+        if not last_invoice:
+            # si no tiene factura anterior se trata de un nuevo socio, por tanto su consumo anterior es 0
+            return 0
+
+        # si no tenemos caudal actual es porque las facturas todavía no tienen lecturas
+        # en ese caso, la lectura anterior la sacaremos del caudal_anterior porque ya está actualizado
+        return last_invoice[0] or last_invoice[1]
 
     def inactive(self) -> None:
         self.is_active = False

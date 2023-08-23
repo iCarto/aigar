@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {SortedTable, LinkCellTable} from "base/table";
+import {SortedTable, LinkCellTable} from "base/table/components";
 import {Spinner} from "base/common";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 import {MemberViewModal} from "member/presentational";

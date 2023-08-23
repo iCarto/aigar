@@ -5,7 +5,7 @@ import {
     EditableTextCellTable,
     EditableDateCellTable,
     LinkCellTable,
-} from "base/table";
+} from "base/table/components";
 
 const LoadPaymentsList = ({payments, onUpdatePayment}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

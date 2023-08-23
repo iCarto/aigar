@@ -1,4 +1,4 @@
-import {SortedTable} from "base/table";
+import {SortedTable} from "base/table/components";
 
 // TO-DO: Review (unused component)
 const PaymentsList = ({payments}) => {

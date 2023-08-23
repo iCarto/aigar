@@ -1,9 +1,22 @@
+from typing import Any
 from django.db import models
+
+
+class InvoicingMonthManager(models.Manager):
+    def create(self, **kwargs: Any) -> Any:
+        kwargs["id_mes_facturacion"] = kwargs["anho"] + kwargs["mes"]
+
+        # Just ensure that invoices are not set in the payload. It should be checked at
+        # frontend and remove this sanity check.
+        kwargs.pop("invoices", None)
+        return super().create(**kwargs)
 
 
 class InvoicingMonth(models.Model):
     class Meta(object):
         unique_together = (("anho", "mes"),)
+
+    objects = InvoicingMonthManager()
 
     id_mes_facturacion = models.TextField(
         primary_key=True,

@@ -1,6 +1,4 @@
-from django.db.models import Max, Value as V
-from django.db.models.functions import Concat
-from rest_framework import permissions, status, viewsets
+from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import (
@@ -9,7 +7,7 @@ from rest_framework_extensions.mixins import (
     NestedViewSetMixin,
 )
 
-from back.models.invoice import Invoice, InvoiceStatus, fixed_values
+from back.models.invoice import Invoice, InvoiceStatus
 from back.models.invoicing_month import InvoicingMonth
 from back.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
 
@@ -23,7 +21,7 @@ class InvoiceViewSet(
     serializer_class = InvoiceSerializer
 
     def get_queryset(self):
-        queryset = Invoice.objects.prefetch_related("member").order_by(
+        queryset = Invoice.objects.select_related("member", "sector").order_by(
             "-mes_facturacion"
         )
         num_socio = self.request.query_params.get("num_socio", None)
@@ -61,7 +59,7 @@ class InvoiceViewSet(
                 for invoicing_month in last_three_invoicing_months
             ]
             last_three_months_invoices = (
-                Invoice.objects.prefetch_related("member")
+                Invoice.objects.select_related("member")
                 .filter(
                     mes_facturacion__in=last_three_invoicing_months_ids, is_active=True
                 )

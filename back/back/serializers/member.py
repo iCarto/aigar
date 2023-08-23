@@ -21,6 +21,9 @@ class MemberShortSerializer(serializers.ModelSerializer):
             "consumo_reduccion_fija",
         ]
 
+    # sector_id does not launch subqueries
+    sector = serializers.ReadOnlyField(source="sector_id")
+
 
 class MemberExportSerializer(serializers.ModelSerializer):
     class Meta(object):

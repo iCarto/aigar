@@ -1,5 +1,5 @@
-from rest_framework import status, viewsets
-from rest_framework.response import Response
+from django.db import transaction
+from rest_framework import viewsets
 
 from back.models.fixed_values import (
     get_derecho_value,
@@ -17,20 +17,15 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
     serializer_class = InvoicingMonthSerializer
     queryset = InvoicingMonth.objects.all()
 
-    def create(self, request):
-        new_invoicing_month = request.data
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
 
-        active_members: list[Member] = Member.objects.filter(is_active=True)
+        active_members = Member.objects.filter(is_active=True)
 
-        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
-
-        id_members = [member.num_socio for member in active_members]
         last_month_invoices = (
             Invoice.objects.prefetch_related("member")
-            .filter(
-                member__in=id_members,
-                mes_facturacion=last_invoicing_month.id_mes_facturacion,
-            )
+            .filter(member__in=active_members, mes_facturacion__is_open=True)
             .exclude(estado=InvoiceStatus.ANULADA)
         )
 
@@ -72,7 +67,5 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
         serializer = InvoicingMonthSerializer(
             data=new_invoicing_month, context={"request": request}
         )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            last_invoice = last_invoice[0] if last_invoice else NoLastInvoice()
+            Invoice.objects.create_from(member, last_invoice, serializer.instance)

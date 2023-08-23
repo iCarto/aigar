@@ -1,4 +1,4 @@
-import {LinkCellTable} from "base/table";
+import {LinkCellTable} from "base/table/components";
 
 import {InvoiceResumenCellTable, InvoiceStatusCellTable} from "invoice/presentational";
 import {MemberStatusCellTable} from "member/presentational";
@@ -6,58 +6,66 @@ import {MemberStatusCellTable} from "member/presentational";
 export function useMonthlyInvoicingTableColumns() {
     const tableColumns = [
         {
-            accessor: "tipo_socio",
-            Cell: MemberStatusCellTable,
-            className: "text-nowrap text-center",
-            getProps: () => ({
-                showOnlyIcons: true,
-            }),
+            id: "tipo_socio",
+            formatFunction: item => {
+                return <MemberStatusCellTable status={item.tipo_socio} showOnlyIcons />;
+            },
+            style: {textAlign: "center"},
         },
         {
-            Header: "Socio",
-            accessor: "nombre",
-            Cell: LinkCellTable,
-            getProps: () => ({
-                linkAccessor: "num_socio",
-                path: "socios",
-            }),
+            label: "Socio",
+            id: "nombre",
+            formatFunction: item => {
+                return (
+                    <LinkCellTable
+                        text={item.nombre}
+                        to={`/socios/${item.num_socio}`}
+                    />
+                );
+            },
         },
         {
-            Header: "Sector",
-            accessor: "sector",
-            className: "text-center",
+            label: "Sector",
+            id: "sector",
         },
         {
-            Header: "Nº Factura",
-            accessor: "numero",
-            Cell: LinkCellTable,
-            className: "text-center",
-            getProps: () => ({
-                linkAccessor: "id_factura",
-                path: "facturas_mes",
-            }),
+            label: "Nº Factura",
+            id: "numero",
+            formatFunction: item => {
+                return (
+                    <LinkCellTable
+                        text={item.numero}
+                        to={`/facturas_mes/${item.id_factura}`}
+                    />
+                );
+            },
         },
         {
-            Header: "Lectura",
-            accessor: "consumo",
+            label: "Lectura",
+            id: "consumo",
             className: "cubic-metre",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Importe",
-            accessor: "total",
+            label: "Importe",
+            id: "total",
             className: "dollar font-weight-bold",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Estado",
-            accessor: "estado",
-            className: "text-center",
-            Cell: InvoiceStatusCellTable,
+            label: "Estado",
+            id: "estado",
+            formatFunction: item => {
+                return <InvoiceStatusCellTable value={item.estado} />;
+            },
         },
         {
-            Header: "Meses previos",
-            accessor: "resumen",
-            className: "text-center",
-            Cell: InvoiceResumenCellTable,
+            label: "Meses previos",
+            id: "resumen",
+            formatFunction: item => {
+                return <InvoiceResumenCellTable value={item.resumen} />;
+            },
+            style: {textAlign: "center"},
         },
     ];
 

@@ -1,38 +1,46 @@
-const InvoicingMonthCellTable = ({row, column}) => {
-    const invoice = row.original.invoices.find(
-        invoice => invoice.mes_facturacion === column.invoicingMonth
+const InvoicingMonthCellTable = ({invoicingMonth, field, member}) => {
+    const invoice = member.invoices.find(
+        invoice => invoice.mes_facturacion === invoicingMonth
     );
-    const value = invoice ? invoice[column.field] : null;
+    const value = invoice ? invoice[field] : null;
     return value;
 };
 
 export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unitClass) {
     let tableColumns = [
         {
-            Header: "Número",
-            accessor: "num_socio",
+            label: "N.º",
+            id: "num_socio",
         },
         {
-            Header: "Socio",
-            accessor: "nombre",
-            style: {minWidth: "210px"},
+            label: "Socio",
+            id: "nombre",
         },
         {
-            Header: "Sector",
-            accessor: "sector",
+            label: "Sector",
+            id: "sector",
         },
     ];
+
     if (invoicingMonths.length > 0) {
         const invoicingMonthsColumns = invoicingMonths.map(invoicingMonth => {
             return {
-                Header:
+                label:
                     invoicingMonth.substring(4, 6) +
                     "/" +
                     invoicingMonth.substring(0, 4),
-                Cell: InvoicingMonthCellTable,
-                invoicingMonth: invoicingMonth,
-                field: selectedField,
+                formatFunction: member => {
+                    return (
+                        <InvoicingMonthCellTable
+                            invoicingMonth={invoicingMonth}
+                            field={selectedField}
+                            member={member}
+                        />
+                    );
+                },
+                id: selectedField,
                 className: unitClass,
+                style: {textAlign: "right"},
             };
         });
         tableColumns = [...tableColumns, ...invoicingMonthsColumns];

@@ -1,65 +1,84 @@
-import {LinkCellTable} from "base/table";
-import {InvoiceStatusCellTable} from "../presentational";
-import InvoiceGroupFieldsCellTable from "../presentational/InvoiceGroupFieldsCellTable";
-import InvoiceMonthCellTable from "../presentational/InvoiceMonthCellTable";
+import {LinkCellTable} from "base/table/components";
+import {
+    InvoiceGroupFieldsCellTable,
+    InvoiceMonthCellTable,
+    InvoiceStatusCellTable,
+} from "../presentational";
 
 export function useInvoicesTableColumns() {
     const tableColumns = [
         {
-            Header: "Socio",
-            accessor: "nombre",
-            className: "font-weight-bold text-nowrap",
+            label: "Socio",
+            id: "nombre",
+            formatFunction: item => {
+                return (
+                    <LinkCellTable
+                        text={item.nombre}
+                        to={`/socios/${item.num_socio}`}
+                    />
+                );
+            },
         },
         {
-            Header: "Sector",
-            accessor: "sector",
+            label: "Sector",
+            id: "sector",
         },
         {
-            Header: "Número",
-            accessor: "numero",
-            Cell: LinkCellTable,
-            getProps: () => ({
-                linkAccessor: "id_factura",
-            }),
+            label: "Número",
+            id: "numero",
+            formatFunction: item => {
+                return <LinkCellTable text={item.numero} to={`id_factura`} />;
+            },
         },
         {
-            Header: "Mes",
-            accessor: "mes_facturacion",
-            Cell: InvoiceMonthCellTable,
+            label: "Mes",
+            id: "mes_facturacion",
+            formatFunction: item => {
+                return <InvoiceMonthCellTable item={item} />;
+            },
         },
         {
-            Header: "Caudal anterior",
-            accessor: "caudal_anterior",
+            label: "Caudal anterior",
+            id: "caudal_anterior",
             className: "cubic-metre",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Caudal actual",
-            accessor: "caudal_actual",
+            label: "Caudal actual",
+            id: "caudal_actual",
             className: "cubic-metre",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Consumo",
-            accessor: "consumo",
+            label: "Consumo",
+            id: "consumo",
             className: "cubic-metre",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Mora",
-            accessor: "mora",
+            label: "Mora",
+            id: "mora",
             className: "dollar",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Otros",
-            Cell: InvoiceGroupFieldsCellTable,
+            label: "Otros",
+            formatFunction: item => {
+                <InvoiceGroupFieldsCellTable item={item} />;
+            },
         },
         {
-            Header: "Total",
-            accessor: "total",
+            label: "Total",
+            id: "total",
             className: "dollar font-weight-bold",
+            style: {textAlign: "right"},
         },
         {
-            Header: "Estado",
-            accessor: "estado",
-            Cell: InvoiceStatusCellTable,
+            label: "Estado",
+            id: "estado",
+            formatFunction: item => {
+                return <InvoiceStatusCellTable value={item.estado} />;
+            },
         },
     ];
 

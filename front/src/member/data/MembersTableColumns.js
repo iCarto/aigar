@@ -1,45 +1,49 @@
-import {LinkCellTable} from "base/table";
-import MemberStatusCellTable from "../presentational/MemberStatusCellTable";
+import {LinkCellTable} from "base/table/components";
+import {MemberStatusCellTable} from "member/presentational";
 
 export function useMembersTableColumns() {
     const tableColumns = [
         {
-            Header: "Número",
-            accessor: "num_socio",
+            label: "N.º",
+            id: "num_socio",
         },
         {
-            Header: "Socio",
-            accessor: "name",
-            Cell: LinkCellTable,
-            getProps: () => ({
-                linkAccessor: "num_socio",
-            }),
+            label: "Socio",
+            id: "name",
+            formatFunction: item => {
+                return (
+                    <LinkCellTable text={item.name} to={`/socios/${item.num_socio}`} />
+                );
+            },
         },
         {
-            Header: "Sector",
-            accessor: "sector",
+            label: "Sector",
+            id: "sector",
         },
         {
-            Header: "Medidor",
-            accessor: "medidor",
+            label: "Medidor",
+            id: "medidor",
         },
         {
-            Header: "Tipo de socio",
-            accessor: "tipo_socio",
-            Cell: MemberStatusCellTable,
-            className: "text-nowrap",
+            label: "Tipo de socio",
+            id: "tipo_socio",
+            formatFunction: item => {
+                return <MemberStatusCellTable status={item.tipo_socio} />;
+            },
         },
         {
-            Header: "Orden",
-            accessor: "orden",
+            label: "Orden",
+            id: "orden",
         },
         {
-            Header: "Consumo máximo",
-            accessor: "consumo_maximo",
+            label: "Consumo máximo",
+            id: "consumo_maximo",
+            className: "cubic-metre",
         },
         {
-            Header: "Consumo reducción fija",
-            accessor: "consumo_reduccion_fija",
+            label: "Consumo reducción fija",
+            id: "consumo_reduccion_fija",
+            className: "cubic-metre",
         },
     ];
     return {tableColumns};

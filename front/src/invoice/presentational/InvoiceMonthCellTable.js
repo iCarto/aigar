@@ -1,9 +1,9 @@
 import {DateUtil} from "base/format/utilities";
 
-const InvoiceMonthCellTable = ({row}) => {
+const InvoiceMonthCellTable = ({item}) => {
     return (
         <div className="text-nowrap">
-            {DateUtil.getMonthName(row.original.mes_facturado)} - {row.original.anho}
+            {DateUtil.getMonthName(item.mes_facturado)} - {item.anho}
         </div>
     );
 };

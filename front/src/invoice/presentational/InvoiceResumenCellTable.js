@@ -1,8 +1,8 @@
 import InvoiceStatusIcon from "./InvoiceStatusIcon";
 
-const InvoiceResumenCellTable = ({cell}) => {
-    if (cell.value) {
-        return cell.value.map((estado, index) => (
+const InvoiceResumenCellTable = ({value}) => {
+    if (value) {
+        return value.map((estado, index) => (
             <InvoiceStatusIcon key={index} estado={estado} />
         ));
     }

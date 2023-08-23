@@ -4,7 +4,7 @@ import {
     EditableTextCellTable,
     EditableSelectCellTable,
     LinkCellTable,
-} from "base/table";
+} from "base/table/components";
 import {MemberViewModal} from "member/presentational";
 
 const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {

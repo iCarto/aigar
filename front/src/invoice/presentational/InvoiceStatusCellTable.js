@@ -1,7 +1,7 @@
 import InvoiceStatusLabel from "./InvoiceStatusLabel";
 
-const InvoiceStatusCellTable = ({cell}) => {
-    return <InvoiceStatusLabel estado={cell.value} />;
+const InvoiceStatusCellTable = ({value}) => {
+    return <InvoiceStatusLabel estado={value} />;
 };
 
 export default InvoiceStatusCellTable;

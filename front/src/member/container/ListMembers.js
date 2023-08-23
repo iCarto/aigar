@@ -14,6 +14,7 @@ const ListMembers = ({members, totalMembers, handleFilterChange}) => {
             items={members}
             totalItems={totalMembers}
             columns={tableColumns}
+            selectAttribute="num_socio"
             pageActions={pageActions}
             groupActions={false}
             filterForm={<MembersFilterForm handleFilterChange={handleFilterChange} />}

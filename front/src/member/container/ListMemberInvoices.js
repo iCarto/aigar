@@ -1,14 +1,14 @@
 import {useMemberInvoicesTableColumns} from "../data";
-import {SortedPaginatedTable} from "base/table";
+import {SortedPaginatedSelectableTable} from "base/table/components";
 
 const ListMemberInvoices = ({invoices}) => {
     const {tableColumns} = useMemberInvoicesTableColumns();
 
     return (
-        <SortedPaginatedTable
+        <SortedPaginatedSelectableTable
             columns={tableColumns}
             data={invoices}
-            totalItems={invoices.length}
+            selectAttribute={"id_factura"}
         />
     );
 };

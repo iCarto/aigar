@@ -1,5 +1,5 @@
 import {ActionsBurgerMenu} from "base/ui/menu";
-import {SortedPaginatedTable} from "base/table";
+import {SortedPaginatedSelectableTable} from "base/table/components";
 import {NoItemsMessage} from "base/error/components";
 import {EntityListFilterForm} from "../form";
 import Grid from "@mui/material/Grid";
@@ -10,7 +10,9 @@ const EntityListPage = ({
     columns,
     filterForm,
     pageActions = [],
+    tableActions = [],
     groupActions = true,
+    selectAttribute = "",
 }) => {
     const displayActions = pageActions?.length > 0;
     const groupedActions = <ActionsBurgerMenu>{pageActions}</ActionsBurgerMenu>;
@@ -52,10 +54,12 @@ const EntityListPage = ({
             </Grid>
             <Grid item>
                 {items.length ? (
-                    <SortedPaginatedTable
+                    <SortedPaginatedSelectableTable
                         columns={columns}
                         data={items}
-                        totalItems={totalItems}
+                        // totalItems={totalItems}
+                        selectAttribute={selectAttribute}
+                        tableActions={tableActions}
                     />
                 ) : (
                     <NoItemsMessage itemsLength={items?.length} />

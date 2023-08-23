@@ -1,23 +1,23 @@
-const InvoiceGroupFieldsCellTable = ({row}) => {
+const InvoiceGroupFieldsCellTable = ({item}) => {
     return (
         <div className="small text-nowrap">
-            {row.original.derecho !== 0 ? (
-                <div className="dollar">Derecho: {row.original.derecho}</div>
+            {item.derecho !== 0 ? (
+                <div className="dollar">Derecho: {item.derecho}</div>
             ) : null}
-            {row.original.reconexion !== 0 ? (
-                <div className="dollar">Re-conexión: {row.original.reconexion}</div>
+            {item.reconexion !== 0 ? (
+                <div className="dollar">Re-conexión: {item.reconexion}</div>
             ) : null}
-            {row.original.asamblea !== 0 ? (
-                <div className="dollar">Asamblea: {row.original.asamblea}</div>
+            {item.asamblea !== 0 ? (
+                <div className="dollar">Asamblea: {item.asamblea}</div>
             ) : null}
-            {row.original.traspaso !== 0 ? (
-                <div className="dollar">Traspaso: {row.original.traspaso}</div>
+            {item.traspaso !== 0 ? (
+                <div className="dollar">Traspaso: {item.traspaso}</div>
             ) : null}
-            {row.original.otros !== 0 ? (
-                <div className="dollar">Otros: {row.original.otros}</div>
+            {item.otros !== 0 ? (
+                <div className="dollar">Otros: {item.otros}</div>
             ) : null}
-            {row.original.descuento !== 0 ? (
-                <div className="dollar">Descuento: {row.original.descuento}</div>
+            {item.descuento !== 0 ? (
+                <div className="dollar">Descuento: {item.descuento}</div>
             ) : null}
         </div>
     );

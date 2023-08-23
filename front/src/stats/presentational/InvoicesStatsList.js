@@ -1,4 +1,4 @@
-import {SortedPaginatedTable} from "base/table";
+import {SortedPaginatedTable} from "base/table/components";
 import {useInvoiceStatsTableColumns} from "stats/data";
 
 const InvoicesStatsList = ({
@@ -18,7 +18,7 @@ const InvoicesStatsList = ({
         <SortedPaginatedTable
             columns={columns}
             data={invoicesStats}
-            totalItems={totalInvoices}
+            selectAttribute={"id_factura"}
         />
     ) : null;
 };

@@ -10,6 +10,7 @@ const ListInvoices = ({invoices, totalInvoices, handleFilterChange}) => {
             items={invoices}
             totalItems={totalInvoices}
             columns={tableColumns}
+            selectAttribute="id_factura"
             filterForm={<InvoicesFilterForm handleFilterChange={handleFilterChange} />}
         />
     );

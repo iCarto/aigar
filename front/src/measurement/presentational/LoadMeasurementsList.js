@@ -3,7 +3,7 @@ import {
     SortedTable,
     EditableTextCellTable,
     EditableSelectCellTable,
-    LinkCellTable,
+    LinkAccessorCellTable,
 } from "base/table/components";
 import {MemberViewModal} from "member/presentational";
 
@@ -34,9 +34,9 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
             {
                 Header: "Socio",
                 accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
-                Cell: LinkCellTable,
+                Cell: LinkAccessorCellTable,
                 getProps: () => ({
-                    handleClickWithItem: handleClickViewMember,
+                    handleClick: handleClickViewMember,
                     linkAccessor: "num_socio",
                 }),
             },
@@ -66,6 +66,7 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
             {
                 Header: "Consumo",
                 accessor: "consumo",
+                className: "cubic-metre font-weight-bold",
             },
         ];
 

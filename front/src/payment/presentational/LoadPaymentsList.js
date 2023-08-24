@@ -4,7 +4,7 @@ import {
     SortedTable,
     EditableTextCellTable,
     EditableDateCellTable,
-    LinkCellTable,
+    LinkAccessorCellTable,
 } from "base/table/components";
 
 const LoadPaymentsList = ({payments, onUpdatePayment}) => {
@@ -34,9 +34,9 @@ const LoadPaymentsList = ({payments, onUpdatePayment}) => {
             {
                 Header: "Socio",
                 accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
-                Cell: LinkCellTable,
+                Cell: LinkAccessorCellTable,
                 getProps: () => ({
-                    handleClickWithItem: handleClickViewMember,
+                    handleClick: handleClickViewMember,
                     linkAccessor: "num_socio",
                 }),
             },
@@ -57,6 +57,8 @@ const LoadPaymentsList = ({payments, onUpdatePayment}) => {
             {
                 Header: "Monto",
                 accessor: "monto",
+                className: "dollar",
+                style: {textAlign: "right"},
             },
         ];
 

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {SortedTable, LinkCellTable} from "base/table/components";
+import {SortedTable, LinkAccessorCellTable} from "base/table/components";
 import {Spinner} from "base/common";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 import {MemberViewModal} from "member/presentational";
@@ -31,9 +31,9 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
             {
                 Header: "Socio",
                 accessor: d => `${d.num_socio} - ${d.nombre}`,
-                Cell: LinkCellTable,
+                Cell: LinkAccessorCellTable,
                 getProps: () => ({
-                    handleClickWithItem: handleClickViewMember,
+                    handleClick: handleClickViewMember,
                     linkAccessor: "num_socio",
                 }),
             },

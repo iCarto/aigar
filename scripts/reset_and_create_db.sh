@@ -52,6 +52,7 @@ else
     python "${this_dir}/../back/manage.py" migrate
 
     sqlite3 back/db.sqlite3 "
+        PRAGMA foreign_keys = ON;
 
         INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
             ('Tihuapa norte', 'Tihuapa norte', 4)
@@ -85,24 +86,7 @@ else
                 END
                 , medidor, solo_mecha, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at, is_active
             FROM api_member;
-        DROP TABLE api_member;
 
-        INSERT INTO back_invoice
-        (
-            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, sector_id
-        )
-        SELECT
-            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, CASE sector
-                    WHEN 1 THEN '1 - Tihuapa norte'
-                    WHEN 2 THEN '2 - Tihuapa norte'
-                    WHEN 3 THEN '3 - Tihuapa norte'
-                    WHEN 4 THEN '4 - Tihuapa norte'
-                    WHEN 5 THEN '5 - Tlacuxtli'
-                    WHEN 6 THEN '6 - Tlacuxtli'
-                    WHEN 7 THEN '7 - Tlacuxtli'
-                END
-            FROM api_invoice;
-        DROP TABLE api_invoice;
 
         INSERT INTO back_invoicingmonth
         (
@@ -121,7 +105,25 @@ else
             created_at,
             updated_at
         FROM api_invoicingmonth;
+
+        INSERT INTO back_invoice
+        (
+            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, sector_id
+        )
+        SELECT
+            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, CASE sector
+                    WHEN 1 THEN '1 - Tihuapa norte'
+                    WHEN 2 THEN '2 - Tihuapa norte'
+                    WHEN 3 THEN '3 - Tihuapa norte'
+                    WHEN 4 THEN '4 - Tihuapa norte'
+                    WHEN 5 THEN '5 - Tlacuxtli'
+                    WHEN 6 THEN '6 - Tlacuxtli'
+                    WHEN 7 THEN '7 - Tlacuxtli'
+                END
+            FROM api_invoice;
+        DROP TABLE api_invoice;
         DROP TABLE api_invoicingmonth;
+        DROP TABLE api_member;
 
         INSERT INTO back_measurement
         (
@@ -170,7 +172,6 @@ else
             mes_facturacion_id
         FROM api_payment;
         DROP TABLE api_payment;
-
         "
 fi
 

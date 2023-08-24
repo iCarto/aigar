@@ -15,10 +15,7 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def perform_create(self, serializer):
         invoicing_month_to_close_query = InvoicingMonth.objects.filter(is_open=True)
-        if invoicing_month_to_close_query.count() > 1:
-            raise serializers.ValidationError(
-                "Existen varios meses de facturación abiertos. Debe revisar este problema."
-            )
+
         invoicing_month_to_close = invoicing_month_to_close_query.first()
 
         invoicing_month_to_close_payments = Payment.objects.filter(

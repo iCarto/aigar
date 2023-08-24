@@ -1,4 +1,5 @@
 from typing import Any
+
 from django.db import models
 
 
@@ -15,6 +16,14 @@ class InvoicingMonthManager(models.Manager):
 class InvoicingMonth(models.Model):
     class Meta(object):
         unique_together = (("anho", "mes"),)
+        constraints = [
+            models.UniqueConstraint(
+                name="%(app_label)s_%(class)s_only_one_invoicing_month_open",  # noqa: WPS323
+                violation_error_message="Existen varios meses de facturación abiertos. Debe revisar este problema.",
+                fields=["is_open"],
+                condition=models.Q(is_open=True),
+            )
+        ]
 
     objects = InvoicingMonthManager()
 
@@ -46,3 +55,7 @@ class InvoicingMonth(models.Model):
 
     def __str__(self):
         return f"{self.anho} - {self.mes} - {self.is_open}"
+
+    def save(self, **kwargs) -> None:
+        self.full_clean()
+        return super().save(**kwargs)

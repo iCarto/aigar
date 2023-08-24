@@ -1,4 +1,4 @@
-import {ActionsBurgerMenu} from "base/ui/menu";
+import {ActionsBurgerMenu} from "base/ui/menu/components";
 import {SortedPaginatedSelectableTable} from "base/table/components";
 import {NoItemsMessage} from "base/error/components";
 import {EntityListFilterForm} from "../form";

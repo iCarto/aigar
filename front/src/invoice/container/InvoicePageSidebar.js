@@ -1,5 +1,5 @@
 import {PrintInvoicesButton} from "monthlyinvoicing/container/actions";
-import {ActionsSidebarMenu} from "base/ui/menu";
+import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {UpdateInvoiceButton} from ".";
 
 const InvoicePageSidebar = ({invoice, urlPathBack = ""}) => {

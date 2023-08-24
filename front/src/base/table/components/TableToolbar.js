@@ -1,6 +1,6 @@
 import {alpha} from "@mui/material/styles";
 
-import {ActionsBurgerMenu} from "base/ui/menu";
+import {ActionsBurgerMenu} from "base/ui/menu/components";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 

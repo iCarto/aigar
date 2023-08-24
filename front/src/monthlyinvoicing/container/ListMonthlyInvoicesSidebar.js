@@ -1,7 +1,7 @@
 import {ESTADOS_FACTURA} from "invoice/model";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {MonthlyInvoicingNavigator} from "../presentational";
-import {ActionsSidebarMenu} from "base/ui/menu";
+import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {
     ExportMemberButton,
     LoadMeasurementsButton,

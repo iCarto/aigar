@@ -1,4 +1,4 @@
-import {ActionsSidebarMenu} from "base/ui/menu";
+import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {EditButton} from "base/common";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 import {CreateInvoiceButton} from "invoice/presentational";

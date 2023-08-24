@@ -12,7 +12,6 @@ def test_negative_order_not_allowed():
     data = {
         "name": "foo",
         "medidor": "123456",
-        "solo_mecha": False,
         "orden": -1,
         "is_active": True,
         "sector": ZoneFactory.create(),

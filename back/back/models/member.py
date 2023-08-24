@@ -76,11 +76,6 @@ class Member(models.Model):
         help_text="",
     )
 
-    # El socio dispone de conexión pero no consume agua
-    solo_mecha = models.BooleanField(
-        blank=False, null=False, default=False, verbose_name="Sólo Mecha", help_text=""
-    )
-
     # TODO: Deberíamos poder fijar un orden máximo igual al número de socios activos
     # TODO: #4228
     orden = RangedIntegerField(
@@ -132,14 +127,10 @@ class Member(models.Model):
 
     @property
     def cuota_fija(self):
-        if self.solo_mecha:
-            return fixed_values["CUOTA_FIJA_SOLO_MECHA"]
         return fixed_values["CUOTA_FIJA_NORMAL"]
 
     @property
     def ahorro(self):
-        if self.solo_mecha:
-            return fixed_values["AHORRO_MANO_DE_OBRA_SOLO_MECHA"]
         return fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
 
     @property

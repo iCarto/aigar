@@ -31,7 +31,6 @@ def parse_invoice_spreadsheet(xls):
         "Orden": "orden",
         "Num_contador": "medidor",
         "Nombre": "nombre",
-        "Mecha": "solo_mecha",
         "Canterior": "caudal_anterior",
         "Cactual": "caudal_actual",
         "Consumo": "consumo",

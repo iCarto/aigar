@@ -16,7 +16,6 @@ class MemberShortSerializer(serializers.ModelSerializer):
             "num_socio",
             "name",
             "sector",
-            "solo_mecha",
             "consumo_maximo",
             "consumo_reduccion_fija",
         ]

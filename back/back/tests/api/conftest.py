@@ -18,7 +18,6 @@ def new_member_data() -> dict:
     return {
         "name": "foo",
         "medidor": "123456",
-        "solo_mecha": False,
         "orden": 2,
         "observaciones": "",
         "is_active": True,

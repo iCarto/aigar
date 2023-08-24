@@ -56,7 +56,6 @@ def get_fixtures_members(invoices, last_invoicing_month):
                                 "medidor": int(invoice["medidor"])
                                 if invoice.get("medidor", None) is not None
                                 else "",
-                                "solo_mecha": invoice.get("solo_mecha", None) == "si",
                                 "orden": 0
                                 if invoice.get("orden", None) is None
                                 else int(invoice["orden"]),
@@ -191,7 +190,6 @@ def get_fixtures_invoices(invoices):
 
 
 def create_django_fixtures(database):
-
     fixtures_invoicing_months = get_fixtures_invoicing_months(database["invoices"])
     fixtures = fixtures_invoicing_months
 

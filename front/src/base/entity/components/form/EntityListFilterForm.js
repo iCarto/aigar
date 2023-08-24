@@ -15,7 +15,7 @@ const EntityListFilterForm = ({filterForm}) => {
     return (
         <DomainProvider>
             {filterForm}
-            <Grid item ml={-0.5} mt={1.75}>
+            <Grid item ml={-0.5}>
                 <IconButton
                     aria-label="clear-filters"
                     onClick={clearFilters}

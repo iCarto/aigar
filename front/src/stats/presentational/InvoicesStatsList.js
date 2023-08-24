@@ -15,11 +15,7 @@ const InvoicesStatsList = ({
     );
 
     return invoicesStats ? (
-        <SortedPaginatedTable
-            columns={columns}
-            data={invoicesStats}
-            selectAttribute={"id_factura"}
-        />
+        <SortedPaginatedTable columns={columns} data={invoicesStats} />
     ) : null;
 };
 

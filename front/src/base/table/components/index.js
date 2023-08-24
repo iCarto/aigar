@@ -1,7 +1,9 @@
 export {default as SortedTable} from "./SortedTable";
+export {default as SortedPaginatedTable} from "./SortedPaginatedTable";
 export {
     default as SortedPaginatedSelectableTable,
 } from "./SortedPaginatedSelectableTable";
+
 export {default as SortedTableHead} from "./SortedTableHead";
 export {default as Table} from "./Table";
 export {default as TableToolbar} from "./TableToolbar";

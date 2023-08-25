@@ -1,31 +1,14 @@
+import {MEMBER_TYPES_MAPPING} from "member/data";
+
 const MemberStatusCellTable = ({status, showOnlyIcons = false}) => {
-    if (status === "eliminado")
-        return (
-            <span className="text-secondary">
-                <i className="fas fa-times mr-1" title="Eliminado" />{" "}
-                {showOnlyIcons ? null : "Eliminado"}
-            </span>
-        );
-    if (status === "solo_mecha")
-        return (
-            <span>
-                <i className="fas fa-tint-slash mr-1" title="Solo mecha" />{" "}
-                {showOnlyIcons ? null : "Solo mecha"}
-            </span>
-        );
-    if (status === "con_ajuste_consumo")
-        return (
-            <span>
-                <i className="fas fa-adjust mr-1" title="Con ajuste de consumo" />{" "}
-                {showOnlyIcons ? null : "Con ajuste"}
-            </span>
-        );
-    return (
+    const selectedType = MEMBER_TYPES_MAPPING[status];
+
+    return selectedType ? (
         <span>
-            <i className="fas fa-tint mr-1" title="Conectado" />{" "}
-            {showOnlyIcons ? null : "Conectado"}
+            <i className={`${selectedType.icon} mr-1`} title={selectedType.label} />{" "}
+            {showOnlyIcons ? null : selectedType.label}
         </span>
-    );
+    ) : null;
 };
 
 export default MemberStatusCellTable;

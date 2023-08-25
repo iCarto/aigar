@@ -45,9 +45,7 @@ const MemberService = {
     },
 
     setMemberConnected(member, connected) {
-        const memberWithSoloMechaUpdated = createMember(
-            Object.assign({}, member, {solo_mecha: connected})
-        );
+        const memberWithSoloMechaUpdated = createMember(Object.assign({}, member));
         return this.updateMember(memberWithSoloMechaUpdated);
     },
 

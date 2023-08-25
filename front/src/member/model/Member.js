@@ -10,7 +10,6 @@ const dataFromMyRESTAPI = [
         "name": "Pepe Pérez",
         "sector": 4,
         "medidor": "",
-        "solo_mecha": false,
         "orden": 56,
         "observaciones": "",
         "consumo_maximo": 0,
@@ -22,7 +21,6 @@ const dataFromMyRESTAPI = [
         "name": "Juanita Pérez",
         "sector": 5,
         "medidor": "763902",
-        "solo_mecha": false,
         "orden": 67,
         "observaciones": "",
         "consumo_maximo": 0,
@@ -30,14 +28,11 @@ const dataFromMyRESTAPI = [
     }
 }
 ]
-
 */
+
 const getTipoSocio = function(member) {
     if (member.is_active === false) {
         return "eliminado";
-    }
-    if (member.solo_mecha === true) {
-        return "solo_mecha";
     }
     if (
         (member.consumo_maximo && member.consumo_maximo !== 0) ||
@@ -51,7 +46,6 @@ const getTipoSocio = function(member) {
 class Members extends Array {}
 
 const member_api_adapter = member => {
-    // member["solo_mecha"] = member["medidor"] === "M" ? true : false;
     member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
     member["tipo_socio"] = getTipoSocio(member);
     return member;
@@ -88,8 +82,6 @@ const createMember = ({
     sector = "",
     /* String */
     medidor = "",
-    /* El socio dispone de conexión pero no consume agua */
-    solo_mecha = false,
     /* Entero. Orden del recorrido ¿ruta? sería un nombre alternativo válido */
     /* Si se mete uno nuevo por el medio mover todo el resto de rutas a mano es
     un lio */
@@ -105,7 +97,6 @@ const createMember = ({
         name,
         sector,
         medidor,
-        solo_mecha,
         orden: parseInt(orden),
         observaciones,
         consumo_maximo: consumo_maximo === "" ? null : consumo_maximo,

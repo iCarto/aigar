@@ -7,11 +7,11 @@ const MemberPageSidebar = ({member, numInvoices}) => {
     const menuActions = [
         <EditButton />,
         <CreateInvoiceButton disabled={!!numInvoices} />,
-        member.solo_mecha ? (
-            <ConnectMemberButton member={member} />
-        ) : (
-            <DisconnectMemberButton member={member} />
-        ),
+        // !member.is_active ? (
+        //     <ConnectMemberButton member={member} />
+        // ) : (
+        //     <DisconnectMemberButton member={member} />
+        // ),
         <DeleteMemberButton member={member} />,
     ];
 

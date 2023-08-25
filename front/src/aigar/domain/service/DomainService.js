@@ -19,7 +19,6 @@ const DomainService = {
     getMemberTypes(showEliminado = true) {
         let memberTypes = [
             {key: "conectado", value: "Conectado"},
-            {key: "solo_mecha", value: "Solo mecha"},
             {key: "con_ajuste_consumo", value: "Con ajuste"},
         ];
         if (showEliminado) {

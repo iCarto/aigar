@@ -4,6 +4,7 @@ import {
     SectionFieldValue,
     SectionSummaryCard,
 } from "base/ui/section/presentational";
+import {MemberTypeField} from "member/presentational";
 import Grid from "@mui/material/Grid";
 
 const MemberDetail = ({member, isSummary = false}) => {
@@ -37,20 +38,9 @@ const MemberDetail = ({member, isSummary = false}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Tipo de socio/a"
-                    value={
-                        member?.solo_mecha ? (
-                            <strong>
-                                <i className="fas fa-tint-slash mr-2" />
-                                Solo mecha
-                            </strong>
-                        ) : (
-                            <strong>
-                                <i className="fas fa-tint mr-2" />
-                                Conectado
-                            </strong>
-                        )
-                    }
+                    value={<MemberTypeField memberType={member.tipo_socio} />}
                     containerWidth="short"
+                    highlightValue
                 />
             </Grid>
             <Grid item xs={6}>

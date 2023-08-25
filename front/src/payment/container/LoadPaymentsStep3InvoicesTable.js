@@ -24,6 +24,7 @@ const LoadPaymentsStep3InvoicesTable = ({
 
     useEffect(() => {
         if (!invoices.length) {
+            onValidateStep(false);
             InvoicingMonthService.previewInvoicesWithPayments(
                 id_mes_facturacion,
                 payments
@@ -46,26 +47,22 @@ const LoadPaymentsStep3InvoicesTable = ({
         }));
     };
 
-    const getErrorMessages = () => {
-        const totalInvoicesWithErrors = invoices.filter(
-            invoice => invoice.errors.length !== 0
-        ).length;
-        if (totalInvoicesWithErrors !== 0) {
-            return (
-                <div className="alert alert-warning text-center" role="alert">
-                    Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
-                    alertas que debería revisar.
-                </div>
-            );
-        }
-        return null;
-    };
+    const totalInvoicesWithErrors = invoices.filter(
+        invoice => invoice.errors.length !== 0
+    ).length;
+
+    const errorsMessage = (
+        <div className="alert alert-warning text-center" role="alert">
+            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            debería revisar.
+        </div>
+    );
 
     return (
         <div className="d-flex flex-column justify-content-around">
             {invoices ? (
                 <>
-                    {getErrorMessages()}
+                    {totalInvoicesWithErrors ? errorsMessage : null}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}

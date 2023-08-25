@@ -18,6 +18,7 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     const {filterMonthlyData} = useFilterMonthlyData();
 
     useEffect(() => {
+        onValidateStep(false);
         reviewMeasurements(measurements);
     }, []);
 
@@ -55,25 +56,20 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         setFilter(prevState => ({...prevState, ...newFilter}));
     };
 
-    const getErrorMessages = () => {
-        const totalRegistersWithErrors = getTotalErrors(measurements);
-        if (totalRegistersWithErrors !== 0) {
-            return (
-                <div className="alert alert-danger text-center" role="alert">
-                    Existen <strong>{totalRegistersWithErrors}</strong> registros con
-                    error de un total de <strong>{measurements.length}</strong>{" "}
-                    registros leídos.
-                </div>
-            );
-        }
-        return null;
-    };
+    const totalRegistersWithErrors = getTotalErrors(measurements);
+
+    const errorsMessage = (
+        <div className="alert alert-danger text-center" role="alert">
+            Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
+            un total de <strong>{measurements.length}</strong> registros leídos.
+        </div>
+    );
 
     const filteredMeasurements = filterMonthlyData(measurements, filter);
 
     return (
         <div className="d-flex flex-column justify-content-around">
-            {getErrorMessages()}
+            {totalRegistersWithErrors ? errorsMessage : null}
             <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
             <LoadMeasurementsList
                 measurements={filteredMeasurements}

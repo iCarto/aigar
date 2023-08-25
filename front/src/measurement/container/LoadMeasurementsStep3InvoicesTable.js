@@ -21,6 +21,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
     const {filterMonthlyData} = useFilterMonthlyData();
 
     useEffect(() => {
+        onValidateStep(false);
         InvoicingMonthService.previewInvoicesWithMeasurements(
             id_mes_facturacion,
             measurements

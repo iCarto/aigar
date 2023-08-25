@@ -86,7 +86,8 @@ const LoadPaymentsStep2PaymentsTable = ({
             });
         });
         onChangePayments(paymentsWithErrors);
-        onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0);
+        console.log(getPaymentsTotalErrors(paymentsWithErrors) === 0);
+        onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
     };
 
     const handleFilterChange = newFilter => {
@@ -98,7 +99,15 @@ const LoadPaymentsStep2PaymentsTable = ({
 
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
+    const errorsMessage = (
+        <div className="alert alert-danger text-center" role="alert">
+            Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
+            un total de <strong>{payments.length}</strong> registros leídos.
+        </div>
+    );
+
     if (loading) {
+        onValidateStep(false);
         return <Spinner message="Verificando pagos" />;
     }
 
@@ -107,13 +116,7 @@ const LoadPaymentsStep2PaymentsTable = ({
 
         return (
             <div className="d-flex flex-column justify-content-around">
-                {totalRegistersWithErrors && (
-                    <div className="alert alert-danger text-center" role="alert">
-                        Existen <strong>{totalRegistersWithErrors}</strong> registros
-                        con error de un total de <strong>{payments.length}</strong>{" "}
-                        registros leídos.
-                    </div>
-                )}
+                {totalRegistersWithErrors ? errorsMessage : null}
                 <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
                 <LoadPaymentsList
                     payments={paymentsFiltered}
@@ -122,8 +125,6 @@ const LoadPaymentsStep2PaymentsTable = ({
             </div>
         );
     }
-
-    return <Spinner message="Cargando lecturas" />;
 };
 
 export default LoadPaymentsStep2PaymentsTable;

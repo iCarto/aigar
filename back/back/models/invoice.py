@@ -1,7 +1,6 @@
 from django.db import models
 
 from back.models.fixed_values import fixed_values
-from back.models.invoicing_month import InvoicingMonth
 from domains.models.zone import Zone
 
 
@@ -13,12 +12,12 @@ class InvoiceStatus(models.TextChoices):
     ANULADA = "anulada"
 
 
-def _next_month(invoicing_month: InvoicingMonth) -> int:
+def _next_month(invoicing_month) -> int:
     month = int(invoicing_month.mes)
     return 1 if month + 1 > 12 else month + 1
 
 
-def _next_year(invoicing_month: InvoicingMonth) -> int:
+def _next_year(invoicing_month) -> int:
     year = int(invoicing_month.anho)
     month = int(invoicing_month.mes)
     return year + 1 if month == 12 else year
@@ -212,7 +211,7 @@ class Invoice(models.Model):
     )
 
     mes_facturacion = models.ForeignKey(
-        InvoicingMonth,
+        "InvoicingMonth",
         null=False,
         blank=False,
         related_name="invoices",

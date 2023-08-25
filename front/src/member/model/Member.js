@@ -1,15 +1,5 @@
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 
-const SECTORES_COMUNIDADES = {
-    0: "",
-    1: "TIHUAPA NORTE",
-    2: "TIHUAPA NORTE",
-    3: "TIHUAPA NORTE",
-    4: "TIHUAPA NORTE",
-    5: "TLACUXTLI",
-    6: "TLACUXTLI",
-    7: "TLACUXTLI",
-};
 /*
 Usage example
 
@@ -42,7 +32,7 @@ const dataFromMyRESTAPI = [
 ]
 
 */
-const getTipoSocio = function (member) {
+const getTipoSocio = function(member) {
     if (member.is_active === false) {
         return "eliminado";
     }
@@ -94,8 +84,8 @@ const createMember = ({
     num_socio = -1,
     /* String */
     name = "",
-    /* Entero. Mismo razonamiento que para `num_socio` */
-    sector = 0,
+    /* String. Ver explicación en el modelo zone.py */
+    sector = "",
     /* String */
     medidor = "",
     /* El socio dispone de conexión pero no consume agua */
@@ -105,7 +95,6 @@ const createMember = ({
     un lio */
     orden = -1,
     observaciones = "",
-
     consumo_maximo = null,
     consumo_reduccion_fija = null,
     tipo_socio = "",
@@ -124,22 +113,7 @@ const createMember = ({
             consumo_reduccion_fija === "" ? null : consumo_reduccion_fija,
         tipo_socio,
         is_active,
-        // comunidad: SECTORES_COMUNIDADES[this.sector],
     };
-
-    // Un "getter" es enumerable en un object literal. Definirlo así permite
-    // jugar con esto y tenenerlo en JSON.stringify(myobj) o no
-    /*
-    Object.defineProperty(publicApi, "comunidad", {
-        get: () => SECTORES_COMUNIDADES[this.sector],
-        enumerable: false,
-    });
-    */
-    // Pero si ya no va a ser writable podemos fijar el valor directamente.
-    Object.defineProperty(publicApi, "comunidad", {
-        value: SECTORES_COMUNIDADES[sector],
-        enumerable: true, // valor por defecto pero interesa ser explicito
-    });
 
     // objeto inmutable para llevarse bien con react.
     return Object.freeze(publicApi);

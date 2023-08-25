@@ -1,17 +1,6 @@
 import {NumberUtil} from "base/format/utilities";
 import {getTipoSocio} from "../../member/model/Member";
 
-const SECTORES_COMUNIDADES = {
-    0: "",
-    1: "TIHUAPA NORTE",
-    2: "TIHUAPA NORTE",
-    3: "TIHUAPA NORTE",
-    4: "TIHUAPA NORTE",
-    5: "TLACUXTLI",
-    6: "TLACUXTLI",
-    7: "TLACUXTLI",
-};
-
 const ESTADOS_FACTURA = {
     NUEVA: "nueva",
     PENDIENTE_DE_COBRO: "pendiente_de_cobro",
@@ -154,11 +143,6 @@ const createInvoice = ({
         is_active,
         errors,
     };
-
-    Object.defineProperty(publicApi, "comunidad", {
-        value: SECTORES_COMUNIDADES[sector],
-        enumerable: true, // valor por defecto pero interesa ser explicito
-    });
 
     // objeto inmutable para llevarse bien con react.
     return Object.freeze(publicApi);

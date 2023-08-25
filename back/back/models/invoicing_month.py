@@ -44,10 +44,8 @@ class InvoicingMonthManager(models.Manager):
 
         active_members = Member.objects.filter(is_active=True)
 
-        last_month_invoices = (
-            Invoice.objects.prefetch_related("member")
-            .filter(member__in=active_members, mes_facturacion=invoicing_month_to_close)
-            .exclude(estado=InvoiceStatus.ANULADA)
+        last_month_invoices = Invoice.objects.prefetch_related("member").filter(
+            member__in=active_members, mes_facturacion=invoicing_month_to_close
         )
         for member in active_members:
             last_invoice = [

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import QuerySet
 
 from back.models.fixed_values import fixed_values
 from domains.models.zone import Zone
@@ -24,14 +25,16 @@ def _next_year(invoicing_month) -> int:
 
 
 class InvoiceManager(models.Manager):
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().exclude(InvoiceStatus.ANULADA)
+
+    def with_cancelled(self) -> QuerySet:
+        return super().get_queryset()
+
     def member_updated(self, member):
-        last_invoice = (
-            Invoice.objects.filter(
-                member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
-            )
-            .exclude(estado=InvoiceStatus.ANULADA)  # innecesario con el filtro de NUEVA
-            .first()
-        )
+        last_invoice = Invoice.objects.filter(
+            member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
+        ).first()
         if last_invoice:
             last_invoice.nombre = member.name
             last_invoice.sector = member.sector

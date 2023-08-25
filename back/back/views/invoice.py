@@ -21,8 +21,10 @@ class InvoiceViewSet(
     serializer_class = InvoiceSerializer
 
     def get_queryset(self):
-        queryset = Invoice.objects.select_related("member", "sector").order_by(
-            "-mes_facturacion"
+        queryset = (
+            Invoice.objects.with_cancelled()
+            .select_related("member", "sector")
+            .order_by("-mes_facturacion")
         )
         num_socio = self.request.query_params.get("num_socio", None)
         if num_socio is not None:
@@ -61,7 +63,6 @@ class InvoiceViewSet(
             last_three_months_invoices = (
                 Invoice.objects.select_related("member")
                 .filter(mes_facturacion__in=last_three_invoicing_months_ids)
-                .exclude(estado=InvoiceStatus.ANULADA)
                 .order_by("-mes_facturacion")
             )
 
@@ -91,17 +92,15 @@ class InvoiceViewSet(
 
 
 class InvoiceStatsView(ListAPIView):
-    queryset = (
-        Invoice.objects.prefetch_related("member", "mes_facturacion")
-        .exclude(estado=InvoiceStatus.ANULADA)
-        .order_by("mes_facturacion", "member")
+    queryset = Invoice.objects.prefetch_related("member", "mes_facturacion").order_by(
+        "mes_facturacion", "member"
     )
     serializer_class = InvoiceStatsSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
 
-        all_invoices = Invoice.objects.exclude(estado=InvoiceStatus.ANULADA).values(
+        all_invoices = Invoice.objects.values(
             "id_factura",
             "mes_facturacion",
             "mes_facturado",

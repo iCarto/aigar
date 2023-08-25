@@ -2,7 +2,7 @@ from django.db import models, transaction
 
 from back.fields import RangedIntegerField
 from back.models.fixed_values import fixed_values
-from back.models.invoice import Invoice, InvoiceStatus
+from back.models.invoice import Invoice
 from domains.models.zone import Zone
 
 
@@ -141,7 +141,6 @@ class Member(models.Model):
     def lectura_anterior(self):
         last_invoice = (
             Invoice.objects.filter(mes_facturacion__is_open=True)
-            .exclude(estado=InvoiceStatus.ANULADA)
             .values_list("caudal_actual", "caudal_anterior")
             .filter(member_id=self.num_socio)
             .first()

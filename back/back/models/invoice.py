@@ -297,11 +297,11 @@ class Invoice(models.Model):
     def calculated_reconexion(self, member) -> float:
         # TODO Comprobar que la factura anterior fue emitida para un socio con solo mecha
         # pero ahora el socio está activo. Nos basamos en el campo de cuota_fija o creamos un nuevo campo?
-        if (
-            not member.solo_mecha
-            and self.cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
-        ):
-            return 10
+        # if (
+        #     not member.solo_mecha
+        #     and self.cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
+        # ):
+        #     return 10
         return 0
 
     def calculated_cuota_variable(self, consumo_final: float) -> float:

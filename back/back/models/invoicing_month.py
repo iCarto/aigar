@@ -43,6 +43,7 @@ class InvoicingMonth(models.Model):
 
     mes = models.TextField(null=False, blank=False, verbose_name="Mes", help_text="")
 
+    # There will be always one and only one InvoicingMonth open
     is_open = models.BooleanField(
         null=False, blank=False, default=True, verbose_name="Mes", help_text=""
     )

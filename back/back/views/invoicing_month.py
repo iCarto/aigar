@@ -14,9 +14,7 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def perform_create(self, serializer):
-        invoicing_month_to_close_query = InvoicingMonth.objects.filter(is_open=True)
-
-        invoicing_month_to_close = invoicing_month_to_close_query.first()
+        invoicing_month_to_close = InvoicingMonth.objects.get(is_open=True)
 
         invoicing_month_to_close_payments = Payment.objects.filter(
             mes_facturacion=invoicing_month_to_close
@@ -26,30 +24,20 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
                 "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
             )
 
-        if invoicing_month_to_close is not None:
-            invoicing_month_to_close.is_open = False
-            invoicing_month_to_close.save()
+        last_month_open_invoices = Invoice.objects.filter(
+            mes_facturacion=invoicing_month_to_close,
+            estado__in=[InvoiceStatus.NUEVA, InvoiceStatus.PENDIENTE_DE_COBRO],
+        )
 
-            last_month_invoices = Invoice.objects.filter(
-                mes_facturacion=invoicing_month_to_close
-            )
-            for last_month_invoice in last_month_invoices:
-                if (
-                    last_month_invoice.estado == InvoiceStatus.NUEVA
-                    or last_month_invoice.estado == InvoiceStatus.PENDIENTE_DE_COBRO
-                ):
-                    if (
-                        last_month_invoice.total is not None
-                        and (
-                            last_month_invoice.pago_1_al_10
-                            + last_month_invoice.pago_11_al_30
-                        )
-                        >= last_month_invoice.total
-                    ):
-                        last_month_invoice.estado = InvoiceStatus.COBRADA
-                    else:
-                        last_month_invoice.estado = InvoiceStatus.NO_COBRADA
-                    last_month_invoice.save()
+        for last_month_invoice in last_month_open_invoices:
+            if last_month_invoice.deuda <= 0:
+                last_month_invoice.estado = InvoiceStatus.COBRADA
+            else:
+                last_month_invoice.estado = InvoiceStatus.NO_COBRADA
+            last_month_invoice.save()
+
+        invoicing_month_to_close.is_open = False
+        invoicing_month_to_close.save()
 
         super().perform_create(serializer)
 
@@ -57,7 +45,7 @@ class InvoicingMonthViewSet(viewsets.ModelViewSet):
 
         last_month_invoices = (
             Invoice.objects.prefetch_related("member")
-            .filter(member__in=active_members, mes_facturacion__is_open=True)
+            .filter(member__in=active_members, mes_facturacion=invoicing_month_to_close)
             .exclude(estado=InvoiceStatus.ANULADA)
         )
         for member in active_members:

@@ -152,7 +152,7 @@ class InvoiceStatsView(ListAPIView):
             }
             all_invoices_payments_info.append(invoice_payment_info)
 
-        last_invoicing_month = InvoicingMonth.objects.filter(is_open=True).first()
+        last_invoicing_month = InvoicingMonth.objects.get(is_open=True)
         context.update(
             {
                 "request": self.request,

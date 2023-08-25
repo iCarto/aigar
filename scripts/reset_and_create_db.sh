@@ -109,10 +109,10 @@ else
 
         INSERT INTO back_invoice
         (
-            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, sector_id
+            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id, sector_id
         )
         SELECT
-            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, is_active, member_id, mes_facturacion_id, CASE sector
+            id_factura, version, nombre, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id, CASE sector
                     WHEN 1 THEN '1 - Tihuapa norte'
                     WHEN 2 THEN '2 - Tihuapa norte'
                     WHEN 3 THEN '3 - Tihuapa norte'

@@ -59,7 +59,6 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     entrega = False
     pago_1_al_10 = None
     pago_11_al_30 = None
-    is_active = True
     member = factory.SubFactory(MemberFactory)
     mes_facturacion = factory.SubFactory(InvoicingMonthFactory)
     sector = factory.SelfAttribute("member.sector")

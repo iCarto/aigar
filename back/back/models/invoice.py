@@ -25,12 +25,13 @@ def _next_year(invoicing_month) -> int:
 
 class InvoiceManager(models.Manager):
     def member_updated(self, member):
-        last_invoice = Invoice.objects.filter(
-            member=member,
-            mes_facturacion__is_open=True,
-            is_active=True,
-            estado=InvoiceStatus.NUEVA,
-        ).first()
+        last_invoice = (
+            Invoice.objects.filter(
+                member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
+            )
+            .exclude(estado=InvoiceStatus.ANULADA)  # innecesario con el filtro de NUEVA
+            .first()
+        )
         if last_invoice:
             last_invoice.nombre = member.name
             last_invoice.sector = member.sector
@@ -197,10 +198,6 @@ class Invoice(models.Model):
     # https://code.djangoproject.com/ticket/28951
     created_at = models.DateTimeField(null=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, auto_now=True)
-
-    is_active = models.BooleanField(
-        blank=False, null=False, default=True, verbose_name="", help_text=""
-    )
 
     member = models.ForeignKey(
         "Member",

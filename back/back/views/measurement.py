@@ -5,7 +5,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from back.models.invoice import Invoice
+from back.models.invoice import Invoice, InvoiceStatus
 from back.models.invoicing_month import InvoicingMonth
 from back.models.measurement import Measurement
 from back.serializers.invoice import InvoiceSerializer
@@ -79,10 +79,10 @@ class MeasurementInvoicePreview(CreateAPIView):
 
 def get_invoices_for_measurements(measurements, invoicing_month):
     num_socios = [measurement["num_socio"] for measurement in measurements]
-    return Invoice.objects.prefetch_related("member").filter(
-        member__in=num_socios,
-        anho=invoicing_month.anho,
-        mes_facturado=invoicing_month.mes,
+    return (
+        Invoice.objects.prefetch_related("member")
+        .filter(member__in=num_socios, mes_facturacion=invoicing_month)
+        .exclude(estado=InvoiceStatus.ANULADA)
     )
 
 

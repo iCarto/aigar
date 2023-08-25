@@ -37,7 +37,7 @@ class InvoiceViewSet(
 
         id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
         if id_mes_facturacion is not None:
-            queryset = queryset.filter(is_active=True)
+            queryset = queryset.exclude(estado=InvoiceStatus.ANULADA)
         return self.filter_queryset_by_parents_lookups(queryset)
 
     def get_serializer_context(self):
@@ -60,9 +60,8 @@ class InvoiceViewSet(
             ]
             last_three_months_invoices = (
                 Invoice.objects.select_related("member")
-                .filter(
-                    mes_facturacion__in=last_three_invoicing_months_ids, is_active=True
-                )
+                .filter(mes_facturacion__in=last_three_invoicing_months_ids)
+                .exclude(estado=InvoiceStatus.ANULADA)
                 .order_by("-mes_facturacion")
             )
 
@@ -79,14 +78,12 @@ class InvoiceViewSet(
         invoice = self.get_object()
         version = invoice.version
         invoice.estado = InvoiceStatus.ANULADA
-        invoice.is_active = False
         invoice.save()
 
         # https://docs.djangoproject.com/en/2.2/topics/db/queries/#copying-model-instances
         invoice.pk = None
         invoice.version = version + 1
         invoice.estado = InvoiceStatus.NUEVA
-        invoice.is_active = True
         invoice.save()
         return Response(
             InvoiceSerializer(context={"request": request}, instance=invoice).data
@@ -96,7 +93,7 @@ class InvoiceViewSet(
 class InvoiceStatsView(ListAPIView):
     queryset = (
         Invoice.objects.prefetch_related("member", "mes_facturacion")
-        .filter(is_active=True)
+        .exclude(estado=InvoiceStatus.ANULADA)
         .order_by("mes_facturacion", "member")
     )
     serializer_class = InvoiceStatsSerializer
@@ -104,7 +101,7 @@ class InvoiceStatsView(ListAPIView):
     def get_serializer_context(self):
         context = super().get_serializer_context()
 
-        all_invoices = Invoice.objects.all().values(
+        all_invoices = Invoice.objects.exclude(estado=InvoiceStatus.ANULADA).values(
             "id_factura",
             "mes_facturacion",
             "mes_facturado",
@@ -115,6 +112,7 @@ class InvoiceStatsView(ListAPIView):
             "pago_11_al_30",
             "mora",
         )
+
         all_invoices_payments_info = []
         for invoice in all_invoices:
             mes_facturado = invoice["mes_facturado"]

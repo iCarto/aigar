@@ -3,7 +3,7 @@ from typing import Any
 from django.db import models, transaction
 from django.forms import ValidationError
 
-from back.models.invoice import Invoice, InvoiceStatus, NoLastInvoice
+from back.models.invoice import Invoice, NoLastInvoice
 from back.models.member import Member
 from back.models.payment import Payment
 
@@ -20,17 +20,7 @@ class InvoicingMonthManager(models.Manager):
                 "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
             )
 
-        last_month_open_invoices = Invoice.objects.filter(
-            mes_facturacion=invoicing_month_to_close,
-            estado__in=[InvoiceStatus.NUEVA, InvoiceStatus.PENDIENTE_DE_COBRO],
-        )
-
-        for last_month_invoice in last_month_open_invoices:
-            if last_month_invoice.deuda <= 0:
-                last_month_invoice.estado = InvoiceStatus.COBRADA
-            else:
-                last_month_invoice.estado = InvoiceStatus.NO_COBRADA
-            last_month_invoice.save()
+        Invoice.objects.update_state_for(invoicing_month_to_close)
 
         invoicing_month_to_close.is_open = False
         invoicing_month_to_close.save()

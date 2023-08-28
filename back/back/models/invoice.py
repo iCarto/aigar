@@ -1,5 +1,6 @@
-from django.db import models
+from typing import Self
 
+from django.db import models
 
 from back.models.fixed_values import fixed_values
 from domains.models.zone import Zone
@@ -25,7 +26,15 @@ def _next_year(invoicing_month) -> int:
 
 
 class InvoiceQuerySet(models.QuerySet):
-    pass
+    def with_deudadb(self) -> Self:
+        return self.alias(
+            deudadb=models.ExpressionWrapper(
+                models.functions.Coalesce("total", 0)
+                - models.functions.Coalesce("pago_1_al_10", 0)
+                - models.functions.Coalesce("pago_11_al_30", 0),
+                output_field=models.FloatField(),
+            )
+        )
 
 
 class InvoiceManager(models.Manager):
@@ -70,6 +79,14 @@ class InvoiceManager(models.Manager):
             "mes_facturacion": new_invoicing_month,
         }
         return self.create(**invoice)
+
+    def update_state_for(self, invoicing_month) -> None:
+        open_invoices = Invoice.objects.filter(
+            mes_facturacion=invoicing_month,
+            estado__in=[InvoiceStatus.NUEVA, InvoiceStatus.PENDIENTE_DE_COBRO],
+        ).with_deudadb()
+        open_invoices.filter(deudadb__lte=0).update(estado=InvoiceStatus.COBRADA)
+        open_invoices.filter(deudadb__gt=0).update(estado=InvoiceStatus.NO_COBRADA)
 
 
 class Invoice(models.Model):

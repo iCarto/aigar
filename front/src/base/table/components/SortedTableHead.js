@@ -19,6 +19,10 @@ const SortedTableHead = ({
         onRequestSort(event, property);
     };
 
+    const checkboxStyle = {
+        "&.MuiCheckbox-root": {color: "inherit"},
+    };
+
     return (
         <TableHead>
             <TableRow>
@@ -26,6 +30,7 @@ const SortedTableHead = ({
                     <TableCell padding="checkbox">
                         <Checkbox
                             color="primary"
+                            sx={checkboxStyle}
                             indeterminate={
                                 totalSelected > 0 && totalSelected < rowCount
                             }

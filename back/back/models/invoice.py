@@ -50,8 +50,7 @@ class InvoiceManager(models.Manager):
             member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
         ).first()
         if last_invoice:
-            if last_invoice.caudal_actual is not None:
-                last_invoice.update_total()
+            last_invoice.update_total()
             last_invoice.save()
 
     def create_from(self, member, last_invoice, new_invoicing_month):
@@ -252,6 +251,8 @@ class Invoice(models.Model):
         self.update_total()
 
     def update_total(self):
+        if self.caudal_actual is None or self.caudal_anterior is None:
+            return
         self.cuota_fija = self.member.cuota_fija
         self.ahorro = self.member.ahorro
         self.consumo = self.caudal_actual - self.caudal_anterior

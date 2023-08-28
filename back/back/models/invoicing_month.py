@@ -1,3 +1,4 @@
+import datetime
 from typing import Any
 
 from django.db import models, transaction
@@ -27,10 +28,19 @@ class InvoicingMonthManager(models.Manager):
         invoicing_month_to_close.is_open = False
         invoicing_month_to_close.save()
 
+        self._update_id_mes_facturacion_in_kwargs(kwargs)
+        kwargs["is_open"] = True
+
         new_invoicing_month = super().create(**kwargs)
 
         self._create_new_invoices(invoicing_month_to_close, new_invoicing_month)
         return new_invoicing_month
+
+    def _update_id_mes_facturacion_in_kwargs(self, kwargs):
+        year = int(kwargs["anho"])
+        month = kwargs["mes"]
+        date_to_format = datetime.date(year, int(month), 1)
+        kwargs.setdefault("id_mes_facturacion", date_to_format.strftime("%Y%m"))
 
     def _create_new_invoices(self, invoicing_month_to_close, new_invoicing_month):
         active_members = Member.objects.filter(is_active=True)
@@ -92,7 +102,4 @@ class InvoicingMonth(models.Model):
 
     def save(self, **kwargs) -> None:
         self.full_clean()
-        anho: str = kwargs.get("update_fields", {}).get("anho", self.anho)
-        mes: str = kwargs.get("update_fields", {}).get("mes", self.anho)
-        self.id_mes_facturacion = anho + mes
         return super().save(**kwargs)

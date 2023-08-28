@@ -33,7 +33,6 @@ class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore
 
 class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     version = 1
-    nombre = factory.SelfAttribute("member.name")
     anho = factory.SelfAttribute("mes_facturacion.anho")
     mes_facturado = factory.SelfAttribute("mes_facturacion.mes")
     mes_limite = factory.LazyAttribute(lambda obj: obj.mes_facturado + 1)  # fixme
@@ -61,4 +60,3 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     pago_11_al_30 = None
     member = factory.SubFactory(MemberFactory)
     mes_facturacion = factory.SubFactory(InvoicingMonthFactory)
-    sector = factory.SelfAttribute("member.sector")

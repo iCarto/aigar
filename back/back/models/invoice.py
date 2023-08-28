@@ -3,7 +3,6 @@ from typing import Self
 from django.db import models
 
 from back.models.fixed_values import fixed_values
-from domains.models.zone import Zone
 
 
 class InvoiceStatus(models.TextChoices):
@@ -51,8 +50,6 @@ class InvoiceManager(models.Manager):
             member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
         ).first()
         if last_invoice:
-            last_invoice.nombre = member.name
-            last_invoice.sector = member.sector
             if last_invoice.caudal_actual is not None:
                 last_invoice.update_total()
             last_invoice.save()
@@ -66,8 +63,6 @@ class InvoiceManager(models.Manager):
             "mes_limite": _next_month(new_invoicing_month),
             "anho_limite": _next_year(new_invoicing_month),
             "member": member,
-            "nombre": member.name,
-            "sector": member.sector,
             "cuota_fija": member.cuota_fija,
             "comision": member.comision,
             "ahorro": member.ahorro,
@@ -105,15 +100,6 @@ class Invoice(models.Model):
 
     version = models.PositiveSmallIntegerField(
         null=False, blank=False, unique=False, verbose_name="Version", help_text=""
-    )
-
-    nombre = models.CharField(
-        max_length=100,
-        null=False,
-        blank=False,
-        unique=False,
-        verbose_name="Nombre socio",
-        help_text="",
     )
 
     anho = models.PositiveSmallIntegerField(
@@ -242,17 +228,8 @@ class Invoice(models.Model):
         on_delete=models.CASCADE,
     )
 
-    sector = models.ForeignKey(
-        Zone,
-        on_delete=models.RESTRICT,
-        to_field="name",
-        blank=False,
-        null=False,
-        verbose_name="sector / comunidad",
-    )
-
     def __str__(self):
-        return f"{self.id_factura} - {self.member} - {self.nombre} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
+        return f"{self.id_factura} - {self.member} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
 
     @property
     def deuda(self) -> float:

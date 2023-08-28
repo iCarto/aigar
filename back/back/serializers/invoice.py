@@ -9,7 +9,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = "__all__"
 
-    num_socio = serializers.IntegerField(source="member.num_socio")
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     resumen = serializers.SerializerMethodField()
 
@@ -35,8 +34,6 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "mes_limite",
             "anho_limite",
             "member",
-            "nombre",
-            "sector",
             "caudal_anterior",
             "caudal_actual",
             "consumo",
@@ -59,9 +56,6 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "mes_abierto",
             "anho",
             "mes_facturado",
-            "num_socio",
-            "nombre",
-            "sector",
             "consumo",
             "mora",
             "mora_por_retraso",
@@ -71,7 +65,6 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "total",
         ]
 
-    num_socio = serializers.IntegerField(source="member.num_socio")
     mes_abierto = serializers.SerializerMethodField()
     mora_por_retraso = serializers.SerializerMethodField()
     mora_por_impago = serializers.SerializerMethodField()

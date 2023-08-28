@@ -2,10 +2,6 @@ import os
 
 import environ
 from corsheaders.defaults import default_headers
-from django.core.exceptions import ImproperlyConfigured
-
-
-# from .logger import LOGGING
 
 
 env = environ.Env(  # set default values and casting

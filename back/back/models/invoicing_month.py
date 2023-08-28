@@ -27,13 +27,12 @@ class InvoicingMonthManager(models.Manager):
         invoicing_month_to_close.is_open = False
         invoicing_month_to_close.save()
 
-        kwargs["id_mes_facturacion"] = kwargs["anho"] + kwargs["mes"]
+        new_invoicing_month = super().create(**kwargs)
 
-        # Just ensure that invoices are not set in the payload. It should be checked at
-        # frontend and remove this sanity check.
-        kwargs.pop("invoices", None)
-        instance = super().create(**kwargs)
+        self._create_new_invoices(invoicing_month_to_close, new_invoicing_month)
+        return new_invoicing_month
 
+    def _create_new_invoices(self, invoicing_month_to_close, new_invoicing_month):
         active_members = Member.objects.filter(is_active=True)
 
         last_month_invoices = Invoice.objects.prefetch_related("member").filter(
@@ -44,8 +43,7 @@ class InvoicingMonthManager(models.Manager):
                 invoice for invoice in last_month_invoices if invoice.member == member
             ]
             last_invoice = last_invoice[0] if last_invoice else NoLastInvoice()
-            Invoice.objects.create_from(member, last_invoice, instance)
-        return instance
+            Invoice.objects.create_from(member, last_invoice, new_invoicing_month)
 
 
 class InvoicingMonth(models.Model):
@@ -94,4 +92,7 @@ class InvoicingMonth(models.Model):
 
     def save(self, **kwargs) -> None:
         self.full_clean()
+        anho: str = kwargs.get("update_fields", {}).get("anho", self.anho)
+        mes: str = kwargs.get("update_fields", {}).get("mes", self.anho)
+        self.id_mes_facturacion = anho + mes
         return super().save(**kwargs)

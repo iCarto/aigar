@@ -28,7 +28,6 @@ class MemberExportSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
         fields = [
-            "id",
             "name",
             "num_socio",
             "orden",
@@ -44,7 +43,6 @@ class MemberExportSerializer(serializers.ModelSerializer):
             "ahorro",
         ]
 
-    id = serializers.ReadOnlyField(source="num_socio")
     lectura = serializers.ReadOnlyField(default=None)
     consumo_calculado = serializers.ReadOnlyField(default=None)
     tarifa_calculada = serializers.ReadOnlyField(default=None)

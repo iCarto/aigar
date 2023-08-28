@@ -8,14 +8,16 @@ from back.models.member import Member
 from back.models.payment import Payment
 
 
+def any_payments_for(invoicing_month_to_close):
+    return Payment.objects.filter(mes_facturacion=invoicing_month_to_close).exists()
+
+
 class InvoicingMonthManager(models.Manager):
     @transaction.atomic
     def create(self, **kwargs: Any) -> "InvoicingMonth":
         invoicing_month_to_close = InvoicingMonth.objects.get(is_open=True)
 
-        if not Payment.objects.filter(
-            mes_facturacion=invoicing_month_to_close
-        ).exists():
+        if not any_payments_for(invoicing_month_to_close):
             raise ValidationError(
                 "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
             )

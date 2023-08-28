@@ -90,6 +90,10 @@ const customTheme = createTheme(
                         "&:nth-of-type(odd)": {
                             backgroundColor: defaultTheme.palette.action.hover,
                         },
+                        "&.Mui-selected": {
+                            //TO-DO: Fix hardcoded value
+                            backgroundColor: "rgba(25, 118, 210, 0.08)",
+                        },
                     },
                 },
             },
@@ -114,6 +118,9 @@ const customTheme = createTheme(
                         lineHeight: "1rem",
                         "&.Mui-active": {
                             color: "inherit",
+                            "& .MuiTableSortLabel-icon": {
+                                color: "inherit",
+                            },
                         },
                         "&:hover": {
                             color: "inherit",
@@ -123,11 +130,6 @@ const customTheme = createTheme(
                             fontWeight: 800,
                         },
                     },
-                    // icon: {
-                    //     "&:active": {
-                    //         opacity: 1,
-                    //     },
-                    // },
                 },
             },
 

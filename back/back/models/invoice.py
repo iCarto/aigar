@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.query import QuerySet
+
 
 from back.models.fixed_values import fixed_values
 from domains.models.zone import Zone
@@ -24,12 +24,18 @@ def _next_year(invoicing_month) -> int:
     return year + 1 if month == 12 else year
 
 
-class InvoiceManager(models.Manager):
-    def get_queryset(self) -> QuerySet:
-        return super().get_queryset().exclude(InvoiceStatus.ANULADA)
+class InvoiceQuerySet(models.QuerySet):
+    pass
 
-    def with_cancelled(self) -> QuerySet:
-        return super().get_queryset()
+
+class InvoiceManager(models.Manager):
+    def get_queryset(self) -> InvoiceQuerySet:
+        return InvoiceQuerySet(self.model, using=self._db).exclude(
+            estado=InvoiceStatus.ANULADA
+        )
+
+    def with_cancelled(self) -> InvoiceQuerySet:
+        return InvoiceQuerySet(self.model, using=self._db)
 
     def member_updated(self, member):
         last_invoice = Invoice.objects.filter(
@@ -72,7 +78,7 @@ class Invoice(models.Model):
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
 
-    objects = InvoiceManager()
+    objects = InvoiceManager.from_queryset(InvoiceQuerySet)()
 
     id_factura = models.AutoField(
         primary_key=True,

@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 
 from back.models.invoice import InvoiceStatus
 from back.models.member import Member
-from back.tests.factories import InvoiceFactory, MemberFactory
+from back.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 
 
 pytestmark = pytest.mark.django_db
@@ -82,16 +82,22 @@ def test_update_member_move_subsequent_order(api_client, five_members_in_order):
 
 
 def test_update_member_with_invoices(api_client):
+    invoicing_month = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
+    invoicing_month.save()
     invoice = InvoiceFactory.create(
-        estado=InvoiceStatus.NUEVA, is_active=True, mes_facturacion__is_open=True
+        estado=InvoiceStatus.NUEVA,
+        mes_facturacion=invoicing_month,
+        caudal_anterior=10,
+        caudal_actual=110,
     )
+    invoice.update_total()
+    invoice.save()
+    assert invoice.total == pytest.approx(210.75)
     d = model_to_dict(
         invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
-    ) | {"name": "foo bar", "solo_mecha": True}
+    ) | {"name": "foo bar", "consumo_maximo": 15}
     response = api_client.put(f"/api/members/{d['num_socio']}/", d)
     assert response.status_code == 200
     invoice.refresh_from_db()
-    assert invoice.nombre == "foo bar"
     assert invoice.member.name == "foo bar"
-    assert invoice.member.solo_mecha
-    assert invoice.total == pytest.approx(12.75)
+    assert invoice.total == pytest.approx(7)

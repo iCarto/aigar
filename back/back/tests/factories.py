@@ -1,5 +1,6 @@
 import factory
 
+from back.models.fixed_values import fixed_values
 from back.models.invoice import Invoice
 from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
@@ -35,24 +36,26 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     version = 1
     anho = factory.SelfAttribute("mes_facturacion.anho")
     mes_facturado = factory.SelfAttribute("mes_facturacion.mes")
-    mes_limite = factory.LazyAttribute(lambda obj: obj.mes_facturado + 1)  # fixme
-    anho_limite = factory.LazyAttribute(lambda obj: obj.anho + 1)  # fixme
+    # mes_limite = factory.LazyAttribute(lambda obj: obj.mes_facturado + 1)  # fixme
+    # anho_limite = factory.LazyAttribute(lambda obj: obj.anho + 1)  # fixme
+    mes_limite = "10"
+    anho_limite = "2019"
     caudal_anterior = 1390
-    caudal_actual = 1402
-    consumo = 12
-    cuota_fija = 5.72
+    caudal_actual = 1400
+    consumo = 10
+    cuota_fija = fixed_values["CUOTA_FIJA_NORMAL"]
     cuota_variable = 0
-    comision = 0.28
-    ahorro = 0.25
-    mora = 1.0
+    comision = fixed_values["COMISION"]
+    ahorro = fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+    mora = 0
     derecho = 0
     reconexion = 0
     asamblea = 0
     traspaso = 0
-    saldo_pendiente = 8.75
+    saldo_pendiente = 0
     descuento = 0
     otros = 0
-    total = 16
+    total = 6.0
     estado = "nueva"
     observaciones = None
     entrega = False

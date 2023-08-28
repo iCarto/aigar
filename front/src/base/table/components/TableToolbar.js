@@ -3,6 +3,7 @@ import {alpha} from "@mui/material/styles";
 import {ActionsBurgerMenu} from "base/ui/menu/components";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 
 const TableToolbar = ({totalSelected, tableActions = []}) => {
     const selectedMessage =
@@ -13,31 +14,34 @@ const TableToolbar = ({totalSelected, tableActions = []}) => {
     return totalSelected > 0 ? (
         <Toolbar
             sx={{
-                pl: {sm: 2},
-                pr: {xs: 1, sm: 1},
+                pl: {sm: 1},
+                pr: {xs: 1, sm: 2},
                 py: 0,
                 minHeight: {xs: "52px", xl: "64px"},
+                justifyItems: "space-between",
                 ...{
                     bgcolor: theme =>
                         alpha(
-                            theme.palette.primary.main,
+                            theme.palette.grey["500"],
                             theme.palette.action.activatedOpacity
                         ),
                 },
             }}
         >
+            {tableActions.length > 0 ? (
+                <Stack>
+                    <ActionsBurgerMenu>{tableActions}</ActionsBurgerMenu>
+                </Stack>
+            ) : null}
+
             <Typography
-                sx={{flex: "1 1 100%"}}
+                sx={{flex: "1 1 100%", textAlign: "right"}}
                 color="inherit"
                 variant="body1"
                 fontWeight={600}
             >
                 {selectedMessage}
             </Typography>
-
-            {tableActions.length > 0 ? (
-                <ActionsBurgerMenu>{tableActions}</ActionsBurgerMenu>
-            ) : null}
         </Toolbar>
     ) : null;
 };

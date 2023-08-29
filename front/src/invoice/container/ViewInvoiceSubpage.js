@@ -30,6 +30,7 @@ const ViewInvoiceSubpage = () => {
     const urlPathBack = allInvoicesList ? "/facturas" : "/";
 
     useEffect(() => {
+        setError("");
         setIsLoading(true);
 
         InvoiceService.getInvoice(idFactura)

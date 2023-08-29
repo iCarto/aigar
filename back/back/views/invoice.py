@@ -23,7 +23,7 @@ class InvoiceViewSet(
     def get_queryset(self):
         queryset = (
             Invoice.objects.with_cancelled()
-            .select_related("member", "sector")
+            .select_related("member")
             .order_by("-mes_facturacion")
         )
         num_socio = self.request.query_params.get("num_socio", None)

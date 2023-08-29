@@ -1,9 +1,10 @@
 export {
     default as createInvoice,
-    invoice_api_adapter,
     createInvoices,
-    invoices_api_adapter,
-    ESTADOS_FACTURA,
-    refreshInvoiceValues,
     createInvoiceForMember,
+    invoice_api_adapter,
+    invoices_api_adapter,
+    invoice_view_adapter,
+    refreshInvoiceValues,
+    ESTADOS_FACTURA,
 } from "./Invoice";

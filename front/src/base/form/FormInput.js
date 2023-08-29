@@ -18,7 +18,7 @@ const FormInput = ({
                 type="text"
                 className="form-control"
                 name={name}
-                value={field.value || ""}
+                value={field?.value || ""}
                 onChange={handleChangeEvent}
                 readOnly={readOnly}
                 style={small ? {width: "100px"} : null}
@@ -29,7 +29,7 @@ const FormInput = ({
             >
                 {info}
             </small>
-            <div className="invalid-feedback d-block">{field.errors}</div>
+            <div className="invalid-feedback d-block">{field?.errors}</div>
         </div>
     );
 };

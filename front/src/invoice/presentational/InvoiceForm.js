@@ -53,7 +53,8 @@ const InvoiceForm = ({
 
     const handleSubmit = event => {
         event.preventDefault();
-        onSubmit(invoice);
+        const updatedInvoice = {...invoice, member: invoice.num_socio};
+        onSubmit(updatedInvoice);
     };
 
     return (

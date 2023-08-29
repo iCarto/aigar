@@ -10,7 +10,7 @@ import {PageLayout} from "base/ui/page";
 import {EditInvoiceSidebar} from ".";
 import {Spinner} from "base/common";
 
-const EditInvoiceSubpage = ({onSubmit = null}) => {
+const EditInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -22,6 +22,7 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setErrorMessage("");
         setIsLoading(true);
 
         InvoiceService.getInvoice(idFactura)
@@ -52,11 +53,7 @@ const EditInvoiceSubpage = ({onSubmit = null}) => {
 
         InvoiceService.updateInvoice(invoice)
             .then(updatedInvoice => {
-                if (onSubmit) {
-                    onSubmit(updatedInvoice);
-                } else {
-                    navigate(`/facturas/${updatedInvoice.id_factura}`);
-                }
+                navigate(`/facturas/${updatedInvoice.id_factura}`);
             })
             .catch(error => {
                 console.log(error);

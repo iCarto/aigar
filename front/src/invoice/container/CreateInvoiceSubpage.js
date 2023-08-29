@@ -6,12 +6,15 @@ import {MemberService} from "member/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {DataValidatorService} from "validation/service";
 
-import {createInvoice, createInvoiceForMember} from "invoice/model";
-
 import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";
 import {CreateInvoiceSidebar} from ".";
 import {Spinner} from "base/common";
+import {
+    createInvoice,
+    createInvoiceForMember,
+    invoice_view_adapter,
+} from "invoice/model";
 
 const CreateInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(createInvoice());
@@ -70,13 +73,13 @@ const CreateInvoiceSubpage = () => {
 
     const handleUpdateForm = updatedInvoice => {
         setValidationErrors(DataValidatorService.validateInvoice(updatedInvoice));
-        setInvoice(updatedInvoice);
+        setInvoice({...updatedInvoice, member: parseInt(num_socio)});
     };
 
     const handleSubmit = () => {
         setIsSaving(true);
 
-        InvoiceService.createInvoice(invoice)
+        InvoiceService.createInvoice(invoice_view_adapter(invoice))
             .then(createdInvoice => {
                 setInvoice(createdInvoice);
                 navigate(`/facturas/${createdInvoice.id_factura}`);

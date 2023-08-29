@@ -27,7 +27,12 @@ export function useInvoicesTableColumns() {
             label: "Número",
             id: "numero",
             formatFunction: item => {
-                return <LinkCellTable text={item.numero} to={`id_factura`} />;
+                return (
+                    <LinkCellTable
+                        text={item.numero}
+                        to={`/facturas/${item.id_factura}`}
+                    />
+                );
             },
         },
         {

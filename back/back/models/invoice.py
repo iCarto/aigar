@@ -6,11 +6,11 @@ from back.models.fixed_values import fixed_values
 
 
 class InvoiceStatus(models.TextChoices):
-    NUEVA = "nueva"
-    PENDIENTE_DE_COBRO = "pendiente_de_cobro"
-    COBRADA = "cobrada"
-    NO_COBRADA = "no_cobrada"
-    ANULADA = "anulada"
+    NUEVA = "nueva"  # noqa: WPS115
+    PENDIENTE_DE_COBRO = "pendiente_de_cobro"  # noqa: WPS115
+    COBRADA = "cobrada"  # noqa: WPS115
+    NO_COBRADA = "no_cobrada"  # noqa: WPS115
+    ANULADA = "anulada"  # noqa: WPS115
 
 
 def _next_month(invoicing_month) -> int:
@@ -186,6 +186,7 @@ class Invoice(models.Model):
         verbose_name="Estado",
         help_text="",
         default=InvoiceStatus.NUEVA,
+        editable=False,
     )
 
     observaciones = models.TextField(

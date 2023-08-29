@@ -169,7 +169,7 @@ else
 fi
 
 if [[ -f ${this_dir}/../back/manage.py ]]; then
-    DJANGO_SUPERUSER_PASSWORD="${DJANGO_SUPERUSER_PASSWORD}" python "${this_dir}/../back/manage.py" createsuperuser --no-input --username admin
+    DJANGO_SUPERUSER_PASSWORD="${DJANGO_SUPERUSER_PASSWORD}" python "${this_dir}/../back/manage.py" createsuperuser --no-input --username admin --email admin@example.com
     # In install.sh static folders are created
     # At this point static assets are collected
     python "${this_dir}/../back/manage.py" collectstatic --no-input --clear --verbosity 0

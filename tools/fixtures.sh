@@ -6,3 +6,20 @@ this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 # python manage.py loaddata fixtures.json
 
 cp "${this_dir}/fixtures/db.sqlite3" ../back/db.sqlite3
+
+sqlite3 ../back/db.sqlite3 "
+    PRAGMA foreign_keys = ON;
+
+    DROP TABLE auth_group;
+    DROP TABLE users_user_groups;
+    DROP TABLE auth_group_permissions;
+    DROP TABLE users_user_user_permissions;
+    DROP TABLE auth_permission;
+    DROP TABLE django_admin_log;
+    DROP TABLE django_content_type;
+    DROP TABLE django_migrations;
+    DROP TABLE django_session;
+    DROP TABLE users_user;
+    /* DROP TABLE users_user_groups; */
+    /* DROP TABLE users_user_user_permissions; */
+"

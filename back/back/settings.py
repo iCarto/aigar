@@ -6,7 +6,6 @@ from corsheaders.defaults import default_headers
 
 env = environ.Env(  # set default values and casting
     DEBUG=(bool, False),
-    DEPLOYMENT=(str, "prod"),
     SECRET_KEY=(str, "h4@c1x9okapu5^#iurp21i(vn14s5c#1lqx!$k-#^v%rd#rn!b"),
     HTTPS=(str, "off"),
 )
@@ -57,7 +56,6 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_extensions",
     "back",
-    "users",
     "domains",
 ]
 
@@ -108,8 +106,6 @@ DATABASES = {
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
-DEPLOYMENT = env("DEPLOYMENT")
-
 # Media storage backend
 MEDIA_ROOT = root("media")
 MEDIA_URL = "/media/"
@@ -155,14 +151,6 @@ REST_FRAMEWORK = {
 }
 
 
-# from datetime import timedelta
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
-#     "USER_ID_FIELD": "username",
-#     "USER_ID_CLAIM": "username",
-# }
-
-
 # Django debug toolbar
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -181,7 +169,3 @@ CORS_ORIGIN_WHITELIST = (
 
 
 CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]
-
-AUTH_USER_MODEL = "users.User"
-# LOGIN_URL = "/login/"
-# LOGIN_REDIRECT_URL = "/"

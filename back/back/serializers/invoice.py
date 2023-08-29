@@ -63,8 +63,10 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "monto",
             "deuda",
             "total",
+            "member_data",
         ]
 
+    member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     mes_abierto = serializers.SerializerMethodField()
     mora_por_retraso = serializers.SerializerMethodField()
     mora_por_impago = serializers.SerializerMethodField()

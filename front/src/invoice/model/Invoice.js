@@ -47,6 +47,7 @@ const invoice_api_adapter = invoice => {
     invoice["tipo_socio"] = getTipoSocio(invoice.member_data);
     invoice["sector"] = invoice.member_data.sector;
     invoice["total_pagado"] = invoice.pago_1_al_10 + invoice.pago_11_al_30;
+    invoice["is_active"] = invoice.estado !== ESTADOS_FACTURA.ANULADA;
     return invoice;
 };
 
@@ -57,6 +58,7 @@ const invoice_view_adapter = invoice => {
     delete invoice["tipo_socio"];
     delete invoice["sector"];
     delete invoice["total_pagado"];
+    delete invoice["is_active"];
     return invoice;
 };
 

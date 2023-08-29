@@ -14,7 +14,7 @@ const MemberDetail = ({member, isSummary = false}) => {
         </div>
     ) : null;
 
-    return (
+    return member ? (
         <SectionSummaryCard>
             <Grid item xs={12}>
                 {message}
@@ -38,7 +38,7 @@ const MemberDetail = ({member, isSummary = false}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Tipo de socio/a"
-                    value={<MemberTypeField memberType={member.tipo_socio} />}
+                    value={<MemberTypeField memberType={member?.tipo_socio} />}
                     containerWidth="short"
                     highlightValue
                 />
@@ -89,7 +89,7 @@ const MemberDetail = ({member, isSummary = false}) => {
                 </Grid>
             )}
         </SectionSummaryCard>
-    );
+    ) : null;
 };
 
 export default MemberDetail;

@@ -1,9 +1,7 @@
 import WaterDropIcon from "@mui/icons-material/WaterDrop"; // Conectado
 import InvertColorsIcon from "@mui/icons-material/InvertColors"; // Con ajuste
 import FormatColorResetIcon from "@mui/icons-material/FormatColorReset"; // Eliminado
-import PersonIcon from "@mui/icons-material/Person"; // Humano
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import StorefrontIcon from "@mui/icons-material/Storefront"; // Comercial
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 
 export const MEMBER_TYPES_MAPPING = {
@@ -24,12 +22,10 @@ export const MEMBER_TYPES_MAPPING = {
 export const USE_TYPES_MAPPING = {
     Humano: {
         label: "Humano",
-        // icon: <PersonIcon />,
         icon: <HomeRoundedIcon />,
     },
     Comercial: {
         label: "Comercial",
-        // icon: <StorefrontIcon />,
         icon: <StorefrontRoundedIcon />,
     },
 };

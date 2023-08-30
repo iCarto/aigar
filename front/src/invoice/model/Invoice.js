@@ -44,7 +44,7 @@ const invoice_api_adapter = invoice => {
     );
     invoice["num_socio"] = invoice.member_data.num_socio;
     invoice["nombre"] = invoice.member_data.name;
-    invoice["tipo_socio"] = getTipoSocio(invoice.member_data);
+    invoice["status"] = getTipoSocio(invoice.member_data);
     invoice["sector"] = invoice.member_data.sector;
     invoice[
         "fecha_lectura"
@@ -58,7 +58,7 @@ const invoice_view_adapter = invoice => {
     delete invoice["numero"];
     delete invoice["num_socio"];
     delete invoice["nombre"];
-    delete invoice["tipo_socio"];
+    delete invoice["status"];
     delete invoice["sector"];
     delete invoice["fecha_lectura"];
     delete invoice["total_pagado"];
@@ -118,7 +118,7 @@ const createInvoice = ({
     resumen = [],
     nombre = "",
     num_socio = -1,
-    tipo_socio = "",
+    status = "",
     sector = "",
     fecha_lectura = null,
     errors = [],
@@ -161,7 +161,7 @@ const createInvoice = ({
         resumen,
         nombre,
         num_socio,
-        tipo_socio,
+        status,
         sector,
         fecha_lectura,
         errors,

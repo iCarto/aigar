@@ -30,31 +30,61 @@ const dataFromMyRESTAPI = [
 ]
 */
 
+const MEMBER_TYPES_MAPPING = {
+    Activa: {
+        key: "Activa",
+        label: "Activo",
+        icon: "fas fa-tint",
+    },
+    Inactiva: {
+        key: "Inactiva",
+        label: "Inactivo",
+        icon: "fas fa-tint-slash",
+    },
+    con_ajuste_consumo: {
+        key: "con_ajuste_consumo",
+        label: "Con ajuste",
+        icon: "fas fa-adjust",
+    },
+    Eliminada: {
+        key: "Eliminada",
+        label: "Eliminado",
+        icon: "fas fa-solid fa-user-slash",
+    },
+};
+
+const MEMBER_TYPES = {
+    ACTIVE: MEMBER_TYPES_MAPPING.Activa,
+    INACTIVE: MEMBER_TYPES_MAPPING.Inactiva,
+    DELETED: MEMBER_TYPES_MAPPING.Eliminada,
+    ADJUSTED: MEMBER_TYPES_MAPPING.con_ajuste_consumo,
+};
+
 const getTipoSocio = function (member) {
-    if (member.is_active === false) {
-        return "eliminado";
-    }
-    if (
-        (member.consumo_maximo && member.consumo_maximo !== 0) ||
-        (member.consumo_reduccion_fija && member.consumo_reduccion_fija !== 0)
-    ) {
-        return "con_ajuste_consumo";
-    }
-    return "conectado";
+    const isActiveMember = () =>
+        member.status !== MEMBER_TYPES.DELETED.label &&
+        member.status !== MEMBER_TYPES.INACTIVE.label;
+
+    const hasAdjustments = () =>
+        !!member.consumo_maximo || !!member.consumo_reduccion_fija;
+
+    if (isActiveMember() && hasAdjustments()) {
+        return MEMBER_TYPES.ADJUSTED.key;
+    } else return member.status;
 };
 
 class Members extends Array {}
 
 const member_api_adapter = member => {
     member["medidor"] = member["medidor"] === "M" ? -1 : member["medidor"];
-    member["tipo_socio"] = getTipoSocio(member);
+    member["status"] = getTipoSocio(member);
     return member;
 };
 
 const members_api_adapter = members => members.map(member_api_adapter);
 
 const createMembers = (data = []) => {
-    const members = Members.from(data, m => createMember(m));
+    const members = Members.from(data, member => createMember(member));
     return members;
 };
 
@@ -89,7 +119,7 @@ const createMember = ({
     observaciones = "",
     consumo_maximo = null,
     consumo_reduccion_fija = null,
-    tipo_socio = "",
+    status = "",
     is_active = true,
     personas_acometida = null,
     dui = "",
@@ -106,7 +136,7 @@ const createMember = ({
         consumo_maximo: consumo_maximo === "" ? null : consumo_maximo,
         consumo_reduccion_fija:
             consumo_reduccion_fija === "" ? null : consumo_reduccion_fija,
-        tipo_socio,
+        status,
         is_active,
         personas_acometida,
         dui,
@@ -124,4 +154,6 @@ export {
     member_api_adapter,
     members_api_adapter,
     getTipoSocio,
+    MEMBER_TYPES_MAPPING,
+    MEMBER_TYPES,
 };

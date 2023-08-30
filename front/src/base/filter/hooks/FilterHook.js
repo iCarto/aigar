@@ -7,13 +7,22 @@ function useFilter() {
         if (filter) {
             const filteredItems = items.filter(item => {
                 return Object.entries(filter).every(([key, value]) => {
-                    return (
-                        item.hasOwnProperty(key) &&
-                        item[key]
-                            .toString()
-                            .toLowerCase()
-                            .includes(value.toString().toLowerCase())
-                    );
+                    // TO-DO: Bootstrapped code
+                    if (key === "nombre" || key === "name") {
+                        return (
+                            item.hasOwnProperty(key) &&
+                            item[key]
+                                .toString()
+                                .toLowerCase()
+                                .includes(value.toString().toLowerCase())
+                        );
+                    } else {
+                        return (
+                            item.hasOwnProperty(key) &&
+                            item[key].toString().toLowerCase() ===
+                                value.toString().toLowerCase()
+                        );
+                    }
                 });
             });
 

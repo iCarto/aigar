@@ -3,7 +3,7 @@ import {DisconnectMemberModal} from ".";
 import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
 import Button from "@mui/material/Button";
 
-const DisconnectMemberButton = ({member}) => {
+const DisconnectMemberButton = ({member, onUpdateStatus}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -23,12 +23,13 @@ const DisconnectMemberButton = ({member}) => {
                 startIcon={<FormatColorResetIcon fontSize="small" />}
                 fullWidth
             >
-                Desconectar
+                Desactivar
             </Button>
             <DisconnectMemberModal
+                member={member}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                member={member}
+                onUpdateStatus={onUpdateStatus}
             />
         </>
     );

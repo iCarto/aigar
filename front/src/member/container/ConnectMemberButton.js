@@ -3,7 +3,7 @@ import {ConnectMemberModal} from ".";
 import Button from "@mui/material/Button";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 
-const ConnectMemberButton = ({member}) => {
+const ConnectMemberButton = ({member, onUpdateStatus}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -25,9 +25,10 @@ const ConnectMemberButton = ({member}) => {
                 Conectar
             </Button>
             <ConnectMemberModal
+                member={member}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                member={member}
+                onUpdateStatus={onUpdateStatus}
             />
         </>
     );

@@ -1,11 +1,12 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {MEMBER_TYPES} from "member/model";
 import {MemberService} from "member/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
 
-const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
+const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
 
     const navigate = useNavigate();
@@ -24,10 +25,12 @@ const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
     };
 
     const deleteMember = () => {
-        console.log("DeleteMemberButton.deleteMember");
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.deleteMember(member)
+        MemberService.updateMemberStatus(member.num_socio, {
+            status: MEMBER_TYPES.DELETED.key,
+        })
             .then(deletedMember => {
+                onUpdateStatus(MEMBER_TYPES.DELETED.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
             })
             .catch(error => {
@@ -38,14 +41,15 @@ const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
 
     const modalContentStart = (
         <Alert severity="warning">
-            Desea eliminar el/la socio/a&nbsp;
+            ¿Desea eliminar a&nbsp;
             <strong>
                 {member.num_socio} - {member.name}
             </strong>
+            &nbsp; del sistema?
         </Alert>
     );
 
-    const modalContentFinished = "El socio ha sido eliminado del sistema.";
+    const modalContentFinished = "Se ha eliminado al/a la socio/a del sistema.";
 
     return isOpen ? (
         <OperationWithConfirmationModal

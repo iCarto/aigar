@@ -1,13 +1,14 @@
 import {useState} from "react";
+import {useLocation} from "react-router-dom";
 import {MemberService} from "member/service";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {MEMBER_TYPES} from "member/model";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
-import {useLocation} from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import {OperationWithConfirmationModal} from "base/ui/modal";
 
-const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
+const ConnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
 
     const navigate = useNavigateWithReload();
@@ -28,10 +29,12 @@ const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
     };
 
     const connectMember = () => {
-        console.log("ConnectMemberModal.disconnectMember");
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.setMemberConnected(member, false)
-            .then(disconnectedMember => {
+        MemberService.updateMemberStatus(member.num_socio, {
+            status: MEMBER_TYPES.ACTIVE.key,
+        })
+            .then(connectedMember => {
+                onUpdateStatus(MEMBER_TYPES.ACTIVE.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
             })
             .catch(error => {
@@ -42,16 +45,16 @@ const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
 
     const modalContentStart = (
         <p>
-            ¿Desea volver a conectar al socio&nbsp;
+            ¿Desea volver a conectar a&nbsp;
             <strong>
                 {member.num_socio} - {member.name}
             </strong>
-            ?
+            &nbsp;en el sistema?
         </p>
     );
 
     const modalContentFinished = (
-        <Alert severity="success">El socio ha sido reconectado del sistema.</Alert>
+        <Alert severity="success">El socio/a ha sido reconectado del sistema.</Alert>
     );
 
     return isOpen ? (
@@ -65,7 +68,7 @@ const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
             modalContentFinished={modalContentFinished}
             modalAcceptText="Conectar"
             modalAcceptIcon={<WaterDropIcon />}
-            modalErrorText="Se ha producido un error y no se ha podido conectar el socio."
+            modalErrorText="Se ha producido un error y no se ha podido conectar a la socia."
         />
     ) : null;
 };

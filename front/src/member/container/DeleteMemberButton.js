@@ -4,7 +4,7 @@ import {DeleteMemberModal} from "../presentational";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 
-const DeleteMemberButton = ({member}) => {
+const DeleteMemberButton = ({member, onUpdateStatus}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -27,9 +27,10 @@ const DeleteMemberButton = ({member}) => {
                 Eliminar
             </Button>
             <DeleteMemberModal
+                member={member}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                member={member}
+                onUpdateStatus={onUpdateStatus}
             />
         </>
     );

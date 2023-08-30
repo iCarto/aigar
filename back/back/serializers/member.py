@@ -18,6 +18,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
         fields = [
             "num_socio",
             "name",
+            "status",
             "sector",
             "dia_lectura",
             "consumo_maximo",

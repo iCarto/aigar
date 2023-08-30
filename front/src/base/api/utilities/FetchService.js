@@ -55,7 +55,9 @@ const put = (url = "", body = {}, headers = {}) =>
             ...headers,
         },
     }).then(response => {
-        if (response.status !== 200) {
+        if (response.status === 204) {
+            return;
+        } else if (response.status !== 200) {
             return response.text().then(text => {
                 throw new Error(text);
             });

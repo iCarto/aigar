@@ -1,9 +1,9 @@
 import {ApiService} from "base/api/service";
 import {
-    createMembers,
-    members_api_adapter,
-    member_api_adapter,
     createMember,
+    createMembers,
+    member_api_adapter,
+    members_api_adapter,
 } from "member/model";
 
 const MemberService = {
@@ -44,16 +44,10 @@ const MemberService = {
         );
     },
 
-    setMemberConnected(member, connected) {
-        const memberWithSoloMechaUpdated = createMember(Object.assign({}, member));
-        return this.updateMember(memberWithSoloMechaUpdated);
-    },
-
-    deleteMember(member) {
-        return ApiService.delete("/members/" + member.num_socio + "/").then(
+    updateMemberStatus(num_socio, newStatus) {
+        return ApiService.put("/members/" + num_socio + "/status/", newStatus).then(
             response => {
-                let member = member_api_adapter(response);
-                return createMember(member);
+                console.log(response);
             }
         );
     },

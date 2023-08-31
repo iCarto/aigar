@@ -1,4 +1,4 @@
-import {FormInput} from "base/form";
+import {FormInputInteger, FormInputDecimal} from "base/form";
 
 const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
     const isNewInvoice = formData?.id_factura.value == -1;
@@ -13,7 +13,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
         <div className="row p-2 mb-3 form-inline needs-validation">
             <div className="row col-md-12 p-3">
                 <div className="col-md-4 text-nowrap">
-                    <FormInput
+                    <FormInputInteger
                         label="Caudal anterior"
                         name="caudal_anterior"
                         field={formData?.caudal_anterior}
@@ -23,7 +23,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-4 d-inline-block">
-                    <FormInput
+                    <FormInputInteger
                         label="Caudal actual"
                         name="caudal_actual"
                         field={formData?.caudal_actual}
@@ -33,7 +33,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-4 text-nowrap">
-                    <FormInput
+                    <FormInputDecimal
                         label="Consumo"
                         name="consumo"
                         field={formData?.consumo}
@@ -45,7 +45,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
             </div>
             <div className="row">
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Cuota fija"
                         name="cuota_fija"
                         field={formData?.cuota_fija}
@@ -54,7 +54,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Cuota variable"
                         name="cuota_variable"
                         field={formData?.cuota_variable}
@@ -64,7 +64,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Comisión de pago"
                         name="comision"
                         field={formData?.comision}
@@ -74,7 +74,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Ahorro para mano de obra"
                         name="ahorro"
                         field={formData?.ahorro}
@@ -84,7 +84,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Recargo por mora"
                         name="mora"
                         field={formData?.mora}
@@ -94,7 +94,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Inasistencia a asambleas"
                         name="asamblea"
                         field={formData?.asamblea}
@@ -104,7 +104,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Nuevo derecho"
                         name="derecho"
                         field={formData?.derecho}
@@ -114,7 +114,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Re-conexión"
                         name="reconexion"
                         field={formData?.reconexion}
@@ -124,7 +124,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Traspaso de derecho"
                         name="traspaso"
                         field={formData?.traspaso}
@@ -134,7 +134,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Otros"
                         name="otros"
                         field={formData?.otros}
@@ -144,7 +144,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Saldo pendiente"
                         name="saldo_pendiente"
                         field={formData?.saldo_pendiente}
@@ -154,7 +154,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Descuento"
                         name="descuento"
                         field={formData?.descuento}
@@ -164,7 +164,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     />
                 </div>
                 <div className="col-md-6 offset-md-3">
-                    <FormInput
+                    <FormInputDecimal
                         label="Total"
                         name="total"
                         field={formData?.total}

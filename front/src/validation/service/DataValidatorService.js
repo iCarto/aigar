@@ -27,7 +27,6 @@ const DataValidatorService = {
             entryObject,
             new DataValidator({
                 name: ["isNotEmpty"],
-                // sector: ["isNotEmpty", "isInteger", "isPositive"],
                 sector: ["isNotEmpty"],
                 orden: ["isNotEmpty", "isInteger", "isPositive"],
                 consumo_maximo: [

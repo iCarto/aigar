@@ -1,5 +1,11 @@
 import {useDomain} from "aigar/domain/provider";
-import {FormInput, FormSelect, FormSelectOrder, FormTextArea} from "base/form";
+import {
+    FormInputText,
+    FormInputInteger,
+    FormSelect,
+    FormSelectOrder,
+    FormTextArea,
+} from "base/form";
 import Grid from "@mui/material/Grid";
 
 /**
@@ -33,21 +39,16 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
         <Grid container columnSpacing={{xs: 3, xl: 5}} justifyContent="center" my={2}>
             <Grid item xs={5} xl={3}>
                 {formData?.num_socio.value === -1 ? null : (
-                    <FormInput
+                    <FormInputText
                         label="Número"
                         name="num_socio"
                         field={formData?.num_socio}
                         onChange={handleChangeField}
                         readOnly={true}
                         small={true}
-                        info={
-                            formData?.num_socio.value === -1
-                                ? "El número de socio se calculará cuando pulse Salvar"
-                                : ""
-                        }
                     />
                 )}
-                <FormInput
+                <FormInputText
                     label="Nombre"
                     name="name"
                     field={formData?.name}
@@ -70,7 +71,7 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                 />
             </Grid>
             <Grid item xs={5} xl={3}>
-                <FormInput
+                <FormInputText
                     label="Medidor"
                     name="medidor"
                     field={formData?.medidor}
@@ -85,14 +86,14 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                         onChange={handleChangeOrder}
                     />
                 ) : null}
-                <FormInput
+                <FormInputInteger
                     label="Consumo máximo"
                     name="consumo_maximo"
                     field={formData?.consumo_maximo}
                     onChange={handleChangeField}
                     small={true}
                 />
-                <FormInput
+                <FormInputInteger
                     label="Consumo reducción fija"
                     name="consumo_reduccion_fija"
                     field={formData?.consumo_reduccion_fija}

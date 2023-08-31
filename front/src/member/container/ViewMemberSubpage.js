@@ -1,19 +1,20 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {ListMemberInvoices, MemberPageSidebar} from "member/container";
-import {MemberDetail} from "member/presentational";
-import {Spinner} from "base/common";
-import {ErrorMessage} from "base/error/components";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {PageLayout} from "base/ui/page";
 import {SectionHeading} from "base/ui/section/presentational";
+import {Spinner} from "base/common";
+import {ErrorMessage} from "base/error/components";
+import {ListMemberInvoices, MemberPageSidebar} from "member/container";
+import {MemberDetail} from "member/presentational";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
 
 const ViewMemberSubpage = () => {
     const [member, setMember] = useState(null);
+    const [memberStatus, setMemberStatus] = useState("");
     const [invoices, setInvoices] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const [error, setError] = useState("");
@@ -35,13 +36,17 @@ const ViewMemberSubpage = () => {
             .catch(error => {
                 console.log(error);
                 setError(
-                    "Se ha producido un error y no se han podido obtener los datos del socio"
+                    "Se ha producido un error y no se han podido obtener los datos del/de la socio/a"
                 );
             })
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [num_socio]);
+    }, [num_socio, memberStatus]);
+
+    const handleStatusUpdate = newStatus => {
+        setMemberStatus(newStatus);
+    };
 
     return (
         <PageLayout
@@ -50,6 +55,7 @@ const ViewMemberSubpage = () => {
                     <MemberPageSidebar
                         member={member}
                         numInvoices={invoices?.length || 0}
+                        onUpdateStatus={handleStatusUpdate}
                     />
                 ) : null
             }

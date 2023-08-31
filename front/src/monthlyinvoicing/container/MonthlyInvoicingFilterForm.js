@@ -9,7 +9,7 @@ const MonthlyInvoicingFilterForm = ({handleFilterChange}) => {
     const fields = {
         nombre: filter?.nombre || "",
         sector: filter?.sector || "",
-        tipo_socio: filter?.tipo_socio || "",
+        status: filter?.status || "",
         estado: filter?.estado || "",
     };
 

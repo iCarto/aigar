@@ -1,23 +1,26 @@
+import {MEMBER_TYPES} from "member/model/Member";
 import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {EditButton} from "base/common";
-import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 import {CreateInvoiceButton} from "invoice/presentational";
-import {MEMBER_TYPES} from "member/data";
+import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 
-const MemberPageSidebar = ({member, numInvoices}) => {
+const MemberPageSidebar = ({member, onUpdateStatus, numInvoices}) => {
     const memberStatus = member.status;
-
-    const displayConnectButton = memberStatus === MEMBER_TYPES.INACTIVE;
-    const displayDisconnectButton =
-        memberStatus !== MEMBER_TYPES.INACTIVE && memberStatus !== MEMBER_TYPES.DELETED;
-    const displayDeleteButton = memberStatus !== MEMBER_TYPES.DELETED;
+    const isMemberDeleted = memberStatus === MEMBER_TYPES.DELETED.key;
+    const isMemberInactive = memberStatus === MEMBER_TYPES.INACTIVE.key;
 
     const menuActions = [
-        <EditButton />,
+        <EditButton disabled={isMemberDeleted} />,
         <CreateInvoiceButton disabled={!!numInvoices} />,
-        displayConnectButton ? <ConnectMemberButton member={member} /> : null,
-        displayDisconnectButton ? <DisconnectMemberButton member={member} /> : null,
-        displayDeleteButton ? <DeleteMemberButton member={member} /> : null,
+        isMemberInactive ? (
+            <ConnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
+        ) : null,
+        !isMemberInactive && !isMemberDeleted ? (
+            <DisconnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
+        ) : null,
+        !isMemberDeleted ? (
+            <DeleteMemberButton member={member} onUpdateStatus={onUpdateStatus} />
+        ) : null,
     ];
 
     return (

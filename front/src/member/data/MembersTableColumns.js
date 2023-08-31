@@ -28,8 +28,8 @@ export function useMembersTableColumns() {
             width: 5,
         },
         {
-            label: "Tipo de socio",
-            id: "tipo_socio",
+            label: "Tipo de socio/a",
+            id: "status",
             formatFunction: item => {
                 return (
                     <ValueWithIcon

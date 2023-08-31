@@ -6,7 +6,7 @@ import {LinkCellTable} from "base/table/components";
 export function useMonthlyInvoicingTableColumns() {
     const tableColumns = [
         {
-            id: "tipo_socio",
+            id: "status",
             formatFunction: item => {
                 return (
                     <ValueWithIcon

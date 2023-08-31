@@ -10,7 +10,7 @@ const MembersFilterForm = ({handleFilterChange}) => {
         num_socio: filter?.num_socio || "",
         name: filter?.name || "",
         sector: filter?.sector || "",
-        tipo_socio: filter?.tipo_socio || "",
+        status: filter?.status || "",
     };
 
     return (

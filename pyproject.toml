@@ -37,6 +37,9 @@ DJANGO_SETTINGS_MODULE = "back.settings"
 python_files = ["test_*.py"]
 markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
+[tool.coverage.run]
+omit = ["manage.py"]
+
 [build-system]
 requires = ["setuptools==65.5.0"]
 build-backend = "setuptools.build_meta"

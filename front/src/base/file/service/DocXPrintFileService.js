@@ -49,7 +49,7 @@ const DocXPrintFileService = {
                 },
                 getInvoiceBarcode: this.getInvoiceBarcode,
                 getMonthName: DateUtil.getMonthName,
-                getDecimal: NumberUtil.getDecimal,
+                getDecimal: NumberUtil.formatFloat,
             },
             /*
             With the default configuration, browser usage can become slow with

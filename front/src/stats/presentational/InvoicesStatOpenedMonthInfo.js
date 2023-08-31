@@ -24,19 +24,19 @@ const InvoicesStatOpenedMonthInfo = ({invoices}) => {
                     <li>
                         Facturación total:{" "}
                         <strong className="dollar">
-                            {NumberUtil.formatFloat(total)}
+                            {NumberUtil.formatNumber(total)}
                         </strong>
                     </li>
                     <li>
                         Cobrado:{" "}
                         <strong className="dollar">
-                            {NumberUtil.formatFloat(monto)}
+                            {NumberUtil.formatNumber(monto)}
                         </strong>
                     </li>
                     <li>
                         Deuda:{" "}
                         <strong className="dollar text-danger">
-                            {NumberUtil.formatFloat(debt)}
+                            {NumberUtil.formatNumber(debt)}
                         </strong>
                     </li>
                 </ul>

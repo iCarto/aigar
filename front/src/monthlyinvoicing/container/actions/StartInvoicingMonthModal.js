@@ -6,6 +6,8 @@ import {useNavigateWithReload} from "base/navigation/hooks";
 import {DateUtil} from "base/format/utilities";
 import {OperationWithConfirmationModal} from "base/ui/modal";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
+import Alert from "@mui/material/Alert";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -53,16 +55,19 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
         </p>
     );
 
-    const modalContentFinished = `Las facturas del mes de ${DateUtil.getMonthName(
-        invoicingMonth.mes
-    )} - ${invoicingMonth.anho} se han creado correctamente.`;
+    const modalContentFinished = (
+        <Alert severity="success">
+            Las facturas del mes de {DateUtil.getMonthName(invoicingMonth.mes)} -{" "}
+            {invoicingMonth.anho} se han creado correctamente.
+        </Alert>
+    );
 
     const modalContentError = (
-        <>
+        <Alert severity="error">
             Se ha producido un error y no se han podido crear las facturas.
             <br />
-            <strong>{errorMessage ? errorMessage.message : null}</strong>
-        </>
+            {errorMessage ? <strong>{errorMessage.message}</strong> : null}
+        </Alert>
     );
 
     return isOpen ? (
@@ -75,7 +80,7 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}
             modalAcceptText="Iniciar"
-            modalAcceptIcon="file-invoice"
+            modalAcceptIcon={<DescriptionIcon />}
             spinnerMessage="Generando facturas"
             modalErrorText={modalContentError}
         />

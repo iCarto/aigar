@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {MemberService} from "member/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";
+import Alert from "@mui/material/Alert";
 
 const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -36,12 +37,12 @@ const DeleteMemberModal = ({isOpen = false, onClose, member}) => {
     };
 
     const modalContentStart = (
-        <p>
+        <Alert severity="warning">
             Desea eliminar el/la socio/a&nbsp;
             <strong>
                 {member.num_socio} - {member.name}
             </strong>
-        </p>
+        </Alert>
     );
 
     const modalContentFinished = "El socio ha sido eliminado del sistema.";

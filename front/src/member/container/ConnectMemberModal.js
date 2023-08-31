@@ -4,6 +4,8 @@ import {OperationWithConfirmationModal} from "base/ui/modal";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {useLocation} from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
 
 const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -48,7 +50,9 @@ const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
         </p>
     );
 
-    const modalContentFinished = "El socio ha sido reconectado del sistema.";
+    const modalContentFinished = (
+        <Alert severity="success">El socio ha sido reconectado del sistema.</Alert>
+    );
 
     return isOpen ? (
         <OperationWithConfirmationModal
@@ -60,7 +64,7 @@ const ConnectMemberModal = ({isOpen = false, onClose, member}) => {
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}
             modalAcceptText="Conectar"
-            modalAcceptIcon="tint"
+            modalAcceptIcon={<WaterDropIcon />}
             modalErrorText="Se ha producido un error y no se ha podido conectar el socio."
         />
     ) : null;

@@ -22,10 +22,6 @@ const ListMonthlyInvoicesSidebar = ({
         setIsDataUpdated(prevState => !prevState);
     };
 
-    // const handleDateChange = (year, month) => {
-    //     handleFilterChange({month, year});
-    // };
-
     const isCurrentInvoicingMonth = selectedInvoicingMonth.is_open;
     const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;
 
@@ -45,12 +41,10 @@ const ListMonthlyInvoicesSidebar = ({
         <StartInvoicingMonthButton
             invoicingMonth={selectedInvoicingMonth}
             disabled={!isStartInvoicingEnabled}
-            // disabled={isStartInvoicingEnabled}
         />,
         <LoadMeasurementsButton
             invoicingMonth={selectedInvoicingMonth}
             disabled={!isLoadMeasurementsButtonEnabled}
-            // disabled={isLoadMeasurementsButtonEnabled}
         />,
         <PrintInvoicesButton
             buttonTitle="3. Imprimir facturas"
@@ -63,7 +57,6 @@ const ListMonthlyInvoicesSidebar = ({
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
             disabled={!isLoadPaymentsButtonEnabled}
-            // disabled={isLoadPaymentsButtonEnabled}
         />,
     ];
 

@@ -4,6 +4,9 @@ import {InvoiceService} from "invoice/service";
 import {ESTADOS_FACTURA} from "invoice/model";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";
+import Alert from "@mui/material/Alert";
+import PrintIcon from "@mui/icons-material/Print";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const PrintInvoicesModal = ({
     invoices,
@@ -23,10 +26,11 @@ const PrintInvoicesModal = ({
             const data = {
                 invoices: invoices,
             };
-            const invoicesDocument = await DocXPrintFileService.generateInvoicesDocument(
-                data,
-                outputFilename
-            );
+            const invoicesDocument =
+                await DocXPrintFileService.generateInvoicesDocument(
+                    data,
+                    outputFilename
+                );
             FileService.saveDataToFile(
                 invoicesDocument,
                 outputFilename + ".docx",
@@ -74,26 +78,26 @@ const PrintInvoicesModal = ({
     };
 
     const modalContentStart = (
-        <p>
-            Procederá a imprimir{" "}
-            {invoices && invoices.length === 1 ? "la factura" : "las facturas"}. ¿Ha
-            revisado previamente si es necesario añadir otros importes, como asambleas,
-            nuevos derechos, reconexiones, traspasos...?
-        </p>
+        <Alert severity="warning" sx={{marginTop: 2}}>
+            <AlertTitle>
+                A continuación procederá a imprimir{" "}
+                {invoices && invoices.length === 1 ? "la factura" : "las facturas"}.
+            </AlertTitle>
+            ¿Ha revisado previamente si es necesario añadir otros importes, como
+            asambleas, nuevos derechos, reconexiones, traspasos...?
+        </Alert>
     );
 
     const modalContentFinished = (
-        <p className="alert alert-success">
-            El documento se ha generado correctamente.
-        </p>
+        <Alert severity="success">El documento se ha generado correctamente.</Alert>
     );
 
     const modalContentError = (
-        <>
+        <Alert severity="error">
             Se ha producido un error y no se han podido generar el documento.
             <br />
-            <strong>{errorMessage ? errorMessage.message : null}</strong>
-        </>
+            {errorMessage ? <strong>{errorMessage}</strong> : null}
+        </Alert>
     );
 
     return isOpen ? (
@@ -106,7 +110,7 @@ const PrintInvoicesModal = ({
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}
             modalAcceptText="Imprimir"
-            modalAcceptIcon="print"
+            modalAcceptIcon={<PrintIcon />}
             spinnerMessage="Generando documento"
             modalErrorText={modalContentError}
         />

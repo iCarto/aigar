@@ -4,6 +4,9 @@ import {MemberService} from "member/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {OperationWithConfirmationModal} from "base/ui/modal";
+import Alert from "@mui/material/Alert";
+import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const DisconnectMemberButton = ({isOpen = false, onClose, member}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
@@ -39,16 +42,17 @@ const DisconnectMemberButton = ({isOpen = false, onClose, member}) => {
     };
 
     const modalContentStart = (
-        <p>
-            ¿Desea desconectar el socio&nbsp;
-            <strong>
-                {member.num_socio} - {member.name}
-            </strong>
-            ?
-            <br />
+        <Alert severity="warning" sx={{marginTop: 2}}>
+            <AlertTitle>
+                ¿Desea desconectar el socio&nbsp;
+                <strong>
+                    {member.num_socio} - {member.name}
+                </strong>
+                ?
+            </AlertTitle>
             Para este socio se seguirán creando facturas mensuales para mantener
             actualizado el costo del servicio cuando vuelva a ser conectado.
-        </p>
+        </Alert>
     );
 
     const modalContentFinished = "El socio ha sido desconectado del sistema.";
@@ -63,7 +67,7 @@ const DisconnectMemberButton = ({isOpen = false, onClose, member}) => {
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}
             modalAcceptText="Desconectar"
-            modalAcceptIcon="tint-slash"
+            modalAcceptIcon={<FormatColorResetIcon />}
             modalErrorText="Se ha producido un error y no se ha podido desconectar el socio."
         />
     ) : null;

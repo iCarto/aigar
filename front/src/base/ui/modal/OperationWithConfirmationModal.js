@@ -1,70 +1,41 @@
 import {ModalOperationStatus} from "./config";
 import {Modal} from "base/ui/modal";
-import {Spinner} from "base/common";
+import {
+    AcceptButton,
+    CancelButton,
+    CloseButton,
+    CloseIconButton,
+    Spinner,
+} from "base/common";
+import Alert from "@mui/material/Alert";
 
-//TO-DO: Migrate to MUI
 const OperationWithConfirmationModal = ({
     operationStatus,
     modalTitle,
     modalContentStart,
     modalContentFinished,
     modalAcceptText = "",
-    modalAcceptIcon = "",
+    modalAcceptIcon = null,
     spinnerMessage = "",
     modalErrorText,
     onClose,
     onClickAccept,
     onClickFinished,
 }) => {
-    const handleClose = () => {
-        onClose();
-    };
-
-    const closeButton = (
-        <button
-            type="button"
-            className="close"
-            aria-label="Close"
-            onClick={
-                operationStatus === ModalOperationStatus.SUCCESS
-                    ? onClickFinished
-                    : handleClose
-            }
-        >
-            <span aria-hidden="true">&times;</span>
-        </button>
-    );
-
-    const cancelButton = (
-        <button type="button" className="btn btn-secondary" onClick={handleClose}>
-            Cancelar
-        </button>
-    );
-
-    const acceptButton = (
-        <button type="button" className="btn btn-primary" onClick={onClickAccept}>
-            {modalAcceptIcon ? (
-                <i className={`mr-2 fas fa-${modalAcceptIcon}`} />
-            ) : null}
-            {modalAcceptText || "Aceptar"}
-        </button>
-    );
-
-    const finishedButton = (
-        <button type="button" className="btn btn-primary" onClick={onClickFinished}>
-            <i className="fas fa-times mr-2" />
-            Cerrar
-        </button>
-    );
-
     const statusModalViews = [
         {
             status: ModalOperationStatus.START,
             body: modalContentStart,
             footer: (
                 <>
-                    {cancelButton}
-                    {acceptButton}
+                    {<CancelButton onClick={onClose} />}
+                    {
+                        <AcceptButton
+                            onClick={onClickAccept}
+                            text={modalAcceptText}
+                            icon={modalAcceptIcon}
+                        />
+                    }
                 </>
             ),
         },
@@ -75,11 +46,11 @@ const OperationWithConfirmationModal = ({
         {
             status: ModalOperationStatus.SUCCESS,
             body: modalContentFinished,
-            footer: finishedButton,
+            footer: <CloseButton onClick={onClickFinished} />,
         },
         {
             status: ModalOperationStatus.ERROR,
-            body: <p className="alert alert-danger">{modalErrorText}</p>,
+            body: <Alert severity="error">{modalErrorText}</Alert>,
         },
     ];
 
@@ -89,16 +60,22 @@ const OperationWithConfirmationModal = ({
         <>
             {modalTitle}
             {operationStatus === ModalOperationStatus.START ||
-            operationStatus === ModalOperationStatus.ERROR
-                ? closeButton
-                : null}
+            operationStatus === ModalOperationStatus.ERROR ? (
+                <CloseIconButton
+                    onClick={
+                        operationStatus === ModalOperationStatus.SUCCESS
+                            ? onClickFinished
+                            : onClose
+                    }
+                />
+            ) : null}
         </>
     );
 
     return (
         <Modal
             isOpen={!!operationStatus}
-            onClose={handleClose}
+            onClose={onClose}
             header={modalHeader}
             body={currentView?.body}
             footer={currentView?.footer}

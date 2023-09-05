@@ -4,14 +4,14 @@ import {EditButton} from "base/common";
 import {CreateInvoiceButton} from "invoice/presentational";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 
-const MemberPageSidebar = ({member, onUpdateStatus, numInvoices}) => {
+const MemberPageSidebar = ({member, onUpdateStatus}) => {
     const memberStatus = member.status;
     const isMemberDeleted = memberStatus === MEMBER_TYPES.DELETED.key;
     const isMemberInactive = memberStatus === MEMBER_TYPES.INACTIVE.key;
 
     const menuActions = [
         <EditButton disabled={isMemberDeleted || isMemberInactive} />,
-        <CreateInvoiceButton disabled={!!numInvoices} />,
+        <CreateInvoiceButton disabled={isMemberDeleted} />,
         isMemberInactive ? (
             <ConnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
         ) : null,

@@ -5,6 +5,7 @@ import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {Spinner} from "base/common";
 import {InvoicesListPreview} from "invoice/presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
+import Alert from "@mui/material/Alert";
 
 const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,
@@ -70,10 +71,10 @@ const LoadMeasurementsStep3InvoicesTable = ({
         const totalInvoicesWithErrors = getTotalErrors(invoices);
         if (totalInvoicesWithErrors !== 0) {
             return (
-                <div className="alert alert-warning text-center" role="alert">
+                <Alert severity="error">
                     Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
                     alertas que debería revisar.
-                </div>
+                </Alert>
             );
         }
         return null;
@@ -82,12 +83,12 @@ const LoadMeasurementsStep3InvoicesTable = ({
     const getMeasurementsWithoutInvoiceError = () => {
         if (measurementsWithoutInvoice.length !== 0) {
             return (
-                <div className="alert alert-danger text-center" role="alert">
+                <Alert severity="error">
                     <strong>
                         Se han detectado lecturas para socios que no tienen factura:{" "}
                         {measurementsWithoutInvoice.join(",")}
                     </strong>
-                </div>
+                </Alert>
             );
         }
         return null;

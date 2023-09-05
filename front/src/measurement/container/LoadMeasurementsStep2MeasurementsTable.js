@@ -4,6 +4,7 @@ import {LoadDataValidatorService} from "validation/service";
 import {createMeasurement} from "measurement/model";
 import {LoadMeasurementsList} from "../presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
+import Alert from "@mui/material/Alert";
 
 const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,
@@ -59,10 +60,10 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     const totalRegistersWithErrors = getTotalErrors(measurements);
 
     const errorsMessage = (
-        <div className="alert alert-danger text-center" role="alert">
+        <Alert severity="error" sx={{mb: 1}}>
             Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
             un total de <strong>{measurements.length}</strong> registros leídos.
-        </div>
+        </Alert>
     );
 
     const filteredMeasurements = filterMonthlyData(measurements, filter);

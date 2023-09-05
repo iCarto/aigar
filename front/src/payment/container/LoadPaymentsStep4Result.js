@@ -4,6 +4,9 @@ import {Spinner} from "base/common";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 // TO-DO: This component & LoadMeasurementsStep4Result can be abstracted into one common component --only the service is different
 const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
@@ -30,10 +33,10 @@ const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
 
     const ErrorMessage = () => {
         return (
-            <div className="alert alert-danger text-center" role="alert">
+            <Alert severity="error">
                 Se ha producido un error durante la actualización de las facturas y no
                 se han podido guardar los datos.
-            </div>
+            </Alert>
         );
     };
 
@@ -51,12 +54,14 @@ const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
 
     const SuccessMessage = () => {
         return (
-            <>
-                <div className="alert alert-success text-center" role="alert">
-                    Las facturas se han actualizado correctamente.
-                </div>
-                <BackToInvoicesButton />
-            </>
+            <Alert severity="success">
+                <Stack>
+                    <Typography mb={3}>
+                        Las facturas se han actualizado correctamente.
+                    </Typography>
+                    <BackToInvoicesButton />
+                </Stack>
+            </Alert>
         );
     };
 

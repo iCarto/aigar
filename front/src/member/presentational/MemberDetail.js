@@ -6,12 +6,13 @@ import {
 } from "base/ui/section/presentational";
 import {MemberTypeField} from "member/presentational";
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
 
 const MemberDetail = ({member, isSummary = false}) => {
     const message = !member?.is_active ? (
-        <div className="alert alert-danger">
+        <Alert severity="error" sx={{mb: 2}}>
             Este socio se encuentra eliminado del sistema.
-        </div>
+        </Alert>
     ) : null;
 
     return member ? (

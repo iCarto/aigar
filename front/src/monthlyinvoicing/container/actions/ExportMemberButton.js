@@ -3,6 +3,7 @@ import {MemberService} from "member/service";
 import {FileService} from "base/file/service";
 import {Spinner} from "base/common";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 
 const ExportMemberButton = ({disabled = false}) => {
     const [loading, setLoading] = useState(false);
@@ -26,9 +27,7 @@ const ExportMemberButton = ({disabled = false}) => {
     };
 
     const message = messageError ? (
-        <div className="alert alert-danger mt-2" role="alert">
-            {messageError}
-        </div>
+        <Alert severity="error">{messageError}</Alert>
     ) : null;
 
     const spinner = loading ? (

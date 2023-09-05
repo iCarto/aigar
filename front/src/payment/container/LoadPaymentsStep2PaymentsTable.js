@@ -7,6 +7,7 @@ import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadPaymentsList} from "../presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
 import {Spinner} from "base/common";
+import Alert from "@mui/material/Alert";
 
 const LoadPaymentsStep2PaymentsTable = ({
     id_mes_facturacion,
@@ -100,10 +101,10 @@ const LoadPaymentsStep2PaymentsTable = ({
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
     const errorsMessage = (
-        <div className="alert alert-danger text-center" role="alert">
+        <Alert severity="error" sx={{mb: 1}}>
             Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
             un total de <strong>{payments.length}</strong> registros leídos.
-        </div>
+        </Alert>
     );
 
     if (loading) {

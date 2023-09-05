@@ -1,6 +1,8 @@
+import Alert from "@mui/material/Alert";
+
 const ErrorMessage = ({message}) => {
     if (message) {
-        return <div className="alert alert-danger">{message}</div>;
+        return <Alert severity="error">{message}</Alert>;
     }
     return null;
 };

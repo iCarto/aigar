@@ -5,6 +5,7 @@ import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadDataTableFilter} from "loaddata/presentational";
 import {InvoicesListPreview} from "invoice/presentational";
 import {Spinner} from "base/common";
+import Alert from "@mui/material/Alert";
 
 const LoadPaymentsStep3InvoicesTable = ({
     invoices,
@@ -52,10 +53,10 @@ const LoadPaymentsStep3InvoicesTable = ({
     ).length;
 
     const errorsMessage = (
-        <div className="alert alert-warning text-center" role="alert">
+        <Alert severity="error">
             Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
             debería revisar.
-        </div>
+        </Alert>
     );
 
     return (

@@ -2,10 +2,13 @@ import {DateUtil} from "base/format/utilities";
 
 import {SectionField, SectionSummaryCard} from "base/ui/section/presentational";
 import {InvoiceStatusLabel} from ".";
+import Alert from "@mui/material/Alert";
 
 const InvoiceDetailShort = ({invoice, payments = []}) => {
     const message = !invoice?.is_active ? (
-        <div className="alert alert-danger">La factura ha sido anulada.</div>
+        <Alert severity="error" sx={{width: "100%"}}>
+            La factura ha sido anulada.
+        </Alert>
     ) : null;
 
     return (

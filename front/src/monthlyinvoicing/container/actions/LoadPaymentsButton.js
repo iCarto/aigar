@@ -1,12 +1,34 @@
-import {ButtonLink} from "base/navigation/components";
+import {useState} from "react";
+import {LoadPaymentsModal} from "payment/presentational";
+import Button from "@mui/material/Button";
 
-const LoadPaymentsButton = ({invoicingMonth, disabled}) => {
+const LoadPaymentsButton = ({invoicingMonth, disabled = false}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
-        <ButtonLink
-            text="5. Importar pagos"
-            to={`/cargarpagos/${invoicingMonth.id_mes_facturacion}`}
-            disabled={disabled}
-        />
+        <>
+            <Button
+                onClick={handleOpenModal}
+                disabled={disabled}
+                variant="contained"
+                fullWidth
+            >
+                5. Importar pagos
+            </Button>
+            <LoadPaymentsModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                invoicingMonthId={invoicingMonth.id_mes_facturacion}
+            />
+        </>
     );
 };
 

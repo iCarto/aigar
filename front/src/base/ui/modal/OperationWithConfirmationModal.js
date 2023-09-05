@@ -1,12 +1,6 @@
 import {ModalOperationStatus} from "./config";
 import {Modal} from "base/ui/modal";
-import {
-    AcceptButton,
-    CancelButton,
-    CloseButton,
-    CloseIconButton,
-    Spinner,
-} from "base/common";
+import {AcceptButton, CancelButton, CloseButton, Spinner} from "base/common";
 import Alert from "@mui/material/Alert";
 
 const OperationWithConfirmationModal = ({
@@ -22,6 +16,15 @@ const OperationWithConfirmationModal = ({
     onClickAccept,
     onClickFinished,
 }) => {
+    const handleCloseModal = () => {
+        if (
+            operationStatus === ModalOperationStatus.START ||
+            operationStatus === ModalOperationStatus.ERROR
+        )
+            onClose();
+        else return;
+    };
+
     const statusModalViews = [
         {
             status: ModalOperationStatus.START,
@@ -56,27 +59,11 @@ const OperationWithConfirmationModal = ({
 
     const currentView = statusModalViews.find(view => view.status === operationStatus);
 
-    const modalHeader = (
-        <>
-            {modalTitle}
-            {operationStatus === ModalOperationStatus.START ||
-            operationStatus === ModalOperationStatus.ERROR ? (
-                <CloseIconButton
-                    onClick={
-                        operationStatus === ModalOperationStatus.SUCCESS
-                            ? onClickFinished
-                            : onClose
-                    }
-                />
-            ) : null}
-        </>
-    );
-
     return (
         <Modal
             isOpen={!!operationStatus}
-            onClose={onClose}
-            header={modalHeader}
+            onClose={handleCloseModal}
+            header={modalTitle}
             body={currentView?.body}
             footer={currentView?.footer}
         />

@@ -1,4 +1,9 @@
 export {default as IconButtonLink} from "./IconButtonLink";
+export {default as AcceptButton} from "./AcceptButton";
+export {default as ContinueButton} from "./ContinueButton";
+export {default as CancelButton} from "./CancelButton";
+export {default as CloseButton} from "./CloseButton";
+export {default as CloseIconButton} from "./CloseIconButton";
 export {default as BackButton} from "./BackButton";
 export {default as EditButton} from "./EditButton";
 export {default as Spinner} from "./Spinner";

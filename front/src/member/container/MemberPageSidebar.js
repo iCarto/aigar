@@ -10,7 +10,7 @@ const MemberPageSidebar = ({member, onUpdateStatus, numInvoices}) => {
     const isMemberInactive = memberStatus === MEMBER_TYPES.INACTIVE.key;
 
     const menuActions = [
-        <EditButton disabled={isMemberDeleted} />,
+        <EditButton disabled={isMemberDeleted || isMemberInactive} />,
         <CreateInvoiceButton disabled={!!numInvoices} />,
         isMemberInactive ? (
             <ConnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />

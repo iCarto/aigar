@@ -6,6 +6,11 @@ from back.models.invoice import Invoice
 from domains.models.zone import Zone
 
 
+class UseTypes(models.TextChoices):
+    HUMANO = "humano"  # noqa: WPS115
+    COMERCIAL = "comercial"  # noqa: WPS115
+
+
 class MemberManager(models.Manager):
     def update_orden(self, new_order: int, old_order: int | None = None) -> None:
         if old_order == new_order:
@@ -115,6 +120,31 @@ class Member(models.Model):
         blank=False,
         null=False,
         verbose_name="sector / comunidad",
+    )
+
+    personas_acometida = models.IntegerField(
+        # TODO: Change to Null=False
+        blank=True,
+        null=True,
+        help_text="Número de personas que habitan en la casa/acometida que está formada por una o varias familias",
+    )
+
+    dui = models.CharField(
+        # TODO: Change to Null=False
+        blank=True,
+        null=True,
+        max_length=10,
+        unique=True,
+        help_text="Documento Único de Identidad",
+    )
+
+    tipo_uso = models.CharField(
+        # TODO: Change to Null=False
+        blank=True,
+        null=True,
+        max_length=20,
+        choices=UseTypes.choices,
+        help_text="Tipo de uso: humano o comercial",
     )
 
     def __str__(self):

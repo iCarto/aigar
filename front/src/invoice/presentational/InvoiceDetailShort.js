@@ -32,7 +32,7 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
                     <span>
                         {payments?.map(payment => {
                             return (
-                                <div key={payment.id}>
+                                <div key={payment.id_pago}>
                                     {payment.fecha} -{" "}
                                     <span className="dollar">{payment.monto}</span>
                                 </div>

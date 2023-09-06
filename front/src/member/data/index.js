@@ -13,4 +13,15 @@ export const MEMBER_TYPES_MAPPING = {
     },
 };
 
+export const USE_TYPES_MAPPING = {
+    humano: {
+        label: "Humano",
+        icon: "fas fa-house-user",
+    },
+    comercial: {
+        label: "Comercial",
+        icon: "fas fa-shop",
+    },
+};
+
 export * from "./MemberInvoicesTableColumns";

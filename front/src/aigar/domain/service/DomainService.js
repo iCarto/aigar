@@ -1,4 +1,5 @@
 import {ApiService} from "base/api/service";
+import {USE_TYPES_MAPPING} from "member/data";
 
 const DomainService = {
     getSectors() {
@@ -14,6 +15,14 @@ const DomainService = {
                 long: longNames,
             };
         });
+    },
+
+    getMemberUseTypes() {
+        const memberUseTypes = Object.keys(USE_TYPES_MAPPING).map(key => ({
+            key,
+            value: USE_TYPES_MAPPING[key].label,
+        }));
+        return Promise.resolve(memberUseTypes);
     },
 
     getMemberTypes(showEliminado = true) {

@@ -8,6 +8,7 @@ export default function DomainProvider({children}) {
     const [sectors, setSectors] = useState([]);
     const [sectorsLong, setSectorsLong] = useState([]);
     const [memberTypes, setMemberTypes] = useState([]);
+    const [memberUseTypes, setMemberUseTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
 
@@ -21,21 +22,32 @@ export default function DomainProvider({children}) {
         Promise.all([
             DomainService.getSectors(),
             DomainService.getMemberTypes(),
+            DomainService.getMemberUseTypes(),
             DomainService.getInvoiceStatus(),
             InvoicingMonthService.getInvoicingMonths(),
-        ]).then(([sectors, memberTypes, invoiceStatus, invoicingMonths]) => {
-            setSectors(sectors.short);
-            setSectorsLong(sectors.long);
-            setMemberTypes(memberTypes);
-            setInvoiceStatus(invoiceStatus);
-            setInvoicingMonths(sortInvoicingMonths(invoicingMonths));
-        });
+        ]).then(
+            ([
+                sectors,
+                memberTypes,
+                memberUseTypes,
+                invoiceStatus,
+                invoicingMonths,
+            ]) => {
+                setSectors(sectors.short);
+                setSectorsLong(sectors.long);
+                setMemberTypes(memberTypes);
+                setMemberUseTypes(memberUseTypes);
+                setInvoiceStatus(invoiceStatus);
+                setInvoicingMonths(sortInvoicingMonths(invoicingMonths));
+            }
+        );
     }, []);
 
     let value = {
         sectors,
         sectorsLong,
         memberTypes,
+        memberUseTypes,
         invoiceStatus,
         invoicingMonths,
     };

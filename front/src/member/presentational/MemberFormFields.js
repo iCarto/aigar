@@ -7,6 +7,7 @@ import {
     FormTextArea,
 } from "base/form";
 import Grid from "@mui/material/Grid";
+import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
 
 /**
 Controlled component for member form.
@@ -23,7 +24,7 @@ and show errors related with every field.
 This component doesn't manage state because the state is stored in the parent component.
 */
 const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
-    const {sectors} = useDomain();
+    const {sectors, memberUseTypes} = useDomain();
 
     const handleChangeOrder = (clickedIndex, updatedList) => {
         onChangeOrder(clickedIndex, updatedList);
@@ -54,14 +55,28 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                     field={formData?.name}
                     onChange={handleChangeField}
                 />
-                <FormSelect
-                    label="Sector"
-                    name="sector"
-                    value={formData?.sector.value}
-                    options={sectors}
-                    errors={formData?.sector.errors}
+
+                <FormInputText
+                    label="Documento Único de Identidad (DUI)"
+                    name="dui"
+                    field={formData?.dui}
                     onChange={handleChangeField}
                 />
+                <FormInputInteger
+                    label="Nº personas acometida"
+                    name="personas_acometida"
+                    field={formData?.personas_acometida}
+                    onChange={handleChangeField}
+                />
+                <FormSelect
+                    label="Tipo de uso"
+                    name="tipo_uso"
+                    value={formData?.tipo_uso.value}
+                    options={memberUseTypes}
+                    errors={formData?.tipo_uso.errors}
+                    onChange={handleChangeField}
+                />
+
                 <FormTextArea
                     label="Observaciones"
                     name="observaciones"
@@ -71,6 +86,14 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                 />
             </Grid>
             <Grid item xs={5} xl={3}>
+                <FormSelect
+                    label="Sector"
+                    name="sector"
+                    value={formData?.sector.value}
+                    options={sectors}
+                    errors={formData?.sector.errors}
+                    onChange={handleChangeField}
+                />
                 <FormInputText
                     label="Medidor"
                     name="medidor"
@@ -79,27 +102,31 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                 />
                 {members && formData?.orden ? (
                     <FormSelectOrder
-                        label="Orden Ruta"
+                        label="Orden ruta"
                         name="orden"
                         field={formData?.orden}
                         items={members}
                         onChange={handleChangeOrder}
                     />
                 ) : null}
-                <FormInputInteger
-                    label="Consumo máximo"
-                    name="consumo_maximo"
-                    field={formData?.consumo_maximo}
-                    onChange={handleChangeField}
-                    small={true}
-                />
-                <FormInputInteger
-                    label="Consumo reducción fija"
-                    name="consumo_reduccion_fija"
-                    field={formData?.consumo_reduccion_fija}
-                    onChange={handleChangeField}
-                    small={true}
-                />
+                <Grid container columnSpacing={1}>
+                    <Grid item xs={6}>
+                        <FormInputInteger
+                            label={`Consumo máximo (${WATER_CONSUMPTION_SYMBOL})`}
+                            name="consumo_maximo"
+                            field={formData?.consumo_maximo}
+                            onChange={handleChangeField}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormInputInteger
+                            label={`Consumo reducción fija (${WATER_CONSUMPTION_SYMBOL})`}
+                            name="consumo_reduccion_fija"
+                            field={formData?.consumo_reduccion_fija}
+                            onChange={handleChangeField}
+                        />
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     );

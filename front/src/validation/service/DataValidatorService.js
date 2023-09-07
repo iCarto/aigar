@@ -27,7 +27,15 @@ const DataValidatorService = {
             entryObject,
             new DataValidator({
                 name: ["isNotEmpty"],
+                dui: [
+                    {
+                        type: "matchesFormat",
+                        param: /^[0-9]{8}-[0-9]$/,
+                        param2: "dddddddd-d",
+                    },
+                ],
                 sector: ["isNotEmpty"],
+                personas_acometida: ["isInteger", "isPositive"],
                 orden: ["isNotEmpty", "isInteger", "isPositive"],
                 consumo_maximo: [
                     "isInteger",

@@ -70,6 +70,15 @@ class DataValidator extends Validator {
             return "El campo debe tener " + length + " caracteres";
         }
     }
+
+    matchesFormat(regex, format, value) {
+        if (!value) {
+            return;
+        }
+        if (!regex.test(value)) {
+            return `El campo debe tener el siguiente formato: ${format}`;
+        }
+    }
 }
 
 export default DataValidator;

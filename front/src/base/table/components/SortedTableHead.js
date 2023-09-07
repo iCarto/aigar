@@ -24,49 +24,57 @@ const SortedTableHead = ({
     };
 
     return (
-        <TableHead>
-            <TableRow>
-                {onSelectAllClick ? (
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            color="primary"
-                            sx={checkboxStyle}
-                            indeterminate={
-                                totalSelected > 0 && totalSelected < rowCount
-                            }
-                            checked={rowCount > 0 && totalSelected === rowCount}
-                            onChange={onSelectAllClick}
-                            inputProps={{
-                                "aria-label": "select all",
-                            }}
-                        />
-                    </TableCell>
-                ) : null}
-                {columns.map((headCell, index) => (
-                    <TableCell
-                        key={index}
-                        align={headCell.numeric ? "right" : "left"}
-                        padding={headCell.disablePadding ? "none" : "normal"}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : "asc"}
-                            onClick={createSortHandler(headCell.id)}
+        <>
+            <colgroup>
+                {onSelectAllClick ? <col key="checkboxColumn" width="auto" /> : null}
+                {columns.map(column => {
+                    return <col key={column.id} width={column.width + "%"} />;
+                })}
+            </colgroup>
+            <TableHead>
+                <TableRow>
+                    {onSelectAllClick ? (
+                        <TableCell padding="checkbox" key="checkboxColumn">
+                            <Checkbox
+                                color="primary"
+                                sx={checkboxStyle}
+                                indeterminate={
+                                    totalSelected > 0 && totalSelected < rowCount
+                                }
+                                checked={rowCount > 0 && totalSelected === rowCount}
+                                onChange={onSelectAllClick}
+                                inputProps={{
+                                    "aria-label": "select all",
+                                }}
+                            />
+                        </TableCell>
+                    ) : null}
+                    {columns.map((column, index) => (
+                        <TableCell
+                            key={index}
+                            align={column.numeric ? "right" : "left"}
+                            padding={column.disablePadding ? "none" : "normal"}
+                            sortDirection={orderBy === column.id ? order : false}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === "desc"
-                                        ? "sorted descending"
-                                        : "sorted ascending"}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
+                            <TableSortLabel
+                                active={orderBy === column.id}
+                                direction={orderBy === column.id ? order : "asc"}
+                                onClick={createSortHandler(column.id)}
+                            >
+                                {column.label}
+                                {orderBy === column.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === "desc"
+                                            ? "sorted descending"
+                                            : "sorted ascending"}
+                                    </Box>
+                                ) : null}
+                            </TableSortLabel>
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+        </>
     );
 };
 

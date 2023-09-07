@@ -1,3 +1,4 @@
+import {USE_TYPES_MAPPING} from ".";
 import {LinkCellTable} from "base/table/components";
 import {MemberStatusCellTable} from "member/presentational";
 
@@ -29,6 +30,17 @@ export function useMembersTableColumns() {
             id: "tipo_socio",
             formatFunction: item => {
                 return <MemberStatusCellTable status={item.tipo_socio} />;
+            },
+        },
+        {
+            label: "Nº personas acometida",
+            id: "personas_acometida",
+        },
+        {
+            label: "Tipo de uso",
+            id: "tipo_uso",
+            formatFunction: item => {
+                return USE_TYPES_MAPPING[item?.tipo_uso]?.label;
             },
         },
         {

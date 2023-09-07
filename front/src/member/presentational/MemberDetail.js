@@ -1,10 +1,11 @@
+import {USE_TYPES_MAPPING} from "member/data";
+import {MemberTypeField} from "member/presentational";
 import {
     SectionField,
     SectionFieldLabel,
     SectionFieldValue,
     SectionSummaryCard,
 } from "base/ui/section/presentational";
-import {MemberTypeField} from "member/presentational";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
 
@@ -22,19 +23,14 @@ const MemberDetail = ({member, isSummary = false}) => {
             </Grid>
             <Grid item xs={6}>
                 <SectionField
-                    label="Nombre"
-                    value={member?.name}
+                    label="Nombre y nº socio/a"
+                    value={`${member?.name} - ${member?.num_socio}`}
                     highlightValue
                     containerWidth="short"
                 />
             </Grid>
             <Grid item xs={6}>
-                <SectionField
-                    label="Nº socio/a"
-                    value={member?.num_socio}
-                    highlightValue
-                    containerWidth="short"
-                />
+                <SectionField label="DUI" value={member?.dui} containerWidth="short" />
             </Grid>
             <Grid item xs={6}>
                 <SectionField
@@ -42,6 +38,20 @@ const MemberDetail = ({member, isSummary = false}) => {
                     value={<MemberTypeField memberType={member?.tipo_socio} />}
                     containerWidth="short"
                     highlightValue
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <SectionField
+                    label="Nº personas acometida"
+                    value={member?.personas_acometida}
+                    containerWidth="short"
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <SectionField
+                    label="Tipo de uso"
+                    value={USE_TYPES_MAPPING[member?.tipo_uso]?.label}
+                    containerWidth="short"
                 />
             </Grid>
             <Grid item xs={6}>

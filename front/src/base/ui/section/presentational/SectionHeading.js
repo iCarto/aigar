@@ -2,11 +2,16 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import LabelIcon from "@mui/icons-material/Label";
 
-const SectionHeading = ({children, label = true}) => {
+const SectionHeading = ({children, label = true, containerStyle = {}}) => {
     return (
         <Grid
             container
-            sx={{display: "flex", flexDirection: "row", flexWrap: "noWrap"}}
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "noWrap",
+                ...containerStyle,
+            }}
         >
             {label && (
                 <LabelIcon

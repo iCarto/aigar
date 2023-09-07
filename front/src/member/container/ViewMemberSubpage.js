@@ -8,7 +8,9 @@ import {ErrorMessage} from "base/error/components";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {PageLayout} from "base/ui/page";
+import {SectionHeading} from "base/ui/section/presentational";
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
 
 const ViewMemberSubpage = () => {
     const [member, setMember] = useState(null);
@@ -52,18 +54,36 @@ const ViewMemberSubpage = () => {
                 ) : null
             }
         >
-            <ErrorMessage message={error} />
-            {isLoading ? <Spinner message="Cargando datos" /> : null}
-            {member ? (
-                <Grid item>
-                    <MemberDetail member={member} />
-                </Grid>
-            ) : null}
-            {invoices ? (
-                <Grid item>
-                    <ListMemberInvoices invoices={invoices} />
-                </Grid>
-            ) : null}
+            {isLoading ? (
+                <Spinner message="Cargando datos" />
+            ) : (
+                <>
+                    <ErrorMessage message={error} />
+                    {member ? (
+                        <>
+                            <Grid item>
+                                <MemberDetail member={member} />
+                            </Grid>
+                            <Grid item>
+                                <SectionHeading
+                                    containerStyle={{justifyContent: "center", mb: 1}}
+                                    label={false}
+                                >
+                                    Facturas
+                                </SectionHeading>
+                                {invoices?.length ? (
+                                    <ListMemberInvoices invoices={invoices} />
+                                ) : (
+                                    <Alert severity="info">
+                                        Aún no se ha emitido ninguna factura para este/a
+                                        socio/a.
+                                    </Alert>
+                                )}
+                            </Grid>
+                        </>
+                    ) : null}
+                </>
+            )}
         </PageLayout>
     );
 };

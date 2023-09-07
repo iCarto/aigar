@@ -1,6 +1,6 @@
-import {USE_TYPES_MAPPING} from ".";
+import {ValueWithIcon} from "base/common";
+import {MEMBER_TYPES_MAPPING, USE_TYPES_MAPPING} from ".";
 import {LinkCellTable} from "base/table/components";
-import {MemberStatusCellTable} from "member/presentational";
 
 export function useMembersTableColumns() {
     const tableColumns = [
@@ -31,14 +31,24 @@ export function useMembersTableColumns() {
             label: "Tipo de socio",
             id: "tipo_socio",
             formatFunction: item => {
-                return <MemberStatusCellTable status={item.tipo_socio} />;
+                return (
+                    <ValueWithIcon
+                        icon={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.icon}
+                        value={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.label}
+                    />
+                );
             },
         },
         {
             label: "Tipo de uso",
             id: "tipo_uso",
             formatFunction: item => {
-                return USE_TYPES_MAPPING[item?.tipo_uso]?.label;
+                return (
+                    <ValueWithIcon
+                        icon={USE_TYPES_MAPPING[item?.tipo_uso]?.icon}
+                        value={USE_TYPES_MAPPING[item?.tipo_uso]?.label}
+                    />
+                );
             },
         },
         {

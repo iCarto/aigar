@@ -1,5 +1,5 @@
-import {USE_TYPES_MAPPING} from "member/data";
-import {MemberTypeField} from "member/presentational";
+import {USE_TYPES_MAPPING, MEMBER_TYPES_MAPPING} from "member/data";
+import {ValueWithIcon} from "base/common";
 import {
     SectionField,
     SectionFieldLabel,
@@ -35,7 +35,12 @@ const MemberDetail = ({member, isSummary = false}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Tipo de socio/a"
-                    value={<MemberTypeField memberType={member?.tipo_socio} />}
+                    value={
+                        <ValueWithIcon
+                            icon={MEMBER_TYPES_MAPPING[member?.tipo_socio]?.icon}
+                            value={MEMBER_TYPES_MAPPING[member?.tipo_socio]?.label}
+                        />
+                    }
                     containerWidth="short"
                     highlightValue
                 />
@@ -50,7 +55,12 @@ const MemberDetail = ({member, isSummary = false}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Tipo de uso"
-                    value={USE_TYPES_MAPPING[member?.tipo_uso]?.label}
+                    value={
+                        <ValueWithIcon
+                            icon={USE_TYPES_MAPPING[member?.tipo_uso]?.icon}
+                            value={USE_TYPES_MAPPING[member?.tipo_uso]?.label}
+                        />
+                    }
                     containerWidth="short"
                 />
             </Grid>

@@ -4,6 +4,4 @@ export {default as MemberForm} from "./MemberForm";
 export {default as MemberFormFields} from "./MemberFormFields";
 export {default as MemberNewButton} from "./MemberNewButton";
 export {default as MembersFilterFormFields} from "./MembersFilterFormFields";
-export {default as MemberStatusCellTable} from "./MemberStatusCellTable";
 export {default as MemberViewModal} from "./MemberViewModal";
-export {default as MemberTypeField} from "./MemberTypeField";

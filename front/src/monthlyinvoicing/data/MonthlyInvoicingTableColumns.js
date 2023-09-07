@@ -1,14 +1,19 @@
-import {LinkCellTable} from "base/table/components";
-
+import {MEMBER_TYPES_MAPPING} from "member/data";
 import {InvoiceResumenCellTable, InvoiceStatusCellTable} from "invoice/presentational";
-import {MemberStatusCellTable} from "member/presentational";
+import {ValueWithIcon} from "base/common";
+import {LinkCellTable} from "base/table/components";
 
 export function useMonthlyInvoicingTableColumns() {
     const tableColumns = [
         {
             id: "tipo_socio",
             formatFunction: item => {
-                return <MemberStatusCellTable status={item.tipo_socio} showOnlyIcons />;
+                return (
+                    <ValueWithIcon
+                        icon={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.icon}
+                        title={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.label}
+                    />
+                );
             },
             style: {textAlign: "center"},
         },

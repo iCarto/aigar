@@ -114,7 +114,7 @@ class Member(models.Model):
     )
 
     is_active = models.BooleanField(
-        blank=False, null=False, default=True, verbose_name="", help_text=""
+        blank=False, null=False, default=True, verbose_name="Activo?", help_text=""
     )
 
     personas_acometida = models.IntegerField(

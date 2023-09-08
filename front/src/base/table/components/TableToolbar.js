@@ -1,17 +1,17 @@
+import {Fragment} from "react";
 import {alpha} from "@mui/material/styles";
 
-import {ActionsBurgerMenu} from "base/ui/menu/components";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import List from "@mui/material/List";
 
-const TableToolbar = ({totalSelected, tableActions = []}) => {
+const TableToolbar = ({selectedRows, tableActions = []}) => {
     const selectedMessage =
-        totalSelected === 1
-            ? `${totalSelected} elemento seleccionado`
-            : `${totalSelected} elementos seleccionados`;
+        selectedRows?.length === 1
+            ? `${selectedRows.length} elemento seleccionado`
+            : `${selectedRows.length} elementos seleccionados`;
 
-    return totalSelected > 0 ? (
+    return selectedRows?.length > 0 ? (
         <Toolbar
             sx={{
                 pl: {sm: 1},
@@ -29,9 +29,11 @@ const TableToolbar = ({totalSelected, tableActions = []}) => {
             }}
         >
             {tableActions.length > 0 ? (
-                <Stack>
-                    <ActionsBurgerMenu>{tableActions}</ActionsBurgerMenu>
-                </Stack>
+                <List dense disablePadding sx={{display: "flex"}}>
+                    {tableActions.map((action, index) => (
+                        <Fragment key={index}>{action}</Fragment>
+                    ))}
+                </List>
             ) : null}
 
             <Typography

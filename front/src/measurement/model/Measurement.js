@@ -15,13 +15,13 @@ const createMeasurements = (data = []) => {
 };
 
 const createMeasurement = ({
-    id = -1,
-    factura = -1,
-    sector = -1,
-    num_socio = -1,
+    id = null,
+    factura = null,
+    sector = "",
+    num_socio = null,
     nombre_socio = "",
-    caudal_anterior = -1,
-    caudal_actual = -1,
+    caudal_anterior = null,
+    caudal_actual = null,
     cambio_medidor = false,
     medidor = "",
     errors = [],

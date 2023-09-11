@@ -30,7 +30,7 @@ const dataFromMyRESTAPI = [
 ]
 */
 
-const getTipoSocio = function(member) {
+const getTipoSocio = function (member) {
     if (member.is_active === false) {
         return "eliminado";
     }

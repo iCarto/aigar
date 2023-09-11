@@ -10,7 +10,7 @@ const createMemberInvoiceGroups = (data = []) => {
 const createMemberInvoiceGroup = ({
     num_socio = -1,
     nombre = "",
-    sector = -1,
+    sector = "",
     invoices = [],
 } = {}) => {
     const publicApi = {

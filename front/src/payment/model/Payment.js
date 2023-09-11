@@ -27,14 +27,14 @@ const createPayments = (data = []) => {
 };
 
 const createPayment = ({
-    id_pago = -1,
-    fecha = -1,
-    monto = -1,
-    num_socio = -1,
+    id_pago = null,
+    fecha = null,
+    monto = null,
+    num_socio = null,
     nombre_socio = "",
-    sector = -1,
+    sector = "",
     num_factura = "",
-    id_factura = -1,
+    id_factura = null,
     errors = [],
 } = {}) => {
     const publicApi = {

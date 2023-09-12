@@ -62,14 +62,14 @@ else
             , ('Tlacuxtli', 'Tlacuxtli', 3)
         ;
 
-        INSERT INTO domains_zone (name, code, locality_short_name) VALUES
-            ('1 - Tihuapa norte', '1', 'Tihuapa norte')
-            , ('2 - Tihuapa norte', '2', 'Tihuapa norte')
-            , ('3 - Tihuapa norte', '3', 'Tihuapa norte')
-            , ('4 - Tihuapa norte', '4', 'Tihuapa norte')
-            , ('5 - Tlacuxtli', '5', 'Tlacuxtli')
-            , ('6 - Tlacuxtli', '6', 'Tlacuxtli')
-            , ('7 - Tlacuxtli', '7', 'Tlacuxtli')
+        INSERT INTO domains_zone (name, code, locality_short_name, measuring_day) VALUES
+            ('1 - Tihuapa norte', '1', 'Tihuapa norte', 27)
+            , ('2 - Tihuapa norte', '2', 'Tihuapa norte', 27)
+            , ('3 - Tihuapa norte', '3', 'Tihuapa norte', 27)
+            , ('4 - Tihuapa norte', '4', 'Tihuapa norte', 27)
+            , ('5 - Tlacuxtli', '5', 'Tlacuxtli', 27)
+            , ('6 - Tlacuxtli', '6', 'Tlacuxtli', 27)
+            , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
         ;
 
         INSERT INTO back_member

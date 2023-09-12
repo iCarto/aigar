@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 from domains.tests import factories
@@ -16,9 +14,11 @@ def test_zone_api(api_client):
         locality__name="Mi comunidad 2", locality__short_name="Comunidad 2", code=None
     )
     response = api_client.get("/api/domains/zones/")
-    response_payload = json.loads(response.content)
 
     assert response.status_code == 200
+    response_payload = response.json()
+    measuring_days = [row.pop("measuring_day") for row in response_payload]
+    assert all((1 <= m <= 31 for m in measuring_days))
     assert response_payload == [
         {"long_name": "Mi comunidad 1", "name": "Comunidad 1"},
         {"long_name": "Mi comunidad 2", "name": "Comunidad 2"},

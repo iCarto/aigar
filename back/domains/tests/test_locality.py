@@ -9,18 +9,17 @@ from domains.tests import factories
 pytestmark = pytest.mark.django_db
 
 
-def test_names_must_processed_on_create():
+def test_names_must_be_processed_on_create():
     """`name` and `short_name` should be normalized when creating a Locality."""
-    locality = factories.LocalityFactory.build(
+    locality = factories.LocalityFactory.create(
         name=" mi\r\ncomunidad\nde\tlargo   nombre ", short_name=" la\ncomunidad "
     )
-    assert locality.pk is None
-    locality.save()
     assert locality.name == "Mi comunidad de largo nombre"
     assert locality.short_name == "La comunidad"
 
 
-def test_names_must_processed_on_update():
+@pytest.mark.skip("Por ahora no está permitido modificar comunidades existentes")
+def test_names_must_be_processed_on_update():
     """`name` and `short_name` should be normalized when modifying a Locality."""
     locality = factories.LocalityFactory.create()
 

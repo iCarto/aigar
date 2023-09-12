@@ -1,5 +1,8 @@
+from contextlib import nullcontext as does_not_raise
+
 import pytest
 from django.db.utils import IntegrityError
+from django.forms import ValidationError
 
 from domains.tests import factories
 
@@ -33,3 +36,16 @@ def test_name_is_unique():
         IntegrityError, match="UNIQUE constraint failed: domains_locality.short_name"
     ):
         factories.ZoneFactory.create(locality__name="comunidad", code=None)
+
+
+@pytest.mark.parametrize(
+    "measuring_day, expectation",
+    [
+        ({"measuring_day": -1}, pytest.raises(ValidationError)),
+        ({"measuring_day": 32}, pytest.raises(ValidationError)),
+        ({"measuring_day": 15}, does_not_raise()),
+    ],
+)
+def test_measuring_day_is_valid(measuring_day, expectation):
+    with expectation:
+        factories.ZoneFactory.create(**measuring_day)

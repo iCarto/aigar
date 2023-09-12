@@ -62,7 +62,7 @@ def test_update_member_move_preceding_order(api_client, five_members_in_order):
         five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"orden": 1}
     response = api_client.put(f"/api/members/{d['num_socio']}/", d)
-    assert response.status_code == 200
+    assert response.status_code == 200, response.json()
     for member in five_members_in_order:
         member.refresh_from_db()
 
@@ -74,7 +74,7 @@ def test_update_member_move_subsequent_order(api_client, five_members_in_order):
         five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"orden": 4}
     response = api_client.put(f"/api/members/{d['num_socio']}/", d)
-    assert response.status_code == 200
+    assert response.status_code == 200, response.json()
     for member in five_members_in_order:
         member.refresh_from_db()
 

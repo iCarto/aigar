@@ -9,6 +9,7 @@ class LocalityFactory(BaseFactory[Locality]):  # type: ignore
     name = factory.Faker("street_address")
     short_name = factory.LazyAttribute(lambda obj: (obj.name or "")[:13])
     number_of_sectors = 0
+    with_zones = False
 
 
 class ZoneFactory(BaseFactory[Zone]):  # type: ignore
@@ -17,3 +18,4 @@ class ZoneFactory(BaseFactory[Zone]):  # type: ignore
     name = factory.LazyAttribute(
         lambda obj: build_zone_name(obj.code, obj.locality.short_name)
     )
+    measuring_day = factory.Faker("day_of_month")

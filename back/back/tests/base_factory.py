@@ -2,7 +2,6 @@
 from typing import Generic, Type, TypeVar, get_args
 
 import factory
-from django.db.models.signals import post_save
 from factory.base import FactoryMetaClass
 
 
@@ -22,7 +21,6 @@ class BaseFactoryMeta(FactoryMetaClass):
         return super().__new__(cls, class_name, bases, attrs)
 
 
-@factory.django.mute_signals(post_save)
 class BaseFactory(
     Generic[T], factory.django.DjangoModelFactory, metaclass=BaseFactoryMeta
 ):

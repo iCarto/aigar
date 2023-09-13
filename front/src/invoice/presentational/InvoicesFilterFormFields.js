@@ -39,6 +39,15 @@ const InvoicesFilterFormFields = ({onFieldChange, fields, domains}) => {
                     value={fields.sector}
                 />
             </Grid>
+            <Grid item xs>
+                <FormSelect
+                    label="Estado"
+                    name="estado"
+                    options={domains.invoiceStatus}
+                    onChange={handleInputChange}
+                    value={fields.estado}
+                />
+            </Grid>
         </>
     );
 };

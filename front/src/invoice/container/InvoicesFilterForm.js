@@ -4,7 +4,7 @@ import {useDomain} from "aigar/domain/provider";
 
 const InvoicesFilterForm = ({handleFilterChange}) => {
     const {filter} = useList();
-    const {sectors} = useDomain();
+    const {sectors, invoiceStatus} = useDomain();
 
     const fields = {
         numero: filter?.numero || "",
@@ -17,7 +17,7 @@ const InvoicesFilterForm = ({handleFilterChange}) => {
             <InvoicesFilterFormFields
                 onFieldChange={handleFilterChange}
                 fields={fields}
-                domains={{sectors}}
+                domains={{sectors, invoiceStatus}}
             />
         </>
     );

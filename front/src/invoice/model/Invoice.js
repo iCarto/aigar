@@ -46,6 +46,9 @@ const invoice_api_adapter = invoice => {
     invoice["nombre"] = invoice.member_data.name;
     invoice["tipo_socio"] = getTipoSocio(invoice.member_data);
     invoice["sector"] = invoice.member_data.sector;
+    invoice[
+        "fecha_lectura"
+    ] = `${invoice.member_data.dia_lectura}/${invoice.mes_facturado}/${invoice.anho}`;
     invoice["total_pagado"] = invoice.pago_1_al_10 + invoice.pago_11_al_30;
     invoice["is_active"] = invoice.estado !== ESTADOS_FACTURA.ANULADA;
     return invoice;
@@ -57,6 +60,7 @@ const invoice_view_adapter = invoice => {
     delete invoice["nombre"];
     delete invoice["tipo_socio"];
     delete invoice["sector"];
+    delete invoice["fecha_lectura"];
     delete invoice["total_pagado"];
     delete invoice["is_active"];
     return invoice;
@@ -116,6 +120,7 @@ const createInvoice = ({
     num_socio = -1,
     tipo_socio = "",
     sector = "",
+    fecha_lectura = null,
     errors = [],
 } = {}) => {
     const publicApi = {
@@ -158,6 +163,7 @@ const createInvoice = ({
         num_socio,
         tipo_socio,
         sector,
+        fecha_lectura,
         errors,
     };
 

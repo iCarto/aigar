@@ -6,6 +6,7 @@ const DomainService = {
         return ApiService.get("/domains/zones").then(response => {
             const shortNames = response.map(domainEntity => ({
                 value: domainEntity.name,
+                dia_lectura: domainEntity.measuring_day,
             }));
             const longNames = response.map(domainEntity => ({
                 value: domainEntity.long_name,

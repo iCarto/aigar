@@ -94,6 +94,7 @@ const createMember = ({
     personas_acometida = null,
     dui = "",
     tipo_uso = "",
+    dia_lectura = null,
 } = {}) => {
     const publicApi = {
         num_socio,
@@ -110,6 +111,7 @@ const createMember = ({
         personas_acometida,
         dui,
         tipo_uso,
+        dia_lectura,
     };
 
     // objeto inmutable para llevarse bien con react.

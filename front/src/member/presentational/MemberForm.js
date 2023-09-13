@@ -56,6 +56,15 @@ const MemberForm = ({
         onUpdate(updatedMember);
     };
 
+    const handleChangeSector = (sector, measuringDay) => {
+        const updatedMember = createMember({
+            ...member,
+            sector: sector,
+            dia_lectura: measuringDay,
+        });
+        onUpdate(updatedMember);
+    };
+
     const handleSubmit = event => {
         event.preventDefault();
         onSubmit(member);
@@ -74,6 +83,7 @@ const MemberForm = ({
                     members={membersList}
                     onChange={handleChange}
                     onChangeOrder={handleChangeOrder}
+                    onChangeSector={handleChangeSector}
                 />
             </DomainProvider>
         </EntityFormLayout>

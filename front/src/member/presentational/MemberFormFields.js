@@ -8,6 +8,7 @@ import {
 } from "base/form";
 import Grid from "@mui/material/Grid";
 import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
+import {useState} from "react";
 
 /**
 Controlled component for member form.
@@ -23,7 +24,13 @@ and show errors related with every field.
 
 This component doesn't manage state because the state is stored in the parent component.
 */
-const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
+const MemberFormFields = ({
+    formData,
+    members,
+    onChange,
+    onChangeOrder,
+    onChangeSector,
+}) => {
     const {sectors, memberUseTypes} = useDomain();
 
     const handleChangeOrder = (clickedIndex, updatedList) => {
@@ -34,6 +41,17 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
         const name = event.target.name;
         const value = event.target.value;
         onChange(name, value);
+    };
+
+    const handleChangeSector = event => {
+        const sector = event.target.value;
+        const measuringDay = getMeasuringDay(sector);
+        onChangeSector(sector, measuringDay);
+    };
+
+    const getMeasuringDay = selectedSector => {
+        const sector = sectors.find(sector => sector.value === selectedSector);
+        return sector["dia_lectura"];
     };
 
     return (
@@ -86,14 +104,27 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                 />
             </Grid>
             <Grid item xs={5} xl={3}>
-                <FormSelect
-                    label="Sector"
-                    name="sector"
-                    value={formData?.sector.value}
-                    options={sectors}
-                    errors={formData?.sector.errors}
-                    onChange={handleChangeField}
-                />
+                <Grid container columnSpacing={1}>
+                    <Grid item xs={8}>
+                        <FormSelect
+                            label="Sector"
+                            name="sector"
+                            value={formData?.sector.value}
+                            options={sectors}
+                            errors={formData?.sector.errors}
+                            onChange={handleChangeSector}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormInputInteger
+                            label="Día de lectura"
+                            name="dia_lectura"
+                            field={formData?.dia_lectura}
+                            onChange={handleChangeField}
+                            readOnly
+                        />
+                    </Grid>
+                </Grid>
                 <FormInputText
                     label="Medidor"
                     name="medidor"

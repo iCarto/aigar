@@ -73,8 +73,8 @@ const MemberDetail = ({member, isSummary = false}) => {
             </Grid>
             <Grid item xs={6}>
                 <SectionField
-                    label="Sector"
-                    value={`${member?.sector}`}
+                    label="Sector y día lectura"
+                    value={`${member?.sector} • Día ${member?.dia_lectura}`}
                     containerWidth="short"
                 />
             </Grid>

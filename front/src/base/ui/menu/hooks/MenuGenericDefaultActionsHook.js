@@ -1,5 +1,5 @@
 import {
-    useMenuGenericDeleteAction,
+    useDeleteActionHook,
     useMenuGenericEditAction,
     useMenuGenericViewAction,
 } from "base/ui/menu/hooks";
@@ -7,9 +7,7 @@ import {
 export function useMenuGenericDefaultActions(service) {
     const {action: viewAction} = useMenuGenericViewAction();
     const {action: editAction} = useMenuGenericEditAction();
-    const {action: deleteAction, dialog: deleteDialog} = useMenuGenericDeleteAction(
-        service
-    );
+    const {action: deleteAction, dialog: deleteDialog} = useDeleteActionHook(service);
 
     const actions = [viewAction, editAction, deleteAction];
 

@@ -15,8 +15,9 @@ const SortedPaginatedSelectableTable = ({
     data,
     selectAttribute,
     tableActions = [],
+    onClickRows,
+    selectedTableRows,
 }) => {
-    const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -37,33 +38,32 @@ const SortedPaginatedSelectableTable = ({
     const handleSelectAllClick = event => {
         if (event.target.checked) {
             const newSelected = data.map(item => item[selectAttribute]);
-            setSelected(newSelected);
+            onClickRows(newSelected);
             return;
         }
-        setSelected([]);
+        onClickRows([]);
     };
 
     const handleClick = (event, item) => {
-        const selectedIndex = selected.indexOf(item);
+        const selectedIndex = selectedTableRows.indexOf(item);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, item);
+            newSelected = newSelected.concat(selectedTableRows, item);
         } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selectedTableRows.slice(1));
+        } else if (selectedIndex === selectedTableRows.length - 1) {
+            newSelected = newSelected.concat(selectedTableRows.slice(0, -1));
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
+                selectedTableRows.slice(0, selectedIndex),
+                selectedTableRows.slice(selectedIndex + 1)
             );
         }
-
-        setSelected(newSelected);
+        onClickRows(newSelected);
     };
 
-    const isSelected = item => selected.indexOf(item) !== -1;
+    const isSelected = item => selectedTableRows.indexOf(item) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty data.
     const emptyRows =
@@ -88,12 +88,15 @@ const SortedPaginatedSelectableTable = ({
 
     return (
         <>
-            <TableToolbar totalSelected={selected.length} tableActions={tableActions} />
+            <TableToolbar
+                selectedRows={selectedTableRows}
+                tableActions={tableActions}
+            />
             <TableContainer>
                 <Table sx={{minWidth: 750}} aria-labelledby="tableTitle" size={"small"}>
                     <SortedTableHead
                         columns={columns}
-                        totalSelected={selected.length}
+                        totalSelected={selectedTableRows.length}
                         rowCount={data.length}
                         order={order}
                         orderBy={orderBy}

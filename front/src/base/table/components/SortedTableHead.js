@@ -27,8 +27,8 @@ const SortedTableHead = ({
         <>
             <colgroup>
                 {onSelectAllClick ? <col key="checkboxColumn" width="auto" /> : null}
-                {columns.map(column => {
-                    return <col key={column.id} width={column.width + "%"} />;
+                {columns.map((column, index) => {
+                    return <col key={index} width={column.width + "%"} />;
                 })}
             </colgroup>
             <TableHead>

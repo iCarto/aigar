@@ -1,21 +1,43 @@
+import {useState} from "react";
 import {useMonthlyInvoicingTableColumns} from "monthlyinvoicing/data";
 
+import {useAddNonAttendancePenaltyHook, useMarkInvoiceAsPaidHook} from "invoice/hooks";
+import {useDeleteActionHook} from "base/delete/hooks";
 import {EntityListPage} from "base/entity/components/presentational";
 import {MonthlyInvoicingFilterForm} from ".";
-import {useMenuGenericDeleteAction} from "base/ui/menu/hooks";
 
-const ListMonthlyInvoicesPage = ({invoices, totalInvoices, handleFilterChange}) => {
+const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
+    const [selectedTableRows, setSelectedTableRows] = useState([]);
+
     const {tableColumns} = useMonthlyInvoicingTableColumns();
-    const {action: deleteAction, dialog: deleteDialog} = useMenuGenericDeleteAction();
+    const {tableAction: markAsPaidAction, modal: markAsPaidModal} =
+        useMarkInvoiceAsPaidHook(null, selectedTableRows);
+    const {
+        tableAction: addNonAttendancePenaltyAction,
+        modal: addNonAttendancePenaltyModal,
+    } = useAddNonAttendancePenaltyHook(null, selectedTableRows);
+    const {tableAction: deleteAction, modal: deleteModal} = useDeleteActionHook(
+        null,
+        selectedTableRows
+    );
 
-    const tableActions = [deleteAction];
+    const tableActions = [
+        markAsPaidAction,
+        addNonAttendancePenaltyAction,
+        deleteAction,
+    ];
+
+    const handleClickOnTableRows = selectedItems => {
+        setSelectedTableRows(selectedItems);
+    };
 
     return (
         <>
-            {deleteDialog}
+            {markAsPaidModal}
+            {addNonAttendancePenaltyModal}
+            {deleteModal}
             <EntityListPage
                 items={invoices}
-                totalItems={totalInvoices}
                 columns={tableColumns}
                 selectAttribute="id_factura"
                 filterForm={
@@ -24,6 +46,8 @@ const ListMonthlyInvoicesPage = ({invoices, totalInvoices, handleFilterChange}) 
                     />
                 }
                 tableActions={tableActions}
+                onClickRows={handleClickOnTableRows}
+                selectedTableRows={selectedTableRows}
             />
         </>
     );

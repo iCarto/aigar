@@ -6,13 +6,14 @@ import Grid from "@mui/material/Grid";
 
 const EntityListPage = ({
     items,
-    totalItems,
     columns,
     filterForm,
     pageActions = [],
     tableActions = [],
     groupActions = true,
     selectAttribute = "",
+    onClickRows,
+    selectedTableRows = [],
 }) => {
     const displayActions = pageActions?.length > 0;
     const groupedActions = <ActionsBurgerMenu>{pageActions}</ActionsBurgerMenu>;
@@ -58,9 +59,10 @@ const EntityListPage = ({
                     <SortedPaginatedSelectableTable
                         columns={columns}
                         data={items}
-                        // totalItems={totalItems}
                         selectAttribute={selectAttribute}
                         tableActions={tableActions}
+                        onClickRows={onClickRows}
+                        selectedTableRows={selectedTableRows}
                     />
                 ) : (
                     <NoItemsMessage itemsLength={items?.length} />

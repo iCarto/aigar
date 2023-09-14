@@ -11,3 +11,5 @@ export {default as InvoiceGroupFieldsCellTable} from "./InvoiceGroupFieldsCellTa
 export {default as InvoiceMonthCellTable} from "./InvoiceMonthCellTable";
 export {default as CreateInvoiceButton} from "./CreateInvoiceButton";
 export {default as InvoicesListPreview} from "./InvoicesListPreview";
+export {default as InvoiceDetailField} from "./InvoiceDetailField";
+export {default as InvoiceDetailHeaderField} from "./InvoiceDetailHeaderField";

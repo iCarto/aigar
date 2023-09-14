@@ -1,6 +1,6 @@
 import {MemberDetail} from "member/presentational";
 import {SectionCard} from "base/ui/section/presentational";
-import {InvoiceDetailShort} from ".";
+import {InvoiceDetailField, InvoiceDetailHeaderField, InvoiceDetailShort} from ".";
 
 import Grid from "@mui/material/Grid";
 
@@ -19,78 +19,58 @@ const InvoiceDetail = ({invoice, member, payments}) => {
                     </Grid>
                 ) : null}
             </Grid>
-            <div className="row m-3">
-                <div className="field-label p-2 col-md-2 row no-gutters"></div>
-                <div className="field-label p-2 col-md-3 row no-gutters">
-                    <label className="col-6">Caudal anterior</label>
-                    <span className="cubic-metre">{invoice?.caudal_anterior}</span>
-                </div>
-                <div className="field-label p-2 col-md-3 row no-gutters">
-                    <label className="col-6">Caudal actual</label>
-                    <span className="cubic-metre">{invoice?.caudal_actual}</span>
-                </div>
-                <div className="field-label p-2 col-md-3 row no-gutters">
-                    <label className="col-6">Consumo</label>
-                    <strong className="cubic-metre">{invoice?.consumo}</strong>
-                </div>
-            </div>
-            <div className="row">
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Cuota fija</label>
-                    <span className="col-2 dollar">{invoice?.cuota_fija}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Cuota variable</label>
-                    <span className="col-2 dollar">{invoice?.cuota_variable}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Comisión de pago</label>
-                    <span className="col-2 dollar">{invoice?.comision}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Ahorro por mano de obra</label>
-                    <span className="col-2 dollar">{invoice?.ahorro}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Recargo por mora</label>
-                    <span className="col-2 dollar">{invoice?.mora}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Inasistencia a Asamblea</label>
-                    <span className="col-2 dollar">{invoice?.asamblea}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Nuevo derecho</label>
-                    <span className="col-2 dollar">{invoice?.derecho}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Re-conexión</label>
-                    <span className="col-2 dollar">{invoice?.reconexion}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Traspaso</label>
-                    <span className="col-2 dollar">{invoice?.traspaso}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8">Otros</label>
-                    <span className="col-2 dollar">{invoice?.otros}</span>
-                </div>
-                <div className="field-label p-2 col-md-4 offset-md-4 row">
-                    <label className="col-8" style={{fontStyle: "italic"}}>
-                        Saldo pendiente
-                    </label>
-                    <span className="col-2 dollar">{invoice?.saldo_pendiente}</span>
-                </div>
-                <div
-                    className="field-label p-2 col-md-4 offset-md-4 row"
-                    style={{borderTop: "1px solid #ccc"}}
-                >
-                    <label className="col-8">
-                        <strong>Total</strong>
-                    </label>
-                    <strong className="col-2 dollar">{invoice?.total}</strong>
-                </div>
-            </div>
+            <Grid container flexDirection="row" justifyContent="space-around" my={3}>
+                <InvoiceDetailHeaderField
+                    label="Caudal anterior"
+                    value={invoice?.caudal_anterior}
+                />
+                <InvoiceDetailHeaderField
+                    label="Caudal actual"
+                    value={invoice?.caudal_actual}
+                />
+                <InvoiceDetailHeaderField
+                    label="Consumo"
+                    value={invoice?.consumo}
+                    valueStyle={{fontWeight: 700}}
+                />
+            </Grid>
+
+            <Grid container flexDirection="column" spacing={1}>
+                <InvoiceDetailField label="Cuota fija" value={invoice?.cuota_fija} />
+                <InvoiceDetailField
+                    label="Cuota variable"
+                    value={invoice?.cuota_variable}
+                />
+                <InvoiceDetailField
+                    label="Comisión de pago"
+                    value={invoice?.comision}
+                />
+                <InvoiceDetailField
+                    label="Ahorro por mano de obra"
+                    value={invoice?.ahorro}
+                />
+                <InvoiceDetailField label="Recargo por mora" value={invoice?.mora} />
+                <InvoiceDetailField
+                    label="Inasistencia a Asamblea"
+                    value={invoice?.asamblea}
+                />
+                <InvoiceDetailField label="Nuevo derecho" value={invoice?.derecho} />
+                <InvoiceDetailField label="Re-conexión" value={invoice?.reconexion} />
+                <InvoiceDetailField label="Traspaso" value={invoice?.traspaso} />
+                <InvoiceDetailField label="Otros" value={invoice?.otros} />
+                <InvoiceDetailField
+                    label="Saldo pendiente"
+                    value={invoice?.saldo_pendiente}
+                    labelStyle={{fontStyle: "italic"}}
+                />
+                <InvoiceDetailField
+                    label="Total"
+                    value={invoice?.total}
+                    containerStyle={{mt: 1, borderTop: "1px solid #ccc"}}
+                    labelStyle={{fontWeight: 700}}
+                    valueStyle={{fontWeight: 700}}
+                />
+            </Grid>
         </SectionCard>
     );
 };

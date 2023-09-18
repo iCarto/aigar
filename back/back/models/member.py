@@ -7,8 +7,8 @@ from domains.models.zone import Zone
 
 
 class UseTypes(models.TextChoices):
-    HUMANO = "humano"  # noqa: WPS115
-    COMERCIAL = "comercial"  # noqa: WPS115
+    HUMANO = "Humano", "Humano"  # noqa: WPS115
+    COMERCIAL = "Comercial", "Comercial"  # noqa: WPS115
 
 
 class MemberManager(models.Manager):
@@ -113,15 +113,6 @@ class Member(models.Model):
         blank=False, null=False, default=True, verbose_name="", help_text=""
     )
 
-    sector = models.ForeignKey(
-        Zone,
-        on_delete=models.RESTRICT,
-        to_field="name",
-        blank=False,
-        null=False,
-        verbose_name="sector / comunidad",
-    )
-
     personas_acometida = models.IntegerField(
         # TODO: Change to Null=False
         blank=True,
@@ -145,6 +136,15 @@ class Member(models.Model):
         max_length=20,
         choices=UseTypes.choices,
         help_text="Tipo de uso: humano o comercial",
+    )
+
+    sector = models.ForeignKey(
+        Zone,
+        on_delete=models.RESTRICT,
+        to_field="name",
+        blank=False,
+        null=False,
+        verbose_name="sector / comunidad",
     )
 
     def __str__(self):

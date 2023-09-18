@@ -3,7 +3,7 @@ import factory
 from back.models.fixed_values import fixed_values
 from back.models.invoice import Invoice
 from back.models.invoicing_month import InvoicingMonth
-from back.models.member import Member
+from back.models.member import Member, UseTypes
 from back.tests.base_factory import BaseFactory
 from domains.tests.factories import ZoneFactory
 
@@ -11,7 +11,6 @@ from domains.tests.factories import ZoneFactory
 class MemberFactory(BaseFactory[Member]):  # type: ignore
     # num_socio
     name = factory.Faker("name")
-    sector = factory.SubFactory(ZoneFactory)
     medidor = factory.Faker("numerify", text="######")
     orden = 0
     observaciones = factory.Faker("paragraph")
@@ -20,6 +19,10 @@ class MemberFactory(BaseFactory[Member]):  # type: ignore
     # created_at = models.DateTimeField(null=True, auto_now_add=True)
     # updated_at = models.DateTimeField(null=True, auto_now=True)
     is_active = True
+    personas_acometida = 3
+    dui = factory.Faker("numerify", text="########-#")
+    sector = factory.SubFactory(ZoneFactory)
+    tipo_uso = factory.Faker("random_element", elements=UseTypes.choices)
 
 
 class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore

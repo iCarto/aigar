@@ -114,14 +114,12 @@ class Member(models.Model):
     )
 
     personas_acometida = models.IntegerField(
-        # TODO: Change to Null=False
         blank=True,
         null=True,
         help_text="Número de personas que habitan en la casa/acometida que está formada por una o varias familias",
     )
 
     dui = models.CharField(
-        # TODO: Change to Null=False
         blank=True,
         null=True,
         max_length=10,
@@ -130,12 +128,11 @@ class Member(models.Model):
     )
 
     tipo_uso = models.CharField(
-        # TODO: Change to Null=False
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         max_length=20,
         choices=UseTypes.choices,
-        help_text="Tipo de uso: humano o comercial",
+        help_text="Tipo de uso: Humano o Comercial",
     )
 
     sector = models.ForeignKey(

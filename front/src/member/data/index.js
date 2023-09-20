@@ -22,12 +22,12 @@ export const MEMBER_TYPES_MAPPING = {
 };
 
 export const USE_TYPES_MAPPING = {
-    humano: {
+    Humano: {
         label: "Humano",
         // icon: <PersonIcon />,
         icon: <HomeRoundedIcon />,
     },
-    comercial: {
+    Comercial: {
         label: "Comercial",
         // icon: <StorefrontIcon />,
         icon: <StorefrontRoundedIcon />,

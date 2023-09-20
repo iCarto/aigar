@@ -34,6 +34,7 @@ const DataValidatorService = {
                         param2: "dddddddd-d",
                     },
                 ],
+                tipo_uso: ["isNotEmpty"],
                 sector: ["isNotEmpty"],
                 personas_acometida: ["isInteger", "isPositive"],
                 orden: ["isNotEmpty", "isInteger", "isPositive"],

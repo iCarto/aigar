@@ -22,4 +22,5 @@ def new_member_data() -> dict:
         "observaciones": "",
         "is_active": True,
         "sector": ZoneFactory.create().name,
+        "tipo_uso": "Humano",
     }

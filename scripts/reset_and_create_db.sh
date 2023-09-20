@@ -75,6 +75,7 @@ else
         INSERT INTO back_member
             (
                 num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at, is_active
+                , tipo_uso
             )
             SELECT
                 num_socio, name
@@ -89,6 +90,7 @@ else
                 END
                 , medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at
                 , is_active AND (NOT solo_mecha)
+                , 'Humano'
             FROM api_member;
 
 

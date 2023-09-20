@@ -37,7 +37,7 @@ def test_create_member_not_move_preceding_order(
     api_client, five_members_in_order, new_member_data
 ):
     response = api_client.post("/api/members/", new_member_data)
-    assert response.status_code == 201
+    assert response.status_code == 201, response.json()
     for member in five_members_in_order:
         member.refresh_from_db()
 
@@ -50,7 +50,7 @@ def test_create_member_move_subsequent_order(
     api_client, five_members_in_order, new_member_data
 ):
     response = api_client.post("/api/members/", new_member_data)
-    assert response.status_code == 201
+    assert response.status_code == 201, response.json()
     for member in five_members_in_order:
         member.refresh_from_db()
     five_members_in_order.insert(2, Member.objects.get(pk=response.data["num_socio"]))

@@ -10,9 +10,41 @@ ejemplo automatizando la creación de los sectores), o para envitar errores (por
 no teniendo que escribir el nombre varias veces a mano si hay varios sectores)
 """
 
-from django.db import models
+import functools
+import itertools
+from typing import Any
+
+from django.db import models, transaction
+from django.forms import ValidationError
 
 from back.fields import StrictCharField
+from domains.models.zone import Zone
+
+
+class LocalityManager(models.Manager):
+    @transaction.atomic
+    def create(self, **kwargs: Any) -> Any:
+        with_zones = kwargs.pop("with_zones", True)
+        instance = super().create(**kwargs)
+        if with_zones:
+            self.create_with_zones(instance)
+        return instance
+
+    @transaction.atomic
+    def create_with_zones(self, instance=None) -> None:
+        # Si estoy usando sectores, la nueva localidad puede hacer que cambie el orden,
+        # así que los recreo todos.
+        # Si instance es None es que estoy borrando y también tengo que recrear todos.
+        # En ambos casos implica perder el dato de measuring_day.
+        if not instance or instance.number_of_sectors:
+            all_localities = list(Locality.objects.all())
+            Zone.objects.all().delete()
+            for index, zone in enumerate(_all_zones(all_localities)):
+                Zone.objects.create(locality=zone, code=str(index + 1))
+            return
+
+        # Si no estoy usando varios sectores simplemente creo uno para la nueva localidad
+        Zone.objects.create(locality=instance, code=None)
 
 
 class Locality(models.Model):
@@ -20,6 +52,8 @@ class Locality(models.Model):
         ordering = ["short_name"]
         verbose_name_plural = "comunidades"
         verbose_name = "comunidad"
+
+    objects = LocalityManager()
 
     name = StrictCharField(
         null=False,
@@ -41,6 +75,7 @@ class Locality(models.Model):
         apply="capitalize",
         min_length=3,
     )
+
     number_of_sectors = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
@@ -50,3 +85,27 @@ class Locality(models.Model):
 
     def __str__(self):
         return self.short_name
+
+    def clean(self) -> None:
+        all_localities = list(Locality.objects.exclude(id=self.id)) + [self]
+
+        with_sectors = sum((loc.number_of_sectors or 0) > 0 for loc in all_localities)
+        without_sectors = sum(loc.number_of_sectors == 0 for loc in all_localities)
+
+        if with_sectors and without_sectors:
+            raise ValidationError(
+                {
+                    "number_of_sectors": "No puede haber comunidades con 0 sectores y otras con más de 0 a la vez"
+                }
+            )
+        return super().clean()
+
+
+def _all_zones(all_localities: list[Locality]) -> list[Locality]:
+    return functools.reduce(
+        lambda acc, l: list(
+            itertools.chain(acc, [l] * l.number_of_sectors)  # noqa: WPS435
+        ),
+        all_localities,
+        [],
+    )

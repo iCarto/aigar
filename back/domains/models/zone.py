@@ -33,8 +33,7 @@ from typing import TYPE_CHECKING
 
 from django.db import models
 
-from back.fields import StrictCharField
-from domains.models.locality import Locality
+from back.fields import RangedIntegerField, StrictCharField
 
 
 class Zone(models.Model):
@@ -53,6 +52,7 @@ class Zone(models.Model):
         verbose_name="nombre",
         help_text="Nombre del sector o comunidad. No debe repetirse.",
         unique=True,
+        editable=False,
     )
 
     code = StrictCharField(
@@ -61,11 +61,20 @@ class Zone(models.Model):
         verbose_name="número de sector",
         help_text="Si la comunidad tiene sectores introduzca el número de este sector. Deben ser correlativos.",
         min_length=1,
+        editable=False,
+    )
+
+    measuring_day = RangedIntegerField(
+        min_value=1,
+        max_value=31,
+        default=27,
+        verbose_name="Día de lectura",
+        help_text="Día de lectura de los contadores",
     )
 
     # TODO: valorar db_index
     locality = models.ForeignKey(
-        Locality,
+        "Locality",
         on_delete=models.CASCADE,
         db_index=False,
         to_field="short_name",
@@ -73,6 +82,7 @@ class Zone(models.Model):
         null=False,
         db_column="locality_short_name",
         verbose_name="comunidad",
+        editable=False,
     )
 
     def __str__(self):
@@ -80,6 +90,7 @@ class Zone(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = build_name(self.code, self.locality_short_name)
+        self.full_clean()
         super().save(*args, **kwargs)
 
     @property

@@ -34,8 +34,8 @@ private
 desktop/gomi
 tools/fixtures
 
-back/static
+# back/static
 back/media
 back/back/front_build
-back/back/static
+# back/back/static
 back/**/migrations/0*.py

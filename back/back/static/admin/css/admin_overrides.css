@@ -1,0 +1,14 @@
+/* StackedInline */
+.inline-group .hide-title h3 b,
+.inline-group .hide-title h3 .inline_label {
+    visibility: hidden;
+}
+
+/* TabularInline */
+.inline-group .tabular .hide-title .original > p {
+    display: none;
+}
+
+.inline-group .tabular .hide-title tr.has_original td {
+    padding-top: 8px;
+}

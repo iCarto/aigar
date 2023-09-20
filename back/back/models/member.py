@@ -54,7 +54,7 @@ class Member(models.Model):
         verbose_name_plural = "socios"
         ordering = ("num_socio",)
 
-    objects = MemberManager()
+    objects: MemberManager = MemberManager()
 
     num_socio = models.AutoField(
         primary_key=True,
@@ -150,6 +150,13 @@ class Member(models.Model):
 
     def save(self, **kwargs) -> None:
         with transaction.atomic():
+            old_order = None
+            if self.pk:
+                old_order = Member.objects.values_list("orden", flat=True).get(
+                    pk=self.pk
+                )
+
+            Member.objects.update_orden(new_order=self.orden, old_order=old_order)
             super().save(**kwargs)
             Invoice.objects.member_updated(self)
 

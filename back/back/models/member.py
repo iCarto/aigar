@@ -1,3 +1,6 @@
+import re
+
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 
 from back.fields import RangedIntegerField
@@ -149,6 +152,7 @@ class Member(models.Model):
         return f"{self.num_socio} - {self.name}"
 
     def save(self, **kwargs) -> None:
+        self.full_clean()
         with transaction.atomic():
             old_order = None
             if self.pk:
@@ -187,6 +191,12 @@ class Member(models.Model):
         # si no tenemos caudal actual es porque las facturas todavía no tienen lecturas
         # en ese caso, la lectura anterior la sacaremos del caudal_anterior porque ya está actualizado
         return last_invoice[0] or last_invoice[1]
+
+    def clean(self):
+        if self.dui and not re.match(r"^\d{8}-\d$", self.dui):
+            raise ValidationError(
+                {"dui": "El campo DUI debe tener el formato 'dddddddd-d'."}
+            )
 
     def inactive(self) -> None:
         self.is_active = False

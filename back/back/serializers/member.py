@@ -1,21 +1,14 @@
-from django.forms import ValidationError
 from rest_framework import serializers
 
 from back.models.member import Member
-import re
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    dia_lectura = serializers.ReadOnlyField(source="sector.measuring_day")
-
     class Meta(object):
         model = Member
         fields = "__all__"
 
-    def validate_dui(self, value):
-        if value and not re.match(r'^\d{8}-\d$', value):
-            raise ValidationError("El campo DUI debe tener el formato 'dddddddd-d'.")
-        return value
+    dia_lectura = serializers.ReadOnlyField(source="sector.measuring_day")
 
 
 class MemberShortSerializer(serializers.ModelSerializer):
@@ -54,7 +47,7 @@ class MemberExportSerializer(serializers.ModelSerializer):
             "ahorro",
             "personas_acometida",
             "dui",
-            "tipo_uso"
+            "tipo_uso",
         ]
 
     lectura = serializers.ReadOnlyField(default=None)

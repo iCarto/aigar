@@ -1,4 +1,5 @@
 import pytest
+from django.core import exceptions
 from django.forms.models import model_to_dict
 
 from back.models.invoice import InvoiceStatus
@@ -101,3 +102,14 @@ def test_update_member_with_invoices(api_client):
     invoice.refresh_from_db()
     assert invoice.member.name == "foo bar"
     assert invoice.total == pytest.approx(7)
+
+
+def test_validate_dui(api_client):
+    member = MemberFactory.create()
+    d = model_to_dict(member, exclude=["consumo_maximo", "consumo_reduccion_fija"])
+    d["dui"] = "abc"
+    with pytest.raises(
+        exceptions.ValidationError,
+        match="El campo DUI debe tener el formato 'dddddddd-d'.",
+    ):
+        api_client.put(f"/api/members/{d['num_socio']}/", d)

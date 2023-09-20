@@ -22,7 +22,7 @@ class MemberFactory(BaseFactory[Member]):  # type: ignore
     personas_acometida = 3
     dui = factory.Faker("numerify", text="########-#")
     sector = factory.SubFactory(ZoneFactory)
-    tipo_uso = factory.Faker("random_element", elements=UseTypes.choices)
+    tipo_uso = factory.Faker("random_element", elements=UseTypes.labels)
 
 
 class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore

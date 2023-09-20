@@ -74,8 +74,9 @@ else
 
         INSERT INTO back_member
             (
-                num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at, is_active
+                num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija, is_active
                 , tipo_uso
+                , created_at, updated_at
             )
             SELECT
                 num_socio, name
@@ -88,9 +89,11 @@ else
                     WHEN 6 THEN '6 - Tlacuxtli'
                     WHEN 7 THEN '7 - Tlacuxtli'
                 END
-                , medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija, created_at, updated_at
+                , medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
                 , is_active AND (NOT solo_mecha)
                 , 'Humano'
+                , COALESCE(created_at, datetime('now')), COALESCE(updated_at, datetime('now'))
+
             FROM api_member;
 
 

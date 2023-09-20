@@ -103,11 +103,12 @@ class Member(models.Model):
         null=True, blank=True, verbose_name="Reducción Fija de Consumo", help_text=""
     )
 
-    # null debería ser falso pero para evitar problemas con las fixtures
-    # https://groups.google.com/forum/#!topic/django-users/Zfqx-kEE2uY
-    # https://code.djangoproject.com/ticket/28951
-    created_at = models.DateTimeField(null=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, auto_now=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Fecha de creación"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Fecha última modificación"
+    )
 
     is_active = models.BooleanField(
         blank=False, null=False, default=True, verbose_name="", help_text=""

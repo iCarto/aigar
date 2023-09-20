@@ -34,6 +34,7 @@ fi
 
 bash "${this_dir}"/install.link_back_front.sh
 
+rm -f "${this_dir}/../back/db.sqlite3"
 if [[ -z "${CREATE_EMPTY}" ]]; then
     "${this_dir}"/fixtures.sh
 fi
@@ -51,7 +52,9 @@ else
     # Ejecuta las migraciones contra la bd
     python "${this_dir}/../back/manage.py" migrate
 
-    sqlite3 back/db.sqlite3 "
+    if [[ -z "${CREATE_EMPTY}" ]]; then
+
+        sqlite3 back/db.sqlite3 "
         PRAGMA foreign_keys = ON;
 
         INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
@@ -166,6 +169,7 @@ else
         FROM api_payment;
         DROP TABLE api_payment;
         "
+    fi
 fi
 
 if [[ -f ${this_dir}/../back/manage.py ]]; then

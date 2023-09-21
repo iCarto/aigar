@@ -32,7 +32,7 @@ def _next_year(invoicing_month) -> int:
     return year + 1 if month == 12 else year
 
 
-class InvoiceQuerySet(models.QuerySet):
+class InvoiceQuerySet(models.QuerySet["Invoice"]):
     def with_deudadb(self) -> Self:
         return self.alias(
             deudadb=models.ExpressionWrapper(
@@ -44,7 +44,7 @@ class InvoiceQuerySet(models.QuerySet):
         )
 
 
-class InvoiceManager(models.Manager):
+class InvoiceManager(models.Manager["Invoice"]):
     def get_queryset(self) -> InvoiceQuerySet:
         return InvoiceQuerySet(self.model, using=self._db).exclude(
             estado=InvoiceStatus.ANULADA
@@ -61,7 +61,7 @@ class InvoiceManager(models.Manager):
             last_invoice.update_total()
             last_invoice.save()
 
-    def create_from(self, member, last_invoice, new_invoicing_month):
+    def create_from(self, member, last_invoice, new_invoicing_month) -> "Invoice":
         invoice = {
             # New monthly invoices are always version 1
             "version": 1,
@@ -124,13 +124,16 @@ class InvoiceManager(models.Manager):
         )
 
 
+_InvoiceManager = InvoiceManager.from_queryset(InvoiceQuerySet)
+
+
 class Invoice(models.Model):
     class Meta(object):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
         ordering = ("id_factura",)
 
-    objects = InvoiceManager.from_queryset(InvoiceQuerySet)()
+    objects: InvoiceManager = _InvoiceManager()
 
     id_factura = models.AutoField(
         primary_key=True,

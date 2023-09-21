@@ -13,7 +13,7 @@ def any_payments_for(invoicing_month_to_close):
     return Payment.objects.filter(mes_facturacion=invoicing_month_to_close).exists()
 
 
-class InvoicingMonthManager(models.Manager):
+class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
     @transaction.atomic
     def create(self, **kwargs: Any) -> "InvoicingMonth":
         invoicing_month_to_close = InvoicingMonth.objects.get(is_open=True)

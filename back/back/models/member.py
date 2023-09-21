@@ -15,7 +15,7 @@ class UseTypes(models.TextChoices):
     COMERCIAL = "Comercial", "Comercial"  # noqa: WPS115
 
 
-class MemberManager(models.Manager):
+class MemberManager(models.Manager["Member"]):
     def active(self) -> models.QuerySet:
         return self.filter(status=MemberStatus.ACTIVE)
 

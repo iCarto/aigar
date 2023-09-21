@@ -1,6 +1,6 @@
 import pytest
-
 from django.forms.models import model_to_dict
+
 from back.models.member import Member
 
 

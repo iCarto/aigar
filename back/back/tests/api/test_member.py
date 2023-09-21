@@ -36,24 +36,15 @@ def test_status_delete(api_client):
     assert expected.status == MemberStatus.DELETED
 
 
-def _create_invoicing_month(anho: str = "2019", mes: str = "09", is_open: bool = True):
-    """InvoicingMonth.create has too much logic."""
-    invoicing_month = InvoicingMonth(
-        anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes
-    )
-    invoicing_month.save()
-    return invoicing_month
-
-
-def test_delete_new_invoices_when_deleting_member(api_client):
+def test_delete_new_invoices_when_deleting_member(api_client, create_invoicing_month):
     invoice9 = InvoiceFactory.create(
         estado=InvoiceStatus.COBRADA,
-        mes_facturacion=_create_invoicing_month(is_open=False),
+        mes_facturacion=create_invoicing_month(is_open=False),
     )
     invoice10 = InvoiceFactory.create(
         estado=InvoiceStatus.NUEVA,
         member=invoice9.member,
-        mes_facturacion=_create_invoicing_month(mes="10"),
+        mes_facturacion=create_invoicing_month(mes="10"),
     )
     InvoiceFactory.create(
         estado=InvoiceStatus.NUEVA, mes_facturacion=invoice10.mes_facturacion

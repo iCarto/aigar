@@ -120,7 +120,7 @@ const createMember = ({
     /* Entero. Orden del recorrido ¿ruta? sería un nombre alternativo válido */
     /* Si se mete uno nuevo por el medio mover todo el resto de rutas a mano es
     un lio */
-    orden = -1,
+    orden = null,
     observaciones = "",
     consumo_maximo = null,
     consumo_reduccion_fija = null,
@@ -135,7 +135,7 @@ const createMember = ({
         name,
         sector,
         medidor,
-        orden: parseInt(orden),
+        orden: orden === "" ? null : orden,
         observaciones,
         consumo_maximo: consumo_maximo === "" ? null : consumo_maximo,
         consumo_reduccion_fija:

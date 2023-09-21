@@ -20,13 +20,21 @@ class MemberManager(models.Manager["Member"]):
         return self.filter(status=MemberStatus.ACTIVE)
 
     def update_order(self, new_order: int | None, old_order: int | None = None) -> None:
-        if (new_order is None) or (old_order == new_order):
+        if old_order == new_order:
             return
+
+        if new_order is None:
+            # status has changed to DELETED
+            filter_ = models.Q(orden__gt=old_order)
+            update = models.F("orden") - 1
+            Member.objects.select_for_update().filter(filter_).update(orden=update)
+            return
+
         if not Member.objects.filter(orden=new_order).exists():
             return
 
         if old_order:
-            # update
+            # update Member
             if old_order < new_order:
                 filter_ = models.Q(orden__gt=old_order, orden__lte=new_order)
                 update = models.F("orden") - 1
@@ -34,7 +42,7 @@ class MemberManager(models.Manager["Member"]):
                 filter_ = models.Q(orden__lt=old_order, orden__gte=new_order)
                 update = models.F("orden") + 1
         else:
-            # create
+            # create Member
             filter_ = models.Q(orden__gte=new_order)
             update = models.F("orden") + 1
 
@@ -91,8 +99,8 @@ class Member(models.Model):
     # TODO: Deberíamos poder fijar un orden máximo igual al número de socios activos
     # TODO: #4228
     orden = RangedIntegerField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         default=0,
         min_value=0,
         max_value=1000,
@@ -218,6 +226,11 @@ class Member(models.Model):
                 {"dui": "El campo DUI debe tener el formato 'dddddddd-d'."}
             )
 
+        if self.orden is None and self.status != MemberStatus.DELETED:
+            raise exceptions.ValidationError(
+                {"orden": "El campo orden sólo puede ser nulo para socias eliminadas'."}
+            )
+
     @transaction.atomic
     def update_status(self, status) -> None:
         if status == self.status:
@@ -225,6 +238,7 @@ class Member(models.Model):
         self.status = status
         if self.status == MemberStatus.DELETED:
             Invoice.objects.handle_invoices_for_new_deleted_members(self)
+            self.orden = None
         if self.status == MemberStatus.INACTIVE:
             Invoice.objects.handle_invoices_for_new_inactive_members(self)
         if self.status == MemberStatus.ACTIVE:

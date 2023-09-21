@@ -120,7 +120,6 @@ const createMember = ({
     consumo_maximo = null,
     consumo_reduccion_fija = null,
     status = "",
-    is_active = true,
     personas_acometida = null,
     dui = "",
     tipo_uso = "",
@@ -137,11 +136,14 @@ const createMember = ({
         consumo_reduccion_fija:
             consumo_reduccion_fija === "" ? null : consumo_reduccion_fija,
         status,
-        is_active,
         personas_acometida,
         dui,
         tipo_uso,
         dia_lectura,
+
+        get isDeleted() {
+            return this.status === MEMBER_TYPES.DELETED.key;
+        },
     };
 
     // objeto inmutable para llevarse bien con react.

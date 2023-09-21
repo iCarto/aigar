@@ -6,19 +6,19 @@ import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".
 
 const MemberPageSidebar = ({member, onUpdateStatus}) => {
     const memberStatus = member.status;
-    const isMemberDeleted = memberStatus === MEMBER_TYPES.DELETED.key;
+
     const isMemberInactive = memberStatus === MEMBER_TYPES.INACTIVE.key;
 
     const menuActions = [
-        <EditButton disabled={isMemberDeleted || isMemberInactive} />,
-        <CreateInvoiceButton disabled={isMemberDeleted} />,
+        <EditButton disabled={member.isDeleted || isMemberInactive} />,
+        <CreateInvoiceButton disabled={member.isDeleted} />,
         isMemberInactive ? (
             <ConnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
         ) : null,
-        !isMemberInactive && !isMemberDeleted ? (
+        !isMemberInactive && !member.isDeleted ? (
             <DisconnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
         ) : null,
-        !isMemberDeleted ? (
+        !member.isDeleted ? (
             <DeleteMemberButton member={member} onUpdateStatus={onUpdateStatus} />
         ) : null,
     ];

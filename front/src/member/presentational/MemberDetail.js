@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
 
 const MemberDetail = ({member, isSummary = false}) => {
-    const message = !member?.is_active ? (
+    const message = member?.isDeleted ? (
         <Alert severity="error" sx={{mb: 2}}>
             Este socio se encuentra eliminado del sistema.
         </Alert>

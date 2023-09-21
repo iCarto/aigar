@@ -19,7 +19,7 @@ export default function MemberSortedListProvider({children}) {
 
     const sortMembers = members => {
         let membersWithOrder = members
-            .filter(member => member.is_active)
+            .filter(member => !member.isDeleted)
             .map(member => {
                 return {
                     id: member.num_socio,

@@ -1,21 +1,30 @@
-import WaterDropIcon from "@mui/icons-material/WaterDrop"; // Conectado
-import InvertColorsIcon from "@mui/icons-material/InvertColors"; // Con ajuste
-import FormatColorResetIcon from "@mui/icons-material/FormatColorReset"; // Eliminado
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 export const MEMBER_TYPES_MAPPING = {
-    conectado: {
-        label: "Conectado",
+    Activa: {
+        key: "Activa",
+        label: "Activo",
         icon: <WaterDropIcon />,
     },
+    Inactiva: {
+        key: "Inactiva",
+        label: "Inactivo",
+        icon: <FormatColorResetIcon />,
+    },
     con_ajuste_consumo: {
+        key: "con_ajuste_consumo",
         label: "Con ajuste",
         icon: <InvertColorsIcon />,
     },
-    eliminado: {
+    Eliminada: {
+        key: "Eliminada",
         label: "Eliminado",
-        icon: <FormatColorResetIcon />,
+        icon: <RemoveIcon />,
     },
 };
 

@@ -1,5 +1,10 @@
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
+import RemoveIcon from "@mui/icons-material/Remove";
+
 /*
 Usage example
 
@@ -34,22 +39,22 @@ const MEMBER_TYPES_MAPPING = {
     Activa: {
         key: "Activa",
         label: "Activo",
-        icon: "fas fa-tint",
+        icon: <WaterDropIcon />,
     },
     Inactiva: {
         key: "Inactiva",
         label: "Inactivo",
-        icon: "fas fa-tint-slash",
+        icon: <FormatColorResetIcon />,
     },
     con_ajuste_consumo: {
         key: "con_ajuste_consumo",
         label: "Con ajuste",
-        icon: "fas fa-adjust",
+        icon: <InvertColorsIcon />,
     },
     Eliminada: {
         key: "Eliminada",
         label: "Eliminado",
-        icon: "fas fa-solid fa-user-slash",
+        icon: <RemoveIcon />,
     },
 };
 
@@ -156,6 +161,5 @@ export {
     member_api_adapter,
     members_api_adapter,
     getTipoSocio,
-    MEMBER_TYPES_MAPPING,
     MEMBER_TYPES,
 };

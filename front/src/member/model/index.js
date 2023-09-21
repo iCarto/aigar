@@ -3,7 +3,6 @@ export {
     createMembers,
     member_api_adapter,
     members_api_adapter,
-    MEMBER_TYPES_MAPPING,
     MEMBER_TYPES,
 } from "./Member";
 export {

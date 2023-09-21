@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 from django.core import exceptions
@@ -29,18 +29,13 @@ def test_payment_validation_raises_error(api_client):
         api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
 
 
-@patch("back.models.invoicing_month.Payment", autospec=True)
-def test_create_without_previous(mock_payment, api_client):
+@patch("back.models.invoicing_month.any_payments_for", return_value=True)
+def test_create_without_previous(_, api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
     InvoiceFactory.create(mes_facturacion=invoicingmonth, estado=InvoiceStatus.COBRADA)
 
     member = MemberFactory()
-
-    mock_payment = MagicMock()
-    mock_payment.objects = MagicMock()
-    mock_payment.objects.filter = MagicMock
-    mock_payment.objects.filter.count = MagicMock(return_value=1)
 
     response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
     assert response.status_code == 201, response.content
@@ -50,8 +45,8 @@ def test_create_without_previous(mock_payment, api_client):
     assert Invoice.objects.filter(member=member).first().caudal_anterior == 0
 
 
-@patch("back.models.invoicing_month.Payment", autospec=True)
-def test_create_with_previous(mock_payment, api_client):
+@patch("back.models.invoicing_month.any_payments_for", return_value=True)
+def test_create_with_previous(_, api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
     InvoiceFactory.create(
@@ -62,11 +57,6 @@ def test_create_with_previous(mock_payment, api_client):
         pago_11_al_30=1,
         total=1,
     )
-
-    mock_payment = MagicMock()
-    mock_payment.objects = MagicMock()
-    mock_payment.objects.filter = MagicMock
-    mock_payment.objects.filter.count = MagicMock(return_value=1)
 
     response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
     assert response.status_code == 201, response.content
@@ -79,15 +69,10 @@ def test_create_with_previous(mock_payment, api_client):
     assert new_invoice.mora == 1
 
 
-@patch("back.models.invoicing_month.Payment", autospec=True)
-def test_previous_month_is_closed_current_is_open(mock_payment, api_client):
+@patch("back.models.invoicing_month.any_payments_for", return_value=True)
+def test_previous_month_is_closed_current_is_open(_, api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
-
-    mock_payment = MagicMock()
-    mock_payment.objects = MagicMock()
-    mock_payment.objects.filter = MagicMock
-    mock_payment.objects.filter.count = MagicMock(return_value=1)
 
     response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
     assert response.status_code == 201, response.content

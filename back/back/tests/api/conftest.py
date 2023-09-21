@@ -2,6 +2,7 @@ import pytest
 
 from back.models.member import Member
 from back.tests.factories import MemberFactory
+from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
 
 
@@ -20,7 +21,7 @@ def new_member_data() -> dict:
         "medidor": "123456",
         "orden": 2,
         "observaciones": "",
-        "is_active": True,
+        "status": MemberStatus.ACTIVE,
         "sector": ZoneFactory.create().name,
         "tipo_uso": "Humano",
     }

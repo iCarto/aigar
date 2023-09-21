@@ -1,22 +1,24 @@
 import pytest
 from django.core import exceptions
 from django.forms.models import model_to_dict
+from rest_framework import status
 
 from back.models.invoice import InvoiceStatus
 from back.models.member import Member
 from back.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
+from domains.models.member_status import MemberStatus
 
 
 pytestmark = pytest.mark.django_db
 
 
-def test_delete_member(api_client):
-    member = MemberFactory.create(is_active=True)
+def test_delete_member_not_allowed(api_client):
+    member = MemberFactory.create(status=MemberStatus.ACTIVE)
     member_pk = member.pk
     assert member.pk == 1
     assert member.num_socio == 1
     response = api_client.delete(f"/api/members/{member_pk}/")
-    assert response.status_code == 204
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     expected = Member.objects.get(pk=member_pk)
     assert expected.is_active is False
 

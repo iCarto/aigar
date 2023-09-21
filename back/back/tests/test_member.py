@@ -1,6 +1,7 @@
 import pytest
 
 from back.models.member import Member
+from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
 
 
@@ -13,10 +14,9 @@ def test_negative_order_not_allowed():
         "name": "foo",
         "medidor": "123456",
         "orden": -1,
-        "is_active": True,
+        "status": MemberStatus.ACTIVE,
         "sector": ZoneFactory.create(),
     }
-    # member = Member.objects.create(**data)
     member = Member(**data)
     member.full_clean()
     member.save()

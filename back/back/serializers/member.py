@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from back.models.member import Member
+from domains.models.member_status import MemberStatus
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -54,3 +55,9 @@ class MemberExportSerializer(serializers.ModelSerializer):
     consumo_calculado = serializers.ReadOnlyField(default=None)
     tarifa_calculada = serializers.ReadOnlyField(default=None)
     cambio_medidor = serializers.ReadOnlyField(default=False)
+
+
+class MemberStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=MemberStatus, allow_blank=False, required=True
+    )

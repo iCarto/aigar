@@ -5,6 +5,7 @@ from back.models.invoice import Invoice
 from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member, UseTypes
 from back.tests.base_factory import BaseFactory
+from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
 
 
@@ -18,11 +19,11 @@ class MemberFactory(BaseFactory[Member]):  # type: ignore
     consumo_reduccion_fija = None
     # created_at = models.DateTimeField(null=True, auto_now_add=True)
     # updated_at = models.DateTimeField(null=True, auto_now=True)
-    is_active = True
     personas_acometida = 3
     dui = factory.Faker("numerify", text="########-#")
     sector = factory.SubFactory(ZoneFactory)
     tipo_uso = factory.Faker("random_element", elements=UseTypes.labels)
+    status = MemberStatus.ACTIVE
 
 
 class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore

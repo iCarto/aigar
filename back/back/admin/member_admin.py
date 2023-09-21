@@ -11,10 +11,10 @@ class MemberAdmin(admin.ModelAdmin):
         "num_socio",
         "name",
         "orden",
-        "is_active",
+        "status",
         "sector",
         "created_at",
         "updated_at",
     )
-    list_filter = ("sector", "is_active", "created_at", "updated_at")
+    list_filter = ("sector", "status", "created_at", "updated_at")
     ordering = ("name",)

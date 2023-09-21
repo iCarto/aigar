@@ -5,9 +5,11 @@ import json
 import logging
 import os
 
-from domains import SECTORES_COMUNIDADES
 from invoice_spreadsheet import parse_invoice_spreadsheet
 from member_spreadsheet import parse_member_spreadsheet
+
+from back.domains.models.member_status import MemberStatus
+from domains import SECTORES_COMUNIDADES
 
 
 logging.basicConfig(level=logging.INFO)
@@ -63,7 +65,7 @@ def get_fixtures_members(invoices, last_invoicing_month):
                                 if invoice.get("consumo_maximo", None) is not None
                                 and isinstance(invoice["consumo_maximo"], int)
                                 else None,
-                                "is_active": True,
+                                "status": MemberStatus.ACTIVE,
                             },
                         }
                         fixtures_members.append(fixture_member)
@@ -90,7 +92,7 @@ def get_fixtures_deleted_members(invoices, fixtures_members, last_invoicing_mont
                             "fields": {
                                 "name": invoice["nombre"],
                                 "sector": int(invoice["sector"]),
-                                "is_active": False,
+                                "status": MemberStatus.FIXME,
                             },
                         }
                         fixtures_deleted_members.append(fixture_member)

@@ -6,6 +6,7 @@ from django.db import models, transaction
 from back.fields import RangedIntegerField
 from back.models.fixed_values import fixed_values
 from back.models.invoice import Invoice
+from domains.models.member_status import MemberStatus
 from domains.models.zone import Zone
 
 
@@ -15,8 +16,11 @@ class UseTypes(models.TextChoices):
 
 
 class MemberManager(models.Manager):
-    def update_orden(self, new_order: int, old_order: int | None = None) -> None:
-        if old_order == new_order:
+    def active(self) -> models.QuerySet:
+        return self.filter(status=MemberStatus.ACTIVE)
+
+    def update_orden(self, new_order: int | None, old_order: int | None = None) -> None:
+        if (new_order is None) or (old_order == new_order):
             return
         if not Member.objects.filter(orden=new_order).exists():
             return
@@ -113,10 +117,6 @@ class Member(models.Model):
         auto_now=True, verbose_name="Fecha última modificación"
     )
 
-    is_active = models.BooleanField(
-        blank=False, null=False, default=True, verbose_name="Activo?", help_text=""
-    )
-
     personas_acometida = models.IntegerField(
         blank=True,
         null=True,
@@ -139,6 +139,16 @@ class Member(models.Model):
         help_text="Tipo de uso: Humano o Comercial",
     )
 
+    status = models.TextField(
+        null=False,
+        blank=False,
+        choices=MemberStatus.choices,
+        verbose_name="tipo de socia",
+        editable=False,
+        default=MemberStatus.ACTIVE,
+        help_text="",
+    )
+
     sector = models.ForeignKey(
         Zone,
         on_delete=models.RESTRICT,
@@ -159,8 +169,8 @@ class Member(models.Model):
                 old_order = Member.objects.values_list("orden", flat=True).get(
                     pk=self.pk
                 )
-
-            Member.objects.update_orden(new_order=self.orden, old_order=old_order)
+            new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
+            Member.objects.update_orden(new_order=new_order, old_order=old_order)
             super().save(**kwargs)
             Invoice.objects.member_updated(self)
 

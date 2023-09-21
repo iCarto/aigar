@@ -37,8 +37,8 @@ const MemberDetail = ({member, isSummary = false}) => {
                     label="Tipo de socio/a"
                     value={
                         <ValueWithIcon
-                            icon={MEMBER_TYPES_MAPPING[member?.tipo_socio]?.icon}
-                            value={MEMBER_TYPES_MAPPING[member?.tipo_socio]?.label}
+                            icon={MEMBER_TYPES_MAPPING[member?.status]?.icon}
+                            value={MEMBER_TYPES_MAPPING[member?.status]?.label}
                         />
                     }
                     containerWidth="short"

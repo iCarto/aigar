@@ -10,8 +10,8 @@ export function useMonthlyInvoicingTableColumns() {
             formatFunction: item => {
                 return (
                     <ValueWithIcon
-                        icon={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.icon}
-                        title={MEMBER_TYPES_MAPPING[item?.tipo_socio]?.label}
+                        icon={MEMBER_TYPES_MAPPING[item?.status]?.icon}
+                        title={MEMBER_TYPES_MAPPING[item?.status]?.label}
                     />
                 );
             },

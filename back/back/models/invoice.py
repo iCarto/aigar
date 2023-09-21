@@ -3,6 +3,7 @@ from typing import Self
 from django.db import models
 
 from back.models.fixed_values import fixed_values
+from back.models.forthcoming_invoice_item import ForthcomingInvoiceItem
 
 
 class InvoiceStatus(models.TextChoices):
@@ -11,6 +12,13 @@ class InvoiceStatus(models.TextChoices):
     COBRADA = "cobrada"  # noqa: WPS115
     NO_COBRADA = "no_cobrada"  # noqa: WPS115
     ANULADA = "anulada"  # noqa: WPS115
+
+
+def _calculated_reconexion(member) -> float:
+    item = member.forthcominginvoiceitem_set.filter(item="DERECHO_RECONEXION").first()
+    if item:
+        return item.value
+    return 0
 
 
 def _next_month(invoicing_month) -> int:
@@ -67,7 +75,7 @@ class InvoiceManager(models.Manager):
             "ahorro": member.ahorro,
             "caudal_anterior": last_invoice.caudal_actual,
             "derecho": last_invoice.calculated_derecho(),
-            "reconexion": last_invoice.calculated_reconexion(member),
+            "reconexion": _calculated_reconexion(member),
             "mora": last_invoice.calculated_mora(),
             "saldo_pendiente": last_invoice.deuda,
             "mes_facturacion": new_invoicing_month,
@@ -81,6 +89,39 @@ class InvoiceManager(models.Manager):
         ).with_deudadb()
         open_invoices.filter(deudadb__lte=0).update(estado=InvoiceStatus.COBRADA)
         open_invoices.filter(deudadb__gt=0).update(estado=InvoiceStatus.NO_COBRADA)
+
+    def handle_invoices_for_new_deleted_members(self, member):
+        """Elimina las facturas en estado NUEVA cuando se borra un socio.
+
+        No toca las demas.
+        """
+        # En realidad no tendríamos por qué pasar member.
+        # Podría ser member__status = MemberStatus.DELETED y este método se podría
+        # ejecutar de forma segura en cualquier momento desacomplando la llamada desde
+        # member
+        # Probablemente tendríamos que gestionar el "saldo_pendiente" de alguna forma
+        Invoice.objects.filter(member=member, estado=InvoiceStatus.NUEVA).delete()
+
+    def handle_invoices_for_new_inactive_members(self, member):
+        """Nada que hacer por ahora.
+
+        La factura en curso sigue siendo válida y debe ser emitida y pagada (o acabar
+        como no cobrada). La deuda pendiente se gestionará si vuelve a Activa.
+        """
+
+    def handle_invoices_for_new_active_members(self, member):
+        """Gestiona los cambios en la facturación cuando un socio vuelve a activo.
+
+        La deuda que tenga pendiente se incluirá en su nueva factura cuando se creen las
+        facturas para el nuevo ciclo buscando cual fue su última factura.
+
+        Se anota en la cola que debe pagar el derecho de reconexión.
+        """
+        ForthcomingInvoiceItem.objects.create(
+            member=member,
+            item="DERECHO_RECONEXION",
+            value=fixed_values["DERECHO_RECONEXION"],
+        )
 
 
 class Invoice(models.Model):
@@ -295,17 +336,7 @@ class Invoice(models.Model):
     def calculated_derecho(self) -> float:
         return fixed_values["DERECHO_CONEXION"]
 
-    def calculated_reconexion(self, member) -> float:
-        # TODO Comprobar que la factura anterior fue emitida para un socio con solo mecha
-        # pero ahora el socio está activo. Nos basamos en el campo de cuota_fija o creamos un nuevo campo?
-        # if (
-        #     not member.solo_mecha
-        #     and self.cuota_fija == fixed_values["CUOTA_FIJA_SOLO_MECHA"]
-        # ):
-        #     return 10
-        return 0
-
-    def calculated_cuota_variable(self, consumo_final: float) -> float:
+    def calculated_cuota_variable(self, consumo_final: int) -> float:
         if consumo_final <= 14:
             return fixed_values["CUOTA_VARIABLE_MENOS_14"] * consumo_final
         if 14 < consumo_final < 20:
@@ -330,10 +361,7 @@ class NoLastInvoice(object):
         return 0
 
     def calculated_derecho(self) -> float:
-        return fixed_values["EMPTY_DERECHO_CONEXION"]
-
-    def calculated_mora(self) -> float:
         return 0
 
-    def calculated_reconexion(self, _) -> float:
+    def calculated_mora(self) -> float:
         return 0

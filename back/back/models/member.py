@@ -1,6 +1,6 @@
 import re
 
-from django.core.exceptions import ValidationError
+from django.core import exceptions
 from django.db import models, transaction
 
 from back.fields import RangedIntegerField
@@ -19,7 +19,7 @@ class MemberManager(models.Manager):
     def active(self) -> models.QuerySet:
         return self.filter(status=MemberStatus.ACTIVE)
 
-    def update_orden(self, new_order: int | None, old_order: int | None = None) -> None:
+    def update_order(self, new_order: int | None, old_order: int | None = None) -> None:
         if (new_order is None) or (old_order == new_order):
             return
         if not Member.objects.filter(orden=new_order).exists():
@@ -170,7 +170,7 @@ class Member(models.Model):
                     pk=self.pk
                 )
             new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
-            Member.objects.update_orden(new_order=new_order, old_order=old_order)
+            Member.objects.update_order(new_order=new_order, old_order=old_order)
             super().save(**kwargs)
             Invoice.objects.member_updated(self)
 
@@ -203,11 +203,31 @@ class Member(models.Model):
         return last_invoice[0] or last_invoice[1]
 
     def clean(self):
+        if self.status == MemberStatus.DELETED:
+            # No se puede mofificar una socia eliminada. Pero el workaround es para que
+            # cuando nos llega un cambio de status a Eliminada si se pueda hacer.
+            current_status = Member.objects.values_list("status").get(pk=self.pk)
+            if current_status == MemberStatus.DELETED:
+                raise exceptions.ValidationError(
+                    {
+                        exceptions.NON_FIELD_ERRORS: "No se puede modificar una socia eliminada"
+                    }
+                )
         if self.dui and not re.match(r"^\d{8}-\d$", self.dui):
-            raise ValidationError(
+            raise exceptions.ValidationError(
                 {"dui": "El campo DUI debe tener el formato 'dddddddd-d'."}
             )
 
-    def inactive(self) -> None:
-        self.is_active = False
+    @transaction.atomic
+    def update_status(self, status) -> None:
+        if status == self.status:
+            return
+        self.status = status
+        if self.status == MemberStatus.DELETED:
+            Invoice.objects.handle_invoices_for_new_deleted_members(self)
+        if self.status == MemberStatus.INACTIVE:
+            Invoice.objects.handle_invoices_for_new_inactive_members(self)
+        if self.status == MemberStatus.ACTIVE:
+            Invoice.objects.handle_invoices_for_new_active_members(self)
+
         self.save()

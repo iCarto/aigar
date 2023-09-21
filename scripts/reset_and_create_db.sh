@@ -72,6 +72,9 @@ else
             , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
         ;
 
+        /* #4234-16 */
+        DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
+
         INSERT INTO back_member
             (
                 num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija

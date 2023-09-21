@@ -4,7 +4,7 @@ from typing import Any
 from django.db import models, transaction
 from django.forms import ValidationError
 
-from back.models.invoice import Invoice, NoLastInvoice
+from back.models.invoice import Invoice, InvoiceStatus, NoLastInvoice
 from back.models.member import Member
 from back.models.payment import Payment
 
@@ -33,7 +33,7 @@ class InvoicingMonthManager(models.Manager):
 
         new_invoicing_month = super().create(**kwargs)
 
-        self._create_new_invoices(invoicing_month_to_close, new_invoicing_month)
+        self._create_new_invoices(new_invoicing_month)
         return new_invoicing_month
 
     def _update_id_mes_facturacion_in_kwargs(self, kwargs):
@@ -42,17 +42,23 @@ class InvoicingMonthManager(models.Manager):
         date_to_format = datetime.date(year, int(month), 1)
         kwargs.setdefault("id_mes_facturacion", date_to_format.strftime("%Y%m"))
 
-    def _create_new_invoices(self, invoicing_month_to_close, new_invoicing_month):
-        active_members = Member.objects.filter(is_active=True)
-
-        last_month_invoices = Invoice.objects.prefetch_related("member").filter(
-            member__in=active_members, mes_facturacion=invoicing_month_to_close
+    def _create_new_invoices(self, new_invoicing_month):
+        p = models.Prefetch(
+            "invoice_set",
+            queryset=Invoice.objects.filter(
+                estado__in=[InvoiceStatus.COBRADA, InvoiceStatus.NO_COBRADA]
+            ).order_by("id_factura"),
+            to_attr="filtered_invoices",
         )
+        active_members = Member.objects.active().prefetch_related(
+            p, "forthcominginvoiceitem_set"
+        )
+
         for member in active_members:
-            last_invoice = [
-                invoice for invoice in last_month_invoices if invoice.member == member
-            ]
-            last_invoice = last_invoice[0] if last_invoice else NoLastInvoice()
+            if member.filtered_invoices:
+                last_invoice = member.filtered_invoices[-1]
+            else:
+                last_invoice = NoLastInvoice()
             Invoice.objects.create_from(member, last_invoice, new_invoicing_month)
 
 

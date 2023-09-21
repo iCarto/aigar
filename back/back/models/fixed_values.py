@@ -6,6 +6,6 @@ fixed_values = {
     "CUOTA_VARIABLE_14_20": 0.75,
     "CUOTA_VARIABLE_MAS_20": 2.5,
     "DERECHO_CONEXION": 400,
-    "EMPTY_DERECHO_CONEXION": 0,
     "MORA": 1,
+    "DERECHO_RECONEXION": 10,
 }

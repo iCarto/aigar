@@ -3,7 +3,8 @@ from django.core import exceptions
 from django.forms.models import model_to_dict
 from rest_framework import status
 
-from back.models.invoice import InvoiceStatus
+from back.models.invoice import Invoice, InvoiceStatus
+from back.models.invoicing_month import InvoicingMonth
 from back.models.member import Member
 from back.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 from domains.models.member_status import MemberStatus
@@ -20,7 +21,50 @@ def test_delete_member_not_allowed(api_client):
     response = api_client.delete(f"/api/members/{member_pk}/")
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     expected = Member.objects.get(pk=member_pk)
-    assert expected.is_active is False
+    assert expected.status == MemberStatus.ACTIVE
+
+
+def test_status_delete(api_client):
+    member = MemberFactory.create(status=MemberStatus.ACTIVE)
+    member_pk = member.pk
+    assert member.pk == 1
+    response = api_client.put(
+        f"/api/members/{member_pk}/status/", {"status": MemberStatus.DELETED}
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    expected = Member.objects.get(pk=member_pk)
+    assert expected.status == MemberStatus.DELETED
+
+
+def _create_invoicing_month(anho: str = "2019", mes: str = "09", is_open: bool = True):
+    """InvoicingMonth.create has too much logic."""
+    invoicing_month = InvoicingMonth(
+        anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes
+    )
+    invoicing_month.save()
+    return invoicing_month
+
+
+def test_delete_new_invoices_when_deleting_member(api_client):
+    invoice9 = InvoiceFactory.create(
+        estado=InvoiceStatus.COBRADA,
+        mes_facturacion=_create_invoicing_month(is_open=False),
+    )
+    invoice10 = InvoiceFactory.create(
+        estado=InvoiceStatus.NUEVA,
+        member=invoice9.member,
+        mes_facturacion=_create_invoicing_month(mes="10"),
+    )
+    InvoiceFactory.create(
+        estado=InvoiceStatus.NUEVA, mes_facturacion=invoice10.mes_facturacion
+    )
+    member_pk = invoice10.member.pk
+    response = api_client.put(
+        f"/api/members/{member_pk}/status/", {"status": MemberStatus.DELETED}
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert Member.objects.get(pk=member_pk).status == MemberStatus.DELETED
+    assert Invoice.objects.count() == 2
 
 
 def test_create_member_first_order(api_client, new_member_data):
@@ -115,3 +159,16 @@ def test_validate_dui(api_client):
         match="El campo DUI debe tener el formato 'dddddddd-d'.",
     ):
         api_client.put(f"/api/members/{d['num_socio']}/", d)
+
+
+def test_api_can_not_change_status(api_client):
+    member = MemberFactory.create(status=MemberStatus.ACTIVE)
+
+    response = api_client.patch(
+        f"/api/members/{member.pk}/", {"estado": MemberStatus.INACTIVE}
+    )
+
+    # El endpoint no devuelve error aunque el campo es ignorado por ser no editable
+    assert response.status_code == 200, response.content
+    member.refresh_from_db()
+    assert member.status == MemberStatus.ACTIVE

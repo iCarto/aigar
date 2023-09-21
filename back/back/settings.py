@@ -41,6 +41,7 @@ CSRF_COOKIE_SECURE = env("HTTPS") == "on"
 SESSION_COOKIE_SECURE = env("HTTPS") == "on"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS") == "on"
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Application definition
 
 INSTALLED_APPS = [

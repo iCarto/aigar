@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from back.models.invoice import InvoiceStatus
+from app.models.invoice import InvoiceStatus
 from domains.models.zone import Zone
 from domains.serializers import ZoneSerializer
 

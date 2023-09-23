@@ -1,54 +1,17 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_extensions import routers
 
-from back.views.invoice import InvoiceStatsView, InvoiceViewSet
-from back.views.invoicing_month import InvoicingMonthViewSet
-from back.views.measurement import MeasurementInvoicePreview, MeasurementViewSet
-from back.views.member import MemberExportView, MemberViewSet
-from back.views.payment import PaymentInvoicePreview, PaymentViewSet
+from app.urls import router
+from app.views.invoice import InvoiceStatsView
+from app.views.measurement import MeasurementInvoicePreview
+from app.views.member import MemberExportView
+from app.views.payment import PaymentInvoicePreview
 from domains import urls as domains_urls
-
-
-class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
-    """NestedDefaultRouter."""
 
 
 admin.autodiscover()
 
-router = NestedDefaultRouter()
-router.register("members", MemberViewSet, basename="member")
-
-invoices_router = router.register("invoices", InvoiceViewSet, basename="invoice")
-invoices_router.register(
-    "payments",
-    PaymentViewSet,
-    basename="invoice-payments",
-    parents_query_lookups=["factura"],
-)
-
-invoicingmonths_router = router.register(
-    "invoicingmonths", InvoicingMonthViewSet, basename="invoicingmonth"
-)
-invoicingmonths_router.register(
-    "invoices",
-    InvoiceViewSet,
-    basename="invoicingmonth-invoices",
-    parents_query_lookups=["mes_facturacion"],
-)
-invoicingmonths_router.register(
-    "measurements",
-    MeasurementViewSet,
-    basename="invoicingmonth-measurements",
-    parents_query_lookups=["mes_facturacion"],
-)
-invoicingmonths_router.register(
-    "payments",
-    PaymentViewSet,
-    basename="invoicingmonth-payments",
-    parents_query_lookups=["mes_facturacion"],
-)
 
 urlpatterns = [
     # The following SPA settings are handled in Django-SPA

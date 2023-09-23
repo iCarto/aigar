@@ -75,7 +75,7 @@ else
         /* #4234-16 */
         DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
 
-        INSERT INTO back_member
+        INSERT INTO app_member
             (
                 num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
                 , tipo_uso
@@ -105,7 +105,7 @@ else
             FROM api_member;
 
 
-        INSERT INTO back_invoicingmonth
+        INSERT INTO app_invoicingmonth
         (
             id_mes_facturacion,
             anho,
@@ -123,7 +123,7 @@ else
             updated_at
         FROM api_invoicingmonth;
 
-        INSERT INTO back_invoice
+        INSERT INTO app_invoice
         (
             id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
         )
@@ -134,7 +134,7 @@ else
         DROP TABLE api_invoicingmonth;
         DROP TABLE api_member;
 
-        INSERT INTO back_measurement
+        INSERT INTO app_measurement
         (
             id_lectura,
             caudal_anterior,
@@ -161,7 +161,7 @@ else
         FROM api_measurement;
         DROP TABLE api_measurement;
 
-        INSERT INTO back_payment
+        INSERT INTO app_payment
         (
             id_pago,
             fecha,

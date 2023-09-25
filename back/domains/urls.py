@@ -8,6 +8,6 @@ router = routers.SimpleRouter()
 router.register("zones", views.ZoneViewSet)
 
 urlpatterns = [
-    path("estados", views.invoice_status_view),
+    path("estados/", views.invoice_status_view),
     path("", include(router.urls)),
 ]

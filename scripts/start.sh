@@ -39,6 +39,9 @@ while [[ -n "$1" ]]; do
             # command -v deactivate || die "ERROR: Activate a virtualenv before continue."
             (cd back && python manage.py runserver)
             ;;
+        -s | --shell)
+            (cd back && python manage.py shell_plus --ipython)
+            ;;
         *)
             die "ERROR: Unknown option: ${1}"
             ;;

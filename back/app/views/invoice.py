@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import (
@@ -9,6 +10,7 @@ from rest_framework_extensions.mixins import (
 
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
+from app.serializers.entity_status_serializer import InvoiceStatusSerializer
 from app.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
 
 
@@ -20,6 +22,17 @@ class InvoiceViewSet(
 ):
     serializer_class = InvoiceSerializer
 
+    @action(detail=False, methods=["put"])
+    def status(self, request):
+        serializer = InvoiceStatusSerializer(data=request.data)
+        if serializer.is_valid():
+            Invoice.objects.update_status(
+                serializer.validated_data["pks"], serializer.validated_data["status"]
+            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get_queryset(self):
         queryset = (
             Invoice.objects.with_cancelled()
@@ -29,13 +42,6 @@ class InvoiceViewSet(
         num_socio = self.request.query_params.get("num_socio", None)
         if num_socio is not None:
             queryset = queryset.filter(member=num_socio)
-
-        # For PATCH bulk operations
-        # https://github.com/chibisov/drf-extensions/blob/503c22f8b442b2bff1f9060c58c024d7d4caabf2/rest_framework_extensions/bulk_operations/mixins.py#L60
-        id_facturas = self.request.query_params.get("id_facturas", None)
-        if id_facturas is not None:
-            id_facturas_list = id_facturas.split(",") if id_facturas != "" else []
-            queryset = queryset.filter(id_factura__in=id_facturas_list)
 
         id_mes_facturacion = self.get_parents_query_dict().get("mes_facturacion", None)
         if id_mes_facturacion is not None:

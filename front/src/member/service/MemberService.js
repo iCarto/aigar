@@ -44,12 +44,13 @@ const MemberService = {
         );
     },
 
-    updateMemberStatus(num_socio, newStatus) {
-        return ApiService.put("/members/" + num_socio + "/status/", newStatus).then(
-            response => {
-                console.log(response);
-            }
-        );
+    updateMemberStatus(num_socio, status) {
+        return ApiService.put("/members/status/", {
+            pks: [num_socio],
+            status: status,
+        }).then(response => {
+            console.log(response);
+        });
     },
 };
 

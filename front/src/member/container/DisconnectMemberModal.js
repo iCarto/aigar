@@ -31,9 +31,7 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
 
     const disconnectMember = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.updateMemberStatus(member.num_socio, {
-            status: MEMBER_TYPES.INACTIVE.key,
-        })
+        MemberService.updateMemberStatus(member.num_socio, MEMBER_TYPES.INACTIVE.key)
             .then(disconnectedMember => {
                 onUpdateStatus(MEMBER_TYPES.INACTIVE.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);

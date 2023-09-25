@@ -48,6 +48,11 @@ class MemberManager(models.Manager["Member"]):
 
         Member.objects.select_for_update().filter(filter_).update(orden=update)
 
+    def update_status(self, pks: list[int], status: str):
+        for pk in pks:
+            member = self.get(num_socio=pk)
+            member.update_status(status)
+
 
 class Member(models.Model):
     # Actualmente el número de socio es representado como un entero y no se "formatea"

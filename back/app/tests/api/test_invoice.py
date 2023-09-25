@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+from rest_framework import status
 
 from app.models.invoice import Invoice, InvoiceStatus
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory
@@ -27,6 +28,29 @@ def test_api_can_not_change_status(api_client):
     assert invoice.estado == InvoiceStatus.NUEVA
 
 
+def test_update_invoice_status(api_client, create_invoicing_month):
+    invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=False)
+    invoices = [
+        InvoiceFactory.create(
+            estado=InvoiceStatus.NUEVA, mes_facturacion=invoicing_month
+        )
+        for i in range(0, 3)
+    ]
+
+    response = api_client.put(
+        "/api/invoices/status/",
+        {
+            "pks": [i.pk for i in invoices[:2]],
+            "status": InvoiceStatus.PENDIENTE_DE_COBRO,
+        },
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT, response.json()
+
+    [i.refresh_from_db() for i in invoices]  # noqa: WPS428
+    assert all(i.estado == InvoiceStatus.PENDIENTE_DE_COBRO for i in invoices[:2])
+    assert all(i.estado == InvoiceStatus.NUEVA for i in invoices[2:])
+
+
 @patch("app.models.invoicing_month.any_payments_for", return_value=True)
 def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     old_invoice = InvoiceFactory.create(
@@ -38,7 +62,9 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     )
     create_invoicing_month(anho="2019", mes="10", is_open=True)
     member_pk = old_invoice.member.pk
-    api_client.put(f"/api/members/{member_pk}/status/", {"status": MemberStatus.ACTIVE})
+    api_client.put(
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE}
+    )
     response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 11})
     assert response.status_code == 201, response.json()
     invoice = Invoice.objects.get(anho=2019, mes_facturado=11)

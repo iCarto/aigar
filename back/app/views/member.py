@@ -4,23 +4,21 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from app.models.member import Member
-from app.serializers.member import (
-    MemberExportSerializer,
-    MemberSerializer,
-    MemberStatusSerializer,
-)
+from app.serializers.entity_status_serializer import MemberStatusSerializer
+from app.serializers.member import MemberExportSerializer, MemberSerializer
 
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
 
-    @action(detail=True, methods=["put"])
-    def status(self, request, pk=None):
-        member = self.get_object()
+    @action(detail=False, methods=["put"])
+    def status(self, request):
         serializer = MemberStatusSerializer(data=request.data)
         if serializer.is_valid():
-            member.update_status(serializer.validated_data["status"])
+            Member.objects.update_status(
+                serializer.validated_data["pks"], serializer.validated_data["status"]
+            )
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

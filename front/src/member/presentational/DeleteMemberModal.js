@@ -26,9 +26,7 @@ const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =>
 
     const deleteMember = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.updateMemberStatus(member.num_socio, {
-            status: MEMBER_TYPES.DELETED.key,
-        })
+        MemberService.updateMemberStatus(member.num_socio, MEMBER_TYPES.DELETED.key)
             .then(deletedMember => {
                 onUpdateStatus(MEMBER_TYPES.DELETED.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);

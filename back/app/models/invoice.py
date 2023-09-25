@@ -90,6 +90,9 @@ class InvoiceManager(models.Manager["Invoice"]):
         open_invoices.filter(deudadb__lte=0).update(estado=InvoiceStatus.COBRADA)
         open_invoices.filter(deudadb__gt=0).update(estado=InvoiceStatus.NO_COBRADA)
 
+    def update_status(self, pks: list[int], status: str) -> None:
+        self.filter(id_factura__in=pks).update(estado=status)
+
     def handle_invoices_for_new_deleted_members(self, member):
         """Elimina las facturas en estado NUEVA cuando se borra un socio.
 

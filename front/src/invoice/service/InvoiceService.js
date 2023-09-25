@@ -64,14 +64,11 @@ const InvoiceService = {
         );
     },
 
-    updateInvoiceStatus(id_facturas, estado) {
-        return ApiService.patch(
-            "/invoices/?id_facturas=" + id_facturas.join("%2C"),
-            {
-                estado,
-            },
-            true
-        );
+    updateInvoiceStatus(pks, status) {
+        return ApiService.put("/invoices/status/", {
+            pks,
+            status,
+        });
     },
 
     createNewInvoiceVersion(id_factura) {

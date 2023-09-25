@@ -29,7 +29,7 @@ def test_status_delete(api_client):
     member_pk = member.pk
     assert member.pk == 1
     response = api_client.put(
-        f"/api/members/{member_pk}/status/", {"status": MemberStatus.DELETED}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED}
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     expected = Member.objects.get(pk=member_pk)
@@ -51,7 +51,7 @@ def test_delete_new_invoices_when_deleting_member(api_client, create_invoicing_m
     )
     member_pk = invoice10.member.pk
     response = api_client.put(
-        f"/api/members/{member_pk}/status/", {"status": MemberStatus.DELETED}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED}
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert Member.objects.get(pk=member_pk).status == MemberStatus.DELETED
@@ -62,7 +62,7 @@ def test_create_reconnect_debt_when_activating_member(api_client):
     member = MemberFactory.create(status=MemberStatus.INACTIVE)
 
     response = api_client.put(
-        f"/api/members/{member.pk}/status/", {"status": MemberStatus.ACTIVE}
+        "/api/members/status/", {"pks": [member.pk], "status": MemberStatus.ACTIVE}
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert ForthcomingInvoiceItem.objects.filter(

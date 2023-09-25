@@ -27,8 +27,8 @@ const createInvoicingMonth = ({
     id_mes_facturacion = -1,
     anho = "",
     mes = "",
-    is_open = false,
-    invoices = [],
+    is_open = undefined,
+    invoices = undefined,
 } = {}) => {
     const publicApi = {
         id_mes_facturacion,

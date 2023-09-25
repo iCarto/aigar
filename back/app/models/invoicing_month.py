@@ -86,15 +86,18 @@ class InvoicingMonth(models.Model):
         editable=False,
     )
 
-    anho = models.TextField(
-        null=False, blank=False, unique=False, verbose_name="Año", help_text=""
-    )
+    anho = models.TextField(null=False, blank=False, verbose_name="Año", help_text="")
 
     mes = models.TextField(null=False, blank=False, verbose_name="Mes", help_text="")
 
     # There will be always one and only one InvoicingMonth open
     is_open = models.BooleanField(
-        null=False, blank=False, default=True, verbose_name="Mes", help_text=""
+        null=False,
+        blank=False,
+        editable=False,
+        default=True,
+        verbose_name="Mes",
+        help_text="",
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures

@@ -270,6 +270,7 @@ class Invoice(models.Model):
         related_name="invoices",
         related_query_name="invoice",
         on_delete=models.CASCADE,
+        editable=False,
     )
 
     def __str__(self):

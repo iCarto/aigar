@@ -9,4 +9,4 @@ class InvoicingMonthSerializer(serializers.ModelSerializer):
         model = InvoicingMonth
         fields = "__all__"
 
-    invoices = InvoiceShortSerializer(many=True, write_only=True, required=False)
+    invoices = InvoiceShortSerializer(many=True, required=False)

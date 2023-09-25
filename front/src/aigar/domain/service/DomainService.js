@@ -4,7 +4,7 @@ import {MEMBER_TYPES} from "member/model";
 
 const DomainService = {
     getSectors() {
-        return ApiService.get("/domains/zones").then(response => {
+        return ApiService.get("/domains/zones/").then(response => {
             const shortNames = response.map(domainEntity => ({
                 value: domainEntity.name,
                 dia_lectura: domainEntity.measuring_day,
@@ -52,7 +52,7 @@ const DomainService = {
     },
 
     getInvoiceStatus() {
-        return ApiService.get("/domains/estados").then(response => {
+        return ApiService.get("/domains/estados/").then(response => {
             return response.map(domainEntity => {
                 return {
                     key: domainEntity[0],

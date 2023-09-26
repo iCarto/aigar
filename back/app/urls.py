@@ -1,17 +1,14 @@
-from rest_framework_extensions import routers
+from rest_framework import routers
 
 from app.views.invoice import InvoiceViewSet
 from app.views.invoicing_month import InvoicingMonthViewSet
 from app.views.measurement import MeasurementViewSet
-from app.views.member import MemberViewSet
+from app.views.member import MemberExportViewSet, MemberViewSet
 from app.views.payment import PaymentViewSet
 
 
-class NestedDefaultRouter(routers.NestedRouterMixin, routers.DefaultRouter):
-    """NestedDefaultRouter."""
-
-
-router = NestedDefaultRouter()
+router = routers.DefaultRouter()
+router.register("members/export", MemberExportViewSet, "member-export")
 router.register("members", MemberViewSet, basename="member")
 
 invoices_router = router.register("invoices", InvoiceViewSet, basename="invoice")

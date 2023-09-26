@@ -1,6 +1,5 @@
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from app.models.member import Member
@@ -27,6 +26,12 @@ class MemberViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class MemberExportView(ListAPIView):
+class MemberExportViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Member.objects.active().all()
     serializer_class = MemberExportSerializer
+
+    def list(self, request):  # noqa: WPS612
+        return super().list(request)
+
+    def retrieve(self, request, pk=None):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

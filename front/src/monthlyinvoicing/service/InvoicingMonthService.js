@@ -63,7 +63,7 @@ const InvoicingMonthService = {
 
     previewInvoicesWithMeasurements(id_mes_facturacion, measurements) {
         return ApiService.post(
-            "/invoicingmonths/" + id_mes_facturacion + "/measurements/previewinvoices",
+            "/invoicingmonths/" + id_mes_facturacion + "/measurements/previewinvoices/",
             measurements
         ).then(response => {
             return createInvoices(invoices_api_adapter(response));

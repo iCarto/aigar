@@ -8,13 +8,13 @@ import {
 
 const MemberService = {
     getMembers() {
-        return ApiService.get("/members").then(response => {
+        return ApiService.get("/members/").then(response => {
             return createMembers(members_api_adapter(response));
         });
     },
 
     getMembersToExport() {
-        return ApiService.get("/members/export").then(response => {
+        return ApiService.get("/members/export/").then(response => {
             return response;
         });
     },

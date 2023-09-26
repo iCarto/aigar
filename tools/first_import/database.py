@@ -144,9 +144,7 @@ def get_fixtures_invoices(invoices):
                 # Error control for invoices in Oct 2019 with negative measurements
                 caudal_actual = int(invoice.get("caudal_actual", 0) or 0)
                 caudal_anterior = int(invoice.get("caudal_anterior", 0) or 0)
-                consumo = int(invoice.get("consumo", 0) or 0)
-                if consumo < 0:
-                    consumo = 0
+                if int(invoice.get("consumo", 0) or 0) < 0:
                     caudal_actual = caudal_anterior
                 fixture_invoice = {
                     "model": "api.Invoice",
@@ -163,7 +161,6 @@ def get_fixtures_invoices(invoices):
                         "caudal_actual": caudal_actual,
                         "caudal_anterior": caudal_anterior,
                         "comision": float(invoice.get("comision", 0) or 0),
-                        "consumo": consumo,
                         "cuota_fija": float(invoice.get("cuota_fija", 0) or 0),
                         "cuota_variable": float(invoice.get("cuota_variable", 0) or 0),
                         "derecho": float(invoice.get("derecho", 0) or 0),

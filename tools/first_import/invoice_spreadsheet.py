@@ -5,6 +5,7 @@ import logging
 import os
 
 import pandas as pd
+
 from domains import sectores_comunidades
 
 
@@ -33,7 +34,6 @@ def parse_invoice_spreadsheet(xls):
         "Nombre": "nombre",
         "Canterior": "caudal_anterior",
         "Cactual": "caudal_actual",
-        "Consumo": "consumo",
         "Cuota fija": "cuota_fija",
         "Cuotavar": "cuota_variable",
         "Comision": "comision",

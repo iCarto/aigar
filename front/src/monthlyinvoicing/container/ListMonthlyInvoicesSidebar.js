@@ -28,8 +28,7 @@ const ListMonthlyInvoicesSidebar = ({
     const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
 
     const isLoadMeasurementsButtonEnabled =
-        invoices?.length > 0 &&
-        invoices?.filter(invoice => invoice.consumo === "").length !== 0;
+        invoices?.length > 0 && invoices?.every(invoice => invoice.consumo >= 0);
 
     const isLoadPaymentsButtonEnabled =
         invoices?.length > 0 &&

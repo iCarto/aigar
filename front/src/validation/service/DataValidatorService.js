@@ -56,7 +56,6 @@ const DataValidatorService = {
             entryObject,
             new DataValidator({
                 numero: ["isNotEmpty"],
-                consumo: ["isNotEmpty", "isInteger"],
                 caudal_anterior: ["isNotEmpty", "isInteger", "isPositive"],
                 caudal_actual: ["isNotEmpty", "isInteger", "isPositive"],
                 cuota_fija: ["isNotEmpty", "isDecimal2", "isPositive"],

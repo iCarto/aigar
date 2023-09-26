@@ -46,7 +46,6 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     anho_limite = "2019"
     caudal_anterior = 1390
     caudal_actual = 1400
-    consumo = 10
     cuota_fija = fixed_values["CUOTA_FIJA_NORMAL"]
     cuota_variable = 0
     comision = fixed_values["COMISION"]

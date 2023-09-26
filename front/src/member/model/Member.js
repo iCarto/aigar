@@ -5,36 +5,6 @@ import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-/*
-Usage example
-
-const dataFromMyRESTAPI = [
-    {
-        "foo": 4 // ignored por createMember
-        "numero_socio": 34,
-        "name": "Pepe Pérez",
-        "sector": 4,
-        "medidor": "",
-        "orden": 56,
-        "observaciones": "",
-        "consumo_maximo": 0,
-        "consumo_reduccion_fija": 0,
-    },
-    {
-        "foo": 4 // ignored por createMember
-        "numero_socio": 35,
-        "name": "Juanita Pérez",
-        "sector": 5,
-        "medidor": "763902",
-        "orden": 67,
-        "observaciones": "",
-        "consumo_maximo": 0,
-        "consumo_reduccion_fija": 0,
-    }
-}
-]
-*/
-
 const MEMBER_TYPES_MAPPING = {
     Activa: {
         key: "Activa",

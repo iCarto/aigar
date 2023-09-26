@@ -172,10 +172,6 @@ class Invoice(models.Model):
         null=True, blank=True, verbose_name="Caudal actual", help_text=""
     )
 
-    consumo = models.IntegerField(
-        null=True, blank=True, verbose_name="Consumo", help_text=""
-    )
-
     cuota_fija = models.FloatField(
         null=False, blank=False, default=0, verbose_name="Cuota fija", help_text=""
     )
@@ -292,6 +288,23 @@ class Invoice(models.Model):
     def total_or0(self) -> float:
         return self.total or 0
 
+    @property
+    def consumo(self) -> int | None:
+        if self.caudal_actual is None or self.caudal_anterior is None:
+            return None
+        return self.caudal_actual - self.caudal_anterior
+
+    @property
+    def consumo_final(self) -> int | None:
+        if self.consumo is None:
+            return None
+        if self.member.consumo_maximo is not None:
+            consumo_tmp = min(self.consumo, self.member.consumo_maximo)
+        else:
+            consumo_tmp = self.consumo
+
+        return consumo_tmp - (self.member.consumo_reduccion_fija or 0)
+
     def update_with_measurement(self, caudal_actual, caudal_anterior):
         self.caudal_actual = int(caudal_actual)
         self.caudal_anterior = (
@@ -300,17 +313,13 @@ class Invoice(models.Model):
         self.update_total()
 
     def update_total(self):
-        if self.caudal_actual is None or self.caudal_anterior is None:
+        if self.consumo is None or self.consumo_final is None:
             return
+
         self.cuota_fija = self.member.cuota_fija
         self.ahorro = self.member.ahorro
-        self.consumo = self.caudal_actual - self.caudal_anterior
-        consumo_final = (
-            min(self.consumo, self.member.consumo_maximo)
-            if self.member.consumo_maximo is not None
-            else self.consumo
-        ) - (self.member.consumo_reduccion_fija or 0)
-        self.cuota_variable = self.calculated_cuota_variable(consumo_final)
+
+        self.cuota_variable = self.calculated_cuota_variable(self.consumo_final)
 
         # TODO Review if store invoice in decimal fields is a better option
         self.total = round(

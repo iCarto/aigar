@@ -125,10 +125,10 @@ else
 
         INSERT INTO app_invoice
         (
-            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
         )
         SELECT
-            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, consumo, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
             FROM api_invoice;
         DROP TABLE api_invoice;
         DROP TABLE api_invoicingmonth;

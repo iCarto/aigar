@@ -91,7 +91,6 @@ const createInvoice = ({
     member = null,
     caudal_actual = null,
     caudal_anterior = null,
-    consumo = null,
     cuota_fija = null,
     comision = null,
     ahorro = null,
@@ -134,7 +133,6 @@ const createInvoice = ({
         member,
         caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),
         caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
-        consumo: NumberUtil.parseIntOrNull(consumo),
         cuota_fija: NumberUtil.parseFloatOrNull(cuota_fija),
         comision: NumberUtil.parseFloatOrNull(comision),
         ahorro: NumberUtil.parseFloatOrNull(ahorro),
@@ -165,6 +163,14 @@ const createInvoice = ({
         sector,
         fecha_lectura,
         errors,
+
+        get consumo() {
+            let _consumo = this.caudal_actual - this.caudal_anterior;
+            if (isNaN(_consumo)) {
+                return null;
+            }
+            return _consumo;
+        },
     };
 
     // objeto inmutable para llevarse bien con react.
@@ -172,13 +178,10 @@ const createInvoice = ({
 };
 
 const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) => {
-    let consumo = invoice.caudal_actual - invoice.caudal_anterior;
-    if (isNaN(consumo)) {
-        consumo = null;
-    }
     const consumo_final =
-        (consumo_maximo != null ? Math.min(consumo, consumo_maximo) : consumo) -
-        (consumo_reduccion_fija || 0);
+        (consumo_maximo != null
+            ? Math.min(invoice.consumo, consumo_maximo)
+            : invoice.consumo) - (consumo_reduccion_fija || 0);
     let cuota_variable = null;
     if (consumo_final <= 14) {
         cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * consumo_final;
@@ -210,7 +213,7 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
     } else {
         total = total.toFixed(2);
     }
-    return createInvoice(Object.assign({}, invoice, {consumo, cuota_variable, total}));
+    return createInvoice(Object.assign({}, invoice, {cuota_variable, total}));
 };
 
 const createInvoiceForMember = (member, invoicingMonth, version) => {
@@ -230,7 +233,6 @@ const createInvoiceForMember = (member, invoicingMonth, version) => {
             invoicingMonthMes === 12 ? invoicingMonthAnho + 1 : invoicingMonthAnho,
         mes_limite: (invoicingMonthMes + 1) % 12,
         estado: ESTADOS_FACTURA.NUEVA,
-        consumo: 0,
         version,
     });
 };

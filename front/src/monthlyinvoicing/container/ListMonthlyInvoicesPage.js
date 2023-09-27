@@ -2,7 +2,6 @@ import {useState} from "react";
 import {useMonthlyInvoicingTableColumns} from "monthlyinvoicing/data";
 
 import {useAddNonAttendancePenaltyHook, useMarkInvoiceAsPaidHook} from "invoice/hooks";
-import {useDeleteActionHook} from "base/delete/hooks";
 import {EntityListPage} from "base/entity/components/presentational";
 import {MonthlyInvoicingFilterForm} from ".";
 
@@ -16,16 +15,8 @@ const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
         tableAction: addNonAttendancePenaltyAction,
         modal: addNonAttendancePenaltyModal,
     } = useAddNonAttendancePenaltyHook(null, selectedTableRows);
-    const {tableAction: deleteAction, modal: deleteModal} = useDeleteActionHook(
-        null,
-        selectedTableRows
-    );
 
-    const tableActions = [
-        markAsPaidAction,
-        addNonAttendancePenaltyAction,
-        deleteAction,
-    ];
+    const tableActions = [markAsPaidAction, addNonAttendancePenaltyAction];
 
     const handleClickOnTableRows = selectedItems => {
         setSelectedTableRows(selectedItems);
@@ -35,7 +26,6 @@ const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
         <>
             {markAsPaidModal}
             {addNonAttendancePenaltyModal}
-            {deleteModal}
             <EntityListPage
                 items={invoices}
                 columns={tableColumns}

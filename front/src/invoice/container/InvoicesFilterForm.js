@@ -10,6 +10,7 @@ const InvoicesFilterForm = ({handleFilterChange}) => {
         numero: filter?.numero || "",
         nombre: filter?.nombre || "",
         sector: filter?.sector || "",
+        estado: filter?.estado || "",
     };
 
     return (

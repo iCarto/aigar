@@ -2,6 +2,8 @@ import {PageHeading} from "base/ui/heading";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import SaveIcon from "@mui/icons-material/Save";
 
 const EntityFormLayout = ({
     onSubmit,
@@ -21,10 +23,16 @@ const EntityFormLayout = ({
             {isSaving ? (
                 <Spinner />
             ) : (
-                <button type="submit" className="btn btn-primary" disabled={disabled}>
-                    <i className="fas fa-save mr-2" />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    endIcon={<SaveIcon />}
+                    sx={{mb: 2}}
+                    disabled={disabled}
+                >
                     Salvar
-                </button>
+                </Button>
             )}
         </Grid>
     );

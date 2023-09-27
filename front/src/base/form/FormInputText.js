@@ -1,36 +1,34 @@
+import {FormInput} from ".";
+
 const FormInputText = ({
     label,
     name,
-    field,
+    field = null,
+    value = "",
     onChange,
     readOnly = false,
-    small = false,
-    info = "",
+    required = false,
+    placeholder = "",
+    endAdornment = null,
+    margin = "dense",
+    maxLength = null,
 }) => {
-    const handleChangeEvent = event => {
-        onChange(event);
-    };
+    const fieldValue = field ? field.value : value;
 
     return (
-        <div className="form-group">
-            <label htmlFor={name}>{label}</label>
-            <input
-                type="text"
-                className="form-control"
-                name={name}
-                value={field?.value || ""}
-                onChange={handleChangeEvent}
-                readOnly={readOnly}
-                style={small ? {width: "100px"} : null}
-            />
-            <small
-                id="help"
-                className={`form-text text-muted ${info === "" ? "d-none" : ""}`}
-            >
-                {info}
-            </small>
-            <div className="invalid-feedback d-block">{field?.errors}</div>
-        </div>
+        <FormInput
+            name={name}
+            label={label}
+            placeholder={placeholder}
+            value={fieldValue}
+            disabled={readOnly}
+            required={required}
+            onChange={onChange}
+            errors={field?.errors}
+            maxLength={maxLength}
+            margin={margin}
+            endAdornment={endAdornment}
+        />
     );
 };
 

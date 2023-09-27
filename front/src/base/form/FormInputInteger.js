@@ -1,37 +1,45 @@
+import {FormInput} from ".";
+
 const FormInputInteger = ({
     label,
     name,
-    field,
+    field = null,
+    value = "",
     onChange,
     readOnly = false,
-    small = false,
-    info = "",
+    required = false,
+    placeholder = "",
+    margin = "dense",
+    endAdornment = null,
+    maxLength = null,
 }) => {
-    const handleChangeEvent = event => {
-        onChange(event);
+    const fieldValue = field ? field.value : value;
+
+    const handleInputChange = event => {
+        const numericValue = event.target.value.replace(/[^0-9]/g, "");
+
+        onChange({
+            target: {
+                name,
+                value: numericValue,
+            },
+        });
     };
 
     return (
-        <div className="form-group">
-            <label htmlFor={name}>{label}</label>
-            <input
-                type="number"
-                step="1"
-                className="form-control"
-                name={name}
-                value={field?.value || ""}
-                onChange={handleChangeEvent}
-                readOnly={readOnly}
-                style={small ? {width: "100px"} : null}
-            />
-            <small
-                id="help"
-                className={`form-text text-muted ${info === "" ? "d-none" : ""}`}
-            >
-                {info}
-            </small>
-            <div className="invalid-feedback d-block">{field?.errors}</div>
-        </div>
+        <FormInput
+            name={name}
+            label={label}
+            placeholder={placeholder}
+            value={fieldValue}
+            disabled={readOnly}
+            required={required}
+            onChange={handleInputChange}
+            errors={field?.errors}
+            maxLength={maxLength}
+            margin={margin}
+            endAdornment={endAdornment}
+        />
     );
 };
 

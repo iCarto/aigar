@@ -1,15 +1,33 @@
-const FormTextArea = ({label, name, value, errors = [], onChange}) => {
+import {FormInput} from ".";
+
+const FormTextArea = ({
+    label,
+    name,
+    field,
+    value = "",
+    onChange,
+    readOnly = false,
+    required = false,
+    placeholder = "",
+    maxLength = null,
+    rows = 8,
+}) => {
+    const fieldValue = field ? field.value : value;
+
     return (
-        <div className="form-group">
-            <label htmlFor={name}>{label}</label>
-            <textarea
-                className="form-control"
-                name="observaciones"
-                value={value}
-                onChange={onChange}
-            />
-            <div className="invalid-feedback d-block">{errors}</div>
-        </div>
+        <FormInput
+            name={name}
+            label={label}
+            placeholder={placeholder}
+            value={fieldValue}
+            disabled={readOnly}
+            required={required}
+            onChange={onChange}
+            errors={field?.errors}
+            maxLength={maxLength}
+            rows={rows}
+            multiline
+        />
     );
 };
 

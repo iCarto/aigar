@@ -1,37 +1,43 @@
+import {FormInput} from ".";
+
 const FormInputDecimal = ({
     label,
     name,
     field,
+    value = "",
     onChange,
     readOnly = false,
-    small = false,
-    info = "",
+    required = false,
+    placeholder = "",
+    endAdornment = null,
+    maxLength = null,
 }) => {
-    const handleChangeEvent = event => {
-        onChange(event);
+    const fieldValue = field ? field.value : value;
+
+    const handleInputChange = event => {
+        onChange({
+            target: {
+                name,
+                value: event.target.value,
+            },
+        });
     };
 
     return (
-        <div className="form-group">
-            <label htmlFor={name}>{label}</label>
-            <input
-                type="number"
-                step="0.01"
-                className="form-control"
-                name={name}
-                value={field?.value || ""}
-                onChange={handleChangeEvent}
-                readOnly={readOnly}
-                style={small ? {width: "100px"} : null}
-            />
-            <small
-                id="help"
-                className={`form-text text-muted ${info === "" ? "d-none" : ""}`}
-            >
-                {info}
-            </small>
-            <div className="invalid-feedback d-block">{field?.errors}</div>
-        </div>
+        <FormInput
+            name={name}
+            label={label}
+            placeholder={placeholder}
+            value={fieldValue}
+            type="number"
+            step="0.01"
+            disabled={readOnly}
+            required={required}
+            onChange={handleInputChange}
+            errors={field?.errors}
+            maxLength={maxLength}
+            endAdornment={endAdornment}
+        />
     );
 };
 

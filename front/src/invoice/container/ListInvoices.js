@@ -1,17 +1,24 @@
+import {useState} from "react";
 import {useInvoicesTableColumns} from "../data";
 import EntityListPage from "base/entity/components/presentational/EntityListPage";
 import InvoicesFilterForm from "./InvoicesFilterForm";
 
-const ListInvoices = ({invoices, totalInvoices, handleFilterChange}) => {
+const ListInvoices = ({invoices, handleFilterChange}) => {
+    const [selectedTableRows, setSelectedTableRows] = useState([]);
     const {tableColumns} = useInvoicesTableColumns();
+
+    const handleClickOnTableRows = selectedItems => {
+        setSelectedTableRows(selectedItems);
+    };
 
     return (
         <EntityListPage
             items={invoices}
-            totalItems={totalInvoices}
             columns={tableColumns}
             selectAttribute="id_factura"
             filterForm={<InvoicesFilterForm handleFilterChange={handleFilterChange} />}
+            onClickRows={handleClickOnTableRows}
+            selectedTableRows={selectedTableRows}
         />
     );
 };

@@ -26,10 +26,14 @@ const ViewMonthlyInvoicingPage = () => {
     }, [selectedInvoicingMonth, invoices, filter]);
 
     const handleFilterChange = newFilter => {
-        setFilter(prevFilter => ({
-            ...prevFilter,
-            ...newFilter,
-        }));
+        const filterValue = Object.values(newFilter)[0];
+        if (filterValue === "") {
+            const updatedFilter = {...filter};
+            delete updatedFilter[Object.keys(newFilter)[0]];
+            setFilter(updatedFilter);
+        } else {
+            setFilter(prevFilter => ({...prevFilter, ...newFilter}));
+        }
     };
 
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {

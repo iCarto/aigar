@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import {FormSelect} from "base/form";
+import {FormInputInteger, FormInputText, FormSelect} from "base/form";
 
 const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
     const handleInputChange = event => {
@@ -11,22 +11,18 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
     return (
         <>
             <Grid item xs>
-                <label htmlFor="num_socio">Número de socio</label>
-                <input
-                    type="text"
-                    className="form-control"
+                <FormInputInteger
+                    label="Número de socio/a"
                     name="num_socio"
-                    value={fields.num_socio}
+                    field={fields.num_socio}
                     onChange={handleInputChange}
                 />
             </Grid>
             <Grid item xs>
-                <label htmlFor="name">Nombre</label>
-                <input
-                    type="text"
-                    className="form-control"
+                <FormInputText
+                    label="Nombre"
                     name="name"
-                    value={fields.name}
+                    field={fields.name}
                     onChange={handleInputChange}
                 />
             </Grid>
@@ -46,6 +42,15 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.memberTypes}
                     onChange={handleInputChange}
                     value={fields.status}
+                />
+            </Grid>
+            <Grid item xs>
+                <FormSelect
+                    label="Tipo de uso"
+                    name="tipo_uso"
+                    options={domains.memberUseTypes}
+                    onChange={handleInputChange}
+                    value={fields.tipo_uso}
                 />
             </Grid>
         </>

@@ -15,14 +15,13 @@ const EntityListFilterForm = ({filterForm}) => {
     return (
         <DomainProvider>
             {filterForm}
-            <Grid item ml={-0.5}>
+            <Grid item ml={-0.5} mb={{xs: 0.5, xl: 1}}>
                 <IconButton
                     aria-label="clear-filters"
                     onClick={clearFilters}
                     title="Borrar filtros"
                 >
                     <FilterAltOffIcon fontSize="small" />
-                    {/* <i className="fas fa-solid fa-eraser fa-xs"></i> */}
                 </IconButton>
             </Grid>
         </DomainProvider>

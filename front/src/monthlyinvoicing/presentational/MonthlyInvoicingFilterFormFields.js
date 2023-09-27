@@ -1,4 +1,4 @@
-import {FormSelect} from "base/form";
+import {FormInputText, FormSelect} from "base/form";
 import Grid from "@mui/material/Grid";
 
 const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
@@ -11,12 +11,10 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
     return (
         <>
             <Grid item xs>
-                <label htmlFor="nombre">Socio</label>
-                <input
-                    type="text"
-                    className="form-control"
+                <FormInputText
+                    label="Nombre de socio/a"
                     name="nombre"
-                    value={fields.nombre}
+                    field={fields.nombre}
                     onChange={handleInputChange}
                 />
             </Grid>
@@ -40,7 +38,7 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
             </Grid>
             <Grid item xs>
                 <FormSelect
-                    label="Estado"
+                    label="Estado de la factura"
                     name="estado"
                     options={domains.invoiceStatus}
                     onChange={handleInputChange}

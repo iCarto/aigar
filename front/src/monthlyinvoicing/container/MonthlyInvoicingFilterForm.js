@@ -14,13 +14,11 @@ const MonthlyInvoicingFilterForm = ({handleFilterChange}) => {
     };
 
     return (
-        <>
-            <MonthlyInvoicingFilterFormFields
-                onFieldChange={handleFilterChange}
-                fields={fields}
-                domains={{sectors, memberTypes, invoiceStatus}}
-            />
-        </>
+        <MonthlyInvoicingFilterFormFields
+            onFieldChange={handleFilterChange}
+            fields={fields}
+            domains={{sectors, memberTypes, invoiceStatus}}
+        />
     );
 };
 

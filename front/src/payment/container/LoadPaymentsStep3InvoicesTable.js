@@ -31,6 +31,7 @@ const LoadPaymentsStep3InvoicesTable = ({
                 payments
             )
                 .then(fetchedInvoices => {
+                    reviewInvoices(payments, fetchedInvoices);
                     onChangeInvoices(fetchedInvoices);
                     onValidateStep(true);
                 })
@@ -40,6 +41,31 @@ const LoadPaymentsStep3InvoicesTable = ({
                 });
         }
     }, [id_mes_facturacion, invoices, payments]);
+
+    const reviewInvoices = (payments, invoices) => {
+        invoices.forEach(invoice => {
+            checkPaymentsForInvoice(payments, invoice);
+        });
+    };
+
+    const checkPaymentsForInvoice = (payments, invoice) => {
+        const paymentsForInvoice = payments.filter(
+            payment => invoice.numero === payment.num_factura
+        );
+
+        if (paymentsForInvoice.length !== 0) {
+            if (paymentsForInvoice.length > 1) {
+                invoice.errors.push("La factura tiene varios pagos");
+                return;
+            }
+            if (invoice.total > invoice.pago_1_al_10 + invoice.pago_11_al_30) {
+                invoice.errors.push("El pago no cubre el total");
+            }
+            if (invoice.total < invoice.pago_1_al_10 + invoice.pago_11_al_30) {
+                invoice.errors.push("El pago supera el total");
+            }
+        }
+    };
 
     const handleFilterChange = newFilter => {
         setFilter(prevFilter => ({

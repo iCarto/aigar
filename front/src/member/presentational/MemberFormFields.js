@@ -1,4 +1,5 @@
 import {useDomain} from "aigar/domain/provider";
+import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
 import {
     FormInputText,
     FormInputInteger,
@@ -7,8 +8,6 @@ import {
     FormTextArea,
 } from "base/form";
 import Grid from "@mui/material/Grid";
-import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
-import {useState} from "react";
 
 /**
 Controlled component for member form.
@@ -58,13 +57,12 @@ const MemberFormFields = ({
         <Grid container columnSpacing={{xs: 3, xl: 5}} justifyContent="center" my={2}>
             <Grid item xs={5} xl={3}>
                 {formData?.num_socio.value === -1 ? null : (
-                    <FormInputText
+                    <FormInputInteger
                         label="Número"
                         name="num_socio"
                         field={formData?.num_socio}
                         onChange={handleChangeField}
-                        readOnly={true}
-                        small={true}
+                        readOnly
                     />
                 )}
                 <FormInputText
@@ -72,6 +70,7 @@ const MemberFormFields = ({
                     name="name"
                     field={formData?.name}
                     onChange={handleChangeField}
+                    required
                 />
 
                 <FormInputText
@@ -79,6 +78,7 @@ const MemberFormFields = ({
                     name="dui"
                     field={formData?.dui}
                     onChange={handleChangeField}
+                    maxLength={10}
                 />
                 <FormInputInteger
                     label="Nº personas acometida"
@@ -89,18 +89,18 @@ const MemberFormFields = ({
                 <FormSelect
                     label="Tipo de uso"
                     name="tipo_uso"
-                    value={formData?.tipo_uso.value}
+                    field={formData?.tipo_uso}
                     options={memberUseTypes}
-                    errors={formData?.tipo_uso.errors}
                     onChange={handleChangeField}
+                    required
                 />
 
                 <FormTextArea
                     label="Observaciones"
                     name="observaciones"
-                    value={formData?.observaciones.value}
+                    field={formData?.observaciones}
+                    rows={7}
                     onChange={handleChangeField}
-                    errors={formData?.observaciones.errors}
                 />
             </Grid>
             <Grid item xs={5} xl={3}>
@@ -109,10 +109,10 @@ const MemberFormFields = ({
                         <FormSelect
                             label="Sector"
                             name="sector"
-                            value={formData?.sector.value}
+                            field={formData?.sector}
                             options={sectors}
-                            errors={formData?.sector.errors}
                             onChange={handleChangeSector}
+                            required
                         />
                     </Grid>
                     <Grid item xs={4}>

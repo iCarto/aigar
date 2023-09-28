@@ -3,42 +3,39 @@ import {useList} from "base/entity/provider";
 function useFilter() {
     const {filter} = useList();
 
-    function filterFunction(items) {
-        if (filter) {
-            const filteredItems = items.filter(item => {
-                return Object.entries(filter).every(([key, value]) => {
-                    // TO-DO: Bootstrapped code
-                    if (key === "nombre" || key === "name") {
-                        return (
-                            item.hasOwnProperty(key) &&
-                            item[key]
-                                .toString()
-                                .toLowerCase()
-                                .includes(value.toString().toLowerCase())
-                        );
-                    } else {
-                        return (
-                            item.hasOwnProperty(key) &&
-                            item[key].toString().toLowerCase() ===
-                                value.toString().toLowerCase()
-                        );
-                    }
-                });
-            });
+    const filterFunction = items => {
+        if (!filter) return {};
 
-            return filteredItems;
-        }
-        return {};
-    }
+        const normalizeText = text => {
+            return text
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase();
+        };
 
-    function filterByTextFunction(item, filterText, searchProperties) {
+        return items.filter(item =>
+            Object.entries(filter).every(([key, value]) => {
+                const itemValue = normalizeText(item[key]?.toString());
+                const filterValue = normalizeText(value?.toString());
+
+                return (
+                    item.hasOwnProperty(key) &&
+                    (["nombre", "name", "numero"].includes(key)
+                        ? itemValue.includes(filterValue)
+                        : itemValue === filterValue)
+                );
+            })
+        );
+    };
+
+    const filterByTextFunction = (item, filterText, searchProperties) => {
         return searchProperties.some(property => {
             const value = String(item[property]).toLowerCase();
             const searchText = filterText.toLowerCase();
 
             return value.indexOf(searchText) >= 0;
         });
-    }
+    };
 
     return {filterFunction, filterByTextFunction};
 }

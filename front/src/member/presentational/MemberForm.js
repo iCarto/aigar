@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 
 import {createMember} from "member/model";
-import {DomainProvider} from "aigar/domain/provider";
+import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {EntityFormLayout} from "base/entity/components/form";
 import {MemberFormFields} from ".";
 
@@ -16,6 +16,8 @@ const MemberForm = ({
     validationErrors = [],
 }) => {
     const {num_socio} = useParams();
+    const getReadingDay = useGetSectorReadingDay;
+
     const isNewMember = num_socio === "nuevo";
 
     const getFieldErrorFromProps = field => {
@@ -32,13 +34,19 @@ const MemberForm = ({
             formData[memberField].value = member[memberField];
             formData[memberField].errors = getFieldErrorFromProps(memberField);
         });
-        return formData;
+        return {
+            ...formData,
+            reading_day: {value: getReadingDay(formData.sector?.value), errors: []},
+        };
     };
 
     const formData = getFormDataFromProps();
 
     const handleChange = (name, value) => {
-        const updatedMember = createMember({...member, [name]: value});
+        const updatedMember = createMember({
+            ...member,
+            [name]: value,
+        });
         onUpdate(updatedMember);
     };
 
@@ -56,15 +64,6 @@ const MemberForm = ({
         onUpdate(updatedMember);
     };
 
-    const handleChangeSector = (sector, measuringDay) => {
-        const updatedMember = createMember({
-            ...member,
-            sector: sector,
-            dia_lectura: measuringDay,
-        });
-        onUpdate(updatedMember);
-    };
-
     const handleSubmit = event => {
         event.preventDefault();
         onSubmit(member);
@@ -77,15 +76,12 @@ const MemberForm = ({
             isSaving={isSaving}
             error={error}
         >
-            <DomainProvider>
-                <MemberFormFields
-                    formData={formData}
-                    members={membersList}
-                    onChange={handleChange}
-                    onChangeOrder={handleChangeOrder}
-                    onChangeSector={handleChangeSector}
-                />
-            </DomainProvider>
+            <MemberFormFields
+                formData={formData}
+                members={membersList}
+                onChange={handleChange}
+                onChangeOrder={handleChangeOrder}
+            />
         </EntityFormLayout>
     );
 };

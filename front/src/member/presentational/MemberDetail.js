@@ -1,4 +1,5 @@
 import {USE_TYPES_MAPPING, MEMBER_TYPES_MAPPING} from "member/data";
+import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {ValueWithIcon} from "base/common";
 import {
     SectionField,
@@ -10,6 +11,8 @@ import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
 
 const MemberDetail = ({member, isSummary = false}) => {
+    const readingDay = useGetSectorReadingDay(member.sector);
+
     const message = member?.isDeleted ? (
         <Alert severity="error" sx={{mb: 2}}>
             Este socio se encuentra eliminado del sistema.
@@ -72,11 +75,13 @@ const MemberDetail = ({member, isSummary = false}) => {
                 />
             </Grid>
             <Grid item xs={6}>
-                <SectionField
-                    label="Sector y día lectura"
-                    value={`${member?.sector} • Día ${member?.dia_lectura}`}
-                    containerWidth="short"
-                />
+                {readingDay ? (
+                    <SectionField
+                        label="Sector y día lectura"
+                        value={`${member?.sector} • Día ${readingDay}`}
+                        containerWidth="short"
+                    />
+                ) : null}
             </Grid>
             <Grid item xs={6}>
                 <SectionField

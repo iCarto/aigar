@@ -23,13 +23,7 @@ and show errors related with every field.
 
 This component doesn't manage state because the state is stored in the parent component.
 */
-const MemberFormFields = ({
-    formData,
-    members,
-    onChange,
-    onChangeOrder,
-    onChangeSector,
-}) => {
+const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
     const {sectors, memberUseTypes} = useDomain();
 
     const handleChangeOrder = (clickedIndex, updatedList) => {
@@ -40,17 +34,6 @@ const MemberFormFields = ({
         const name = event.target.name;
         const value = event.target.value;
         onChange(name, value);
-    };
-
-    const handleChangeSector = event => {
-        const sector = event.target.value;
-        const measuringDay = getMeasuringDay(sector);
-        onChangeSector(sector, measuringDay);
-    };
-
-    const getMeasuringDay = selectedSector => {
-        const sector = sectors.find(sector => sector.value === selectedSector);
-        return sector["dia_lectura"];
     };
 
     return (
@@ -111,15 +94,15 @@ const MemberFormFields = ({
                             name="sector"
                             field={formData?.sector}
                             options={sectors}
-                            onChange={handleChangeSector}
+                            onChange={handleChangeField}
                             required
                         />
                     </Grid>
                     <Grid item xs={4}>
                         <FormInputInteger
                             label="Día de lectura"
-                            name="dia_lectura"
-                            field={formData?.dia_lectura}
+                            name="reading_day"
+                            field={formData?.reading_day}
                             onChange={handleChangeField}
                             readOnly
                         />

@@ -14,14 +14,14 @@ const DomainService = {
             const longNames = response.map(domainEntity => ({
                 value: domainEntity.long_name,
             }));
-            const measuringDays = response.map(domainEntity => ({
+            const readingDays = response.map(domainEntity => ({
                 key: domainEntity.name,
-                value: domainEntity.measuring_day,
+                value: domainEntity.reading_day,
             }));
             return {
                 short: shortNames,
                 long: longNames,
-                measuringDays: measuringDays,
+                readingDays: readingDays,
             };
         });
     },

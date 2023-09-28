@@ -3,6 +3,7 @@ import {DocXPrintFileService, FileService} from "base/file/service";
 import {InvoiceService} from "invoice/service";
 import {ESTADOS_FACTURA} from "invoice/model";
 import {ModalOperationStatus} from "base/ui/modal/config";
+import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
 import PrintIcon from "@mui/icons-material/Print";
@@ -18,13 +19,23 @@ const PrintInvoicesModal = ({
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
     const [errorMessage, setErrorMessage] = useState(null);
 
+    const getReadingDay = useGetSectorReadingDay;
+
+    const invoicesWithReadingDay = invoices.map(invoice => {
+        const readingDay = getReadingDay(invoice.sector);
+        return {
+            ...invoice,
+            fecha_lectura: `${readingDay}/${invoice.mes_facturado}/${invoice.anho}`,
+        };
+    });
+
     const printInvoices = async () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
         setErrorMessage(null);
 
         try {
             const data = {
-                invoices: invoices,
+                invoices: invoicesWithReadingDay,
             };
             const invoicesDocument =
                 await DocXPrintFileService.generateInvoicesDocument(

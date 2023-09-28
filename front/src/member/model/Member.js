@@ -98,7 +98,6 @@ const createMember = ({
     personas_acometida = null,
     dui = "",
     tipo_uso = "",
-    dia_lectura = null,
 } = {}) => {
     const publicApi = {
         num_socio,
@@ -114,7 +113,6 @@ const createMember = ({
         personas_acometida,
         dui,
         tipo_uso,
-        dia_lectura,
 
         get isDeleted() {
             return this.status === MEMBER_TYPES.DELETED.key;

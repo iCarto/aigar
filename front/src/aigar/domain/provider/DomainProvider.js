@@ -7,7 +7,7 @@ let DomainContext = createContext(null);
 export default function DomainProvider({children}) {
     const [sectors, setSectors] = useState([]);
     const [sectorsLong, setSectorsLong] = useState([]);
-    const [measuringDays, setMeasuringDays] = useState([]);
+    const [readingDays, setReadingDays] = useState([]);
     const [memberTypes, setMemberTypes] = useState([]);
     const [memberUseTypes, setMemberUseTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
@@ -36,7 +36,7 @@ export default function DomainProvider({children}) {
             ]) => {
                 setSectors(sectors.short);
                 setSectorsLong(sectors.long);
-                setMeasuringDays(sectors.measuringDays);
+                setReadingDays(sectors.readingDays);
                 setMemberTypes(memberTypes);
                 setMemberUseTypes(memberUseTypes);
                 setInvoiceStatus(invoiceStatus);
@@ -48,7 +48,7 @@ export default function DomainProvider({children}) {
     let value = {
         sectors,
         sectorsLong,
-        measuringDays,
+        readingDays,
         memberTypes,
         memberUseTypes,
         invoiceStatus,

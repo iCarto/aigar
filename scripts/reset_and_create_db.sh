@@ -6,7 +6,6 @@ source "${this_dir}"/../server/variables.ini
 
 reset_django_migrations() {
     # Eliminamos todo para restaurarlo de cero y creamos una bd limpia
-    rm -f db.sqlite3
     find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
     find . -path "*/migrations/*.pyc" -delete
 
@@ -34,7 +33,7 @@ fi
 
 bash "${this_dir}"/install.link_back_front.sh
 
-rm -f "${this_dir}/../back/db.sqlite3"
+rm -f "${SQLITE_PATH}"
 if [[ -z "${CREATE_EMPTY}" ]]; then
     "${this_dir}"/fixtures.sh
 fi
@@ -54,7 +53,7 @@ else
 
     if [[ -z "${CREATE_EMPTY}" ]]; then
 
-        sqlite3 back/db.sqlite3 "
+        sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
 
         INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES

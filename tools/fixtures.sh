@@ -1,13 +1,14 @@
 #!/bin/bash
 
 this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+source "${this_dir}"/../server/variables.ini
 
 # python ../scripts/database.py --hack ../web/src/fixtures/database_fileindex.csv > ../api/fixtures.json
 # python manage.py loaddata fixtures.json
 
-cp "${this_dir}/fixtures/db.sqlite3" ../back/db.sqlite3
+cp "${this_dir}/fixtures/db.sqlite3" "${SQLITE_PATH}"
 
-sqlite3 ../back/db.sqlite3 "
+sqlite3 "${SQLITE_PATH}" "
     PRAGMA foreign_keys = ON;
 
     DROP TABLE auth_group;

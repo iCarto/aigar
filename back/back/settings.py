@@ -4,45 +4,44 @@ import environ
 from corsheaders.defaults import default_headers
 
 
+# Build paths inside the project like this: base('desired/local/path')
+base = environ.Path(__file__) - 2  # Folder of manage.py
+
 env = environ.Env(  # set default values and casting
     DEBUG=(bool, False),
-    SECRET_KEY=(str, "h4@c1x9okapu5^#iurp21i(vn14s5c#1lqx!$k-#^v%rd#rn!b"),
     HTTPS=(str, "off"),
+    ALLOWED_HOSTS=(list, []),
+    SENTRY_DSN=(str, ""),
 )
 
-# Build paths inside the project like this: base('desired/local/path')
-# - the path containing manage.py
-#   (e.g. ~/code/api)
-base = environ.Path(__file__) - 2  # two folders back (/a/b/ - 2 = /)
-BASE_DIR = base()
+
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# - the Django project root containing settings.py
-# (e.g. ~/code/api/api)
-root = environ.Path(__file__) - 1
-PROJECT_ROOT = root()
+BASE_DIR = base()
+root = environ.Path(__file__) - 1  # Folder of this file (settings.py)
 # PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = root()
+
 
 environ.Env.read_env(env_file=base(".env"))  # reading .env file
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: set a SECRET_KEY environment variable to a secret value
 # before deploying to production!
-SECRET_KEY = env("SECRET_KEY")  # default used if not in os.environ
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")  # False if not in os.environ
+DEBUG = env("DEBUG")
 
-# Allow all host headers
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+# https://stackoverflow.com/questions/54504142/
+# If in DEV is needed to access the app in a defined IP or URL fill .env with:
+# ALLOWED_HOSTS=.localhost,127.0.0.1,[::1],THE_IP_OR_URL
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
-CSRF_COOKIE_SECURE = env("HTTPS") == "on"
-SESSION_COOKIE_SECURE = env("HTTPS") == "on"
-SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS") == "on"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-# Application definition
+CSRF_COOKIE_SECURE = env("HTTPS")
+SESSION_COOKIE_SECURE = env("HTTPS")
+SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS")
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -54,12 +53,32 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
-    "debug_toolbar",
+    "django_filters",
     "django_extensions",
     "back",
     "domains",
     "app",
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+
+
+# In Sqitch database control changes mode we have to remove migrations for all used modules to avoid errors
+MIGRATION_MODULES = (
+    {
+        "admin": None,
+        "contenttypes": None,
+        "auth": None,
+        "sessions": None,
+        "back": None,
+        "domains": None,
+        "app": None,
+    }
+    if env("DATABASE_CONTROL_CHANGES_MODE") == "sqitch"
+    else {}
+)
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -96,27 +115,45 @@ TEMPLATES = [
 WSGI_APPLICATION = "back.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": base("db.sqlite3")}
-}
-
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        )
+    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
-# Media storage backend
-MEDIA_ROOT = root("media")
+appname = "aigar_data"
 MEDIA_URL = "/media/"
+MEDIA_ROOT = base(appname)
+SQLITE_PATH = base(appname, "db.sqlite3")
+
+
+if not DEBUG:
+    from platformdirs import PlatformDirs  # noqa: WPS433
+
+    dirs = PlatformDirs(appname=appname, appauthor=False, ensure_exists=True)
+    MEDIA_ROOT = dirs.user_data_dir
+    SQLITE_PATH = os.path.join(dirs.user_data_dir, "db.sqlite3")
+
+
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": SQLITE_PATH}}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
+# Force setting locale for format methods
+# locale.setlocale(locale.LC_ALL, "es_ES.utf-8")
+
 LANGUAGE_CODE = "es-SV"
-# set your local time zone to more easily analyse data on the backend
 TIME_ZONE = "America/El_Salvador"
 USE_I18N = True
 USE_TZ = True
@@ -131,6 +168,8 @@ STATICFILES_DIRS = (root("front_build"),)
 # Django SPA - simple setup for serving modern SPAs from Django
 # https://github.com/metakermit/django-spa
 STORAGES = {"staticfiles": {"BACKEND": "spa.storage.SPAStaticFilesStorage"}}
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Django REST Framework
@@ -155,17 +194,17 @@ REST_FRAMEWORK = {
 INTERNAL_IPS = ["127.0.0.1"]
 
 # CORS header settings
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    # 'example.com', # your domain
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://localhost:5100",
-    "http://127.0.0.1:5100",
-)
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_WHITELIST = (
+#     # 'example.com', # your domain
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+# )
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = list(default_headers) + ["Content-Disposition", "Cache-Control"]
+CORS_EXPOSE_HEADERS = ["Content-Disposition", "Cache-Control"]
 
 
 CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]

@@ -5,16 +5,23 @@ import {MEMBER_TYPES} from "member/model";
 const DomainService = {
     getSectors() {
         return ApiService.get("/domains/zones/").then(response => {
-            const shortNames = response.map(domainEntity => ({
-                value: domainEntity.name,
-                dia_lectura: domainEntity.measuring_day,
-            }));
+            const shortNames = response.map(domainEntity => {
+                return {
+                    key: domainEntity.name,
+                    value: domainEntity.name,
+                };
+            });
             const longNames = response.map(domainEntity => ({
                 value: domainEntity.long_name,
+            }));
+            const measuringDays = response.map(domainEntity => ({
+                key: domainEntity.name,
+                value: domainEntity.measuring_day,
             }));
             return {
                 short: shortNames,
                 long: longNames,
+                measuringDays: measuringDays,
             };
         });
     },

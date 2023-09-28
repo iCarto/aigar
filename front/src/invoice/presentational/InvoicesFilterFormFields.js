@@ -14,16 +14,18 @@ const InvoicesFilterFormFields = ({onFieldChange, fields, domains}) => {
                 <FormInputInteger
                     label="Número de factura"
                     name="numero"
-                    field={fields.numero}
+                    value={fields.numero}
                     onChange={handleInputChange}
+                    margin=""
                 />
             </Grid>
             <Grid item xs>
                 <FormInputText
                     label="Nombre de socio/a"
                     name="nombre"
-                    field={fields.nombre}
+                    value={fields.nombre}
                     onChange={handleInputChange}
+                    margin=""
                 />
             </Grid>
             <Grid item xs>
@@ -33,6 +35,7 @@ const InvoicesFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.sectors}
                     onChange={handleInputChange}
                     value={fields.sector}
+                    showEmptyOption
                 />
             </Grid>
             <Grid item xs>
@@ -42,6 +45,7 @@ const InvoicesFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.invoiceStatus}
                     onChange={handleInputChange}
                     value={fields.estado}
+                    showEmptyOption
                 />
             </Grid>
         </>

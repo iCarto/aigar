@@ -14,8 +14,9 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
                 <FormInputText
                     label="Nombre de socio/a"
                     name="nombre"
-                    field={fields.nombre}
+                    value={fields.nombre}
                     onChange={handleInputChange}
+                    margin=""
                 />
             </Grid>
             <Grid item xs>
@@ -25,6 +26,7 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.sectors}
                     onChange={handleInputChange}
                     value={fields.sector}
+                    showEmptyOption
                 />
             </Grid>
             <Grid item xs>
@@ -34,6 +36,7 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.memberTypes}
                     onChange={handleInputChange}
                     value={fields.status}
+                    showEmptyOption
                 />
             </Grid>
             <Grid item xs>
@@ -43,6 +46,7 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.invoiceStatus}
                     onChange={handleInputChange}
                     value={fields.estado}
+                    showEmptyOption
                 />
             </Grid>
         </>

@@ -1,10 +1,10 @@
-import Grid from "@mui/material/Grid";
 import {FormInputInteger, FormInputText, FormSelect} from "base/form";
+import Grid from "@mui/material/Grid";
 
 const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
     const handleInputChange = event => {
         const name = event.target.name;
-        const value = event.target.value;
+        const value = event.target.value || "";
         onFieldChange({[name]: value});
     };
 
@@ -14,16 +14,18 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
                 <FormInputInteger
                     label="Número de socio/a"
                     name="num_socio"
-                    field={fields.num_socio}
+                    value={fields.num_socio}
                     onChange={handleInputChange}
+                    margin=""
                 />
             </Grid>
             <Grid item xs>
                 <FormInputText
                     label="Nombre"
                     name="name"
-                    field={fields.name}
+                    value={fields.name}
                     onChange={handleInputChange}
+                    margin=""
                 />
             </Grid>
             <Grid item xs>
@@ -33,6 +35,7 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.sectors}
                     onChange={handleInputChange}
                     value={fields.sector}
+                    showEmptyOption
                 />
             </Grid>
             <Grid item xs>
@@ -42,6 +45,7 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.memberTypes}
                     onChange={handleInputChange}
                     value={fields.status}
+                    showEmptyOption
                 />
             </Grid>
             <Grid item xs>
@@ -51,6 +55,7 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
                     options={domains.memberUseTypes}
                     onChange={handleInputChange}
                     value={fields.tipo_uso}
+                    showEmptyOption
                 />
             </Grid>
         </>

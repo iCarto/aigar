@@ -1,4 +1,3 @@
-import {DomainProvider} from "aigar/domain/provider";
 import {useList} from "base/entity/provider";
 
 import Grid from "@mui/material/Grid";
@@ -13,7 +12,7 @@ const EntityListFilterForm = ({filterForm}) => {
     };
 
     return (
-        <DomainProvider>
+        <>
             {filterForm}
             <Grid item ml={-0.5} mb={{xs: 0.5, xl: 1}}>
                 <IconButton
@@ -24,7 +23,7 @@ const EntityListFilterForm = ({filterForm}) => {
                     <FilterAltOffIcon fontSize="small" />
                 </IconButton>
             </Grid>
-        </DomainProvider>
+        </>
     );
 };
 

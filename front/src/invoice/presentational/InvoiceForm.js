@@ -1,4 +1,3 @@
-import {DomainProvider} from "aigar/domain/provider";
 import {EntityFormLayout} from "base/entity/components/form";
 import {ESTADOS_FACTURA, createInvoice, refreshInvoiceValues} from "invoice/model";
 import {MemberDetail} from "member/presentational";
@@ -64,21 +63,19 @@ const InvoiceForm = ({
             isSaving={isSaving}
             error={error}
         >
-            <DomainProvider>
-                <Grid container columnSpacing={1} alignItems="stretch">
-                    <Grid item xs={8}>
-                        <MemberDetail member={member} isSummary />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <InvoiceDetailShort invoice={invoice} />
-                    </Grid>
+            <Grid container columnSpacing={1} alignItems="stretch">
+                <Grid item xs={8}>
+                    <MemberDetail member={member} isSummary />
                 </Grid>
-                <InvoiceFormFields
-                    isReadOnly={isReadOnlyInvoice}
-                    formData={formData}
-                    onChange={handleChange}
-                />
-            </DomainProvider>
+                <Grid item xs={4}>
+                    <InvoiceDetailShort invoice={invoice} />
+                </Grid>
+            </Grid>
+            <InvoiceFormFields
+                isReadOnly={isReadOnlyInvoice}
+                formData={formData}
+                onChange={handleChange}
+            />
         </EntityFormLayout>
     );
 };

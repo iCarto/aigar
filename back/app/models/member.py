@@ -140,7 +140,6 @@ class Member(models.Model):
         blank=True,
         null=True,
         max_length=10,
-        unique=True,
         help_text="Documento Único de Identidad",
     )
 

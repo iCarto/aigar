@@ -56,6 +56,10 @@ else
         sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
 
+        INSERT INTO domains_basicconfig (name, payments_csv) VALUES
+            ('Junta de Agua ASCATLI', 1)
+        ;
+
         INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
             ('Tihuapa norte', 'Tihuapa norte', 4)
             , ('Tlacuxtli', 'Tlacuxtli', 3)

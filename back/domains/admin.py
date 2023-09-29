@@ -7,6 +7,7 @@ from django.http.request import HttpRequest
 from django.utils.html import format_html_join
 
 from domains.models import Locality, Zone
+from domains.models.basic_config import BasicConfig
 
 
 class ZoneInline(admin.TabularInline):
@@ -82,3 +83,17 @@ class LocalityAdmin(admin.ModelAdmin):
     def get_zones(self, obj):
         zone_names = obj.zone_set.values_list("name", flat=True)
         return format_html_join("", "{0}<br>", ((name,) for name in zone_names))
+
+
+@admin.register(BasicConfig)
+class BasicConfigAdmin(admin.ModelAdmin):
+    list_display = ("name", "payments_csv")
+
+    def has_add_permission(self, request, obj=None):
+        return not BasicConfig.objects.count()
+
+    def has_change_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return False

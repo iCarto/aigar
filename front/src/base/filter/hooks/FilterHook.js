@@ -3,29 +3,79 @@ import {useList} from "base/entity/provider";
 function useFilter() {
     const {filter} = useList();
 
-    const filterFunction = items => {
-        if (!filter) return {};
+    // TODO: Bootstrapped code
+    const textFilters = ["nombre", "name", "numero"];
+    const combinedFilters = [
+        {
+            filter: "socio_factura",
+            searchedProperties: ["nombre", "num_socio"],
+        },
+        {
+            filter: "socio",
+            searchedProperties: ["name", "num_socio"],
+        },
+    ];
 
-        const normalizeText = text => {
-            return text
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .toLowerCase();
-        };
+    const filterFunction = items => {
+        if (!filter) return items;
 
         return items.filter(item =>
             Object.entries(filter).every(([key, value]) => {
-                const itemValue = normalizeText(item[key]?.toString());
                 const filterValue = normalizeText(value?.toString());
 
-                return (
-                    item.hasOwnProperty(key) &&
-                    (["nombre", "name", "numero"].includes(key)
-                        ? itemValue.includes(filterValue)
-                        : itemValue === filterValue)
-                );
+                if (!item.hasOwnProperty(key) && !isCombinedFilter(key)) return false;
+
+                if (isCombinedFilter(key)) {
+                    return matchesCombinedFilter(key, item, filterValue);
+                } else {
+                    const itemValue = getItemValue(item, key);
+
+                    if (textFilters.includes(key)) {
+                        return matchesTextSearch(itemValue, filterValue);
+                    }
+
+                    return itemValue === filterValue;
+                }
             })
         );
+    };
+
+    const getItemValue = (item, key) => {
+        return normalizeText(item[key]?.toString());
+    };
+
+    const getCombinedFilter = key => {
+        return combinedFilters.find(combinedFilter => combinedFilter.filter === key);
+    };
+
+    function isCombinedFilter(key) {
+        return !!getCombinedFilter(key);
+    }
+
+    const matchesCombinedFilter = (key, searchedObject, searchValue) => {
+        const combinedFilter = getCombinedFilter(key);
+
+        if (isNaN(searchValue)) {
+            return combinedFilter.searchedProperties.some(property => {
+                const itemValue = getItemValue(searchedObject, property);
+                return matchesTextSearch(itemValue, searchValue);
+            });
+        } else {
+            return combinedFilter.searchedProperties.some(
+                property => getItemValue(searchedObject, property) === searchValue
+            );
+        }
+    };
+
+    const matchesTextSearch = (searchedObject, searchValue) => {
+        return searchedObject.includes(searchValue);
+    };
+
+    const normalizeText = text => {
+        return text
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
     };
 
     const filterByTextFunction = (item, filterText, searchProperties) => {

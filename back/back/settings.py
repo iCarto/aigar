@@ -208,3 +208,32 @@ CORS_EXPOSE_HEADERS = ["Content-Disposition", "Cache-Control"]
 
 
 CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]
+
+if not DEBUG:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "root": {"level": "WARNING", "handlers": ["file"]},
+        "handlers": {
+            "file": {
+                "level": "WARNING",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": os.path.join(MEDIA_ROOT, "aigar.log"),
+                "formatter": "app",
+                "maxBytes": 1024 * 1024,  # 1 MB
+                "backupCount": 5,
+            }
+        },
+        "loggers": {
+            "django": {"handlers": ["file"], "level": "WARNING", "propagate": True}
+        },
+        "formatters": {
+            "app": {
+                "format": (
+                    "%(asctime)s [%(levelname)-8s] "
+                    "(%(module)s.%(funcName)s) %(message)s"
+                ),
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            }
+        },
+    }

@@ -7,8 +7,7 @@ const MembersFilterForm = ({handleFilterChange}) => {
     const {sectors, memberTypes, memberUseTypes} = useDomain();
 
     const fields = {
-        num_socio: filter?.num_socio || "",
-        name: filter?.name || "",
+        socio: filter?.socio || "",
         sector: filter?.sector || "",
         status: filter?.status || "",
         tipo_uso: filter?.tipo_uso || "",

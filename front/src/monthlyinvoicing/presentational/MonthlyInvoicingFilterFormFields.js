@@ -12,11 +12,11 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
         <>
             <Grid item xs>
                 <FormInputText
-                    label="Nombre de socio/a"
-                    name="nombre"
-                    value={fields.nombre}
+                    label="Nombre/nº de socio/a"
+                    name="socio_factura"
+                    value={fields.socio_factura}
                     onChange={handleInputChange}
-                    margin=""
+                    margin="none"
                 />
             </Grid>
             <Grid item xs>

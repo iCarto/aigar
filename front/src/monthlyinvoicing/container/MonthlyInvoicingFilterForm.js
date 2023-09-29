@@ -7,7 +7,7 @@ const MonthlyInvoicingFilterForm = ({handleFilterChange}) => {
     const {sectors, memberTypes, invoiceStatus} = useDomain();
 
     const fields = {
-        nombre: filter?.nombre || "",
+        socio_factura: filter?.socio_factura || "",
         sector: filter?.sector || "",
         status: filter?.status || "",
         estado: filter?.estado || "",

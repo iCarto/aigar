@@ -11,21 +11,12 @@ const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {
     return (
         <>
             <Grid item xs>
-                <FormInputInteger
-                    label="Número de socio/a"
-                    name="num_socio"
-                    value={fields.num_socio}
-                    onChange={handleInputChange}
-                    margin=""
-                />
-            </Grid>
-            <Grid item xs>
                 <FormInputText
-                    label="Nombre"
-                    name="name"
-                    value={fields.name}
+                    label="Nombre/nº de socio/a"
+                    name="socio"
+                    value={fields.socio}
                     onChange={handleInputChange}
-                    margin=""
+                    margin="none"
                 />
             </Grid>
             <Grid item xs>

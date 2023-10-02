@@ -8,8 +8,6 @@ class MemberSerializer(serializers.ModelSerializer):
         model = Member
         fields = "__all__"
 
-    dia_lectura = serializers.ReadOnlyField(source="sector.measuring_day")
-
 
 class MemberShortSerializer(serializers.ModelSerializer):
     class Meta(object):
@@ -19,14 +17,12 @@ class MemberShortSerializer(serializers.ModelSerializer):
             "name",
             "status",
             "sector",
-            "dia_lectura",
             "consumo_maximo",
             "consumo_reduccion_fija",
         ]
 
     # sector_id does not launch subqueries
     sector = serializers.ReadOnlyField(source="sector_id")
-    dia_lectura = serializers.ReadOnlyField(source="sector.measuring_day")
 
 
 class MemberExportSerializer(serializers.ModelSerializer):

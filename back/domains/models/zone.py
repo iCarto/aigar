@@ -64,7 +64,7 @@ class Zone(models.Model):
         editable=False,
     )
 
-    measuring_day = RangedIntegerField(
+    reading_day = RangedIntegerField(
         min_value=1,
         max_value=31,
         default=27,

@@ -7,7 +7,7 @@ from domains.models.zone import Zone
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Zone
-        fields = ["name", "long_name", "measuring_day"]
+        fields = ["name", "long_name", "reading_day"]
 
 
 class BasicConfigSerializer(serializers.ModelSerializer):

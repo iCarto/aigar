@@ -18,4 +18,4 @@ class ZoneFactory(BaseFactory[Zone]):  # type: ignore
     name = factory.LazyAttribute(
         lambda obj: build_zone_name(obj.code, obj.locality.short_name)
     )
-    measuring_day = factory.Faker("day_of_month")
+    reading_day = factory.Faker("day_of_month")

@@ -39,13 +39,13 @@ def test_name_is_unique():
 
 
 @pytest.mark.parametrize(
-    "measuring_day, expectation",
+    "reading_day, expectation",
     [
-        ({"measuring_day": -1}, pytest.raises(ValidationError)),
-        ({"measuring_day": 32}, pytest.raises(ValidationError)),
-        ({"measuring_day": 15}, does_not_raise()),
+        ({"reading_day": -1}, pytest.raises(ValidationError)),
+        ({"reading_day": 32}, pytest.raises(ValidationError)),
+        ({"reading_day": 15}, does_not_raise()),
     ],
 )
-def test_measuring_day_is_valid(measuring_day, expectation):
+def test_reading_day_is_valid(reading_day, expectation):
     with expectation:
-        factories.ZoneFactory.create(**measuring_day)
+        factories.ZoneFactory.create(**reading_day)

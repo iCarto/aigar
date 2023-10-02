@@ -65,7 +65,7 @@ else
             , ('Tlacuxtli', 'Tlacuxtli', 3)
         ;
 
-        INSERT INTO domains_zone (name, code, locality_short_name, measuring_day) VALUES
+        INSERT INTO domains_zone (name, code, locality_short_name, reading_day) VALUES
             ('1 - Tihuapa norte', '1', 'Tihuapa norte', 27)
             , ('2 - Tihuapa norte', '2', 'Tihuapa norte', 27)
             , ('3 - Tihuapa norte', '3', 'Tihuapa norte', 27)

@@ -16,7 +16,7 @@ class ZoneInline(admin.TabularInline):
     # https://stackoverflow.com/questions/41376406/remove-title-from-tabularinline-in-admin
     classes = ("hide-title",)
 
-    fields = ("name", "measuring_day")
+    fields = ("name", "reading_day")
     readonly_fields = ("name",)
 
     def has_add_permission(self, request, obj):

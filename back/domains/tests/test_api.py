@@ -17,8 +17,8 @@ def test_zone_api(api_client):
 
     assert response.status_code == 200
     response_payload = response.json()
-    measuring_days = [row.pop("measuring_day") for row in response_payload]
-    assert all((1 <= m <= 31 for m in measuring_days))
+    reading_days = [row.pop("reading_day") for row in response_payload]
+    assert all((1 <= m <= 31 for m in reading_days))
     assert response_payload == [
         {"long_name": "Mi comunidad 1", "name": "Comunidad 1"},
         {"long_name": "Mi comunidad 2", "name": "Comunidad 2"},

@@ -35,7 +35,7 @@ class LocalityManager(models.Manager):
         # Si estoy usando sectores, la nueva localidad puede hacer que cambie el orden,
         # así que los recreo todos.
         # Si instance es None es que estoy borrando y también tengo que recrear todos.
-        # En ambos casos implica perder el dato de measuring_day.
+        # En ambos casos implica perder el dato de reading_day.
         if not instance or instance.number_of_sectors:
             all_localities = list(Locality.objects.all())
             Zone.objects.all().delete()

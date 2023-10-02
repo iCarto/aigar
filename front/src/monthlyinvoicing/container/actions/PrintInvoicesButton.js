@@ -21,9 +21,8 @@ const PrintInvoicesButton = ({
     };
 
     //TO-DO: Check if this works for ListMonthlyInvoicesActions too
-    const isDisabled = !!(
-        invoices?.length > 0 && invoices?.every(invoice => invoice.consumo >= 0)
-    );
+    const isDisabled =
+        !invoices?.length || invoices?.some(invoice => invoice.consumo < 0);
 
     return (
         <>

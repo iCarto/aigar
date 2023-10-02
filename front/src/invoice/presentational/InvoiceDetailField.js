@@ -5,6 +5,7 @@ const InvoiceDetailField = ({
     label,
     value,
     unit = "dollar",
+    negativeField = false,
     containerStyle = {},
     labelStyle = {},
     valueStyle = {},
@@ -20,7 +21,9 @@ const InvoiceDetailField = ({
                 {label}:
             </Grid>
             <Grid component="span" sx={{...valueStyle}} className={unit}>
-                {NumberUtil.formatNumber(value)}
+                {negativeField
+                    ? `- ${NumberUtil.formatNumber(value)}`
+                    : NumberUtil.formatNumber(value)}
             </Grid>
         </Grid>
     );

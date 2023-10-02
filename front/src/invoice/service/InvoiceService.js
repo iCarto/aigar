@@ -14,19 +14,8 @@ const InvoiceService = {
         });
     },
 
-    getInvoicesByYearAndMonth(year, month) {
-        console.log("ApiService.getInvoicesByYearAndMonth");
-        // In Javascript, months are zero-based (https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.4)
-        // But our API and model works are one-based months, so we need to transform
-        return ApiService.get("/invoices/?year=" + year + "&month=" + month).then(
-            response => {
-                return createInvoices(invoices_api_adapter(response));
-            }
-        );
-    },
-
-    getInvoicesForMember(num_socio) {
-        return ApiService.get("/invoices/?num_socio=" + num_socio).then(response => {
+    getInvoicesForMember(member_id) {
+        return ApiService.get("/invoices/?member_id=" + member_id).then(response => {
             return createInvoices(invoices_api_adapter(response));
         });
     },
@@ -79,7 +68,7 @@ const InvoiceService = {
     },
 
     getInvoicesStats() {
-        return ApiService.get("/invoices/stats").then(response => {
+        return ApiService.get("/invoices/stats/").then(response => {
             return response;
         });
     },

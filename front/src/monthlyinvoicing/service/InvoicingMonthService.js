@@ -48,11 +48,11 @@ const InvoicingMonthService = {
     },
 
     getInvoicingMonthInvoices(id_mes_facturacion) {
-        return ApiService.get(
-            "/invoicingmonths/" + id_mes_facturacion + "/invoices/"
-        ).then(response => {
-            return createInvoices(invoices_api_adapter(response));
-        });
+        return ApiService.get(`/invoicingmonths/${id_mes_facturacion}/invoices/`).then(
+            response => {
+                return createInvoices(invoices_api_adapter(response));
+            }
+        );
     },
 
     startInvoicingMonth(invoicingMonth) {

@@ -7,6 +7,7 @@ from django.forms import ValidationError
 from app.models.invoice import Invoice, InvoiceStatus, NoLastInvoice
 from app.models.member import Member
 from app.models.payment import Payment
+from back.base.base_expressions import JsonGroupArray
 
 
 def any_payments_for(invoicing_month_to_close):
@@ -35,6 +36,40 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
 
         self._create_new_invoices(new_invoicing_month)
         return new_invoicing_month
+
+    def get_invoices(self, mes_facturacion_id: str):
+        last_three_invoicing_months = (
+            InvoicingMonth.objects.filter(id_mes_facturacion__lt=mes_facturacion_id)
+            .order_by("-id_mes_facturacion")[:3]
+            .values("id_mes_facturacion")
+        )
+
+        window_function = models.expressions.Window(
+            expression=JsonGroupArray("estado"),
+            partition_by="member_id",
+            order_by="-mes_facturacion_id",
+            frame=models.expressions.RowRange(start=None, end=None),
+        )
+
+        q = (
+            Invoice.objects.filter(
+                mes_facturacion__in=models.expressions.Subquery(
+                    last_three_invoicing_months
+                )
+            )
+            .filter(member_id=models.expressions.OuterRef("member_id"))
+            .distinct()
+            .annotate(foo=window_function)
+            .values_list("foo", flat=True)
+            .order_by()
+        )
+
+        return (
+            Invoice.objects.select_related("member")
+            .filter(mes_facturacion_id=mes_facturacion_id)
+            .annotate(resumen=models.expressions.Subquery(q))
+            .order_by("member_id")
+        )
 
     def _update_id_mes_facturacion_in_kwargs(self, kwargs):
         year = int(kwargs["anho"])
@@ -74,7 +109,7 @@ class InvoicingMonth(models.Model):
             )
         ]
 
-    objects = InvoicingMonthManager()
+    objects: InvoicingMonthManager = InvoicingMonthManager()
 
     id_mes_facturacion = models.TextField(
         primary_key=True,

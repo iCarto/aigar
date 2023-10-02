@@ -7,3 +7,4 @@ from app.serializers.invoicing_month import InvoicingMonthSerializer
 class InvoicingMonthViewSet(viewsets.ModelViewSet):
     serializer_class = InvoicingMonthSerializer
     queryset = InvoicingMonth.objects.all()
+    lookup_url_kwarg = "mes_facturacion_id"

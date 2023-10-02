@@ -11,18 +11,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     due_date = serializers.DateField(read_only=True)
-    resumen = serializers.SerializerMethodField()
-
-    def get_resumen(self, obj):
-        last_three_months_invoices = self.context.get("last_three_months_invoices")
-        if not last_three_months_invoices:
-            return None
-
-        return [
-            invoice.estado
-            for invoice in last_three_months_invoices
-            if invoice.member.num_socio == obj.member.num_socio
-        ]
 
 
 class InvoiceShortSerializer(serializers.ModelSerializer):

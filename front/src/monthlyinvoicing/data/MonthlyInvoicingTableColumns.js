@@ -58,6 +58,7 @@ export function useMonthlyInvoicingTableColumns() {
             formatFunction: item => {
                 return <InvoiceStatusCellTable value={item.estado} />;
             },
+            style: {textAlign: "center"},
         },
         {
             label: "Meses previos",

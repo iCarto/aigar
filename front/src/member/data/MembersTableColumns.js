@@ -67,7 +67,7 @@ export function useMembersTableColumns() {
             width: 5,
         },
         {
-            label: "Consumo reducción fija",
+            label: "Reducción fija de consumo",
             id: "consumo_reduccion_fija",
             className: "cubic-metre",
             width: 5,

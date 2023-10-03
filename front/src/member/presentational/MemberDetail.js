@@ -104,7 +104,7 @@ const MemberDetail = ({member, isSummary = false}) => {
             </Grid>
             <Grid item xs={6}>
                 <SectionField
-                    label="Consumo reducción fija"
+                    label="Reducción fija de consumo"
                     value={
                         member?.consumo_reduccion_fija
                             ? `${member?.consumo_reduccion_fija} ${WATER_CONSUMPTION_SYMBOL}`

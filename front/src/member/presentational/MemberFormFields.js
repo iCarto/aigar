@@ -134,7 +134,7 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
                     </Grid>
                     <Grid item xs={6}>
                         <FormInputInteger
-                            label={`Consumo reducción fija (${WATER_CONSUMPTION_SYMBOL})`}
+                            label={`Reducción fija de consumo (${WATER_CONSUMPTION_SYMBOL})`}
                             name="consumo_reduccion_fija"
                             field={formData?.consumo_reduccion_fija}
                             onChange={handleChangeField}

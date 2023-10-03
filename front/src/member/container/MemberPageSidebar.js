@@ -1,4 +1,4 @@
-import {MEMBER_TYPES} from "member/model/Member";
+import {MEMBER_TYPES} from "member/config";
 import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {EditButton} from "base/common";
 import {CreateInvoiceButton} from "invoice/presentational";

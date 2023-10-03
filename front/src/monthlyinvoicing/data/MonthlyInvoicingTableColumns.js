@@ -1,4 +1,4 @@
-import {MEMBER_TYPES_MAPPING} from "member/data";
+import {MEMBER_TYPES_MAPPING} from "member/config";
 import {InvoiceResumenCellTable, InvoiceStatusCellTable} from "invoice/presentational";
 import {ValueWithIcon} from "base/common";
 import {LinkCellTable} from "base/table/components";

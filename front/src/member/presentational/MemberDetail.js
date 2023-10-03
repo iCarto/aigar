@@ -1,5 +1,5 @@
-import {USE_TYPES_MAPPING, MEMBER_TYPES_MAPPING} from "member/data";
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
+import {USE_TYPES_MAPPING, MEMBER_TYPES_MAPPING} from "member/config";
 import {ValueWithIcon} from "base/common";
 import {
     SectionField,

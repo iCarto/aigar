@@ -1,50 +1,17 @@
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
-import InvertColorsIcon from "@mui/icons-material/InvertColors";
-import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
-import RemoveIcon from "@mui/icons-material/Remove";
-
-const MEMBER_TYPES_MAPPING = {
-    Activa: {
-        key: "Activa",
-        label: "Activo",
-        icon: <WaterDropIcon />,
-    },
-    Inactiva: {
-        key: "Inactiva",
-        label: "Inactivo",
-        icon: <FormatColorResetIcon />,
-    },
-    con_ajuste_consumo: {
-        key: "con_ajuste_consumo",
-        label: "Con ajuste",
-        icon: <InvertColorsIcon />,
-    },
-    Eliminada: {
-        key: "Eliminada",
-        label: "Eliminado",
-        icon: <RemoveIcon />,
-    },
-};
-
-const MEMBER_TYPES = {
-    ACTIVE: MEMBER_TYPES_MAPPING.Activa,
-    INACTIVE: MEMBER_TYPES_MAPPING.Inactiva,
-    DELETED: MEMBER_TYPES_MAPPING.Eliminada,
-    ADJUSTED: MEMBER_TYPES_MAPPING.con_ajuste_consumo,
-};
+import {MEMBER_TYPES} from "member/config";
 
 const getTipoSocio = function (member) {
     const isActiveMember = () =>
-        member.status !== MEMBER_TYPES.DELETED.label &&
-        member.status !== MEMBER_TYPES.INACTIVE.label;
+        member.status !== MEMBER_TYPES?.DELETED.label &&
+        member.status !== MEMBER_TYPES?.INACTIVE.label;
 
     const hasAdjustments = () =>
         !!member.consumo_maximo || !!member.consumo_reduccion_fija;
 
     if (isActiveMember() && hasAdjustments()) {
-        return MEMBER_TYPES.ADJUSTED.key;
+        return MEMBER_TYPES?.ADJUSTED.key;
     } else return member.status;
 };
 
@@ -115,7 +82,7 @@ const createMember = ({
         tipo_uso,
 
         get isDeleted() {
-            return this.status === MEMBER_TYPES.DELETED.key;
+            return this.status === MEMBER_TYPES?.DELETED.key;
         },
     };
 
@@ -129,5 +96,4 @@ export {
     member_api_adapter,
     members_api_adapter,
     getTipoSocio,
-    MEMBER_TYPES,
 };

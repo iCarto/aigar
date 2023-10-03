@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {MEMBER_TYPES} from "member/model";
+import {MEMBER_TYPES} from "member/config";
 import {MemberService} from "member/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {OperationWithConfirmationModal} from "base/ui/modal";

@@ -1,13 +1,13 @@
 import {useState} from "react";
 import {useLocation} from "react-router-dom";
 import {MemberService} from "member/service";
-import {MEMBER_TYPES} from "member/model";
+import {MEMBER_TYPES} from "member/config";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
-import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
 import AlertTitle from "@mui/material/AlertTitle";
+import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
 
 const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);

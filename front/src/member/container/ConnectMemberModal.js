@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {useLocation} from "react-router-dom";
 import {MemberService} from "member/service";
-import {MEMBER_TYPES} from "member/model";
+import {MEMBER_TYPES} from "member/config";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
+import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
-import {OperationWithConfirmationModal} from "base/ui/modal";
 
 const ConnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) => {
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);

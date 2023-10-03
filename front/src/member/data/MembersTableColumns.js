@@ -1,5 +1,5 @@
+import {MEMBER_TYPES_MAPPING, USE_TYPES_MAPPING} from "member/config";
 import {ValueWithIcon} from "base/common";
-import {MEMBER_TYPES_MAPPING, USE_TYPES_MAPPING} from ".";
 import {LinkCellTable} from "base/table/components";
 
 export function useMembersTableColumns() {

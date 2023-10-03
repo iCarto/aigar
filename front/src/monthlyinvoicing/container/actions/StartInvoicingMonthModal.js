@@ -63,11 +63,11 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
     );
 
     const modalContentError = (
-        <Alert severity="error">
+        <p>
             Se ha producido un error y no se han podido crear las facturas.
             <br />
             {errorMessage ? <strong>{errorMessage.message}</strong> : null}
-        </Alert>
+        </p>
     );
 
     return isOpen ? (

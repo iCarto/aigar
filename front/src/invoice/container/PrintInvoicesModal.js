@@ -104,11 +104,11 @@ const PrintInvoicesModal = ({
     );
 
     const modalContentError = (
-        <Alert severity="error">
+        <p>
             Se ha producido un error y no se han podido generar el documento.
             <br />
             {errorMessage ? <strong>{errorMessage}</strong> : null}
-        </Alert>
+        </p>
     );
 
     return isOpen ? (

@@ -3,7 +3,7 @@ import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import FormatColorResetIcon from "@mui/icons-material/FormatColorReset";
-import RemoveIcon from "@mui/icons-material/Remove";
+import NotInterestedIcon from "@mui/icons-material/NotInterested";
 
 export const MEMBER_TYPES_MAPPING = {
     Activa: {
@@ -24,7 +24,7 @@ export const MEMBER_TYPES_MAPPING = {
     Eliminada: {
         key: "Eliminada",
         label: "Eliminado",
-        icon: <RemoveIcon />,
+        icon: <NotInterestedIcon />,
     },
 };
 

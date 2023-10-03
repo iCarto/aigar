@@ -9,6 +9,7 @@ import {
 } from "base/ui/section/presentational";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
+import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
 
 const MemberDetail = ({member, isSummary = false}) => {
     const readingDay = useGetSectorReadingDay(member.sector);
@@ -93,14 +94,22 @@ const MemberDetail = ({member, isSummary = false}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Consumo máximo"
-                    value={member?.consumo_maximo}
+                    value={
+                        member?.consumo_maximo
+                            ? `${member?.consumo_maximo} ${WATER_CONSUMPTION_SYMBOL}`
+                            : ""
+                    }
                     containerWidth="short"
                 />
             </Grid>
             <Grid item xs={6}>
                 <SectionField
                     label="Consumo reducción fija"
-                    value={member?.consumo_reduccion_fija}
+                    value={
+                        member?.consumo_reduccion_fija
+                            ? `${member?.consumo_reduccion_fija} ${WATER_CONSUMPTION_SYMBOL}`
+                            : ""
+                    }
                     containerWidth="short"
                 />
             </Grid>

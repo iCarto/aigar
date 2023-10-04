@@ -1,4 +1,4 @@
-export const HERO_HEIGHT = 94;
+export const HERO_HEIGHT = 0;
 export const NAVBAR_HEIGHT = 64;
 export const HEADER_HEIGHT = HERO_HEIGHT + NAVBAR_HEIGHT;
 

@@ -1,4 +1,4 @@
-import {LEFT_SIDEBAR_WIDTH} from "base/ui/app/config/measurements";
+import {HEADER_HEIGHT} from "base/ui/app/config/measurements";
 import {LeftSideBar} from "../sidebar";
 import Grid from "@mui/material/Grid";
 
@@ -10,10 +10,9 @@ const PageLayout = ({sidebar = null, children}) => {
                 role="container"
                 container
                 flexDirection="column"
-                rowSpacing={1}
-                px={sidebar ? 2 : 3}
-                ml={sidebar ? `${LEFT_SIDEBAR_WIDTH}px` : null}
-                // mb={3}
+                mt={`${HEADER_HEIGHT}px`}
+                px={sidebar ? 1 : 2}
+                pt={1}
             >
                 {children}
             </Grid>

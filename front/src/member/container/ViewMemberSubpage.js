@@ -71,7 +71,7 @@ const ViewMemberSubpage = () => {
                             </Grid>
                             <Grid item>
                                 <SectionHeading
-                                    containerStyle={{justifyContent: "center", mb: 1}}
+                                    containerStyle={{justifyContent: "center", my: 1}}
                                     label={false}
                                 >
                                     Facturas

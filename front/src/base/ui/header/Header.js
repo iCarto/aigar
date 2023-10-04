@@ -1,28 +1,31 @@
 import {Link} from "react-router-dom";
-import {APP_LOGO_URL} from "aigar/config";
+import {APP_LOGO_URL, APP_NAME} from "aigar/config";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 
 const Header = ({hero = null, menu = null}) => {
     return (
-        <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-            <Link to="/" className="navbar-brand">
-                <img src={process.env.PUBLIC_URL + APP_LOGO_URL} alt="AIGAR Logo" />
-            </Link>
-            <button
-                className="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarmenu"
-                aria-controls="navbarmenu"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbarmenu" role="menu">
+        <AppBar
+            position="fixed"
+            sx={{height: "60px", backgroundColor: "#343a40", boxShadow: "none"}}
+        >
+            <Toolbar disableGutters>
+                <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+                    <img
+                        src={process.env.PUBLIC_URL + APP_LOGO_URL}
+                        alt={`Logo de ${APP_NAME}`}
+                        style={{
+                            height: "40px",
+                            margin: "8px 8px 8px 16px",
+                            padding: "2px 20px",
+                            backgroundColor: "#fff",
+                            borderRadius: "5px",
+                        }}
+                    />
+                </Link>
                 {menu ? menu : null}
-            </div>
-        </nav>
+            </Toolbar>
+        </AppBar>
     );
 };
 

@@ -24,7 +24,7 @@ const EntityListPage = ({
 
     return (
         <>
-            <Grid item container alignItems="flex-end">
+            <Grid item container alignItems="flex-end" mb={1}>
                 {filterForm ? (
                     <Grid
                         item

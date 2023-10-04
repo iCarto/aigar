@@ -12,6 +12,7 @@ const ActionsSidebarMenu = ({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                padding: 0,
             }}
         >
             {showBackButton ? <BackButton path={urlPathBack} /> : null}

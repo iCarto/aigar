@@ -11,6 +11,7 @@ const LeftSideBar = ({children}) => {
         alignItems: "center",
         justifyContent: "flex-end",
         padding: theme.spacing(0, 1),
+        zIndex: 1,
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
     }));
@@ -31,6 +32,7 @@ const LeftSideBar = ({children}) => {
                     zIndex: 0,
                     width: `${PAGE_MENU_DRAWER_WIDTH}px`,
                     borderRight: "3px solid " + theme.palette.text,
+                    mt: 1,
                     px: 1,
                 },
             }}

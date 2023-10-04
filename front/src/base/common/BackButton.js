@@ -1,6 +1,8 @@
 import {useNavigate} from "react-router-dom";
+import Button from "@mui/material/Button";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 
-const BackButton = ({path}) => {
+const BackButton = ({path = ""}) => {
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -10,10 +12,10 @@ const BackButton = ({path}) => {
     };
 
     return (
-        <button onClick={handleBack} className="btn btn-light">
-            <i className="fas fa-arrow-left mr-2" />
+        <Button onClick={handleBack} variant="outlined" fullWidth>
+            <ArrowLeftIcon />
             Volver
-        </button>
+        </Button>
     );
 };
 

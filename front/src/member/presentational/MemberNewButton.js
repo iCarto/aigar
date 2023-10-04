@@ -1,4 +1,6 @@
 import {useNavigate} from "react-router-dom";
+import Button from "@mui/material/Button";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const MemberNewButton = () => {
     const navigate = useNavigate();
@@ -7,9 +9,16 @@ const MemberNewButton = () => {
     };
 
     return (
-        <button onClick={handleClick} className="btn btn-primary mb-1 mt-1">
-            <i className="fas fa-user-plus" /> Nuevo socio
-        </button>
+        <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            sx={{mb: 0.75}}
+            startIcon={<PersonAddIcon />}
+            onClick={handleClick}
+        >
+            Nuevo
+        </Button>
     );
 };
 

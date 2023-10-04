@@ -4,6 +4,7 @@ import {FileService} from "base/file/service";
 import {Spinner} from "base/common";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
 
 const ExportMemberButton = ({disabled = false}) => {
     const [loading, setLoading] = useState(false);
@@ -26,15 +27,17 @@ const ExportMemberButton = ({disabled = false}) => {
             });
     };
 
-    const message = messageError ? (
-        <Alert severity="error">{messageError}</Alert>
+    const errorMessage = messageError ? (
+        <Alert severity="error" sx={{mt: 1}}>
+            {messageError}
+        </Alert>
     ) : null;
 
-    const spinner = loading ? (
-        <div className="d-flex align-items-center">
+    const spinner = (
+        <Grid mb={1}>
             <Spinner message="Obteniendo fichero" />
-        </div>
-    ) : null;
+        </Grid>
+    );
 
     const button = (
         <Button onClick={handleClick} disabled={disabled} variant="contained" fullWidth>
@@ -45,7 +48,7 @@ const ExportMemberButton = ({disabled = false}) => {
     return (
         <>
             {loading ? spinner : button}
-            {message}
+            {errorMessage}
         </>
     );
 };

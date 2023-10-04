@@ -1,25 +1,25 @@
 import {MemberDetail} from "member/presentational";
-import {SectionCard} from "base/ui/section/presentational";
 import {InvoiceDetailField, InvoiceDetailHeaderField, InvoiceDetailShort} from ".";
 
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 const InvoiceDetail = ({invoice, member, payments}) => {
     return (
-        <SectionCard>
-            <Grid container columnSpacing={1} alignItems="stretch">
-                {member ? (
-                    <Grid item xs={8}>
-                        <MemberDetail member={member} isSummary />
-                    </Grid>
-                ) : null}
+        <Box mb={3}>
+            <Box display="flex" flexDirection="column">
                 {invoice ? (
-                    <Grid item xs={4}>
+                    <Box mb={1}>
                         <InvoiceDetailShort invoice={invoice} payments={payments} />
-                    </Grid>
+                    </Box>
                 ) : null}
-            </Grid>
-            <Grid container flexDirection="row" justifyContent="space-around" my={3}>
+                {member ? (
+                    <Box>
+                        <MemberDetail member={member} isSummary />
+                    </Box>
+                ) : null}
+            </Box>
+            <Grid container flexDirection="row" justifyContent="space-around" my={2}>
                 <InvoiceDetailHeaderField
                     label="Caudal anterior"
                     value={invoice?.caudal_anterior}
@@ -79,7 +79,7 @@ const InvoiceDetail = ({invoice, member, payments}) => {
                     valueStyle={{fontWeight: 700}}
                 />
             </Grid>
-        </SectionCard>
+        </Box>
     );
 };
 

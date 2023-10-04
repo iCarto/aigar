@@ -11,10 +11,11 @@ export default function DomainProvider({children}) {
     const [memberTypes, setMemberTypes] = useState([]);
     const [memberUseTypes, setMemberUseTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
+    const [basicConfig, setBasicConfig] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
 
     const sortInvoicingMonths = invoicingMonths => {
-        return invoicingMonths.sort(
+        return invoicingMonths?.sort(
             (a, b) => b.id_mes_facturacion - a.id_mes_facturacion
         );
     };
@@ -25,6 +26,7 @@ export default function DomainProvider({children}) {
             DomainService.getMemberTypes(),
             DomainService.getMemberUseTypes(),
             DomainService.getInvoiceStatus(),
+            DomainService.getBasicConfig(),
             InvoicingMonthService.getInvoicingMonths(),
         ]).then(
             ([
@@ -32,6 +34,7 @@ export default function DomainProvider({children}) {
                 memberTypes,
                 memberUseTypes,
                 invoiceStatus,
+                basicConfig,
                 invoicingMonths,
             ]) => {
                 setSectors(sectors.short);
@@ -40,6 +43,7 @@ export default function DomainProvider({children}) {
                 setMemberTypes(memberTypes);
                 setMemberUseTypes(memberUseTypes);
                 setInvoiceStatus(invoiceStatus);
+                setBasicConfig(basicConfig);
                 setInvoicingMonths(sortInvoicingMonths(invoicingMonths));
             }
         );
@@ -52,6 +56,7 @@ export default function DomainProvider({children}) {
         memberTypes,
         memberUseTypes,
         invoiceStatus,
+        basicConfig,
         invoicingMonths,
     };
 

@@ -1,7 +1,13 @@
 import {Link} from "react-router-dom";
 import Button from "@mui/material/Button";
 
-const ButtonLink = ({text, to, disabled = false}) => {
+const ButtonLink = ({
+    text,
+    to,
+    disabled = false,
+    fullWidth = true,
+    openNewTab = false,
+}) => {
     const buttonStyle = {
         textAlign: "center",
         "&a:hover": {
@@ -11,12 +17,13 @@ const ButtonLink = ({text, to, disabled = false}) => {
 
     return (
         <Button
+            to={to}
             variant="contained"
             component={Link}
-            to={to}
             disabled={disabled}
             sx={buttonStyle}
-            fullWidth
+            fullWidth={fullWidth}
+            target={openNewTab ? "_blank" : null}
         >
             {text}
         </Button>

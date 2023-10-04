@@ -67,6 +67,12 @@ const DomainService = {
             });
         });
     },
+
+    getBasicConfig() {
+        return ApiService.get("/domains/basicconfig/").then(response => {
+            return response;
+        });
+    },
 };
 
 export default DomainService;

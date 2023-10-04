@@ -54,7 +54,6 @@ const ViewMemberSubpage = () => {
                 member ? (
                     <MemberPageSidebar
                         member={member}
-                        numInvoices={invoices?.length || 0}
                         onUpdateStatus={handleStatusUpdate}
                     />
                 ) : null

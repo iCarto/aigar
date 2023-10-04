@@ -6,8 +6,10 @@ import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 
 import {LoadPaymentsList} from "../presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
+import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/common";
-import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 const LoadPaymentsStep2PaymentsTable = ({
     id_mes_facturacion,
@@ -101,10 +103,10 @@ const LoadPaymentsStep2PaymentsTable = ({
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
     const errorsMessage = (
-        <Alert severity="error" sx={{mb: 1}}>
+        <Typography>
             Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
             un total de <strong>{payments.length}</strong> registros leídos.
-        </Alert>
+        </Typography>
     );
 
     if (loading) {
@@ -116,14 +118,16 @@ const LoadPaymentsStep2PaymentsTable = ({
         const paymentsFiltered = filterMonthlyData(payments, filter);
 
         return (
-            <div className="d-flex flex-column justify-content-around">
-                {totalRegistersWithErrors ? errorsMessage : null}
+            <Grid>
+                {totalRegistersWithErrors ? (
+                    <ErrorMessage message={errorsMessage} />
+                ) : null}
                 <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
                 <LoadPaymentsList
                     payments={paymentsFiltered}
                     onUpdatePayment={handleUpdatePayment}
                 />
-            </div>
+            </Grid>
         );
     }
 };

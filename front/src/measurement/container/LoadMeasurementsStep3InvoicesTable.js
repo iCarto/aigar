@@ -2,10 +2,12 @@ import {useEffect, useState} from "react";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
-import {Spinner} from "base/common";
 import {InvoicesListPreview} from "invoice/presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
-import Alert from "@mui/material/Alert";
+import {ErrorMessage} from "base/error/components";
+import {Spinner} from "base/common";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,
@@ -19,7 +21,10 @@ const LoadMeasurementsStep3InvoicesTable = ({
         showOnlyErrors: false,
     });
     const [measurementsWithoutInvoice, setMeasurementsWithoutInvoice] = useState([]);
+
     const {filterMonthlyData} = useFilterMonthlyData();
+
+    const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
 
     useEffect(() => {
         onValidateStep(false);
@@ -70,38 +75,36 @@ const LoadMeasurementsStep3InvoicesTable = ({
     const getErrorMessages = () => {
         const totalInvoicesWithErrors = getTotalErrors(invoices);
         if (totalInvoicesWithErrors !== 0) {
-            return (
-                <Alert severity="error">
+            const errorMessage = (
+                <Typography>
                     Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
                     alertas que debería revisar.
-                </Alert>
+                </Typography>
             );
+            return <ErrorMessage message={errorMessage} />;
         }
         return null;
     };
 
     const getMeasurementsWithoutInvoiceError = () => {
         if (measurementsWithoutInvoice.length !== 0) {
-            return (
-                <Alert severity="error">
-                    <strong>
-                        Se han detectado lecturas para socios que no tienen factura:{" "}
-                        {measurementsWithoutInvoice.join(",")}
-                    </strong>
-                </Alert>
+            const errorMessage = (
+                <Typography fontWeight={700}>
+                    Se han detectado lecturas para socios que no tienen factura:{" "}
+                    {measurementsWithoutInvoice.join(", ")}
+                </Typography>
             );
+            return <ErrorMessage message={errorMessage} />;
         }
         return null;
     };
 
-    const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
-
     return (
-        <div className="d-flex flex-column justify-content-around">
+        <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices ? (
                 <>
-                    {getMeasurementsWithoutInvoiceError()}
                     {getErrorMessages()}
+                    {getMeasurementsWithoutInvoiceError()}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}
@@ -114,7 +117,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
             ) : (
                 <Spinner message="Cargando facturas" />
             )}
-        </div>
+        </Box>
     );
 };
 

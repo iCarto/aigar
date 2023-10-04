@@ -1,3 +1,4 @@
+import Grid from "@mui/material/Grid";
 import "./WizardStepper.css";
 
 const WizardStepper = ({steps, currentStep, isValidStep}) => {
@@ -16,9 +17,9 @@ const WizardStepper = ({steps, currentStep, isValidStep}) => {
     });
 
     return (
-        <div className="col-12 stepper d-flex justify-content-center">
+        <Grid container justifyContent="center" className="stepper">
             {stepsElements}
-        </div>
+        </Grid>
     );
 };
 

@@ -1,9 +1,9 @@
 import Alert from "@mui/material/Alert";
 
-const ErrorMessage = ({message}) => {
+const ErrorMessage = ({message, style = {}}) => {
     if (message) {
         return (
-            <Alert severity="error" sx={{mb: 1}}>
+            <Alert severity="error" sx={{mb: 1, ...style}}>
                 {message}
             </Alert>
         );

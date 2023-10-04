@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {LoadDataValidatorService} from "validation/service";
 import {MeasurementService} from "measurement/service";
 import {LoadDataFileUploadArea} from "loaddata/presentational";
+import Grid from "@mui/material/Grid";
 
 const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) => {
     const [dataFiles, setDataFiles] = useState([]);
@@ -47,16 +48,16 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
     };
 
     return (
-        <div className="col-12 row justify-content-center">
-            <form className="col-md-8 p-3">
+        <Grid container justifyContent="center">
+            <Grid item xs={8} p={3}>
                 <LoadDataFileUploadArea
                     dataFiles={dataFiles}
                     handleLoadedDataFile={handleLoadedDataFile}
                     handleRemoveDataFile={handleRemoveDataFile}
                     allowedFormats={[".json"]}
                 />
-            </form>
-        </div>
+            </Grid>
+        </Grid>
     );
 };
 

@@ -1,3 +1,8 @@
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 const WizardButtons = ({
     currentStep,
     numberOfSteps,
@@ -6,40 +11,48 @@ const WizardButtons = ({
     onClickNextStep,
 }) => {
     const previousButton = (
-        <button className="btn" type="button" onClick={onClickPrevStep}>
-            &laquo; Anterior
-        </button>
+        <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<ChevronLeftIcon />}
+            onClick={onClickPrevStep}
+        >
+            Anterior
+        </Button>
     );
 
     const nextButton = (
-        <button
-            className={"btn " + (isValidStep ? "btn-primary" : "")}
-            type="button"
-            onClick={onClickNextStep}
+        <Button
+            variant="contained"
+            color="primary"
+            endIcon={<ChevronRightIcon />}
             disabled={!isValidStep}
+            onClick={onClickNextStep}
         >
-            Siguiente &raquo;
-        </button>
+            Siguiente
+        </Button>
     );
 
     if (currentStep === 1) {
         return (
-            <div className="d-flex flex-grow-1 justify-content-end">{nextButton}</div>
+            <Grid container justifyContent="flex-end">
+                <Grid item>{nextButton}</Grid>
+            </Grid>
         );
     }
     if (currentStep === numberOfSteps) {
         return (
-            <div className="d-flex flex-grow-1 justify-content-start">
-                {previousButton}
-            </div>
+            <Grid container justifyContent="flex-start">
+                <Grid item>{previousButton}</Grid>
+            </Grid>
         );
     }
 
     return (
-        <div className="d-flex flex-grow-1 justify-content-between">
-            {previousButton}
-            {nextButton}
-        </div>
+        <Grid container justifyContent="space-between">
+            <Grid item>{previousButton}</Grid>
+            <Grid item>{nextButton}</Grid>
+        </Grid>
     );
 };
 

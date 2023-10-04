@@ -4,8 +4,10 @@ import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadDataTableFilter} from "loaddata/presentational";
 import {InvoicesListPreview} from "invoice/presentational";
+import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/common";
-import Alert from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const LoadPaymentsStep3InvoicesTable = ({
     invoices,
@@ -74,22 +76,29 @@ const LoadPaymentsStep3InvoicesTable = ({
         }));
     };
 
-    const totalInvoicesWithErrors = invoices.filter(
-        invoice => invoice.errors.length !== 0
-    ).length;
+    const getTotalErrors = items => {
+        return items.filter(item => item.errors.length !== 0).length;
+    };
 
-    const errorsMessage = (
-        <Alert severity="error">
-            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
-            debería revisar.
-        </Alert>
-    );
+    const getErrorMessages = () => {
+        const totalInvoicesWithErrors = getTotalErrors(invoices);
+        if (totalInvoicesWithErrors !== 0) {
+            const errorMessage = (
+                <Typography>
+                    Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
+                    alertas que debería revisar.
+                </Typography>
+            );
+            return <ErrorMessage message={errorMessage} />;
+        }
+        return null;
+    };
 
     return (
-        <div className="d-flex flex-column justify-content-around">
+        <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices ? (
                 <>
-                    {totalInvoicesWithErrors ? errorsMessage : null}
+                    {getErrorMessages()}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}
@@ -102,7 +111,7 @@ const LoadPaymentsStep3InvoicesTable = ({
             ) : (
                 <Spinner message="Cargando facturas" />
             )}
-        </div>
+        </Box>
     );
 };
 

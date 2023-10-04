@@ -4,7 +4,9 @@ import {LoadDataValidatorService} from "validation/service";
 import {createMeasurement} from "measurement/model";
 import {LoadMeasurementsList} from "../presentational";
 import {LoadDataTableFilter} from "loaddata/presentational";
-import Alert from "@mui/material/Alert";
+import {ErrorMessage} from "base/error/components";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,
@@ -60,23 +62,23 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     const totalRegistersWithErrors = getTotalErrors(measurements);
 
     const errorsMessage = (
-        <Alert severity="error" sx={{mb: 1}}>
+        <Typography>
             Existen <strong>{totalRegistersWithErrors}</strong> registros con error de
             un total de <strong>{measurements.length}</strong> registros leídos.
-        </Alert>
+        </Typography>
     );
 
     const filteredMeasurements = filterMonthlyData(measurements, filter);
 
     return (
-        <div className="d-flex flex-column justify-content-around">
-            {totalRegistersWithErrors ? errorsMessage : null}
+        <Grid>
+            {totalRegistersWithErrors ? <ErrorMessage message={errorsMessage} /> : null}
             <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
             <LoadMeasurementsList
                 measurements={filteredMeasurements}
                 onUpdateMeasurement={handleUpdateMeasurement}
             />
-        </div>
+        </Grid>
     );
 };
 

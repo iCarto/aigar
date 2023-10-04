@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import {PaymentService} from "payment/service";
 import {LoadDataValidatorService} from "validation/service";
 import {LoadDataFileUploadArea} from "loaddata/presentational";
+import Grid from "@mui/material/Grid";
 
 const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
     const [dataFiles, setDataFiles] = useState([]);
@@ -45,16 +46,16 @@ const LoadPaymentsStep1ReadFile = ({onValidateStep, onChangePayments}) => {
     };
 
     return (
-        <div className="col-12 row justify-content-center">
-            <form className="col-md-8 p-3">
+        <Grid container justifyContent="center">
+            <Grid item xs={8} p={3}>
                 <LoadDataFileUploadArea
                     dataFiles={dataFiles}
                     handleLoadedDataFile={handleLoadedDataFile}
                     handleRemoveDataFile={handleRemoveDataFile}
                     allowedFormats={[".csv", ".txt"]}
                 />
-            </form>
-        </div>
+            </Grid>
+        </Grid>
     );
 };
 

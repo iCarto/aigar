@@ -2,7 +2,10 @@ import {useState} from "react";
 
 import {PageLayout} from "../page";
 import {PageHeading} from "../heading";
-import {WizardButtons, WizardSidebar, WizardStepInfo, WizardStepper} from ".";
+import {WizardButtons, WizardStepInfo, WizardStepper} from ".";
+import {ActionsSidebarMenu} from "../menu/components";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 const Wizard = ({heading, steps, isValidStep, onChangeStep, children}) => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -42,21 +45,45 @@ const Wizard = ({heading, steps, isValidStep, onChangeStep, children}) => {
         />
     );
 
-    const sidebar = <WizardSidebar />;
+    const sidebar = <ActionsSidebarMenu showBackButton />;
 
     const content = (
-        <div
-            className="d-flex flex-column justify-content-between"
-            style={{marginTop: "12px"}}
-        >
+        <Grid flexDirection="column" justifyContent="content-between">
             <PageHeading heading={heading} />
-            <div className="mb-4 mt-3">{stepper}</div>
-            <div className="rounded-top">{stepInfo}</div>
-            <div className="border p-3">{children}</div>
-            <div className="border-left border-right border-bottom rounded-bottom p-3">
+            <Box mb={4} mt={3}>
+                {stepper}
+            </Box>
+            <Box
+                sx={{
+                    borderRadius: 1,
+                }}
+            >
+                {stepInfo}
+            </Box>
+            <Box
+                sx={{
+                    border: 1,
+                    borderTop: 0,
+                    borderBottom: 0,
+                    borderColor: "grey.300",
+                    p: 1,
+                }}
+            >
+                {children}
+            </Box>
+            <Box
+                sx={{
+                    mb: 1,
+                    border: 1,
+                    borderTop: 0,
+                    borderRadius: 1,
+                    padding: 2,
+                    borderColor: "grey.300",
+                }}
+            >
                 {buttons}
-            </div>
-        </div>
+            </Box>
+        </Grid>
     );
 
     return <PageLayout sidebar={sidebar}>{content}</PageLayout>;

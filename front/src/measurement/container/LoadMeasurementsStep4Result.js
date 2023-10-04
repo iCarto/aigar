@@ -4,9 +4,11 @@ import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {Spinner} from "base/common";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
-import Alert from "@mui/material/Alert";
+import {ErrorMessage} from "base/error/components";
+import {BackToInvoicesButton} from "monthlyinvoicing/presentational";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
 
 const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
     const [result, setResult] = useState(null);
@@ -14,7 +16,7 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
 
     const navigate = useNavigateWithReload();
 
-    const handleClick = () => {
+    const handleClickBack = () => {
         setIsDataUpdated(prevState => !prevState);
         navigate("/", true);
     };
@@ -30,52 +32,34 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
             });
     }, [id_mes_facturacion, measurements]);
 
-    const ErrorMessage = () => {
-        return (
-            <Alert severity="error">
-                Se ha producido un error durante la actualización de las facturas y no
-                se han podido guardar los datos.
-            </Alert>
-        );
-    };
-
-    const BackToInvoicesButton = () => {
-        return (
-            <button
-                className="btn btn-primary center"
-                type="button"
-                onClick={handleClick}
-            >
-                Volver al listado de facturas <i className="fas fa-list"></i>
-            </button>
-        );
-    };
-
     const SuccessMessage = () => {
         return (
-            <Alert severity="success">
-                <Stack>
-                    <Typography mb={3}>
-                        Las facturas se han actualizado correctamente.
-                    </Typography>
-                    <BackToInvoicesButton />
-                </Stack>
-            </Alert>
+            <Stack>
+                <Alert severity="success" sx={{mb: 1}}>
+                    Las facturas se han actualizado correctamente.
+                </Alert>
+                <BackToInvoicesButton onClick={handleClickBack} />
+            </Stack>
         );
     };
 
     return (
-        <div className="d-flex flex-column justify-content-around align-items-center">
+        <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-around"
+            alignItems="center"
+        >
             {result !== null ? (
                 result ? (
                     <SuccessMessage />
                 ) : (
-                    <ErrorMessage />
+                    <ErrorMessage message="Se ha producido un error durante la actualización de las facturas y no se han podido guardar los datos." />
                 )
             ) : (
                 <Spinner message="Actualizando facturas" />
             )}
-        </div>
+        </Box>
     );
 };
 

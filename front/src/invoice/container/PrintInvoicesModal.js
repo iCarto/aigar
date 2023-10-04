@@ -2,6 +2,7 @@ import {useState} from "react";
 import {DocXPrintFileService, FileService} from "base/file/service";
 import {InvoiceService} from "invoice/service";
 import {ESTADOS_FACTURA} from "invoice/model";
+import {useDomain} from "aigar/domain/provider";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {OperationWithConfirmationModal} from "base/ui/modal";
@@ -20,12 +21,18 @@ const PrintInvoicesModal = ({
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
     const [errorMessage, setErrorMessage] = useState(null);
 
+    const {basicConfig} = useDomain();
+
+    // Basic config is always a list with one single object
+    const communityName = basicConfig[0]?.name;
+
     const getReadingDay = useGetSectorReadingDay;
 
     const formatedInvoices = invoices.map(invoice => {
         const readingDay = getReadingDay(invoice.sector);
         return {
             ...invoice,
+            nombre_junta: communityName,
             fecha_lectura: `${readingDay}/${invoice.mes_facturado}/${invoice.anho}`,
             due_date: DateUtil.format(invoice.due_date),
         };

@@ -53,7 +53,7 @@ const EditInvoiceSubpage = () => {
 
         InvoiceService.updateInvoice(invoice)
             .then(updatedInvoice => {
-                navigate(`/facturas/${updatedInvoice.id_factura}`);
+                navigate(`/facturas/${updatedInvoice.id}`);
             })
             .catch(error => {
                 console.log(error);

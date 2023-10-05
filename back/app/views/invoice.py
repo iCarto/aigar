@@ -64,7 +64,7 @@ class InvoiceStatsView(ListAPIView):
         context = super().get_serializer_context()
 
         all_invoices = Invoice.objects.values(
-            "id_factura",
+            "id",
             "mes_facturacion",
             "mes_facturado",
             "anho",
@@ -91,7 +91,7 @@ class InvoiceStatsView(ListAPIView):
             ]
             previous_invoice = previous_invoice[0] if previous_invoice else None
             invoice_payment_info = {
-                "id_factura": invoice["id_factura"],
+                "id_factura": invoice["id"],
                 "mora": invoice["mora"],
                 "mora_por_retraso": 1
                 if invoice["mora"] != 0

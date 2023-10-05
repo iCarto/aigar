@@ -22,12 +22,12 @@ const UpdateInvoiceModal = ({isOpen = false, onClose, invoice}) => {
 
     const onClickFinished = () => {
         closeModal();
-        navigate(`/facturas/${invoiceNewVersion.id_factura}`);
+        navigate(`/facturas/${invoiceNewVersion.id}`);
     };
 
     const createNewInvoiceVersion = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        InvoiceService.createNewInvoiceVersion(invoice.id_factura)
+        InvoiceService.createNewInvoiceVersion(invoice.id)
             .then(invoiceNewVersion => {
                 setOperationStatus(ModalOperationStatus.SUCCESS);
                 setInvoiceNewVersion(invoiceNewVersion);

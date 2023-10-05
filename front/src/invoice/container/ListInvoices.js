@@ -15,7 +15,7 @@ const ListInvoices = ({invoices, handleFilterChange}) => {
         <EntityListPage
             items={invoices}
             columns={tableColumns}
-            selectAttribute="id_factura"
+            selectAttribute="id"
             filterForm={<InvoicesFilterForm handleFilterChange={handleFilterChange} />}
             onClickRows={handleClickOnTableRows}
             selectedTableRows={selectedTableRows}

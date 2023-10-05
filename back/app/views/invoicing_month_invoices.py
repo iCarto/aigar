@@ -18,7 +18,7 @@ class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Invoice
         fields = [
-            "id_factura",
+            "id",
             "mes_facturacion_id",
             "caudal_actual",
             "caudal_anterior",

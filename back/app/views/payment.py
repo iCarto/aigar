@@ -83,8 +83,8 @@ def get_invoices_for_payments(payments):
     return Invoice.objects.filter(id_factura__in=num_socios)
 
 
-def get_invoice_by_id_factura(invoices, id_factura):
-    invoice = [invoice for invoice in invoices if id_factura == invoice.id_factura]
+def get_invoice_by_id_factura(invoices, id):
+    invoice = [invoice for invoice in invoices if id == invoice.id]
     if invoice:
         return invoice[0]
     return None

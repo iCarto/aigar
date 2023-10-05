@@ -51,7 +51,7 @@ const PrintInvoicesModal = ({
             );
             const invoiceIdsToUpdate = invoices
                 .filter(invoice => invoice.estado === ESTADOS_FACTURA.NUEVA)
-                .map(invoice => invoice.id_factura);
+                .map(invoice => invoice.id);
 
             InvoiceService.updateInvoiceStatus(
                 invoiceIdsToUpdate,

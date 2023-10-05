@@ -13,8 +13,6 @@ const InvoiceForm = ({
     error = "",
     validationErrors = [],
 }) => {
-    const isNewInvoice = invoice.id_factura === -1;
-
     const getFieldErrorFromProps = field => {
         const fieldErrors = validationErrors
             ? validationErrors.filter(error => error.field === field)
@@ -58,7 +56,7 @@ const InvoiceForm = ({
 
     return (
         <EntityFormLayout
-            formTitle={isNewInvoice ? "Crear factura" : "Modificar factura"}
+            formTitle={invoice.isNewInvoice ? "Crear factura" : "Modificar factura"}
             onSubmit={handleSubmit}
             isSaving={isSaving}
             error={error}

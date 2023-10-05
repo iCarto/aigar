@@ -3,7 +3,7 @@ import {FormInputInteger, FormInputDecimal} from "base/form";
 import Grid from "@mui/material/Grid";
 
 const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
-    const isNewInvoice = formData?.id_factura.value == -1;
+    const isNewInvoice = formData?.id.value == -1;
 
     const handleChangeField = event => {
         const name = event.target.name;

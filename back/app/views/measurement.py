@@ -37,7 +37,7 @@ class MeasurementViewSet(
 
         for measurement in measurements:
             invoice = get_invoice_by_num_socio(invoices, measurement["num_socio"])
-            measurement["factura"] = invoice.id_factura
+            measurement["factura"] = invoice.id
             measurement["mes_facturacion"] = id_mes_facturacion
 
         serializer = MeasurementSerializer(

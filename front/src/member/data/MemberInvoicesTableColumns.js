@@ -11,9 +11,7 @@ export function useMemberInvoicesTableColumns() {
             label: "Número",
             id: "numero",
             formatFunction: item => {
-                return (
-                    <TextLink text={item.numero} to={`/facturas/${item.id_factura}`} />
-                );
+                return <TextLink text={item.numero} to={`/facturas/${item.id}`} />;
             },
         },
         {

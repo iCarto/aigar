@@ -82,7 +82,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
             "invoice_set",
             queryset=Invoice.objects.filter(
                 estado__in=[InvoiceStatus.COBRADA, InvoiceStatus.NO_COBRADA]
-            ).order_by("id_factura"),
+            ).order_by("id"),
             to_attr="filtered_invoices",
         )
         active_members = Member.objects.active().prefetch_related(

@@ -15,7 +15,7 @@ export default function InvoicesListProvider({children}) {
         InvoiceService.getInvoices()
             .then(invoices => {
                 setInvoices(invoices);
-                setInvoicesIds(invoices?.map(invoice => invoice.id_factura));
+                setInvoicesIds(invoices?.map(invoice => invoice.id));
             })
             .catch(error => console.log(error))
             .finally(() => setIsLoading(false));
@@ -23,9 +23,7 @@ export default function InvoicesListProvider({children}) {
 
     useEffect(() => {
         if (filteredInvoices.length) {
-            const filteredInvoicesIds = filteredInvoices?.map(
-                invoice => invoice.id_factura
-            );
+            const filteredInvoicesIds = filteredInvoices?.map(invoice => invoice.id);
             setInvoicesIds(filteredInvoicesIds);
         }
     }, [filteredInvoices]);

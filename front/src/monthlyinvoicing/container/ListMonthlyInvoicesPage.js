@@ -29,7 +29,7 @@ const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
             <EntityListPage
                 items={invoices}
                 columns={tableColumns}
-                selectAttribute="id_factura"
+                selectAttribute="id"
                 filterForm={
                     <MonthlyInvoicingFilterForm
                         handleFilterChange={handleFilterChange}

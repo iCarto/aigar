@@ -80,7 +80,7 @@ class InvoiceManager(models.Manager["Invoice"]):
         open_invoices.filter(deudadb__gt=0).update(estado=InvoiceStatus.NO_COBRADA)
 
     def update_status(self, pks: list[int], status: str) -> None:
-        self.filter(id_factura__in=pks).update(estado=status)
+        self.filter(id__in=pks).update(estado=status)
 
     def handle_invoices_for_new_deleted_members(self, member):
         """Elimina las facturas en estado NUEVA cuando se borra un socio.
@@ -123,11 +123,11 @@ class Invoice(models.Model):
     class Meta(object):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
-        ordering = ("id_factura",)
+        ordering = ("id",)
 
     objects: InvoiceManager = _InvoiceManager()
 
-    id_factura = models.AutoField(
+    id = models.AutoField(
         primary_key=True,
         verbose_name="Id factura",
         help_text="El Identificador de la factura no puede estar vacío y no debe repetirse",
@@ -254,7 +254,7 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id_factura} - {self.member} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
+        return f"{self.id} - {self.member} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
 
     @property
     def due_date(self) -> datetime.date:

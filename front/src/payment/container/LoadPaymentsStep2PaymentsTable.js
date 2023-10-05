@@ -74,7 +74,7 @@ const LoadPaymentsStep2PaymentsTable = ({
                     num_socio: invoiceForPayment.num_socio,
                     nombre_socio: invoiceForPayment.nombre,
                     sector: invoiceForPayment.sector,
-                    id_factura: invoiceForPayment.id_factura,
+                    id_factura: invoiceForPayment.id,
                 };
             }
             return createPayment({

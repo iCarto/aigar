@@ -77,7 +77,7 @@ const createInvoices = (data = []) => {
 };
 
 const createInvoice = ({
-    id_factura = null,
+    id = -1,
     version = null,
     anho = null,
     mes_facturado = 0,
@@ -117,7 +117,7 @@ const createInvoice = ({
     errors = [],
 } = {}) => {
     const publicApi = {
-        id_factura,
+        id,
         version,
         anho,
         mes_facturado,
@@ -162,6 +162,10 @@ const createInvoice = ({
                 return null;
             }
             return _consumo;
+        },
+
+        get isNewInvoice() {
+            return this.id === -1;
         },
     };
 

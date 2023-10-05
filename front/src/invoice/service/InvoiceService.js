@@ -20,21 +20,19 @@ const InvoiceService = {
         });
     },
 
-    getInvoice(id_factura) {
-        id_factura = parseInt(id_factura);
-        return ApiService.get("/invoices/" + id_factura + "/").then(response => {
+    getInvoice(id) {
+        id = parseInt(id);
+        return ApiService.get("/invoices/" + id + "/").then(response => {
             let invoice = invoice_api_adapter(response);
             return createInvoice(invoice);
         });
     },
 
-    getInvoicePayments(id_factura) {
-        id_factura = parseInt(id_factura);
-        return ApiService.get("/invoices/" + id_factura + "/payments/").then(
-            response => {
-                return createPayments(payments_api_adapter(response));
-            }
-        );
+    getInvoicePayments(id) {
+        id = parseInt(id);
+        return ApiService.get("/invoices/" + id + "/payments/").then(response => {
+            return createPayments(payments_api_adapter(response));
+        });
     },
 
     createInvoice(invoice) {
@@ -45,7 +43,7 @@ const InvoiceService = {
     },
 
     updateInvoice(invoice) {
-        return ApiService.put("/invoices/" + invoice.id_factura + "/", invoice).then(
+        return ApiService.put("/invoices/" + invoice.id + "/", invoice).then(
             response => {
                 let invoice = invoice_api_adapter(response);
                 return createInvoice(invoice);
@@ -60,8 +58,8 @@ const InvoiceService = {
         });
     },
 
-    createNewInvoiceVersion(id_factura) {
-        return ApiService.delete("/invoices/" + id_factura + "/").then(response => {
+    createNewInvoiceVersion(id) {
+        return ApiService.delete("/invoices/" + id + "/").then(response => {
             let invoice = invoice_api_adapter(response);
             return createInvoice(invoice);
         });

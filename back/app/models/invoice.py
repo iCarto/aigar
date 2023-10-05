@@ -146,11 +146,11 @@ class Invoice(models.Model):
     )
 
     caudal_anterior = models.PositiveIntegerField(
-        null=True, blank=True, verbose_name="Caudal anterior", help_text=""
+        null=False, blank=False, verbose_name="Caudal anterior"
     )
 
     caudal_actual = models.PositiveIntegerField(
-        null=True, blank=True, verbose_name="Caudal actual", help_text=""
+        null=True, blank=True, verbose_name="Caudal actual"
     )
 
     cuota_fija = models.FloatField(
@@ -275,7 +275,7 @@ class Invoice(models.Model):
 
     @property
     def consumo(self) -> int | None:
-        if self.caudal_actual is None or self.caudal_anterior is None:
+        if self.caudal_actual is None:
             return None
         return self.caudal_actual - self.caudal_anterior
 

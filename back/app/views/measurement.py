@@ -66,7 +66,7 @@ class MeasurementInvoicePreview(CreateAPIView):
                 invoice.update_with_measurement(
                     measurement["caudal_actual"],
                     measurement["caudal_anterior"]
-                    if measurement["cambio_medidor"] == True
+                    if measurement["cambio_medidor"]
                     else None,
                 )
                 updated_invoices.append(invoice)

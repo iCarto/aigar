@@ -1,3 +1,4 @@
+from django.core import exceptions
 from django.db import models
 
 
@@ -14,27 +15,19 @@ class Measurement(models.Model):
     )
 
     caudal_anterior = models.PositiveIntegerField(
-        null=True, blank=True, verbose_name="Caudal anterior", help_text=""
+        null=False, blank=False, verbose_name="Caudal anterior"
     )
 
     caudal_actual = models.PositiveIntegerField(
-        null=True, blank=True, verbose_name="Caudal actual", help_text=""
-    )
-
-    consumo = models.IntegerField(
-        null=True, blank=True, verbose_name="Consumo", help_text=""
+        null=False, blank=False, verbose_name="Caudal actual"
     )
 
     cambio_medidor = models.BooleanField(
-        blank=False,
-        null=False,
-        default=False,
-        verbose_name="Cambio de medidor",
-        help_text="",
+        blank=False, null=False, default=False, verbose_name="Cambio de medidor"
     )
 
     medidor = models.CharField(
-        max_length=30, null=True, blank=True, verbose_name="Medidor", help_text=""
+        max_length=30, null=True, blank=True, verbose_name="Medidor"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -57,4 +50,20 @@ class Measurement(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.factura} - {self.caudal_anterior} - {self.caudal_actual} - {self.consumo}"
+        return f"{self.factura} - {self.caudal_anterior} - {self.caudal_actual}"
+
+    def save(self, **kwargs) -> None:
+        self.full_clean()
+        super().save(**kwargs)
+
+    @property
+    def consumo(self) -> int:
+        return self.caudal_actual - self.caudal_anterior
+
+    def clean(self):
+        if self.caudal_actual < self.caudal_anterior:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: "El caudal actual no puede ser menor al caudal anterior"
+                }
+            )

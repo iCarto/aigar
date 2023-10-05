@@ -8,9 +8,9 @@ import {
     invoicing_month_api_adapter,
 } from "monthlyinvoicing/model";
 import {
-    payments_api_adapter,
+    payments_view_adapter,
     createPayments,
-    payments_front_adapter,
+    payments_api_adapter,
 } from "payment/model";
 
 const InvoicingMonthService = {
@@ -91,12 +91,12 @@ const InvoicingMonthService = {
     },
 
     savePayments(id_mes_facturacion, payments) {
-        const paymentsToApi = payments_api_adapter(payments);
+        const paymentsToApi = payments_view_adapter(payments);
         return ApiService.post(
             "/invoicingmonths/" + id_mes_facturacion + "/payments/",
             paymentsToApi
         ).then(response => {
-            return createPayments(payments_front_adapter(response));
+            return createPayments(payments_api_adapter(response));
         });
     },
 };

@@ -166,7 +166,7 @@ else
 
         INSERT INTO app_payment
         (
-            id_pago,
+            id,
             fecha,
             monto,
             created_at,

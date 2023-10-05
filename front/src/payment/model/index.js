@@ -3,6 +3,6 @@ export {
     createPayments,
     payment_api_adapter,
     payments_api_adapter,
-    payment_front_adapter,
-    payments_front_adapter,
+    payment_view_adapter,
+    payments_view_adapter,
 } from "./Payment";

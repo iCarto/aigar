@@ -5,7 +5,7 @@ import {
     invoice_api_adapter,
     createInvoice,
 } from "invoice/model";
-import {createPayments, payments_front_adapter} from "payment/model";
+import {createPayments, payments_api_adapter} from "payment/model";
 
 const InvoiceService = {
     getInvoices() {
@@ -32,7 +32,7 @@ const InvoiceService = {
         id_factura = parseInt(id_factura);
         return ApiService.get("/invoices/" + id_factura + "/payments/").then(
             response => {
-                return createPayments(payments_front_adapter(response));
+                return createPayments(payments_api_adapter(response));
             }
         );
     },

@@ -48,7 +48,7 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
                         {payments?.map(payment => {
                             return (
                                 <SectionFieldValue
-                                    key={payment.id_pago}
+                                    key={payment.id}
                                     value={`${payment.fecha} - ${payment.monto} ${CURRENCY_SYMBOL}`}
                                 />
                             );

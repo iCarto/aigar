@@ -6,19 +6,19 @@ import {ErrorMessage} from "base/error/components";
 import {ListMemberInvoices} from "member/container";
 import {MemberDetail} from ".";
 
-const MemberViewModal = ({num_socio, isOpen, onClose}) => {
+const MemberViewModal = ({id, isOpen, onClose}) => {
     const [member, setMember] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         loadMember();
-    }, [num_socio]);
+    }, [id]);
 
     const loadMember = () => {
-        if (num_socio) {
+        if (id) {
             setIsLoading(true);
-            MemberService.getMember(num_socio)
+            MemberService.getMember(id)
                 .then(member => {
                     setMember(member);
                     setIsLoading(false);

@@ -99,7 +99,7 @@ const LoadDataValidatorService = {
                     "isJSON",
                     {
                         type: "mandatoryFields",
-                        param: ["num_socio"],
+                        param: ["member_id"],
                     },
                 ],
             })
@@ -111,7 +111,7 @@ const LoadDataValidatorService = {
             measurement,
             new DataValidator({
                 sector: ["isNotEmpty"],
-                num_socio: ["isNotEmpty"],
+                member_id: ["isNotEmpty"],
                 caudal_anterior: ["isNotEmpty", "isDecimal2"],
                 caudal_actual: ["isNotEmpty", "isDecimal2"],
             })

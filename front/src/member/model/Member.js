@@ -31,32 +31,10 @@ const createMembers = (data = []) => {
 };
 
 const createMember = ({
-    /*
-    Entero. Actualmente el número de socio es representado como un entero y no
-    se "formatea" de otro modo (ie: "015"). Tan sólo se hace 0-pad a cuatro
-    caracteres para que las facturas tengan un número uniforme de caracteres.
-    Usarlo como entero facilita crear el siguiente, validación del valor, cambiar
-    el formato, calcular el siguiente número. Y postponer la decisión de si es
-    necesario un "id serial primary key" en la base de datos.
-
-    El número de socio es no editable por el usuario, y se calcula automáticamente.
-    El número de socio es "único", no se reutilizan números ya usados. Pero se permite
-    el "traspaso". Es decir dar un "número de socio" / "derecho de consumo" a otro
-    usuario. En lugar de usar el -1 podríamos hacer este método async y calcularlo a través
-    de la API, pero en caso de varios usuarios podría haber problemas de concurrencia y siempre
-    habría que recalcular. Sólo afecta a crear nuevo socio, es aceptable, no mostrar el nuevo
-    número hasta después de "salvar"
-    */
-    num_socio = -1,
-    /* String */
+    id = -1,
     name = "",
-    /* String. Ver explicación en el modelo zone.py */
     sector = "",
-    /* String */
     medidor = "",
-    /* Entero. Orden del recorrido ¿ruta? sería un nombre alternativo válido */
-    /* Si se mete uno nuevo por el medio mover todo el resto de rutas a mano es
-    un lio */
     orden = null,
     observaciones = "",
     consumo_maximo = null,
@@ -67,7 +45,7 @@ const createMember = ({
     tipo_uso = "",
 } = {}) => {
     const publicApi = {
-        num_socio,
+        id,
         name,
         sector,
         medidor,

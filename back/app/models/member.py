@@ -50,33 +50,24 @@ class MemberManager(models.Manager["Member"]):
 
     def update_status(self, pks: list[int], status: str):
         for pk in pks:
-            member = self.get(num_socio=pk)
+            member = self.get(id=pk)
             member.update_status(status)
 
 
 class Member(models.Model):
-    # Actualmente el número de socio es representado como un entero y no se "formatea"
-    # de otro modo (ie: "015"). Tan sólo se hace 0-pad a cuatro caracteres para que
-    # las facturas tengan un número uniforme de caracteres.
-    # Definirlo como Entero Autoincremental simplifica crear el siguiente número,
-    # validar el valor, cambiar el formato. Es un override del `id` por defecto de Django.
-
     # El número de socio es no editable por el usuario, y se calcula automáticamente.
     # El número de socio es "único", no se reutilizan números ya usados. Pero se permite
     # el "traspaso". Es decir dar un "número de socio" / "derecho de consumo" a otro
-    # usuario. En lugar de usar el -1 podríamos hacer este método async y calcularlo
-    # a través de la API, pero en caso de varios usuarios podría haber problemas de
-    # concurrencia y siempre habría que recalcular. Sólo afecta a crear nuevo socio, es
-    # aceptable, no mostrar el nuevo número hasta después de "salvar"
+    # usuario.
 
     class Meta(object):
         verbose_name = "socio"
         verbose_name_plural = "socios"
-        ordering = ("num_socio",)
+        ordering = ("id",)
 
     objects: MemberManager = MemberManager()
 
-    num_socio = models.AutoField(
+    id = models.AutoField(
         primary_key=True,
         verbose_name="Número Socio",
         help_text="El Número de socio no puede estar vacío y no debe repetirse",
@@ -137,10 +128,7 @@ class Member(models.Model):
     )
 
     dui = models.CharField(
-        blank=True,
-        null=True,
-        max_length=10,
-        help_text="Documento Único de Identidad",
+        blank=True, null=True, max_length=10, help_text="Documento Único de Identidad"
     )
 
     tipo_uso = models.CharField(
@@ -171,7 +159,7 @@ class Member(models.Model):
     )
 
     def __str__(self):
-        return f"{self.num_socio} - {self.name}"
+        return f"{self.id} - {self.name}"
 
     def save(self, **kwargs) -> None:
         self.full_clean()
@@ -203,7 +191,7 @@ class Member(models.Model):
         last_invoice = (
             Invoice.objects.filter(mes_facturacion__is_open=True)
             .values_list("caudal_actual", "caudal_anterior")
-            .filter(member_id=self.num_socio)
+            .filter(member_id=self.id)
             .first()
         )
         if not last_invoice:

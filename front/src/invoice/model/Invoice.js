@@ -26,9 +26,9 @@ class Invoices extends Array {
     }
 }
 
-const getNumero = (num_socio, anho, mes_facturado, version) => {
+const getNumero = (member_id, anho, mes_facturado, version) => {
     return (
-        num_socio.toString().padStart(4, "0") +
+        member_id.toString().padStart(4, "0") +
         anho.toString() +
         mes_facturado.toString().padStart(2, "0") +
         version.toString().padStart(2, "0")
@@ -37,12 +37,12 @@ const getNumero = (num_socio, anho, mes_facturado, version) => {
 
 const invoice_api_adapter = invoice => {
     invoice["numero"] = getNumero(
-        invoice.member_data.num_socio,
+        invoice.member_data.id,
         invoice.anho,
         invoice.mes_facturado,
         invoice.version
     );
-    invoice["num_socio"] = invoice.member_data.num_socio;
+    invoice["member_id"] = invoice.member_data.id;
     invoice["nombre"] = invoice.member_data.name;
     invoice["status"] = getTipoSocio(invoice.member_data);
     invoice["sector"] = invoice.member_data.sector;
@@ -53,7 +53,7 @@ const invoice_api_adapter = invoice => {
 
 const invoice_view_adapter = invoice => {
     delete invoice["numero"];
-    delete invoice["num_socio"];
+    delete invoice["member_id"];
     delete invoice["nombre"];
     delete invoice["status"];
     delete invoice["sector"];
@@ -111,7 +111,7 @@ const createInvoice = ({
     observaciones = "",
     resumen = [],
     nombre = "",
-    num_socio = -1,
+    member_id = -1,
     status = "",
     sector = "",
     errors = [],
@@ -151,7 +151,7 @@ const createInvoice = ({
         observaciones,
         resumen,
         nombre,
-        num_socio,
+        member_id,
         status,
         sector,
         errors,
@@ -216,12 +216,7 @@ const createInvoiceForMember = (member, invoicingMonth, version) => {
     const invoicingMonthAnho = parseInt(invoicingMonth.anho);
     const invoicingMonthMes = parseInt(invoicingMonth.mes);
     return createInvoice({
-        numero: getNumero(
-            member.num_socio,
-            invoicingMonth.anho,
-            invoicingMonth.mes,
-            version
-        ),
+        numero: getNumero(member.id, invoicingMonth.anho, invoicingMonth.mes, version),
         mes_facturacion: invoicingMonth.id_mes_facturacion,
         anho: invoicingMonthAnho,
         mes_facturado: invoicingMonthMes,

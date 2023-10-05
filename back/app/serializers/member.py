@@ -13,7 +13,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
         fields = [
-            "num_socio",
+            "id",
             "name",
             "status",
             "sector",
@@ -30,7 +30,7 @@ class MemberExportSerializer(serializers.ModelSerializer):
         model = Member
         fields = [
             "name",
-            "num_socio",
+            "id",
             "orden",
             "sector",
             "lectura_anterior",

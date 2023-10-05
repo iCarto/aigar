@@ -74,13 +74,36 @@ else
             , ('6 - Tlacuxtli', '6', 'Tlacuxtli', 27)
             , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
         ;
+/*
+        INSERT INTO domains_invoiceconcepts (name, value) VALUES
+            ('Comisión de pago banco (dentro de la cuota)', 0.28)
+            , ('Recargo por mora', 1)
+            , ('Inasistencia a asambleas', 2)
+            , ('Reconexión', 10)
+            , ('Ahorro mano de obra (centro de la cuota)', 0.25)
+            , ('Traspaso de derecho (cambio de nombre)', 5)
+            , ('Jornadas de trabajo', 2)
+            , ('Cuota fija - Consumo Humano - €', 5.72)
+            , ('Cuota fija - Consumo Comercial - €', 100)
+            , ('Cuota fija - Consumo Humano - m3', 14)
+            , ('Cuota fija - Consumo Comercial - m3', 100)
 
+
+             , ('Cuota Variable',)
+
+            , ('Nuevo derecho - total',)
+            , ('Nuevo derecho - número de cuotas',)
+            , ('Nuevo derecho - pago inicial',)
+
+
+        ;
+*/
         /* #4234-16 */
         DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
 
         INSERT INTO app_member
             (
-                num_socio, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
+                id, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
                 , tipo_uso
                 , created_at, updated_at
                 , status

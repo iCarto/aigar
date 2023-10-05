@@ -27,14 +27,13 @@ const ListInvoicesStatsPage = ({
         const memberInvoiceGroups = [];
         invoices?.forEach(invoice => {
             const indexFound = memberInvoiceGroups.findIndex(
-                memberInvoiceGroup =>
-                    memberInvoiceGroup.num_socio === invoice.member_data.num_socio
+                memberInvoiceGroup => memberInvoiceGroup.id === invoice.member_data.id
             );
             if (indexFound >= 0) {
                 memberInvoiceGroups[indexFound].invoices.push(invoice);
             } else {
                 memberInvoiceGroups.push({
-                    num_socio: invoice.member_data.num_socio,
+                    id: invoice.member_data.id,
                     nombre: invoice.member_data.name,
                     sector: invoice.member_data.sector,
                     invoices: [invoice],

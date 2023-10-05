@@ -10,7 +10,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
     let tableColumns = [
         {
             label: "N.º",
-            id: "num_socio",
+            id: "id",
         },
         {
             label: "Socio",

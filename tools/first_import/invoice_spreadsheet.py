@@ -28,7 +28,7 @@ def parse_invoice_spreadsheet(xls):
     excel_options = {"dtype": {"NúmeroSocio": object}}
     column_names = {
         "NúmeroS": "sector",
-        "NúmeroSocio": "num_socio",
+        "NúmeroSocio": "member_id",
         "Orden": "orden",
         "Num_contador": "medidor",
         "Nombre": "nombre",

@@ -46,19 +46,19 @@ export default function AigarRoutes() {
 
                     <Route path="socios" element={<MemberModule />}>
                         <Route
-                            path=":num_socio/crear"
+                            path=":member_id/crear"
                             element={<CreateMemberSubpage />}
                         />
                         <Route path="" element={<ManageMembersPage />}>
                             <Route path="" element={<ViewMembersPage />} />
                         </Route>
-                        <Route path=":num_socio" element={<ViewMemberSubpage />} />
+                        <Route path=":member_id" element={<ViewMemberSubpage />} />
                         <Route
-                            path=":num_socio/modificar"
+                            path=":member_id/modificar"
                             element={<EditMemberSubpage />}
                         />
                         <Route
-                            path=":num_socio/nueva_factura"
+                            path=":member_id/nueva_factura"
                             element={<CreateInvoiceSubpage />}
                         />
                     </Route>

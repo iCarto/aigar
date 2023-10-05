@@ -10,7 +10,6 @@ from domains.tests.factories import ZoneFactory
 
 
 class MemberFactory(BaseFactory[Member]):  # type: ignore
-    # num_socio
     name = factory.Faker("name")
     medidor = factory.Faker("numerify", text="######")
     orden = 0

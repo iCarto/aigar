@@ -24,20 +24,20 @@ const CreateInvoiceSubpage = () => {
     const [validationErrors, setValidationErrors] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const {num_socio} = useParams();
+    const {member_id} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
         loadDataForInvoice();
-    }, [num_socio]);
+    }, [member_id]);
 
     const loadDataForInvoice = () => {
         setIsLoading(true);
 
         Promise.all([
-            MemberService.getMember(num_socio),
+            MemberService.getMember(member_id),
             InvoicingMonthService.getInvoicingMonths(),
-            InvoiceService.getInvoicesForMember(num_socio),
+            InvoiceService.getInvoicesForMember(member_id),
         ])
             .then(result => {
                 const member = result[0];
@@ -73,7 +73,7 @@ const CreateInvoiceSubpage = () => {
 
     const handleUpdateForm = updatedInvoice => {
         setValidationErrors(DataValidatorService.validateInvoice(updatedInvoice));
-        setInvoice({...updatedInvoice, member: parseInt(num_socio)});
+        setInvoice({...updatedInvoice, member: parseInt(member_id)});
     };
 
     const handleSubmit = () => {

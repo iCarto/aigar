@@ -19,14 +19,14 @@ const ViewMemberSubpage = () => {
     const [isLoading, setIsLoading] = useState(null);
     const [error, setError] = useState("");
 
-    const {num_socio} = useParams();
+    const {member_id} = useParams();
 
     useEffect(() => {
         setIsLoading(true);
 
         Promise.all([
-            MemberService.getMember(num_socio),
-            InvoiceService.getInvoicesForMember(num_socio),
+            MemberService.getMember(member_id),
+            InvoiceService.getInvoicesForMember(member_id),
         ])
             .then(result => {
                 const member = result[0];
@@ -42,7 +42,7 @@ const ViewMemberSubpage = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [num_socio, memberStatus]);
+    }, [member_id, memberStatus]);
 
     const handleStatusUpdate = newStatus => {
         setMemberStatus(newStatus);

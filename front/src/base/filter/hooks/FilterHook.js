@@ -8,11 +8,11 @@ function useFilter() {
     const combinedFilters = [
         {
             filter: "socio_factura",
-            searchedProperties: ["nombre", "num_socio"],
+            searchedProperties: ["nombre", "member_id"],
         },
         {
             filter: "socio",
-            searchedProperties: ["name", "num_socio"],
+            searchedProperties: ["name", "id"],
         },
     ];
 

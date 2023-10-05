@@ -8,7 +8,7 @@ class MemberAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     search_help_text = "Busqueda por nombre"
     list_display = (
-        "num_socio",
+        "id",
         "name",
         "orden",
         "status",

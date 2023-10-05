@@ -22,7 +22,7 @@ export default function MemberSortedListProvider({children}) {
             .filter(member => !member.isDeleted)
             .map(member => {
                 return {
-                    id: member.num_socio,
+                    id: member.id,
                     order: member.orden,
                     name: member.name,
                 };

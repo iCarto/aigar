@@ -59,7 +59,7 @@ const LoadPaymentsStep2PaymentsTable = ({
         );
         if (!invoiceForPayment) {
             invoiceForPayment = invoices.find(
-                invoice => invoice.num_socio === payment.num_socio
+                invoice => invoice.member_id === payment.member_id
             );
         }
         return invoiceForPayment;
@@ -71,8 +71,8 @@ const LoadPaymentsStep2PaymentsTable = ({
             let invoiceFieldsForPayment = {};
             if (invoiceForPayment) {
                 invoiceFieldsForPayment = {
-                    num_socio: invoiceForPayment.num_socio,
-                    nombre_socio: invoiceForPayment.nombre,
+                    member_id: invoiceForPayment.member_id,
+                    member_name: invoiceForPayment.nombre,
                     sector: invoiceForPayment.sector,
                     id_factura: invoiceForPayment.id,
                 };

@@ -26,7 +26,7 @@ const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =>
 
     const deleteMember = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.updateMemberStatus(member.num_socio, MEMBER_TYPES.DELETED.key)
+        MemberService.updateMemberStatus(member.id, MEMBER_TYPES.DELETED.key)
             .then(deletedMember => {
                 onUpdateStatus(MEMBER_TYPES.DELETED.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
@@ -41,7 +41,7 @@ const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =>
         <Alert severity="warning">
             ¿Desea eliminar a&nbsp;
             <strong>
-                {member.num_socio} - {member.name}
+                {member.id} - {member.name}
             </strong>
             &nbsp; del sistema?
         </Alert>

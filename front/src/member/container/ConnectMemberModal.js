@@ -30,7 +30,7 @@ const ConnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =
 
     const connectMember = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.updateMemberStatus(member.num_socio, MEMBER_TYPES.ACTIVE.key)
+        MemberService.updateMemberStatus(member.id, MEMBER_TYPES.ACTIVE.key)
             .then(connectedMember => {
                 onUpdateStatus(MEMBER_TYPES.ACTIVE.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
@@ -45,7 +45,7 @@ const ConnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =
         <p>
             ¿Desea volver a conectar a&nbsp;
             <strong>
-                {member.num_socio} - {member.name}
+                {member.id} - {member.name}
             </strong>
             &nbsp;en el sistema?
         </p>

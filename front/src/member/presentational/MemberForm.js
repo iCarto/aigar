@@ -15,10 +15,11 @@ const MemberForm = ({
     error = "",
     validationErrors = [],
 }) => {
-    const {num_socio} = useParams();
+    const {id: member_id} = useParams();
+    const params = useParams();
+    console.log(params);
     const getReadingDay = useGetSectorReadingDay;
-
-    const isNewMember = num_socio === "nuevo";
+    const isNewMember = member_id === "nuevo";
 
     const getFieldErrorFromProps = field => {
         const fieldErrors = validationErrors
@@ -52,7 +53,7 @@ const MemberForm = ({
 
     const handleChangeOrder = updatedMembersList => {
         const orderForItem = updatedMembersList.find(
-            item => item.id === member?.num_socio
+            item => item.id === member?.id
         ).order;
 
         const updatedMember = createMember({

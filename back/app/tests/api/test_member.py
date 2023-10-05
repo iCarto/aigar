@@ -17,7 +17,7 @@ def test_delete_member_not_allowed(api_client):
     member = MemberFactory.create(status=MemberStatus.ACTIVE)
     member_pk = member.pk
     assert member.pk == 1
-    assert member.num_socio == 1
+    assert member.id == 1
     response = api_client.delete(f"/api/members/{member_pk}/")
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     expected = Member.objects.get(pk=member_pk)
@@ -91,7 +91,7 @@ def test_update_member_with_invoices(api_client):
     d = model_to_dict(
         invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"name": "foo bar", "consumo_maximo": 15}
-    response = api_client.put(f"/api/members/{d['num_socio']}/", d)
+    response = api_client.put(f"/api/members/{d['id']}/", d)
     assert response.status_code == 200
     invoice.refresh_from_db()
     assert invoice.member.name == "foo bar"
@@ -106,7 +106,7 @@ def test_validate_dui(api_client):
         exceptions.ValidationError,
         match="El campo DUI debe tener el formato 'dddddddd-d'.",
     ):
-        api_client.put(f"/api/members/{d['num_socio']}/", d)
+        api_client.put(f"/api/members/{d['id']}/", d)
 
 
 def test_api_can_not_change_status(api_client):

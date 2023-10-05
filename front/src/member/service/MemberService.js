@@ -19,10 +19,10 @@ const MemberService = {
         });
     },
 
-    getMember(num_socio) {
+    getMember(id) {
         // always cast numero_socio to int
-        num_socio = parseInt(num_socio);
-        return ApiService.get("/members/" + num_socio + "/").then(response => {
+        id = parseInt(id);
+        return ApiService.get("/members/" + id + "/").then(response => {
             let member = member_api_adapter(response);
             return createMember(member);
         });
@@ -36,17 +36,15 @@ const MemberService = {
     },
 
     updateMember(member) {
-        return ApiService.put("/members/" + member.num_socio + "/", member).then(
-            response => {
-                let member = member_api_adapter(response);
-                return createMember(member);
-            }
-        );
+        return ApiService.put("/members/" + member.id + "/", member).then(response => {
+            let member = member_api_adapter(response);
+            return createMember(member);
+        });
     },
 
-    updateMemberStatus(num_socio, status) {
+    updateMemberStatus(id, status) {
         return ApiService.put("/members/status/", {
-            pks: [num_socio],
+            pks: [id],
             status: status,
         }).then(response => {
             console.log(response);

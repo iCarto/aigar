@@ -6,13 +6,13 @@ export function useMembersTableColumns() {
     const tableColumns = [
         {
             label: "N.º",
-            id: "num_socio",
+            id: "id",
         },
         {
             label: "Socio",
             id: "name",
             formatFunction: item => {
-                return <TextLink text={item.name} to={`/socios/${item.num_socio}`} />;
+                return <TextLink text={item.name} to={`/socios/${item.id}`} />;
             },
         },
         {

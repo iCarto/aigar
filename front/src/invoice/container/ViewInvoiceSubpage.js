@@ -35,7 +35,7 @@ const ViewInvoiceSubpage = () => {
         InvoiceService.getInvoice(idFactura)
             .then(invoiceData => {
                 setInvoice(invoiceData);
-                MemberService.getMember(invoiceData.num_socio).then(memberData => {
+                MemberService.getMember(invoiceData.member_id).then(memberData => {
                     setMember(memberData);
                 });
                 InvoiceService.getInvoicePayments(idFactura).then(paymentsData => {

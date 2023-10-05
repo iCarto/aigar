@@ -15,8 +15,8 @@ const MeasurementsService = {
                     return createMeasurement(
                         measurement_api_adapter({
                             sector: jsonMeasurement.sector,
-                            num_socio: jsonMeasurement.num_socio,
-                            nombre_socio: jsonMeasurement.name,
+                            member_id: jsonMeasurement.member_id,
+                            member_name: jsonMeasurement.member_name,
                             caudal_anterior: jsonMeasurement.lectura_anterior,
                             caudal_actual: jsonMeasurement.lectura,
                             medidor: jsonMeasurement.medidor,

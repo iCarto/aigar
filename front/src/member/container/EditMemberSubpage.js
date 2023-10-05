@@ -18,22 +18,22 @@ const EditMemberSubpage = () => {
     const [isSaving, setIsSaving] = useState(null);
 
     const {sortedMembersList, fetchMembersList} = useMembersList();
-    const {num_socio} = useParams();
+    const {member_id} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        MemberService.getMember(num_socio).then(member => {
+        MemberService.getMember(member_id).then(member => {
             setMember(member);
         });
         setMembersList(sortedMembersList);
-    }, [num_socio, sortedMembersList]);
+    }, [member_id, sortedMembersList]);
 
     const handleSubmit = updatedMember => {
         setIsSaving(true);
         MemberService.updateMember(updatedMember)
             .then(() => {
                 fetchMembersList();
-                navigate(`/socios/${num_socio}`);
+                navigate(`/socios/${member_id}`);
             })
             .catch(error => {
                 console.log(error);

@@ -25,12 +25,12 @@ const MemberDetail = ({member, isSummary = false}) => {
         if (isSummary) {
             return (
                 <TextLink
-                    text={`${member?.name} - ${member?.num_socio}`}
-                    to={`/socios/${member?.num_socio}`}
+                    text={`${member?.name} - ${member?.id}`}
+                    to={`/socios/${member?.id}`}
                 />
             );
         }
-        return `${member?.name} - ${member?.num_socio}`;
+        return `${member?.name} - ${member?.id}`;
     };
 
     const fields = [

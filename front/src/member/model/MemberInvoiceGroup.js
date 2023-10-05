@@ -8,13 +8,13 @@ const createMemberInvoiceGroups = (data = []) => {
 };
 
 const createMemberInvoiceGroup = ({
-    num_socio = -1,
+    id = -1,
     nombre = "",
     sector = "",
     invoices = [],
 } = {}) => {
     const publicApi = {
-        num_socio,
+        id,
         nombre,
         sector,
         invoices,

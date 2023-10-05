@@ -9,9 +9,9 @@ function useFilterMonthlyData() {
             if (filter.text) {
                 filtered = filterByTextFunction(item, filter.text, [
                     "numero",
-                    "num_socio",
+                    "member_id",
                     "nombre",
-                    "nombre_socio",
+                    "member_name",
                     "num_factura",
                     "fecha",
                 ]);

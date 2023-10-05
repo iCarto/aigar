@@ -42,7 +42,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
         let measurementsWithoutInvoice = [];
         measurements.forEach(measurement => {
             const invoice = invoices.find(
-                invoice => invoice.num_socio === measurement.num_socio
+                invoice => invoice.member_id === measurement.member_id
             );
             if (invoice) {
                 if (invoice.caudal_anterior !== measurement.caudal_anterior) {
@@ -53,7 +53,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
                     );
                 }
             } else {
-                measurementsWithoutInvoice.push(measurement.num_socio);
+                measurementsWithoutInvoice.push(measurement.member_id);
             }
         });
         setMeasurementsWithoutInvoice(measurementsWithoutInvoice);

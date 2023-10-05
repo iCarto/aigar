@@ -30,8 +30,8 @@ const createPayment = ({
     id = null,
     fecha = null,
     monto = null,
-    num_socio = null,
-    nombre_socio = "",
+    member_id = null,
+    member_name = "",
     sector = "",
     num_factura = "",
     id_factura = null,
@@ -42,9 +42,9 @@ const createPayment = ({
         id,
         fecha,
         monto,
-        num_socio:
-            num_socio !== -1 ? parseInt(num_socio) : parseInt(num_factura.substr(0, 4)),
-        nombre_socio,
+        member_id:
+            member_id !== -1 ? parseInt(member_id) : parseInt(num_factura.substr(0, 4)),
+        member_name,
         sector,
         num_factura: num_factura !== "" ? num_factura.padStart(12, "0") : num_factura,
         id_factura,

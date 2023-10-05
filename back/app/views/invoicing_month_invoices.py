@@ -8,7 +8,7 @@ from app.models.member import Member
 class MemberShortSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
-        fields = ["num_socio", "name", "status", "sector"]
+        fields = ["id", "name", "status", "sector"]
 
     # sector_id does not launch subqueries
     sector = serializers.ReadOnlyField(source="sector_id")

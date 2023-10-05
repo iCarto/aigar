@@ -31,7 +31,7 @@ const CreateMemberSubpage = () => {
                 ? sortedMembersList[sortedMembersList.length - 1].order + 1
                 : 1;
         const newMember = {
-            id: member.num_socio,
+            id: member.id,
             order: orderForNewMember,
             name: "<<Nuevo socio>>",
         };
@@ -60,7 +60,7 @@ const CreateMemberSubpage = () => {
         MemberService.createMember(updatedMember)
             .then(createdMember => {
                 fetchMembersList();
-                navigate(`/socios/${createdMember.num_socio}`);
+                navigate(`/socios/${createdMember.id}`);
             })
             .catch(error => {
                 console.log(error);

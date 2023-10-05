@@ -39,11 +39,11 @@ const MemberFormFields = ({formData, members, onChange, onChangeOrder}) => {
     return (
         <Grid container columnSpacing={{xs: 3, xl: 5}} justifyContent="center" my={2}>
             <Grid item xs={5} xl={3}>
-                {formData?.num_socio.value === -1 ? null : (
+                {formData?.id.value === -1 ? null : (
                     <FormInputInteger
                         label="Número"
-                        name="num_socio"
-                        field={formData?.num_socio}
+                        name="id"
+                        field={formData?.id}
                         onChange={handleChangeField}
                         readOnly
                     />

@@ -28,7 +28,7 @@ const EditInvoiceSubpage = () => {
         InvoiceService.getInvoice(idFactura)
             .then(invoice => {
                 setInvoice(invoice);
-                MemberService.getMember(invoice.num_socio).then(member => {
+                MemberService.getMember(invoice.member_id).then(member => {
                     setMember(member);
                 });
             })

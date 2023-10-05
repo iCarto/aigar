@@ -11,9 +11,9 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
 
-    const handleClickViewMember = num_socio => {
+    const handleClickViewMember = member_id => {
         setIsModalOpen(true);
-        setSelectedMemberForModal(num_socio);
+        setSelectedMemberForModal(member_id);
     };
 
     const onClickCancelViewMember = () => {
@@ -23,7 +23,7 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
 
     const modal = (
         <MemberViewModal
-            num_socio={selectedMemberForModal}
+            member_id={selectedMemberForModal}
             isOpen={isModalOpen}
             onClose={onClickCancelViewMember}
         />
@@ -33,11 +33,11 @@ const LoadMeasurementsList = ({measurements, onUpdateMeasurement}) => {
         const columns = [
             {
                 Header: "Socio",
-                accessor: d => `${d.num_socio} - ${d.nombre_socio}`,
+                accessor: d => `${d.id} - ${d.nombre}`,
                 Cell: LinkAccessorCellTable,
                 getProps: () => ({
                     handleClick: handleClickViewMember,
-                    linkAccessor: "num_socio",
+                    linkAccessor: "member_id",
                 }),
             },
             {

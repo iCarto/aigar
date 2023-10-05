@@ -31,7 +31,7 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
 
     const disconnectMember = () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);
-        MemberService.updateMemberStatus(member.num_socio, MEMBER_TYPES.INACTIVE.key)
+        MemberService.updateMemberStatus(member.id, MEMBER_TYPES.INACTIVE.key)
             .then(disconnectedMember => {
                 onUpdateStatus(MEMBER_TYPES.INACTIVE.key);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
@@ -47,7 +47,7 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
             <AlertTitle>
                 ¿Desea desactivar a&nbsp;
                 <strong>
-                    {member.num_socio} - {member.name}
+                    {member.id} - {member.name}
                 </strong>
                 ?
             </AlertTitle>

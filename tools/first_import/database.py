@@ -42,16 +42,16 @@ def get_fixtures_members(invoices, last_invoicing_month):
             mes_facturacion = str(year) + str(month)
             if mes_facturacion == last_invoicing_month:
                 for invoice in month_invoices:
-                    num_socio = int(invoice["num_socio"])
+                    member_id = int(invoice["member_id"])
                     fixture_member = [
                         aux_fixture_member
                         for aux_fixture_member in fixtures_members
-                        if aux_fixture_member["pk"] == num_socio
+                        if aux_fixture_member["pk"] == member_id
                     ]
                     if not fixture_member:
                         fixture_member = {
                             "model": "api.Member",
-                            "pk": num_socio,
+                            "pk": member_id,
                             "fields": {
                                 "name": invoice["nombre"],
                                 "sector": int(invoice["sector"]),
@@ -79,16 +79,16 @@ def get_fixtures_deleted_members(invoices, fixtures_members, last_invoicing_mont
             mes_facturacion = str(year) + str(month)
             if mes_facturacion != last_invoicing_month:
                 for invoice in month_invoices:
-                    num_socio = int(invoice["num_socio"])
+                    member_id = int(invoice["member_id"])
                     fixture_member = [
                         aux_fixture_member
                         for aux_fixture_member in fixtures_members
-                        if aux_fixture_member["pk"] == num_socio
+                        if aux_fixture_member["pk"] == member_id
                     ]
                     if not fixture_member:
                         fixture_member = {
                             "model": "api.Member",
-                            "pk": num_socio,
+                            "pk": member_id,
                             "fields": {
                                 "name": invoice["nombre"],
                                 "sector": int(invoice["sector"]),
@@ -106,7 +106,7 @@ def get_fixtures_invoices(invoices):
         for month, month_invoices in year_invoices.items():
             mes_facturacion = str(year) + str(month)
             for invoice in month_invoices:
-                num_socio = int(invoice["num_socio"])
+                member_id = int(invoice["member_id"])
                 # estos pagos se corresponden con la factura del mes anterior
                 # y se utiliza en el excel para determinar si hay mora o no
                 # pero no se pueden cargar en la factura actual, sino en la anterior
@@ -123,7 +123,7 @@ def get_fixtures_invoices(invoices):
                         aux_fixture_invoice
                         for aux_fixture_invoice in fixtures_invoices
                         if aux_fixture_invoice["model"] == "api.Invoice"
-                        and aux_fixture_invoice["fields"]["member"] == num_socio
+                        and aux_fixture_invoice["fields"]["member"] == member_id
                         and aux_fixture_invoice["fields"]["mes_facturacion"]
                         == mes_facturacion_previo
                     ]
@@ -153,7 +153,7 @@ def get_fixtures_invoices(invoices):
                         "mes_facturacion": mes_facturacion,
                         "version": 1,
                         "anho": int(year),
-                        "member": num_socio,
+                        "member": member_id,
                         "nombre": invoice["nombre"],
                         "sector": int(invoice["sector"]),
                         "ahorro": float(invoice.get("ahorro", 0) or 0),

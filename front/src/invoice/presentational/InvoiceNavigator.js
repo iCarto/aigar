@@ -1,4 +1,7 @@
 import {useNavigate} from "react-router-dom";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
 
 const InvoiceNavigator = ({navigatorIds, currentInvoiceId, path}) => {
     const navigate = useNavigate();
@@ -16,26 +19,27 @@ const InvoiceNavigator = ({navigatorIds, currentInvoiceId, path}) => {
     };
 
     return (
-        <div className="text-center mb-2" style={{borderBottom: "1px solid #ccc"}}>
-            <form className="form-inline d-flex justify-content-between m-1">
-                <button
-                    type="button"
-                    className="btn mr-1"
+        <Box textAlign="center" mb={1}>
+            <Box display="flex" justifyContent="space-between" mb={0.5}>
+                <Button
+                    variant="text"
+                    size="small"
                     onClick={handleClickPreviousInvoice}
                     disabled={isPreviousButtonDisabled}
                 >
                     &laquo; Factura anterior
-                </button>
-                <button
-                    type="button"
-                    className="btn ml-1"
+                </Button>
+                <Button
+                    variant="text"
+                    size="small"
                     onClick={handleClickNextInvoice}
                     disabled={isNextButtonDisabled}
                 >
                     Siguiente factura &raquo;
-                </button>
-            </form>
-        </div>
+                </Button>
+            </Box>
+            <Divider />
+        </Box>
     );
 };
 

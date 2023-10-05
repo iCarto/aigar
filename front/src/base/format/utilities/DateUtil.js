@@ -25,6 +25,11 @@ const DateUtil = {
         return moment(date, BANK_DATEFORMAT, true).format(API_DATEFORMAT);
     },
 
+    parseISO(value) {
+        var tokens = value.trim().split("-");
+        return new Date(Date.UTC(tokens[0], tokens[1] - 1, tokens[2]));
+    },
+
     // Transform to UI format date DD/MM/YYYY from DD-MM-YYYY
     format(date) {
         return moment(date, API_DATEFORMAT).format(BANK_DATEFORMAT);

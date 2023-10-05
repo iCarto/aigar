@@ -40,10 +40,6 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     version = 1
     anho = factory.SelfAttribute("mes_facturacion.anho")
     mes_facturado = factory.SelfAttribute("mes_facturacion.mes")
-    # mes_limite = factory.LazyAttribute(lambda obj: obj.mes_facturado + 1)  # fixme
-    # anho_limite = factory.LazyAttribute(lambda obj: obj.anho + 1)  # fixme
-    mes_limite = "10"
-    anho_limite = "2019"
     caudal_anterior = 1390
     caudal_actual = 1400
     cuota_fija = fixed_values["CUOTA_FIJA_NORMAL"]

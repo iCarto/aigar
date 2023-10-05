@@ -52,7 +52,6 @@ def parse_invoice_spreadsheet(xls):
         "Comentarios": "observaciones",
         "Comunidad": "comunidad",
         "MesFact": "mes_facturado",
-        "MesLimite": "mes_limite",
         "ENTREGA": "entrega",
         "Pago1al11": "pago_1_al_10",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
         "Comprobar": "comprobar_pago_1_al_10",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
@@ -81,7 +80,6 @@ def parse_invoice_spreadsheet(xls):
 
     if "mes_facturado" not in df.columns:
         df["mes_facturado"] = 9
-        df["mes_limite"] = 10
 
     return df
 

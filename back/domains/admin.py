@@ -87,7 +87,7 @@ class LocalityAdmin(admin.ModelAdmin):
 
 @admin.register(BasicConfig)
 class BasicConfigAdmin(admin.ModelAdmin):
-    list_display = ("name", "payments_csv")
+    list_display = ("name", "payment_csv")
 
     def has_add_permission(self, request, obj=None):
         return not BasicConfig.objects.count()

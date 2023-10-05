@@ -23,7 +23,7 @@ Logos. Tendremos uno génerico totalmente transparente del tamaño adecuado.
 
 from django.db import models
 
-from back.fields import StrictCharField
+from back.fields import RangedIntegerField, StrictCharField
 
 
 class BasicConfig(models.Model):
@@ -40,7 +40,7 @@ class BasicConfig(models.Model):
         min_length=3,
     )
 
-    payments_csv = models.BooleanField(
+    payment_csv = models.BooleanField(
         null=False,
         blank=False,
         default=False,
@@ -48,5 +48,13 @@ class BasicConfig(models.Model):
         help_text="Marque esta casilla si los pagos se importarán mediante un CSV generado por el banco",
     )
 
+    payment_due_day = RangedIntegerField(
+        null=False,
+        blank=False,
+        min_value=1,
+        max_value=28,
+        verbose_name="Día límite de pago",
+    )
+
     def __str__(self):
-        return f"{self.name} {self.payments_csv}"
+        return f"{self.name} {self.payment_csv}"

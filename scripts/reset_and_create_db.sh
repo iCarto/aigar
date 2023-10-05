@@ -56,8 +56,8 @@ else
         sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
 
-        INSERT INTO domains_basicconfig (name, payments_csv) VALUES
-            ('Junta de Agua ASCATLI', 1)
+        INSERT INTO domains_basicconfig (name, payment_csv, payment_due_day) VALUES
+            ('Junta de Agua ASCATLI', 1, 10)
         ;
 
         INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
@@ -128,10 +128,10 @@ else
 
         INSERT INTO app_invoice
         (
-            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
         )
         SELECT
-            id_factura, version, anho, mes_facturado, mes_limite, anho_limite, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
             FROM api_invoice;
         DROP TABLE api_invoice;
         DROP TABLE api_invoicingmonth;

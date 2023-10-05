@@ -1,9 +1,11 @@
+import datetime
 from typing import Self
 
 from django.db import models
 
 from app.models.fixed_values import fixed_values
 from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
+from back.utils.dates import next_month
 
 
 class InvoiceStatus(models.TextChoices):
@@ -19,17 +21,6 @@ def _calculated_reconexion(member) -> float:
     if item:
         return item.value
     return 0
-
-
-def _next_month(invoicing_month) -> int:
-    month = int(invoicing_month.mes)
-    return 1 if month + 1 > 12 else month + 1
-
-
-def _next_year(invoicing_month) -> int:
-    year = int(invoicing_month.anho)
-    month = int(invoicing_month.mes)
-    return year + 1 if month == 12 else year
 
 
 class InvoiceQuerySet(models.QuerySet["Invoice"]):
@@ -67,8 +58,6 @@ class InvoiceManager(models.Manager["Invoice"]):
             "version": 1,
             "anho": new_invoicing_month.anho,
             "mes_facturado": new_invoicing_month.mes,
-            "mes_limite": _next_month(new_invoicing_month),
-            "anho_limite": _next_year(new_invoicing_month),
             "member": member,
             "cuota_fija": member.cuota_fija,
             "comision": member.comision,
@@ -154,14 +143,6 @@ class Invoice(models.Model):
 
     mes_facturado = models.PositiveSmallIntegerField(
         null=False, blank=False, verbose_name="Mes facturado", help_text=""
-    )
-
-    mes_limite = models.PositiveSmallIntegerField(
-        null=False, blank=False, verbose_name="Mes límite", help_text=""
-    )
-
-    anho_limite = models.PositiveSmallIntegerField(
-        null=False, blank=False, verbose_name="Año límite", help_text=""
     )
 
     caudal_anterior = models.PositiveIntegerField(
@@ -274,6 +255,10 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.id_factura} - {self.member} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
+
+    @property
+    def due_date(self) -> datetime.date:
+        return next_month(datetime.date(self.anho, self.mes_facturado, 1))
 
     @property
     def deuda(self) -> float:

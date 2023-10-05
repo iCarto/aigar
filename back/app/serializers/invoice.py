@@ -10,6 +10,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
+    due_date = serializers.DateField(read_only=True)
     resumen = serializers.SerializerMethodField()
 
     def get_resumen(self, obj):
@@ -31,8 +32,7 @@ class InvoiceShortSerializer(serializers.ModelSerializer):
             "version",
             "anho",
             "mes_facturado",
-            "mes_limite",
-            "anho_limite",
+            "due_date",
             "member",
             "caudal_anterior",
             "caudal_actual",

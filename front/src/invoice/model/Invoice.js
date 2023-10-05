@@ -1,4 +1,4 @@
-import {NumberUtil} from "base/format/utilities";
+import {DateUtil, NumberUtil} from "base/format/utilities";
 import {getTipoSocio} from "../../member/model/Member";
 
 const ESTADOS_FACTURA = {
@@ -82,8 +82,7 @@ const createInvoice = ({
     anho = null,
     mes_facturado = 0,
     mes_facturacion = "",
-    mes_limite = 0,
-    anho_limite = 0,
+    due_date = null,
     member = null,
     caudal_actual = null,
     caudal_anterior = null,
@@ -123,8 +122,7 @@ const createInvoice = ({
         anho,
         mes_facturado,
         mes_facturacion,
-        mes_limite,
-        anho_limite,
+        due_date: DateUtil.parseISO(due_date),
         member,
         caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),
         caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
@@ -223,9 +221,6 @@ const createInvoiceForMember = (member, invoicingMonth, version) => {
         mes_facturacion: invoicingMonth.id_mes_facturacion,
         anho: invoicingMonthAnho,
         mes_facturado: invoicingMonthMes,
-        anho_limite:
-            invoicingMonthMes === 12 ? invoicingMonthAnho + 1 : invoicingMonthAnho,
-        mes_limite: (invoicingMonthMes + 1) % 12,
         estado: ESTADOS_FACTURA.NUEVA,
         version,
     });

@@ -8,6 +8,7 @@ import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
 import PrintIcon from "@mui/icons-material/Print";
 import AlertTitle from "@mui/material/AlertTitle";
+import {DateUtil} from "base/format/utilities";
 
 const PrintInvoicesModal = ({
     invoices,
@@ -21,11 +22,12 @@ const PrintInvoicesModal = ({
 
     const getReadingDay = useGetSectorReadingDay;
 
-    const invoicesWithReadingDay = invoices.map(invoice => {
+    const formatedInvoices = invoices.map(invoice => {
         const readingDay = getReadingDay(invoice.sector);
         return {
             ...invoice,
             fecha_lectura: `${readingDay}/${invoice.mes_facturado}/${invoice.anho}`,
+            due_date: DateUtil.format(invoice.due_date),
         };
     });
 
@@ -35,7 +37,7 @@ const PrintInvoicesModal = ({
 
         try {
             const data = {
-                invoices: invoicesWithReadingDay,
+                invoices: formatedInvoices,
             };
             const invoicesDocument =
                 await DocXPrintFileService.generateInvoicesDocument(

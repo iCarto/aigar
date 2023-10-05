@@ -166,10 +166,6 @@ def get_fixtures_invoices(invoices):
                         "derecho": float(invoice.get("derecho", 0) or 0),
                         "entrega": True if invoice.get("entrega") == "Si" else False,
                         "mes_facturado": int(invoice.get("mes_facturado") or 0),
-                        "mes_limite": int(invoice.get("mes_limite") or 0),
-                        "anho_limite": int(year)
-                        if int(invoice.get("mes_facturado") or 0) != 12
-                        else int(year) + 1,
                         "mora": float(invoice.get("mora", 0) or 0),
                         "reconexion": float(invoice.get("reconexion", 0) or 0),
                         "descuento": float(invoice.get("descuento", 0) or 0),

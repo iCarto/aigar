@@ -9,6 +9,7 @@ const MonthlyInvoicingNavigator = ({
     invoicingMonths,
     selectedInvoicingMonth,
     handleChangeInvoicingMonth,
+    isNextMonthButtonDisabled,
 }) => {
     const getInvoicingMonthCurrentIndex = () => {
         return invoicingMonths.findIndex(
@@ -61,7 +62,10 @@ const MonthlyInvoicingNavigator = ({
     };
 
     const isNextButtonDisabled = () => {
-        return getInvoicingMonthCurrentIndex() === invoicingMonths.length - 1;
+        return (
+            isNextMonthButtonDisabled ||
+            getInvoicingMonthCurrentIndex() === invoicingMonths.length - 1
+        );
     };
 
     const monthOptions = invoicingMonths

@@ -21,7 +21,7 @@ const LoadPaymentsButton = ({invoicingMonth, disabled = false}) => {
                 variant="contained"
                 fullWidth
             >
-                5. Importar pagos
+                5. Actualizar pagos
             </Button>
             <LoadPaymentsModal
                 isOpen={isModalOpen}

@@ -9,6 +9,7 @@ const PrintInvoicesButton = ({
     outputFilename,
     showIcon = true,
     buttonTitle = "",
+    disabled = false,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,20 +21,16 @@ const PrintInvoicesButton = ({
         setIsModalOpen(false);
     };
 
-    //TO-DO: Check if this works for ListMonthlyInvoicesActions too
-    const isDisabled =
-        !invoices?.length || invoices?.some(invoice => invoice.consumo < 0);
-
     return (
         <>
             <Button
                 onClick={handleOpenModal}
-                disabled={isDisabled}
+                disabled={disabled}
                 variant="contained"
                 startIcon={showIcon ? <PrintIcon fontSize="small" /> : null}
                 title={
-                    isDisabled
-                        ? "No se pueden imprimir las facturas ya que alguna no tiene consumo registrado"
+                    disabled
+                        ? "No se pueden imprimir las facturas ya que alguna no tiene el caudal actual registrado"
                         : null
                 }
                 fullWidth

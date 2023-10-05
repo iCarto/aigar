@@ -23,27 +23,53 @@ const ListMonthlyInvoicesSidebar = ({
     };
 
     const isCurrentInvoicingMonth = selectedInvoicingMonth.is_open;
-    const isStartInvoicingEnabled = selectedInvoicingMonth.id_mes_facturacion < 0;
+    const isNewMonthSelected = selectedInvoicingMonth.id_mes_facturacion === -1;
 
     const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
 
-    const isLoadMeasurementsButtonEnabled =
-        invoices?.length > 0 && invoices?.every(invoice => invoice.consumo >= 0);
+    const isStartInvoicingDisabled = !isNewMonthSelected;
+    /*
+        Botón IMPORTAR LECTURAS deshabilitado cuando:
+        * No haya facturas para ese mes (que sería el caso de que has cambiado el selector de mes y no has iniciado la facturación)
+        * o cuando todas las facturas tengan un caudal_actual > 0. No usamos el consumo porque podría ser 0 por cualquier motivo
+        * o cuando ya se hayan impreso las facturas (es decir, que no todas las facturas son nuevas)
+    */
+    const isLoadMeasurementsButtonDisabled =
+        !invoices?.length ||
+        invoices?.every(invoice => invoice.caudal_actual) ||
+        invoices?.some(invoice => invoice.estado !== ESTADOS_FACTURA.NUEVA);
+    /*
+        Botón IMPRIMIR FACTURAS deshabilitado cuando:
+        * No haya facturas para ese mes
+        * o alguna factura no tenga caudal_actual o es 0. Es decir no se ha importado la lectura para alguna.
+    */
+    const isPrintInvoicesButtonDisabled =
+        !invoices?.length || invoices?.some(invoice => !invoice.caudal_actual);
+    /*
+        Botón ACTUALIZAR PAGOS deshabilitado cuando:
+        * No haya facturas para ese mes
+        * o todas las facturas están cobradas
+    */
+    const isLoadPaymentsButtonDisabled =
+        !invoices?.length ||
+        invoices?.every(invoice => invoice.estado === ESTADOS_FACTURA.COBRADA);
 
-    const isLoadPaymentsButtonEnabled =
-        invoices?.length > 0 &&
-        invoices?.filter(
-            invoice => invoice.estado === ESTADOS_FACTURA.PENDIENTE_DE_COBRO
-        ).length !== 0;
+    const isMonthlyInvoicingDone =
+        isLoadMeasurementsButtonDisabled &&
+        isPrintInvoicesButtonDisabled &&
+        isLoadPaymentsButtonDisabled;
+
+    const isNextMonthButtonDisabled =
+        isCurrentInvoicingMonth && !isMonthlyInvoicingDone;
 
     const menuActions = [
         <StartInvoicingMonthButton
             invoicingMonth={selectedInvoicingMonth}
-            disabled={!isStartInvoicingEnabled}
+            disabled={isStartInvoicingDisabled}
         />,
         <LoadMeasurementsButton
             invoicingMonth={selectedInvoicingMonth}
-            disabled={!isLoadMeasurementsButtonEnabled}
+            disabled={isLoadMeasurementsButtonDisabled}
         />,
         <PrintInvoicesButton
             buttonTitle="3. Imprimir facturas"
@@ -51,11 +77,12 @@ const ListMonthlyInvoicesSidebar = ({
             onDataUpdate={handleDataUpdate}
             outputFilename={outputFilename}
             showIcon={false}
+            disabled={isPrintInvoicesButtonDisabled}
         />,
         <ExportMemberButton />,
         <LoadPaymentsButton
             invoicingMonth={selectedInvoicingMonth}
-            disabled={!isLoadPaymentsButtonEnabled}
+            disabled={isLoadPaymentsButtonDisabled}
         />,
     ];
 
@@ -65,8 +92,9 @@ const ListMonthlyInvoicesSidebar = ({
                 selectedInvoicingMonth={selectedInvoicingMonth}
                 invoicingMonths={invoicingMonths}
                 handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                isNextMonthButtonDisabled={isNextMonthButtonDisabled}
             />
-            {isStartInvoicingEnabled || isCurrentInvoicingMonth ? (
+            {isCurrentInvoicingMonth || isNewMonthSelected ? (
                 <ActionsSidebarMenu menuActions={menuActions} />
             ) : null}
         </>

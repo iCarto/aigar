@@ -1,6 +1,6 @@
 import {MEMBER_TYPES_MAPPING, USE_TYPES_MAPPING} from "member/config";
 import {ValueWithIcon} from "base/common";
-import {LinkCellTable} from "base/table/components";
+import {TextLink} from "base/navigation/components";
 
 export function useMembersTableColumns() {
     const tableColumns = [
@@ -12,9 +12,7 @@ export function useMembersTableColumns() {
             label: "Socio",
             id: "name",
             formatFunction: item => {
-                return (
-                    <LinkCellTable text={item.name} to={`/socios/${item.num_socio}`} />
-                );
+                return <TextLink text={item.name} to={`/socios/${item.num_socio}`} />;
             },
         },
         {

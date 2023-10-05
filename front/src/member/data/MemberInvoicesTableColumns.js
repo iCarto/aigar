@@ -1,4 +1,4 @@
-import {LinkCellTable} from "base/table/components";
+import {TextLink} from "base/navigation/components";
 import {
     InvoiceGroupFieldsCellTable,
     InvoiceMonthCellTable,
@@ -12,10 +12,7 @@ export function useMemberInvoicesTableColumns() {
             id: "numero",
             formatFunction: item => {
                 return (
-                    <LinkCellTable
-                        text={item.numero}
-                        to={`/facturas/${item.id_factura}`}
-                    />
+                    <TextLink text={item.numero} to={`/facturas/${item.id_factura}`} />
                 );
             },
         },

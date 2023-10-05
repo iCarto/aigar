@@ -1,7 +1,7 @@
 import {MEMBER_TYPES_MAPPING} from "member/config";
 import {InvoiceResumenCellTable, InvoiceStatusCellTable} from "invoice/presentational";
 import {ValueWithIcon} from "base/common";
-import {LinkCellTable} from "base/table/components";
+import {TextLink} from "base/navigation/components";
 
 export function useMonthlyInvoicingTableColumns() {
     const tableColumns = [
@@ -21,12 +21,7 @@ export function useMonthlyInvoicingTableColumns() {
             label: "Socio",
             id: "nombre",
             formatFunction: item => {
-                return (
-                    <LinkCellTable
-                        text={item.nombre}
-                        to={`/socios/${item.num_socio}`}
-                    />
-                );
+                return <TextLink text={item.nombre} to={`/socios/${item.num_socio}`} />;
             },
         },
         {
@@ -38,7 +33,7 @@ export function useMonthlyInvoicingTableColumns() {
             id: "numero",
             formatFunction: item => {
                 return (
-                    <LinkCellTable
+                    <TextLink
                         text={item.numero}
                         to={`/facturas_mes/${item.id_factura}`}
                     />

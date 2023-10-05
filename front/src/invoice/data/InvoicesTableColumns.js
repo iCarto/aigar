@@ -1,4 +1,4 @@
-import {LinkCellTable} from "base/table/components";
+import {TextLink} from "base/navigation/components";
 import {
     InvoiceGroupFieldsCellTable,
     InvoiceMonthCellTable,
@@ -11,12 +11,7 @@ export function useInvoicesTableColumns() {
             label: "Socio",
             id: "nombre",
             formatFunction: item => {
-                return (
-                    <LinkCellTable
-                        text={item.nombre}
-                        to={`/socios/${item.num_socio}`}
-                    />
-                );
+                return <TextLink text={item.nombre} to={`/socios/${item.num_socio}`} />;
             },
         },
         {
@@ -28,10 +23,7 @@ export function useInvoicesTableColumns() {
             id: "numero",
             formatFunction: item => {
                 return (
-                    <LinkCellTable
-                        text={item.numero}
-                        to={`/facturas/${item.id_factura}`}
-                    />
+                    <TextLink text={item.numero} to={`/facturas/${item.id_factura}`} />
                 );
             },
         },

@@ -7,12 +7,10 @@ const TextLink = ({text, to, textStyle = {}}) => {
     const theme = useTheme();
     const textLinkStyle = {
         display: "inline-block",
-        color: theme.palette.primary.main,
-        textDecoration: "underline",
-        textDecorationColor: "rgba(0, 123, 196, 0.4)",
-    };
-
-    const textLinkHoverStyle = {
+        whiteSpace: "nowrap",
+        fontWeight: "600",
+        fontSize: "inherit",
+        color: "inherit",
         "&:hover": {
             textDecoration: "underline",
             textDecorationColor: theme.palette.primary.dark,
@@ -20,8 +18,8 @@ const TextLink = ({text, to, textStyle = {}}) => {
     };
 
     return (
-        <Link component={HashLink} to={to} smooth style={{...textLinkStyle}}>
-            <Typography sx={{...textLinkHoverStyle, ...textStyle}}>{text}</Typography>
+        <Link component={HashLink} to={to} smooth style={textLinkStyle}>
+            <Typography sx={{...textLinkStyle, ...textStyle}}>{text}</Typography>
         </Link>
     );
 };

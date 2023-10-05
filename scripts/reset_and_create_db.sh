@@ -139,7 +139,7 @@ else
 
         INSERT INTO app_measurement
         (
-            id_lectura,
+            id,
             caudal_anterior,
             caudal_actual,
             consumo,

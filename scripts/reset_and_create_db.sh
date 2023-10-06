@@ -99,6 +99,15 @@ else
         ;
 */
         /* #4234-16 */
+        WITH
+          socias AS (
+            SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha
+        )
+        , invoices as (
+            SELECT id_factura FROM api_invoice WHERE member_id IN (SELECT num_socio FROM socias) AND estado = 'nueva'
+        )
+        DELETE FROM api_measurement WHERE factura_id IN (SELECT id_factura FROM invoices);
+
         DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
 
         INSERT INTO app_member
@@ -156,9 +165,6 @@ else
         SELECT
             id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
             FROM api_invoice;
-        DROP TABLE api_invoice;
-        DROP TABLE api_invoicingmonth;
-        DROP TABLE api_member;
 
         INSERT INTO app_measurement
         (
@@ -183,28 +189,30 @@ else
             factura_id,
             mes_facturacion_id
         FROM api_measurement;
-        DROP TABLE api_measurement;
+
 
         INSERT INTO app_payment
         (
-            id,
-            fecha,
-            monto,
-            created_at,
-            updated_at,
-            factura_id,
-            mes_facturacion_id
+            id
+            , fecha
+            , monto
+            , created_at
+            , updated_at
+            , invoice_id
         )
         SELECT
-            id_pago,
-            fecha,
-            monto,
-            created_at,
-            updated_at,
-            factura_id,
-            mes_facturacion_id
+            id_pago
+            , fecha
+            , monto
+            , created_at
+            , updated_at
+            , factura_id
         FROM api_payment;
+        DROP TABLE api_measurement;
         DROP TABLE api_payment;
+        DROP TABLE api_invoice;
+        DROP TABLE api_invoicingmonth;
+        DROP TABLE api_member;
         "
     fi
 fi

@@ -1,4 +1,3 @@
-export {default as IconButtonLink} from "./IconButtonLink";
 export {default as AcceptButton} from "./AcceptButton";
 export {default as ContinueButton} from "./ContinueButton";
 export {default as CancelButton} from "./CancelButton";

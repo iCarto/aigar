@@ -1,5 +1,9 @@
 import {DateUtil} from "base/format/utilities";
-import {IconButtonLink} from "base/common";
+import {FormSelect} from "base/form";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 const MonthlyInvoicingNavigator = ({
     invoicingMonths,
@@ -62,55 +66,62 @@ const MonthlyInvoicingNavigator = ({
 
     const monthOptions = invoicingMonths
         .filter(invoicingMonth => invoicingMonth.anho === selectedInvoicingMonth.anho)
-        .map(invoicingMonth => {
-            return (
-                <option key={invoicingMonth.mes} value={invoicingMonth.mes}>
-                    {DateUtil.getShortMonthName(invoicingMonth.mes)}
-                </option>
-            );
-        });
+        .map(invoicingMonth => ({
+            key: invoicingMonth.mes,
+            value: DateUtil.getShortMonthName(invoicingMonth.mes),
+        }));
 
     const yearOptions = [
         ...new Set(invoicingMonths.map(invoicingMonth => invoicingMonth.anho)),
-    ].map(year => {
-        return (
-            <option key={year} value={year}>
-                {year}
-            </option>
-        );
-    });
+    ].map(year => ({
+        key: year,
+        value: year,
+    }));
+
+    const arrowBtnStyle = {
+        "& .MuiSvgIcon-root": {
+            width: "18px",
+            height: "18px",
+        },
+    };
 
     return (
-        <form className="form-inline d-flex justify-content-around pt-2 pb-1">
-            <IconButtonLink
-                icon="chevron-circle-left"
+        <Box display="flex" justifyContent="space-between" alignItems="center" pb={0.5}>
+            <IconButton
                 onClick={handleMonthChangePrevious}
                 disabled={isPreviousButtonDisabled()}
-            />
-            <div className="row">
-                <select
-                    className="custom-select"
-                    id="inlineFormCustomSelectPref"
+                size="small"
+                sx={arrowBtnStyle}
+            >
+                <ArrowLeftIcon />
+            </IconButton>
+            <Box display="flex" alignItems="center">
+                <FormSelect
+                    label="Mes"
+                    name="mes"
                     value={selectedInvoicingMonth.mes}
+                    options={monthOptions}
                     onChange={handleMonthSelected}
-                >
-                    {monthOptions}
-                </select>
-                <select
-                    className="custom-select"
-                    id="inlineFormCustomSelectPref"
+                    smallInput
+                />
+                <FormSelect
+                    label="Año"
+                    name="anho"
                     value={selectedInvoicingMonth.anho}
+                    options={yearOptions}
                     onChange={handleYearSelected}
-                >
-                    {yearOptions}
-                </select>
-            </div>
-            <IconButtonLink
-                icon="chevron-circle-right"
+                    smallInput
+                />
+            </Box>
+            <IconButton
                 onClick={handleMonthChangeNext}
                 disabled={isNextButtonDisabled()}
-            />
-        </form>
+                size="small"
+                sx={arrowBtnStyle}
+            >
+                <ArrowRightIcon />
+            </IconButton>
+        </Box>
     );
 };
 

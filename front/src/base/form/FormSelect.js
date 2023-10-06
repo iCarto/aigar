@@ -13,12 +13,22 @@ const FormSelect = ({
     disabled = false,
     required = false,
     showEmptyOption = false,
+    smallInput = false,
 }) => {
     const fieldValue = field ? field.value : value;
 
     const emptyOption = {
         key: "",
         value: "‌‌", // This is not an empty character. It's U+200C unicode character.
+    };
+
+    const smallInputStyle = {
+        "& .MuiInputBase-input": {
+            overflow: "visible",
+        },
+        "& .MuiSelect-icon": {
+            fontSize: "18px",
+        },
     };
 
     return (
@@ -32,6 +42,7 @@ const FormSelect = ({
                 label={label}
                 onChange={onChange}
                 disabled={disabled}
+                sx={smallInput ? smallInputStyle : {}}
             >
                 {(showEmptyOption ? [emptyOption, ...options] : options).map(
                     (option, index) => {

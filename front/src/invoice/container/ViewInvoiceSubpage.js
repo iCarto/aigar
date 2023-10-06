@@ -27,7 +27,6 @@ const ViewInvoiceSubpage = () => {
         allInvoicesList?.invoicesIds || monthlyInvoicesList?.invoicesIds;
 
     const urlPath = allInvoicesList ? "facturas" : "facturas_mes";
-    const urlPathBack = allInvoicesList ? "/facturas" : "/";
 
     useEffect(() => {
         setError("");
@@ -55,9 +54,7 @@ const ViewInvoiceSubpage = () => {
     }, [idFactura]);
 
     return (
-        <PageLayout
-            sidebar={<InvoicePageSidebar invoice={invoice} urlPathBack={urlPathBack} />}
-        >
+        <PageLayout sidebar={<InvoicePageSidebar invoice={invoice} />}>
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
             {invoicesIds?.length ? (

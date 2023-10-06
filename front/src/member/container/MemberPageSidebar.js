@@ -23,13 +23,7 @@ const MemberPageSidebar = ({member, onUpdateStatus}) => {
         ) : null,
     ];
 
-    return (
-        <ActionsSidebarMenu
-            menuActions={menuActions}
-            showBackButton
-            urlPathBack="/socios"
-        />
-    );
+    return <ActionsSidebarMenu menuActions={menuActions} showBackButton />;
 };
 
 export default MemberPageSidebar;

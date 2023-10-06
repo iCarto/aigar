@@ -15,11 +15,7 @@ const InvoicePageSidebar = ({invoice, urlPathBack = ""}) => {
     ];
 
     return (
-        <ActionsSidebarMenu
-            menuActions={invoice ? menuActions : null}
-            showBackButton
-            urlPathBack={urlPathBack}
-        />
+        <ActionsSidebarMenu menuActions={invoice ? menuActions : null} showBackButton />
     );
 };
 

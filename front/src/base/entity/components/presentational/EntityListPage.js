@@ -1,5 +1,8 @@
 import {ActionsBurgerMenu} from "base/ui/menu/components";
-import {SortedPaginatedSelectableTable} from "base/table/components";
+import {
+    SortedPaginatedSelectableTable,
+    SortedPaginatedTable,
+} from "base/table/components";
 import {NoItemsMessage} from "base/error/components";
 import {EntityListFilterForm} from "../form";
 import Grid from "@mui/material/Grid";
@@ -12,8 +15,9 @@ const EntityListPage = ({
     tableActions = [],
     groupActions = true,
     selectAttribute = "",
-    onClickRows,
+    onClickRows = null,
     selectedTableRows = [],
+    selectable = true,
 }) => {
     const displayActions = pageActions?.length > 0;
     const groupedActions = <ActionsBurgerMenu>{pageActions}</ActionsBurgerMenu>;
@@ -56,14 +60,18 @@ const EntityListPage = ({
             </Grid>
             <Grid item>
                 {items.length ? (
-                    <SortedPaginatedSelectableTable
-                        columns={columns}
-                        data={items}
-                        selectAttribute={selectAttribute}
-                        tableActions={tableActions}
-                        onClickRows={onClickRows}
-                        selectedTableRows={selectedTableRows}
-                    />
+                    selectable ? (
+                        <SortedPaginatedSelectableTable
+                            columns={columns}
+                            data={items}
+                            selectAttribute={selectAttribute}
+                            tableActions={tableActions}
+                            onClickRows={onClickRows}
+                            selectedTableRows={selectedTableRows}
+                        />
+                    ) : (
+                        <SortedPaginatedTable columns={columns} data={items} />
+                    )
                 ) : (
                     <NoItemsMessage itemsLength={items?.length} />
                 )}

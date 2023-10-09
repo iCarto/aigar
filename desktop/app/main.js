@@ -23,7 +23,7 @@ function createWindow(mainAddr) {
     });
     mainWindow.maximize();
 
-    setTimeout(function() {
+    setTimeout(function () {
         log("loading: " + mainAddr);
         mainWindow.loadURL(mainAddr);
     }, 2500);
@@ -42,7 +42,7 @@ function createWindow(mainAddr) {
         mainWindow.webContents.openDevTools();
     }
 
-    mainWindow.webContents.once("did-finish-load", function() {
+    mainWindow.webContents.once("did-finish-load", function () {
         mainWindow.show();
         splashWindow.close();
     });
@@ -54,7 +54,7 @@ function createWindow(mainAddr) {
   });
 */
 
-    mainWindow.on("closed", function() {
+    mainWindow.on("closed", function () {
         mainWindow = null;
         pythonServerProcess.kill("SIGINT");
     });
@@ -67,7 +67,7 @@ function createWindow(mainAddr) {
 //   }
 // });
 
-app.on("ready", function() {
+app.on("ready", function () {
     // log(app.getPath('userData'));
     Menu.setApplicationMenu(null);
 
@@ -76,16 +76,16 @@ app.on("ready", function() {
     var spawn = require("child_process").spawn;
     if (process.platform !== "linux") {
         log("not linux");
-        pythonServerProcess = spawn("./Python37/python.exe", [
-            "./src/manage.py",
+        pythonServerProcess = spawn("./Python311/python.exe", [
+            "./Python311/Lib/site-packages/aigar/manage.py",
             "runserver",
             "--noreload",
             "--nothreading",
         ]);
     } else {
         log("is linux");
-        pythonServerProcess = spawn("python", [
-            "./src/manage.py",
+        pythonServerProcess = spawn("./Python311/python.exe", [
+            "./Python311/Lib/site-packages/aigar/manage.py",
             "runserver",
             "--noreload",
             "--nothreading",
@@ -95,7 +95,7 @@ app.on("ready", function() {
     // TODO. Esto está hecho para esperar a que se lance el servidor Python.
     // Sería mejor que fuera una especie de callback que creara la ventana justo
     // después de que el servidor arrancase
-    setTimeout(function() {
+    setTimeout(function () {
         var mainAddr = "http://localhost:8000";
         createWindow(mainAddr);
     }, 4000);
@@ -110,19 +110,19 @@ function showSplash() {
         frame: false,
         type: "splash",
     });
-    splashWindow.on("closed", function() {
+    splashWindow.on("closed", function () {
         splashWindow = null;
     });
     splashWindow.loadURL("file://" + __dirname + "/splash.html");
 }
 
 // Quit when all windows are closed.
-app.on("window-all-closed", function() {
+app.on("window-all-closed", function () {
     log("window-all-closed");
     app.quit();
 });
 
-app.on("will-quit", function() {
+app.on("will-quit", function () {
     log("will-quit");
     if (pythonServerProcess) {
         log("Sending SIGTERM");
@@ -130,7 +130,7 @@ app.on("will-quit", function() {
     }
 });
 
-app.on("quit", function() {
+app.on("quit", function () {
     log("quit");
     if (pythonServerProcess) {
         log("Sending SIGKILL");
@@ -138,7 +138,7 @@ app.on("quit", function() {
     }
 });
 
-app.on("activate", function() {
+app.on("activate", function () {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {

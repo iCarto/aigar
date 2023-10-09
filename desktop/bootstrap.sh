@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# https://stackoverflow.com/questions/21799443/wine-error-application-tried-to-create-a-window-but-no-driver-could-be-loaded
+# https://superuser.com/questions/902175/run-wine-totally-headless
+
 # Inspirado en: https://github.com/cdrx/docker-pyinstaller
 # Combinaciones que no funcionan:
 # * Ubuntu 18.04 + winehq-stable + Python 3.6.8
@@ -8,6 +11,13 @@
 # * Ubuntu 16.04 + winehq-staging + Python 3.7.5
 
 set -e
+
+export PYTHON_VERSION=3.11.3
+
+export W_DRIVE_C=/wine/drive_c
+export PYTHON_FOLDER_WIN='C:\Python311'
+export PYTHON_FOLDER_LIN="${W_DRIVE_C}/Python311"
+export GOMI=/vagrant/gomi
 
 # https://serverfault.com/questions/500764/
 # https://unix.stackexchange.com/questions/22820
@@ -18,17 +28,8 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 export UCF_FORCE_CONFFNEW=1
 
-apt-get update
-apt-get upgrade -y
-
-update_apt_db_if_need() {
-    # En versiones de Ubuntu 18.04 no es necesario hacer apt update después de
-    # apt-add-repository
-    local current_version
-    current_version=$(lsb_release -rs)
-    local no_need_version='18.04'
-    if (($(echo "$current_version $no_need_version" | awk '{print ($1 < $2)}'))); then apt-get update; fi
-}
+apt update
+apt upgrade -y
 
 download() {
     local URL="${1}"
@@ -41,7 +42,7 @@ unzip_electron() {
     local URL="${1}"
     local FILE
     local FOLDER
-    apt-get install -y --install-recommends unzip
+    apt install -y --install-recommends unzip
     FILE="${GOMI}/$(basename "${URL}")"
     FOLDER="${FILE%.zip}"
     [[ -d "${FOLDER}" ]] || unzip "${FILE}" -d "${FOLDER}"
@@ -50,28 +51,34 @@ unzip_electron() {
 }
 
 install_wine() {
-    local WINE_VERSION=winehq-staging # winehq-stable
+    local WINE_VERSION=winehq-stable # winehq-staging winehq-stable winehq-devel
 
     # repo versions is too old
-    if [ -x "$(command -v wine)" ]; then
+    if [[ -x "$(command -v wine)" ]]; then
         echo 'wine is installed'
         return
     fi
 
     dpkg --add-architecture i386
-    wget --no-verbose -nc https://dl.winehq.org/wine-builds/winehq.key
-    apt-key add winehq.key
-    rm winehq.key
-    apt-add-repository -u "deb https://dl.winehq.org/wine-builds/ubuntu/ $(lsb_release -sc) main"
+    mkdir -p /etc/apt/keyrings
+    chmod -R 755 /etc/apt/keyrings
+    wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+    # wget --no-verbose -nc https://dl.winehq.org/wine-builds/winehq.key
+    # apt-key add winehq.key
+    # rm winehq.key
+    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-$(lsb_release -sc).sources
+    apt update
 
-    if [[ $(lsb_release -rs) == "18.04" ]]; then
-        wget --no-verbose -nc https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key
-        apt-key add Release.key
-        rm Release.key
-        apt-add-repository -u 'deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./'
-    fi
+    # apt-add-repository -u "deb https://dl.winehq.org/wine-builds/ubuntu/ $(lsb_release -sc) main"
 
-    apt-get install -y --install-recommends "${WINE_VERSION}"
+    # if [[ $(lsb_release -rs) == "18.04" ]]; then
+    #     wget --no-verbose -nc https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key
+    #     apt-key add Release.key
+    #     rm Release.key
+    #     apt-add-repository -u 'deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./'
+    # fi
+
+    apt install -y --install-recommends "${WINE_VERSION}"
 
     wget --no-verbose -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
     chmod +x winetricks
@@ -86,9 +93,6 @@ install_python() {
     # download "${PYTHON_URL}"
     # xvfb-run wine python-3.6.8-amd64.exe /quiet
     # wine python-3.6.8-amd64.exe /quiet
-    export PYTHON_VERSION=3.7.5
-    export PYTHON_FOLDER_LIN='/wine/drive_c/Python37'
-    export PYTHON_FOLDER_WIN='C:/Python37'
 
     if [[ -f "${PYTHON_FOLDER_LIN}/python.exe" ]]; then
         echo "Python is installed"
@@ -100,7 +104,7 @@ install_python() {
     export WINEPREFIX=/wine
     set -x
     winetricks win7
-    for msifile in $(echo core dev exe lib path pip tcltk tools); do
+    for msifile in core dev exe lib path pip tcltk tools; do
         wget --no-verbose --no-check-certificate -nv "https://www.python.org/ftp/python/${PYTHON_VERSION}/amd64/${msifile}.msi"
         wine msiexec /i "${msifile}.msi" /qb TARGETDIR="${PYTHON_FOLDER_WIN}"
         rm "${msifile}.msi"
@@ -126,25 +130,24 @@ install_python_2() {
 }
 
 install_dll() {
-    export W_DRIVE_C=/wine/drive_c
-    export W_WINDIR_UNIX="$W_DRIVE_C/windows"
-    export W_SYSTEM64_DLLS="$W_WINDIR_UNIX/system32"
-    export W_TMP="$W_DRIVE_C/windows/temp/_$0"
-    rm -f "$W_TMP"/*
+    export W_WINDIR_UNIX="${W_DRIVE_C}/windows"
+    export W_SYSTEM64_DLLS="${W_WINDIR_UNIX}/system32"
+    export W_TMP="${W_DRIVE_C}/windows/temp/_$0"
+    rm -f "${W_TMP}"/*
 
     if [[ -f "${W_SYSTEM64_DLLS}/msvcp140.dll" ]]; then
         echo "visual studios dll are installed"
         return
     fi
 
-    apt-get install -y --install-recommends winbind cabextract
-    wget --no-verbose -P "$W_TMP" https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe
-    cabextract -q --directory="$W_TMP" "$W_TMP"/VC_redist.x64.exe
-    cabextract -q --directory="$W_TMP" "$W_TMP/a10"
-    cabextract -q --directory="$W_TMP" "$W_TMP/a11"
-    cd "$W_TMP"
+    apt install -y --install-recommends winbind cabextract
+    wget --no-verbose -P "${W_TMP}" https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe
+    cabextract -q --directory="${W_TMP}" "${W_TMP}"/VC_redist.x64.exe
+    cabextract -q --directory="${W_TMP}" "${W_TMP}/a10"
+    cabextract -q --directory="${W_TMP}" "${W_TMP}/a11"
+    cd "${W_TMP}"
     rename 's/_/\-/g' *.dll
-    cp "$W_TMP"/*.dll "$W_SYSTEM64_DLLS"/
+    cp "${W_TMP}"/*.dll "${W_SYSTEM64_DLLS}"/
 }
 
 install_app() {
@@ -154,20 +157,22 @@ install_app() {
     local DATE
     DATE=$(date +%y%m%d)
     unzip_electron "${ELECTRON_URL}"
-    mv "${GOMI}/src" "${GOMI}/${DATE}_aigar/"
-    wine 'C:\Python37\Scripts\pip.exe' install -r "${GOMI}/${DATE}_aigar/src/requirements.txt"
+    # mv "${GOMI}/src" "${GOMI}/${DATE}_aigar/"
+    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install "${GOMI}/aigar-1.0.0.tar.gz"
 
     # No deberíamos montar runserver_plus en en build para reducir el tamaño
     # y dependencias
-    wine 'C:\Python37\Scripts\pip.exe' install Werkzeug
-    wine 'C:\Python37\Scripts\pip.exe' install django-debug-toolbar
+    # wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install Werkzeug
+    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install django-debug-toolbar
+    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install django-extensions
 
-    cp -R /wine/drive_c/Python37/ "${GOMI}/${DATE}_aigar/"
+    cp -R "${PYTHON_FOLDER_LIN}" "${GOMI}/${DATE}_aigar/"
 
     rm "${GOMI}/${DATE}_aigar/electron.exe"
     cp "${GOMI}/electron.exe" "${GOMI}/${DATE}_aigar/AIGAR.exe"
     cp -R /vagrant/app "${GOMI}/${DATE}_aigar/resources/"
     sed -i "s/\"version\":.*/\"version\": \"${DATE}\",/" "${GOMI}/${DATE}_aigar/resources/app/package.json"
+    mv "${GOMI}/.env" "${GOMI}/${DATE}_aigar/Python311/Lib/site-packages/aigar"
 }
 
 copy_license() {
@@ -185,10 +190,9 @@ prepare_empty_app() {
     mv "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3.empty" "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3"
 }
 
-GOMI=/vagrant/gomi
 ELECTRON_URL=https://github.com/electron/electron/releases/download/v8.2.1/electron-v8.2.1-win32-x64.zip
 
-mkdir -p ${GOMI}
+mkdir -p "${GOMI}"
 
 download "${ELECTRON_URL}"
 
@@ -196,6 +200,6 @@ install_wine
 install_python
 install_dll
 install_app
-copy_license
-prepare_empty_app
+# copy_license
+# prepare_empty_app
 # install_python_2

@@ -1,15 +1,36 @@
 #!/bin/bash
+
 set -euo pipefail
 
-./scripts/reset_db_and_migrations.sh "CREAR_VACIA"
-cp back/db.sqlite3 back/db.sqlite3.empty
+this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
-./scripts/reset_db_and_migrations.sh
+source "${this_dir}"/../server/variables.ini
 
-./scripts/util/prod-package.sh
-cp front/src/fixtures/electron.exe desktop/gomi
+./scripts/reset_and_create_db.sh vacia
+cp "${SQLITE_PATH}" "${SQLITE_PATH}".empty
 
-cp LICENSE desktop/gomi/src
-cp README.md desktop/gomi/src
+./scripts/reset_and_create_db.sh
 
-./scripts/create_notice.sh desktop/NOTICE 'web@0.1.0'
+bash ./scripts/util/build_web_deploy_file.sh
+cp dist/aigar-1.0.0.tar.gz desktop/gomi/
+
+cp tools/fixtures/gomi/electron.exe desktop/gomi
+
+# cp LICENSE desktop/gomi/src
+# cp README.md desktop/gomi/src
+
+# ./scripts/create_notice.sh desktop/NOTICE 'web@0.1.0'
+bash ./scripts/util/echo_env_back.sh | sed 's/DESKTOP=False/DESKTOP=True/' | sed 's/DEBUG=True/DEBUG=False/' | sed '/^ALLOWED_/d' | sed 's/# ALLOWED_/ALLOWED_/' > desktop/gomi/.env
+cp -r back/aigar_data desktop/gomi/
+cp ./tools/fixtures/gomi/logo-ascatli.png desktop/gomi/aigar_data
+
+cd "${this_dir}"/../desktop
+vagrant halt
+vagrant up --provision
+
+rm -rf "${HOME}/VirtualBox VMs/shared/${TODAY}_aigar"
+rm -rf "${HOME}/VirtualBox VMs/shared/aigar_data"
+cp -r gomi/aigar_data "${HOME}/VirtualBox VMs/shared/"
+cp -r "gomi/${TODAY}_aigar" "${HOME}/VirtualBox VMs/shared/"
+
+echo "DONE!"

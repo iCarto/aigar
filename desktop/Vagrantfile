@@ -8,21 +8,24 @@ def provisioned?(vm_name='default', provider='virtualbox')
 end
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20200407.0.0"
-  config.vm.box_check_update = false
+    config.vm.box = "ubuntu/jammy64"
+    config.vm.box_version = "20230929.0.0"
+    config.vm.box_check_update = false
 
 
-  if Vagrant.has_plugin?("vagrant-vbguest")
-      # Disable it if problems with shared folders or guest additions appears
-      # or if you want to speed up `vagrant up` a bit
-      config.vbguest.auto_update = true
-  end
+    if Vagrant.has_plugin?("vagrant-vbguest")
+        # Disable it if problems with shared folders or guest additions appears
+        # or if you want to speed up `vagrant up` a bit
+        config.vbguest.auto_update = true
+    end
 
-  config.vm.provider "virtualbox" do |vb|
-      vb.gui = false
-      vb.memory = "1512"
-  end
+    config.vm.provider "virtualbox" do |vb|
+        # vb.name = "AIGAR"
+        vb.gui = false
+        vb.memory = "2048"
+        vb.cpus = 2
+        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "85"]
+    end
 
-  config.vm.provision "shell", path:"bootstrap.sh"
+    config.vm.provision "shell", path:"bootstrap.sh"
 end

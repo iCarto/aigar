@@ -8,10 +8,11 @@ from corsheaders.defaults import default_headers
 base = environ.Path(__file__) - 2  # Folder of manage.py
 
 env = environ.Env(  # set default values and casting
-    DEBUG=(bool, False),
+    DEBUG=(bool, True),
     HTTPS=(str, "off"),
     ALLOWED_HOSTS=(list, []),
     SENTRY_DSN=(str, ""),
+    DESKTOP=(bool, True),
 )
 
 
@@ -25,12 +26,9 @@ PROJECT_ROOT = root()
 environ.Env.read_env(env_file=base(".env"))  # reading .env file
 
 
-# SECURITY WARNING: set a SECRET_KEY environment variable to a secret value
-# before deploying to production!
 SECRET_KEY = env("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
+DESKTOP = env("DESKTOP")
 
 # https://stackoverflow.com/questions/54504142/
 # If in DEV is needed to access the app in a defined IP or URL fill .env with:
@@ -85,7 +83,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "spa.middleware.SPAMiddleware",
+    "back.spa.BackSPAMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",  # early, but after Gzip
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -137,12 +135,13 @@ MEDIA_ROOT = base(appname)
 SQLITE_PATH = base(appname, "db.sqlite3")
 
 
-if not DEBUG:
+if DESKTOP:
     from platformdirs import PlatformDirs  # noqa: WPS433
 
     dirs = PlatformDirs(appname=appname, appauthor=False, ensure_exists=True)
-    MEDIA_ROOT = dirs.user_data_dir
-    SQLITE_PATH = os.path.join(dirs.user_data_dir, "db.sqlite3")
+    MEDIA_ROOT = dirs.user_documents_dir
+    print(MEDIA_ROOT)  # noqa: WPS421
+    SQLITE_PATH = os.path.join(dirs.user_documents_dir, "db.sqlite3")
 
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": SQLITE_PATH}}
@@ -160,11 +159,12 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_ROOT = root("staticfiles")
-STATIC_URL = "/static/"
+STATIC_ROOT = base("static")
+STATIC_URL = "/staticfiles/"
 # Extra places for collectstatic to find static files.
 # STATICFILES_DIRS = (root("static"), root("front_build"), base("app/static"))
-STATICFILES_DIRS = (root("front_build"),)
+if not DESKTOP:
+    STATICFILES_DIRS = (root("front_build"),)
 
 # Django SPA - simple setup for serving modern SPAs from Django
 # https://github.com/metakermit/django-spa
@@ -211,7 +211,36 @@ CORS_EXPOSE_HEADERS = ["Content-Disposition", "Cache-Control"]
 
 CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]
 
-if not DEBUG:
+if not DEBUG and not DESKTOP:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "django.server": {
+                "()": "django.utils.log.ServerFormatter",
+                "format": "[{server_time}] {message}",
+                "style": "{",
+            }
+        },
+        "handlers": {
+            "console": {"level": "INFO", "class": "logging.StreamHandler"},
+            "django.server": {
+                "level": "INFO",
+                "class": "logging.StreamHandler",
+                "formatter": "django.server",
+            },
+        },
+        "loggers": {
+            "django": {"handlers": ["console"], "level": "INFO"},
+            "django.server": {
+                "handlers": ["django.server"],
+                "level": "INFO",
+                "propagate": False,
+            },
+        },
+    }
+
+if not DEBUG and DESKTOP:
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -232,10 +261,10 @@ if not DEBUG:
         "formatters": {
             "app": {
                 "format": (
-                    "%(asctime)s [%(levelname)-8s] "
-                    "(%(module)s.%(funcName)s) %(message)s"
+                    "%(asctime)s [%(levelname)-8s] "  # noqa: WPS323
+                    "(%(module)s.%(funcName)s) %(message)s"  # noqa: WPS32
                 ),
-                "datefmt": "%Y-%m-%d %H:%M:%S",
+                "datefmt": "%Y-%m-%d %H:%M:%S",  # noqa: WPS323
             }
         },
     }

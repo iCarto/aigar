@@ -13,29 +13,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
     due_date = serializers.DateField(read_only=True)
 
 
-class InvoiceShortSerializer(serializers.ModelSerializer):
-    class Meta(object):
-        model = Invoice
-        fields = [
-            "version",
-            "anho",
-            "mes_facturado",
-            "due_date",
-            "member",
-            "caudal_anterior",
-            "caudal_actual",
-            "consumo",
-            "cuota_fija",
-            "comision",
-            "ahorro",
-            "derecho",
-            "reconexion",
-            "mora",
-            "saldo_pendiente",
-            "total",
-        ]
-
-
 class InvoiceStatsSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Invoice

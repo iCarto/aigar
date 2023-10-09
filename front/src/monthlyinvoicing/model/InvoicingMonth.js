@@ -1,11 +1,6 @@
-import {createInvoices} from "../../invoice/model/Invoice";
-
 class InvoicingMonths extends Array {}
 
 const invoicing_month_api_adapter = invoicing_month => {
-    /*if (invoicing_month.invoices) {
-        invoicing_month["invoices"] = invoices_api_adapter(invoicing_month.invoices);
-    }*/
     return invoicing_month;
 };
 
@@ -17,10 +12,10 @@ const invoicing_months_api_adapter = invoicing_months => {
 };
 
 const createInvoicingMonths = (data = []) => {
-    const invoices = InvoicingMonths.from(data, invoice => {
-        return createInvoicingMonth(invoice);
+    const invoicingMonths = InvoicingMonths.from(data, invoicingMonth => {
+        return createInvoicingMonth(invoicingMonth);
     });
-    return invoices;
+    return invoicingMonths;
 };
 
 const createInvoicingMonth = ({
@@ -28,14 +23,12 @@ const createInvoicingMonth = ({
     anho = "",
     mes = "",
     is_open = undefined,
-    invoices = undefined,
 } = {}) => {
     const publicApi = {
         id_mes_facturacion,
         anho: anho.toString(),
         mes: mes.toString().padStart(2, "0"),
         is_open,
-        invoices: createInvoices(invoices),
     };
 
     return Object.freeze(publicApi);

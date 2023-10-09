@@ -20,6 +20,9 @@ class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "mes_facturacion_id",
+            "anho",
+            "mes_facturado",
+            "version",
             "caudal_actual",
             "caudal_anterior",
             "total",

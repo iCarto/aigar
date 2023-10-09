@@ -22,14 +22,15 @@ Logos. Tendremos uno génerico totalmente transparente del tamaño adecuado.
 
 
 from django.db import models
+from solo.models import SingletonModel
 
 from back.fields import RangedIntegerField, StrictCharField
 
 
-class BasicConfig(models.Model):
+class AigarConfig(SingletonModel):
     class Meta(object):
-        verbose_name_plural = "Configuración básica"
-        verbose_name = "Configuración básica"
+        verbose_name_plural = "Configuración de AIGAR"
+        verbose_name = "Configuración de AIGAR"
 
     name = StrictCharField(
         null=False,
@@ -54,7 +55,12 @@ class BasicConfig(models.Model):
         min_value=1,
         max_value=28,
         verbose_name="Día límite de pago",
+        help_text="Día del mes hasta el que (incluido) el pago no tendrá mora.",
     )
 
     def __str__(self):
-        return f"{self.name} {self.payment_csv}"
+        return "Configuración de AIGAR"
+
+
+def get_config() -> AigarConfig:
+    return AigarConfig.get_solo()

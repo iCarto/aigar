@@ -61,6 +61,7 @@ dependencies = [
     "django-filter==23.1",
     "django-spa==0.3.6",
     "djangorestframework==3.14.0",
+    "django-solo==2.1.0",
     "djangorestframework-simplejwt==5.2.2",
     "drf-extensions==0.7.1",
     "platformdirs==3.10.0",

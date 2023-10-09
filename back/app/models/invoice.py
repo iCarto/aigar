@@ -6,6 +6,7 @@ from django.db import models
 from app.models.fixed_values import fixed_values
 from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
 from back.utils.dates import next_month
+from domains.models import aigar_config
 
 
 class InvoiceStatus(models.TextChoices):
@@ -258,7 +259,10 @@ class Invoice(models.Model):
 
     @property
     def due_date(self) -> datetime.date:
-        return next_month(datetime.date(self.anho, self.mes_facturado, 1))
+        payment_due_date = aigar_config.get_config().payment_due_day
+        return next_month(
+            datetime.date(self.anho, self.mes_facturado, payment_due_date)
+        )
 
     @property
     def deuda(self) -> float:

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
     "django_extensions",
+    "solo",
     "back",
     "domains",
     "app",

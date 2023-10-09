@@ -5,9 +5,10 @@ from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.html import format_html_join
+from solo.admin import SingletonModelAdmin
 
 from domains.models import Locality, Zone
-from domains.models.basic_config import BasicConfig
+from domains.models.aigar_config import AigarConfig
 
 
 class ZoneInline(admin.TabularInline):
@@ -85,15 +86,4 @@ class LocalityAdmin(admin.ModelAdmin):
         return format_html_join("", "{0}<br>", ((name,) for name in zone_names))
 
 
-@admin.register(BasicConfig)
-class BasicConfigAdmin(admin.ModelAdmin):
-    list_display = ("name", "payment_csv")
-
-    def has_add_permission(self, request, obj=None):
-        return not BasicConfig.objects.count()
-
-    def has_change_permission(self, request, obj=None):
-        return True
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+admin.site.register(AigarConfig, SingletonModelAdmin)

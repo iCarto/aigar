@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from app.models.invoice import InvoiceStatus
-from domains.models.basic_config import BasicConfig
+from domains.models.aigar_config import AigarConfig
 from domains.models.zone import Zone
 from domains.serializers import BasicConfigSerializer, ZoneSerializer
 
@@ -25,7 +25,7 @@ class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
 class BasicConfigViewSet(viewsets.ReadOnlyModelViewSet):
     """API endpoint that allows BasicConfig to be viewed."""
 
-    queryset = BasicConfig.objects.all()
+    queryset = AigarConfig.objects.all()
     serializer_class = BasicConfigSerializer
 
 

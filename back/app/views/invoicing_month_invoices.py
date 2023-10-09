@@ -2,34 +2,13 @@ from rest_framework import serializers, viewsets
 
 from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth
-from app.models.member import Member
-
-
-class MemberShortSerializer(serializers.ModelSerializer):
-    class Meta(object):
-        model = Member
-        fields = ["id", "name", "status", "sector"]
-
-    # sector_id does not launch subqueries
-    sector = serializers.ReadOnlyField(source="sector_id")
+from app.serializers.member import MemberShortSerializer
 
 
 class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Invoice
-        fields = [
-            "id",
-            "mes_facturacion_id",
-            "anho",
-            "mes_facturado",
-            "version",
-            "caudal_actual",
-            "caudal_anterior",
-            "total",
-            "estado",
-            "member_data",
-            "resumen",
-        ]
+        exclude = ("mes_facturacion", "observaciones", "created_at", "updated_at")
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     resumen = serializers.JSONField(allow_null=True, read_only=True)

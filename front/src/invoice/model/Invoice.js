@@ -60,6 +60,7 @@ const invoice_view_adapter = invoice => {
     delete invoice["sector"];
     delete invoice["total_pagado"];
     delete invoice["is_active"];
+    delete invoice["member_data"];
     return invoice;
 };
 
@@ -85,6 +86,7 @@ const createInvoice = ({
     mes_facturacion = "",
     due_date = null,
     member = null,
+    member_data = null,
     caudal_actual = null,
     caudal_anterior = null,
     cuota_fija = null,
@@ -126,6 +128,7 @@ const createInvoice = ({
         mes_facturacion,
         due_date: DateUtil.parseISO(due_date),
         member,
+        member_data,
         caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),
         caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
         cuota_fija: NumberUtil.parseFloatOrNull(cuota_fija),

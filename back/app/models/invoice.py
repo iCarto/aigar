@@ -339,7 +339,7 @@ class Invoice(models.Model):
         self.cuota_fija = self.member.cuota_fija
         self.ahorro = self.member.ahorro
 
-        self.cuota_variable = self.calculated_cuota_variable(self.consumo_final)
+        self.cuota_variable = self.calculated_cuota_variable()
 
         # TODO Review if store invoice in decimal fields is a better option
         self.total = round(
@@ -373,18 +373,20 @@ class Invoice(models.Model):
     def calculated_derecho(self) -> float:
         return fixed_values["DERECHO_CONEXION"]
 
-    def calculated_cuota_variable(self, consumo_final: int) -> float:
-        if consumo_final <= 14:
-            return fixed_values["CUOTA_VARIABLE_MENOS_14"] * consumo_final
-        if 14 < consumo_final < 20:
+    def calculated_cuota_variable(self) -> float | None:
+        if self.consumo_final is None:
+            return None
+        if self.consumo_final <= 14:
+            return fixed_values["CUOTA_VARIABLE_MENOS_14"] * self.consumo_final
+        if 14 < self.consumo_final < 20:
             return (fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14) + fixed_values[
                 "CUOTA_VARIABLE_14_20"
-            ] * (consumo_final - 14)
+            ] * (self.consumo_final - 14)
 
         return (
             (fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14)
             + (fixed_values["CUOTA_VARIABLE_14_20"] * 6)
-            + fixed_values["CUOTA_VARIABLE_MAS_20"] * (consumo_final - 20)
+            + fixed_values["CUOTA_VARIABLE_MAS_20"] * (self.consumo_final - 20)
         )
 
 

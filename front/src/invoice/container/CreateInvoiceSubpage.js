@@ -3,8 +3,8 @@ import {useNavigate, useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
-import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {DataValidatorService} from "validation/service";
+import {useDomain} from "aigar/domain/provider";
 
 import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";
@@ -25,40 +25,36 @@ const CreateInvoiceSubpage = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const {member_id} = useParams();
+    const {currentInvoicingMonth} = useDomain();
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadDataForInvoice();
-    }, [member_id]);
+        if (currentInvoicingMonth) loadDataForInvoice();
+    }, [member_id, currentInvoicingMonth]);
 
     const loadDataForInvoice = () => {
         setIsLoading(true);
 
         Promise.all([
             MemberService.getMember(member_id),
-            InvoicingMonthService.getInvoicingMonths(),
             InvoiceService.getInvoicesForMember(member_id),
         ])
             .then(result => {
                 const member = result[0];
-                const invoicingMonthOpened = result[1].find(
-                    invoicingMonth => invoicingMonth.is_open
+                const invoicesForMember = result[1].filter(
+                    invoice =>
+                        invoice?.mes_facturacion.toString() ===
+                        currentInvoicingMonth?.id_mes_facturacion?.toString()
                 );
 
-                const invoicesForMember = result[2].filter(
-                    invoice =>
-                        invoice.mes_facturacion.toString() ===
-                        invoicingMonthOpened.id_mes_facturacion.toString()
+                const currentInvoice = createInvoiceForMember(
+                    member,
+                    currentInvoicingMonth,
+                    invoicesForMember.length + 1
                 );
 
                 setMember(member);
-                setInvoice(
-                    createInvoiceForMember(
-                        member,
-                        invoicingMonthOpened,
-                        invoicesForMember.length + 1
-                    )
-                );
+                setInvoice(currentInvoice);
             })
             .catch(error => {
                 console.log(error);
@@ -67,6 +63,7 @@ const CreateInvoiceSubpage = () => {
                 );
             })
             .finally(() => {
+                setErrorMessage("");
                 setIsLoading(false);
             });
     };

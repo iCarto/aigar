@@ -1,5 +1,6 @@
 import {useState, useEffect, createContext, useContext} from "react";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useInvoicingMonths} from "monthlyinvoicing/hooks";
 
 let MonthlyInvoicingListContext = createContext(null);
 
@@ -12,20 +13,18 @@ export default function MonthlyInvoicingListProvider({children}) {
     const [isLoading, setIsLoading] = useState(null);
     const [isDataUpdated, setIsDataUpdated] = useState(false);
 
+    const {getCurrentInvoicingMonth, getNextInvoicingMonth} = useInvoicingMonths();
+
     useEffect(() => {
         setIsLoading(true);
         let invoicingMonthOpened;
         InvoicingMonthService.getInvoicingMonths()
             .then(invoicingMonths => {
-                invoicingMonthOpened = invoicingMonths.find(
-                    invoicingMonth => invoicingMonth.is_open
-                );
+                invoicingMonthOpened = getCurrentInvoicingMonth(invoicingMonths);
                 // Next month add to allow the creation of a new monthly invoicing process
                 setInvoicingMonths([
                     ...invoicingMonths,
-                    InvoicingMonthService.getNextInvoicingMonthToCreate(
-                        invoicingMonthOpened
-                    ),
+                    getNextInvoicingMonth(invoicingMonthOpened),
                 ]);
                 setSelectedInvoicingMonth(invoicingMonthOpened);
             })

@@ -1,6 +1,7 @@
 import {useState, useEffect, createContext, useContext} from "react";
 import {DomainService} from "aigar/domain/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useInvoicingMonths} from "monthlyinvoicing/hooks";
 
 let DomainContext = createContext(null);
 
@@ -13,12 +14,9 @@ export default function DomainProvider({children}) {
     const [invoiceStatus, setInvoiceStatus] = useState([]);
     const [basicConfig, setBasicConfig] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
+    const [currentInvoicingMonth, setCurrentInvoicingMonth] = useState({});
 
-    const sortInvoicingMonths = invoicingMonths => {
-        return invoicingMonths?.sort(
-            (a, b) => b.id_mes_facturacion - a.id_mes_facturacion
-        );
-    };
+    const {sortInvoicingMonths, getCurrentInvoicingMonth} = useInvoicingMonths();
 
     useEffect(() => {
         Promise.all([
@@ -45,6 +43,7 @@ export default function DomainProvider({children}) {
                 setInvoiceStatus(invoiceStatus);
                 setBasicConfig(basicConfig);
                 setInvoicingMonths(sortInvoicingMonths(invoicingMonths));
+                setCurrentInvoicingMonth(getCurrentInvoicingMonth(invoicingMonths));
             }
         );
     }, []);
@@ -58,6 +57,7 @@ export default function DomainProvider({children}) {
         invoiceStatus,
         basicConfig,
         invoicingMonths,
+        currentInvoicingMonth,
     };
 
     return <DomainContext.Provider value={value}>{children}</DomainContext.Provider>;

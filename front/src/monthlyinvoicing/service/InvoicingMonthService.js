@@ -14,19 +14,6 @@ import {
 } from "payment/model";
 
 const InvoicingMonthService = {
-    getNextInvoicingMonthToCreate(invoicingMonth) {
-        let nextInvocingMonthMonth = parseInt(invoicingMonth.mes) + 1;
-        let nextInvocingMonthYear = parseInt(invoicingMonth.anho);
-        if (nextInvocingMonthMonth > 12) {
-            nextInvocingMonthMonth = 1;
-            nextInvocingMonthYear += 1;
-        }
-        return createInvoicingMonth({
-            mes: nextInvocingMonthMonth,
-            anho: nextInvocingMonthYear,
-        });
-    },
-
     getInvoicingMonths() {
         console.log("ApiService.getInvoicingMonths");
         return ApiService.get("/invoicingmonths/").then(response => {

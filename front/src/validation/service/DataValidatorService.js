@@ -63,6 +63,7 @@ const DataValidatorService = {
                 comision: ["isNotEmpty", "isDecimal2", "isPositive"],
                 ahorro: ["isNotEmpty", "isDecimal2", "isPositive"],
                 asamblea: ["isNotEmpty", "isDecimal2", "isPositive"],
+                jornada_trabajo: ["isNotEmpty", "isDecimal2", "isPositive"],
                 derecho: ["isNotEmpty", "isDecimal2", "isPositive"],
                 reconexion: ["isNotEmpty", "isDecimal2", "isPositive"],
                 mora: ["isNotEmpty", "isDecimal2", "isPositive"],

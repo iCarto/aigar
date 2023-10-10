@@ -100,6 +100,7 @@ const createInvoice = ({
     comprobar_pago_11_al_30 = null,
     comprobar_pago_1_al_10 = null,
     asamblea = null,
+    jornada_trabajo = null,
     cuota_variable = null,
     entrega = false,
     pago_11_al_30 = null,
@@ -135,6 +136,7 @@ const createInvoice = ({
         saldo_pendiente: NumberUtil.parseFloatOrNull(saldo_pendiente),
         total: NumberUtil.parseFloatOrNull(total),
         asamblea: NumberUtil.parseFloatOrNull(asamblea),
+        jornada_trabajo: NumberUtil.parseFloatOrNull(jornada_trabajo),
         comprobar_pago_11_al_30,
         comprobar_pago_1_al_10,
         cuota_variable: NumberUtil.parseFloatOrNull(cuota_variable),
@@ -198,6 +200,7 @@ const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) =
         invoice.ahorro +
         invoice.mora +
         invoice.asamblea +
+        invoice.jornada_trabajo +
         invoice.derecho +
         invoice.reconexion +
         invoice.traspaso +

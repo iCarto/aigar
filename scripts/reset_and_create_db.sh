@@ -79,6 +79,7 @@ else
             ('Comisión de pago banco (dentro de la cuota)', 0.28)
             , ('Recargo por mora', 1)
             , ('Inasistencia a asambleas', 2)
+            , ('Jornada de trabajo', 0)
             , ('Reconexión', 10)
             , ('Ahorro mano de obra (centro de la cuota)', 0.25)
             , ('Traspaso de derecho (cambio de nombre)', 5)
@@ -161,9 +162,11 @@ else
         INSERT INTO app_invoice
         (
             id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            , jornada_trabajo
         )
         SELECT
             id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+            , 0
             FROM api_invoice;
 
         INSERT INTO app_measurement

@@ -17,6 +17,18 @@ class InvoiceStatus(models.TextChoices):
     ANULADA = "anulada"  # noqa: WPS115
 
 
+class InvoiceValue(models.TextChoices):
+    # name = value, label
+    JORNADA_TRABAJO = "jornada_trabajo", "Jornada de trabajo"  # noqa: WPS115
+    ASAMBLEA = "asamblea", "Inasistencia a Asamblea"  # noqa: WPS115
+
+    @classmethod
+    def from_value(cls, value: str):
+        for c in cls:
+            if c.value == value:
+                return c
+
+
 def _calculated_reconexion(member) -> float:
     item = member.forthcominginvoiceitem_set.filter(item="DERECHO_RECONEXION").first()
     if item:
@@ -82,6 +94,13 @@ class InvoiceManager(models.Manager["Invoice"]):
 
     def update_status(self, pks: list[int], status: str) -> None:
         self.filter(id__in=pks).update(estado=status)
+
+    def update_value(self, pks: list[int], value: str) -> None:
+        fix_value = InvoiceValue.from_value(value).name
+        for invoice in self.filter(id__in=pks):
+            setattr(invoice, value, fixed_values[fix_value])
+            invoice.update_total()
+            invoice.save()
 
     def handle_invoices_for_new_deleted_members(self, member):
         """Elimina las facturas en estado NUEVA cuando se borra un socio.
@@ -186,6 +205,14 @@ class Invoice(models.Model):
         null=False, blank=False, default=0, verbose_name="Asamblea", help_text=""
     )
 
+    jornada_trabajo = models.FloatField(
+        null=False,
+        blank=False,
+        default=0,
+        verbose_name="Jornada de Trabajo",
+        help_text="",
+    )
+
     traspaso = models.FloatField(
         null=False, blank=False, default=0, verbose_name="Traspaso", help_text=""
     )
@@ -195,7 +222,11 @@ class Invoice(models.Model):
     )
 
     descuento = models.FloatField(
-        null=False, blank=False, default=0, verbose_name="Descuento", help_text=""
+        null=False,
+        blank=False,
+        default=0,
+        verbose_name="Descuento",
+        help_text="Si la factura tiene algún descuento especial introduzcalo",
     )
 
     otros = models.FloatField(
@@ -318,6 +349,7 @@ class Invoice(models.Model):
             + self.ahorro
             + self.mora
             + self.asamblea
+            + self.jornada_trabajo
             + self.derecho
             + self.reconexion
             + self.traspaso

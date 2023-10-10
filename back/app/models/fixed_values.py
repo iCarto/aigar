@@ -8,4 +8,6 @@ fixed_values = {
     "DERECHO_CONEXION": 400,
     "MORA": 1,
     "DERECHO_RECONEXION": 10,
+    "JORNADA_TRABAJO": 1,
+    "ASAMBLEA": 2,
 }

@@ -70,6 +70,22 @@ const InvoiceService = {
             return response;
         });
     },
+
+    addWorkingDayPenaltyPenalty(pks) {
+        console.log(pks);
+        return ApiService.put("/invoices/value/", {
+            pks,
+            value: "jornada_trabajo",
+        });
+    },
+
+    addNonAttendancePenalty(pks) {
+        console.log(pks);
+        return ApiService.put("/invoices/value/", {
+            pks,
+            value: "asamblea",
+        });
+    },
 };
 
 export default InvoiceService;

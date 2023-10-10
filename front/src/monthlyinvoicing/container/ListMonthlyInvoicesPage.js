@@ -1,7 +1,11 @@
 import {useState} from "react";
 import {useMonthlyInvoicingTableColumns} from "monthlyinvoicing/data";
-
-import {useAddNonAttendancePenaltyHook, useMarkInvoiceAsPaidHook} from "invoice/hooks";
+import {InvoiceService} from "invoice/service";
+import {
+    useAddNonAttendancePenaltyHook,
+    useMarkInvoiceAsPaidHook,
+    useAddWorkingDayPenaltyHook,
+} from "invoice/hooks";
 import {EntityListPage} from "base/entity/components/presentational";
 import {MonthlyInvoicingFilterForm} from ".";
 
@@ -14,9 +18,15 @@ const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
     const {
         tableAction: addNonAttendancePenaltyAction,
         modal: addNonAttendancePenaltyModal,
-    } = useAddNonAttendancePenaltyHook(null, selectedTableRows);
+    } = useAddNonAttendancePenaltyHook(InvoiceService, selectedTableRows);
+    const {tableAction: addWorkingDayPenalyAction, modal: addWorkingDayPenalyModal} =
+        useAddWorkingDayPenaltyHook(InvoiceService, selectedTableRows);
 
-    const tableActions = [markAsPaidAction, addNonAttendancePenaltyAction];
+    const tableActions = [
+        markAsPaidAction,
+        addNonAttendancePenaltyAction,
+        addWorkingDayPenalyAction,
+    ];
 
     const handleClickOnTableRows = selectedItems => {
         setSelectedTableRows(selectedItems);
@@ -26,6 +36,7 @@ const ListMonthlyInvoicesPage = ({invoices, handleFilterChange}) => {
         <>
             {markAsPaidModal}
             {addNonAttendancePenaltyModal}
+            {addWorkingDayPenalyModal}
             <EntityListPage
                 items={invoices}
                 columns={tableColumns}

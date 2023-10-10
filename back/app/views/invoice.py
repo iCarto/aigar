@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
 from app.serializers.entity_status_serializer import InvoiceStatusSerializer
-from app.serializers.invoice import InvoiceSerializer, InvoiceStatsSerializer
+from app.serializers.invoice import (
+    InvoiceSerializer,
+    InvoiceStatsSerializer,
+    InvoiceValueSerializer,
+)
 
 
 class InvoiceFilter(filters.FilterSet):
@@ -32,6 +36,17 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             Invoice.objects.update_status(
                 serializer.validated_data["pks"], serializer.validated_data["status"]
+            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["put"])
+    def value(self, request):
+        serializer = InvoiceValueSerializer(data=request.data)
+        if serializer.is_valid():
+            Invoice.objects.update_value(
+                serializer.validated_data["pks"], serializer.validated_data["value"]
             )
             return Response(status=status.HTTP_204_NO_CONTENT)
 

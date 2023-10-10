@@ -54,6 +54,10 @@ const InvoiceDetail = ({invoice, member, payments}) => {
                     label="Inasistencia a asambleas"
                     value={invoice?.asamblea}
                 />
+                <InvoiceDetailField
+                    label="Jornada de trabajo"
+                    value={invoice?.jornada_trabajo}
+                />
                 <InvoiceDetailField label="Nuevo derecho" value={invoice?.derecho} />
                 <InvoiceDetailField label="Re-conexión" value={invoice?.reconexion} />
                 <InvoiceDetailField
@@ -66,11 +70,11 @@ const InvoiceDetail = ({invoice, member, payments}) => {
                     value={invoice?.saldo_pendiente}
                     labelStyle={{fontStyle: "italic"}}
                 />
-                {/* <InvoiceDetailField
+                <InvoiceDetailField
                     label="Descuento"
                     value={invoice?.descuento}
                     negativeField
-                /> */}
+                />
                 <InvoiceDetailField
                     label="Total"
                     value={invoice?.total}

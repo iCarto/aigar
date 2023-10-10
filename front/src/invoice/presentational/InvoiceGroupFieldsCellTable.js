@@ -10,6 +10,9 @@ const InvoiceGroupFieldsCellTable = ({item}) => {
             {item.asamblea !== 0 ? (
                 <div className="dollar">Asamblea: {item.asamblea}</div>
             ) : null}
+            {item.jornada_trabajo !== 0 ? (
+                <div className="dollar">Jornada trabajo: {item.jornada_trabajo}</div>
+            ) : null}
             {item.traspaso !== 0 ? (
                 <div className="dollar">Traspaso: {item.traspaso}</div>
             ) : null}

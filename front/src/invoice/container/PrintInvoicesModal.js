@@ -104,7 +104,7 @@ const PrintInvoicesModal = ({
                 {invoices && invoices.length === 1 ? "la factura" : "las facturas"}.
             </AlertTitle>
             ¿Ha revisado previamente si es necesario añadir otros importes, como
-            asambleas, nuevos derechos, reconexiones, traspasos...?
+            asambleas, jornadas de trabajo, nuevos derechos, reconexiones, traspasos...?
         </Alert>
     );
 

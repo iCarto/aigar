@@ -49,6 +49,7 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     derecho = 0
     reconexion = 0
     asamblea = 0
+    jornada_trabajo = 0
     traspaso = 0
     saldo_pendiente = 0
     descuento = 0

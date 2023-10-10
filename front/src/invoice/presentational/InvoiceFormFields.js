@@ -94,6 +94,14 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     endAdornment={CURRENCY_SYMBOL}
                 />
                 <FormInputDecimal
+                    label="Jornada de trabajo"
+                    name="jornada_trabajo"
+                    field={formData?.jornada_trabajo}
+                    onChange={handleChangeField}
+                    readOnly={isReadOnly}
+                    endAdornment={CURRENCY_SYMBOL}
+                />
+                <FormInputDecimal
                     label="Nuevo derecho"
                     name="derecho"
                     field={formData?.derecho}

@@ -1,7 +1,16 @@
 from rest_framework import serializers
 
-from app.models.invoice import Invoice
+from app.models.invoice import Invoice, InvoiceValue
 from app.serializers.member import MemberShortSerializer
+
+
+class InvoiceValueSerializer(serializers.Serializer):
+    pks = serializers.ListField(
+        child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1
+    )
+    value = serializers.ChoiceField(
+        choices=InvoiceValue, allow_blank=False, required=True
+    )
 
 
 class InvoiceSerializer(serializers.ModelSerializer):

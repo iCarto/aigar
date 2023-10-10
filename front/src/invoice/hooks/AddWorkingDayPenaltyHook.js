@@ -1,18 +1,18 @@
 import {useState} from "react";
 import {TableAction} from "base/table/components";
 import {ActionConfirmationModal} from "base/common";
-import GroupsIcon from "@mui/icons-material/Groups";
+import ConstructionIcon from "@mui/icons-material/Construction";
 
-export const useAddNonAttendancePenaltyHook = (service, selectedItems) => {
+export const useAddWorkingDayPenaltyHook = (service, selectedItems) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClickAction = () => {
-        console.log("Asignar penalización por inasistencia a asamblea", selectedItems);
+        console.log("Asignar penalización por jornada de trabajo", selectedItems);
         setIsModalOpen(true);
     };
 
     const handleAction = items => {
-        return service.addNonAttendancePenalty(items);
+        return service.addWorkingDayPenaltyPenalty(items);
     };
 
     const closeModal = () => {
@@ -21,9 +21,9 @@ export const useAddNonAttendancePenaltyHook = (service, selectedItems) => {
 
     const tableAction = (
         <TableAction
-            id="add-non-attendance-penalty"
-            icon={<GroupsIcon />}
-            title="Asignar inasistencia a asamblea"
+            id="add-working-day-penalty"
+            icon={<ConstructionIcon />}
+            title="Asignar penalización por jornada de trabajo"
             handleClick={handleClickAction}
             selectedItems={selectedItems}
         />
@@ -31,10 +31,10 @@ export const useAddNonAttendancePenaltyHook = (service, selectedItems) => {
 
     const modalMessages = {
         confirmation:
-            "¿Desea asignar penalización por inasistencia a asamblea a las facturas seleccionadas?",
+            "¿Desea asignar penalización por jornada de trabajo a las facturas seleccionadas?",
         success:
-            "Se ha asignado la penalización por inasistencia a asamblea a las facturas seleccionadas.",
-        title: "Asignar penalización por inasistencia a asamblea",
+            "Se ha asignado la penalización por jornada de trabajo a las facturas seleccionadas.",
+        title: "Asignar penalización por jornada de trabajo",
     };
 
     const modal = (

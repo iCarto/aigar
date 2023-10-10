@@ -26,8 +26,7 @@ const ActionConfirmationModal = ({
     };
 
     const onClickAccept = () => {
-        console.log("Confirma acción");
-        // confirmAction();
+        confirmAction();
     };
 
     const onClickFinished = () => {

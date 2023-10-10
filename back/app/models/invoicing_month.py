@@ -6,12 +6,13 @@ from django.forms import ValidationError
 
 from app.models.invoice import Invoice, InvoiceStatus, NoLastInvoice
 from app.models.member import Member
-from app.models.payment import Payment
 from back.base.base_expressions import JsonGroupArray
 
 
 def any_payments_for(invoicing_month_to_close):
-    return Payment.objects.filter(mes_facturacion=invoicing_month_to_close).exists()
+    from app.models.payment import Payment
+
+    return Payment.objects.filter_by_invoicingmonth(invoicing_month_to_close).exists()
 
 
 class InvoicingMonthManager(models.Manager["InvoicingMonth"]):

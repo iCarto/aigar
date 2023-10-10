@@ -6,6 +6,7 @@ from django.urls import include, path
 from app.urls import router
 from app.views.invoice import InvoiceStatsView
 from app.views.measurement import MeasurementInvoicePreview
+
 from app.views.payment import PaymentInvoicePreview
 from domains import urls as domains_urls
 

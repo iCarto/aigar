@@ -183,11 +183,12 @@ REST_FRAMEWORK = {
     # "DEFAULT_PERMISSION_CLASSES": [
     #     "rest_framework.permissions.IsAuthenticated",
     #     "rest_framework.permissions.DjangoModelPermissions",
-    #     "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    # ]
+    # ],
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 10,
     # "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
 
@@ -238,3 +239,8 @@ if not DEBUG:
             }
         },
     }
+
+
+SHELL_PLUS_IMPORTS = ["from django.db import models"]
+SHELL_PLUS_PRINT_SQL = True
+SHELL_PLUS_PRINT_SQL_TRUNCATE = None

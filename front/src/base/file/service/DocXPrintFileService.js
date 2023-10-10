@@ -2,12 +2,11 @@ import createReport from "docx-templates";
 import FileService from "./FileService";
 import BarcodeService from "./BarcodeService";
 import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
-// import invoiceTemplatePath from "media/plantilla_factura.docx";
 import {DateUtil, NumberUtil} from "base/format/utilities";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-const invoiceTemplatePath = "media/plantilla_factura.docx";
+const invoiceTemplatePath = "http://localhost:8000/media/plantilla_factura.docx";
 
 const DocXPrintFileService = {
     async getLogoAscatli() {

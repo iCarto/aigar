@@ -37,6 +37,7 @@ class AigarConfig(SingletonModel):
         blank=False,
         verbose_name="Nombre de la Junta de Agua",
         help_text="Nombre de la Junta de Agua como desea que aparezca en las facturas",
+        default="Junta de Agua",
         unique=True,
         min_length=3,
     )
@@ -54,6 +55,7 @@ class AigarConfig(SingletonModel):
         blank=False,
         min_value=1,
         max_value=28,
+        default=10,
         verbose_name="Día límite de pago",
         help_text="Día del mes hasta el que (incluido) el pago no tendrá mora.",
     )

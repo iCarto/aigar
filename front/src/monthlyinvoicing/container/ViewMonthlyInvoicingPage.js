@@ -1,11 +1,11 @@
+import {useEffect, useState} from "react";
 import {useList} from "base/entity/provider";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
+import {useFilter} from "base/filter/hooks";
 
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
-import {useEffect, useState} from "react";
-import {useFilter} from "base/filter/hooks";
 
 const ViewMonthlyInvoicingPage = () => {
     const {filter, setFilter} = useList();
@@ -16,6 +16,8 @@ const ViewMonthlyInvoicingPage = () => {
         selectedInvoicingMonth,
         invoicingMonthsForNavigator,
         setSelectedInvoicingMonth,
+        isDataUpdated,
+        setIsDataUpdated,
     } = useMonthlyInvoicingList();
 
     const [filteredInvoices, setFilteredInvoices] = useState([]);
@@ -42,6 +44,10 @@ const ViewMonthlyInvoicingPage = () => {
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
+    const refreshTable = () => {
+        setIsDataUpdated(prevState => !prevState);
+    };
+
     return (
         <PageLayout
             sidebar={
@@ -59,8 +65,10 @@ const ViewMonthlyInvoicingPage = () => {
                 <Spinner message="Cargando datos" />
             ) : (
                 <ListMonthlyInvoicesPage
+                    key={isDataUpdated}
                     invoices={filteredInvoices}
                     handleFilterChange={handleFilterChange}
+                    refreshTable={refreshTable}
                 />
             )}
         </PageLayout>

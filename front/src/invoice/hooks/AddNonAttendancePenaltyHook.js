@@ -3,16 +3,28 @@ import {TableAction} from "base/table/components";
 import {ActionConfirmationModal} from "base/common";
 import GroupsIcon from "@mui/icons-material/Groups";
 
-export const useAddNonAttendancePenaltyHook = (service, selectedItems) => {
+export const useAddNonAttendancePenaltyHook = (
+    service,
+    selectedItems,
+    refreshTable
+) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClickAction = () => {
-        console.log("Asignar penalización por inasistencia a asamblea", selectedItems);
         setIsModalOpen(true);
     };
 
     const handleAction = items => {
-        return service.addNonAttendancePenalty(items);
+        return new Promise(() => {
+            service
+                .addNonAttendancePenalty(items)
+                .then(response => {
+                    refreshTable();
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        });
     };
 
     const closeModal = () => {

@@ -3,16 +3,24 @@ import {TableAction} from "base/table/components";
 import {ActionConfirmationModal} from "base/common";
 import ConstructionIcon from "@mui/icons-material/Construction";
 
-export const useAddWorkingDayPenaltyHook = (service, selectedItems) => {
+export const useAddWorkingDayPenaltyHook = (service, selectedItems, refreshTable) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClickAction = () => {
-        console.log("Asignar penalización por jornada de trabajo", selectedItems);
         setIsModalOpen(true);
     };
 
     const handleAction = items => {
-        return service.addWorkingDayPenaltyPenalty(items);
+        return new Promise(() => {
+            service
+                .addWorkingDayPenaltyPenalty(items)
+                .then(response => {
+                    refreshTable();
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        });
     };
 
     const closeModal = () => {

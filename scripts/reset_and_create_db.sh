@@ -21,9 +21,6 @@ reset_django_migrations() {
     find "${SITE_PACKAGES}/django/contrib/contenttypes" -path "*/migrations/*.pyc" -delete
 }
 
-# Si se pasa cualquier parámetro a este comando crea una base de datos vacía
-CREATE_EMPTY="${1}"
-
 if [[ -f back/manage.py ]]; then
     reset_django_migrations
 fi
@@ -34,9 +31,7 @@ fi
 bash "${this_dir}"/install.link_back_front.sh
 
 rm -f "${SQLITE_PATH}"
-if [[ -z "${CREATE_EMPTY}" ]]; then
-    "${this_dir}"/fixtures.sh
-fi
+"${this_dir}"/fixtures.sh
 
 if [[ "${DATABASE_CONTROL_CHANGES_MODE}" == "sqitch" ]]; then
     (
@@ -51,173 +46,184 @@ else
     # Ejecuta las migraciones contra la bd
     python "${this_dir}/../back/manage.py" migrate
 
-    if [[ -z "${CREATE_EMPTY}" ]]; then
+    sqlite3 "${SQLITE_PATH}" "
 
-        sqlite3 "${SQLITE_PATH}" "
-        PRAGMA foreign_keys = ON;
+    /* https://stackoverflow.com/a/48016934/930271 */
+    PRAGMA writable_schema = ON;
 
-        INSERT INTO domains_aigarconfig (name, payment_csv, payment_due_day) VALUES
-            ('Junta de Agua ASCATLI', 1, 10)
-        ;
+    UPDATE sqlite_master SET
+        sql = replace(sql, 'DEFERRABLE', 'ON DELETE CASCADE DEFERRABLE')
+    WHERE
+        type='table'
+        AND
+        name IN ('app_invoice', 'app_measurement', 'app_payment', 'app_forthcominginvoiceitem');
 
-        INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
-            ('Tihuapa norte', 'Tihuapa norte', 4)
-            , ('Tlacuxtli', 'Tlacuxtli', 3)
-        ;
+    PRAGMA writable_schema = OFF;
 
-        INSERT INTO domains_zone (name, code, locality_short_name, reading_day) VALUES
-            ('1 - Tihuapa norte', '1', 'Tihuapa norte', 27)
-            , ('2 - Tihuapa norte', '2', 'Tihuapa norte', 27)
-            , ('3 - Tihuapa norte', '3', 'Tihuapa norte', 27)
-            , ('4 - Tihuapa norte', '4', 'Tihuapa norte', 27)
-            , ('5 - Tlacuxtli', '5', 'Tlacuxtli', 27)
-            , ('6 - Tlacuxtli', '6', 'Tlacuxtli', 27)
-            , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
-        ;
+
+    PRAGMA foreign_keys = ON;
+
+    INSERT INTO domains_aigarconfig (name, payment_csv, payment_due_day) VALUES
+        ('Junta de Agua ASCATLI', 1, 10)
+    ;
+
+    INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
+        ('Tihuapa norte', 'Tihuapa norte', 4)
+        , ('Tlacuxtli', 'Tlacuxtli', 3)
+    ;
+
+    INSERT INTO domains_zone (name, code, locality_short_name, reading_day) VALUES
+        ('1 - Tihuapa norte', '1', 'Tihuapa norte', 27)
+        , ('2 - Tihuapa norte', '2', 'Tihuapa norte', 27)
+        , ('3 - Tihuapa norte', '3', 'Tihuapa norte', 27)
+        , ('4 - Tihuapa norte', '4', 'Tihuapa norte', 27)
+        , ('5 - Tlacuxtli', '5', 'Tlacuxtli', 27)
+        , ('6 - Tlacuxtli', '6', 'Tlacuxtli', 27)
+        , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
+    ;
 /*
-        INSERT INTO domains_invoiceconcepts (name, value) VALUES
-            ('Comisión de pago banco (dentro de la cuota)', 0.28)
-            , ('Recargo por mora', 1)
-            , ('Inasistencia a asambleas', 2)
-            , ('Jornada de trabajo', 0)
-            , ('Reconexión', 10)
-            , ('Ahorro mano de obra (centro de la cuota)', 0.25)
-            , ('Traspaso de derecho (cambio de nombre)', 5)
-            , ('Jornadas de trabajo', 2)
-            , ('Cuota fija - Consumo Humano - €', 5.72)
-            , ('Cuota fija - Consumo Comercial - €', 100)
-            , ('Cuota fija - Consumo Humano - m3', 14)
-            , ('Cuota fija - Consumo Comercial - m3', 100)
+    INSERT INTO domains_invoiceconcepts (name, value) VALUES
+        ('Comisión de pago banco (dentro de la cuota)', 0.28)
+        , ('Recargo por mora', 1)
+        , ('Inasistencia a asambleas', 2)
+        , ('Jornada de trabajo', 0)
+        , ('Reconexión', 10)
+        , ('Ahorro mano de obra (centro de la cuota)', 0.25)
+        , ('Traspaso de derecho (cambio de nombre)', 5)
+        , ('Jornadas de trabajo', 2)
+        , ('Cuota fija - Consumo Humano - €', 5.72)
+        , ('Cuota fija - Consumo Comercial - €', 100)
+        , ('Cuota fija - Consumo Humano - m3', 14)
+        , ('Cuota fija - Consumo Comercial - m3', 100)
 
 
-             , ('Cuota Variable',)
+            , ('Cuota Variable',)
 
-            , ('Nuevo derecho - total',)
-            , ('Nuevo derecho - número de cuotas',)
-            , ('Nuevo derecho - pago inicial',)
+        , ('Nuevo derecho - total',)
+        , ('Nuevo derecho - número de cuotas',)
+        , ('Nuevo derecho - pago inicial',)
 
 
-        ;
+    ;
 */
-        /* #4234-16 */
-        WITH
-          socias AS (
-            SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha
-        )
-        , invoices as (
-            SELECT id_factura FROM api_invoice WHERE member_id IN (SELECT num_socio FROM socias) AND estado = 'nueva'
-        )
-        DELETE FROM api_measurement WHERE factura_id IN (SELECT id_factura FROM invoices);
+    /* #4234-16 */
+    WITH
+        socias AS (
+        SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha
+    )
+    , invoices as (
+        SELECT id_factura FROM api_invoice WHERE member_id IN (SELECT num_socio FROM socias) AND estado = 'nueva'
+    )
+    DELETE FROM api_measurement WHERE factura_id IN (SELECT id_factura FROM invoices);
 
-        DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
+    DELETE FROM api_invoice WHERE member_id IN (SELECT num_socio FROM api_member WHERE NOT is_active OR solo_mecha) AND estado = 'nueva';
 
-        INSERT INTO app_member
-            (
-                id, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
-                , tipo_uso
-                , created_at, updated_at
-                , status
-            )
-            SELECT
-                num_socio, name
-                , CASE sector
-                    WHEN 1 THEN '1 - Tihuapa norte'
-                    WHEN 2 THEN '2 - Tihuapa norte'
-                    WHEN 3 THEN '3 - Tihuapa norte'
-                    WHEN 4 THEN '4 - Tihuapa norte'
-                    WHEN 5 THEN '5 - Tlacuxtli'
-                    WHEN 6 THEN '6 - Tlacuxtli'
-                    WHEN 7 THEN '7 - Tlacuxtli'
-                END
-
-                , medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
-                , 'Humano'
-                , COALESCE(created_at, datetime('now')), COALESCE(updated_at, datetime('now'))
-                , CASE
-                    WHEN NOT is_active THEN 'Eliminada'
-                    WHEN solo_mecha THEN 'Inactiva'
-                    ELSE 'Activa'
-                END
-            FROM api_member;
-
-
-        INSERT INTO app_invoicingmonth
+    INSERT INTO app_member
         (
-            id_mes_facturacion,
-            anho,
-            mes,
-            is_open,
-            created_at,
-            updated_at
+            id, name, sector_id, medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
+            , tipo_uso
+            , created_at, updated_at
+            , status
         )
         SELECT
-            id_mes_facturacion,
-            anho,
-            mes,
-            is_open,
-            created_at,
-            updated_at
-        FROM api_invoicingmonth;
+            num_socio, name
+            , CASE sector
+                WHEN 1 THEN '1 - Tihuapa norte'
+                WHEN 2 THEN '2 - Tihuapa norte'
+                WHEN 3 THEN '3 - Tihuapa norte'
+                WHEN 4 THEN '4 - Tihuapa norte'
+                WHEN 5 THEN '5 - Tlacuxtli'
+                WHEN 6 THEN '6 - Tlacuxtli'
+                WHEN 7 THEN '7 - Tlacuxtli'
+            END
 
-        INSERT INTO app_invoice
-        (
-            id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
-            , jornada_trabajo
-        )
-        SELECT
-            id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
-            , 0
-            FROM api_invoice;
-
-        INSERT INTO app_measurement
-        (
-            id,
-            caudal_anterior,
-            caudal_actual,
-            cambio_medidor,
-            medidor,
-            created_at,
-            updated_at,
-            factura_id,
-            mes_facturacion_id
-        )
-        SELECT
-            id_lectura,
-            caudal_anterior,
-            caudal_actual,
-            cambio_medidor,
-            medidor,
-            created_at,
-            updated_at,
-            factura_id,
-            mes_facturacion_id
-        FROM api_measurement;
+            , medidor, orden, observaciones, consumo_maximo, consumo_reduccion_fija
+            , 'Humano'
+            , COALESCE(created_at, datetime('now')), COALESCE(updated_at, datetime('now'))
+            , CASE
+                WHEN NOT is_active THEN 'Eliminada'
+                WHEN solo_mecha THEN 'Inactiva'
+                ELSE 'Activa'
+            END
+        FROM api_member;
 
 
-        INSERT INTO app_payment
-        (
-            id
-            , fecha
-            , monto
-            , created_at
-            , updated_at
-            , invoice_id
-        )
-        SELECT
-            id_pago
-            , fecha
-            , monto
-            , created_at
-            , updated_at
-            , factura_id
-        FROM api_payment;
-        DROP TABLE api_measurement;
-        DROP TABLE api_payment;
-        DROP TABLE api_invoice;
-        DROP TABLE api_invoicingmonth;
-        DROP TABLE api_member;
-        "
-    fi
+    INSERT INTO app_invoicingmonth
+    (
+        id_mes_facturacion,
+        anho,
+        mes,
+        is_open,
+        created_at,
+        updated_at
+    )
+    SELECT
+        id_mes_facturacion,
+        anho,
+        mes,
+        is_open,
+        created_at,
+        updated_at
+    FROM api_invoicingmonth;
+
+    INSERT INTO app_invoice
+    (
+        id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+        , jornada_trabajo
+    )
+    SELECT
+        id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+        , 0
+        FROM api_invoice;
+
+    INSERT INTO app_measurement
+    (
+        id,
+        caudal_anterior,
+        caudal_actual,
+        cambio_medidor,
+        medidor,
+        created_at,
+        updated_at,
+        factura_id,
+        mes_facturacion_id
+    )
+    SELECT
+        id_lectura,
+        caudal_anterior,
+        caudal_actual,
+        cambio_medidor,
+        medidor,
+        created_at,
+        updated_at,
+        factura_id,
+        mes_facturacion_id
+    FROM api_measurement;
+
+
+    INSERT INTO app_payment
+    (
+        id
+        , fecha
+        , monto
+        , created_at
+        , updated_at
+        , invoice_id
+    )
+    SELECT
+        id_pago
+        , fecha
+        , monto
+        , created_at
+        , updated_at
+        , factura_id
+    FROM api_payment;
+    DROP TABLE api_measurement;
+    DROP TABLE api_payment;
+    DROP TABLE api_invoice;
+    DROP TABLE api_invoicingmonth;
+    DROP TABLE api_member;
+    "
 fi
 
 if [[ -f ${this_dir}/../back/manage.py ]]; then
@@ -226,3 +232,119 @@ if [[ -f ${this_dir}/../back/manage.py ]]; then
     # At this point static assets are collected
     python "${this_dir}/../back/manage.py" collectstatic --no-input --clear --verbosity 0
 fi
+
+crear_vacia() {
+    sqlite3 "${SQLITE_PATH}" "
+        PRAGMA foreign_keys = ON;
+        delete from app_invoicingmonth;
+        delete from app_member;
+        delete from domains_aigarconfig;
+        delete from domains_zone;
+        delete from domains_locality;
+    "
+}
+
+crear_iniciar() {
+    sqlite3 "${SQLITE_PATH}" "
+        PRAGMA foreign_keys = ON;
+        delete from app_invoicingmonth where id_mes_facturacion = '202305';
+        update app_invoicingmonth set is_open=True where id_mes_facturacion = '202304';
+        delete from
+            app_invoice
+        where
+            mes_facturacion_id = '202304'
+            and
+            member_id IN (SELECT id FROM app_member WHERE status = 'Inactiva')
+        ;
+        update app_invoice set
+            estado = 'pendiente_de_cobro'
+        where mes_facturacion_id = '202304' and estado = 'no_cobrada';
+
+    "
+}
+
+crear_importar() {
+    crear_iniciar
+    sqlite3 "${SQLITE_PATH}" "
+        PRAGMA foreign_keys = ON;
+        update app_invoice set
+            caudal_actual = null
+            , cuota_variable = 0
+            , asamblea = 0
+            , jornada_trabajo = 0
+            , traspaso = 0
+            , descuento = 0
+            , otros = 0
+            , total = null
+            , estado = 'nueva'
+            , pago_1_al_10 = 0
+            , pago_11_al_30 = 0
+        where mes_facturacion_id = '202304';
+        delete from app_payment where
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+        delete from app_measurement where
+            factura_id in (select id from app_invoice where mes_facturacion_id = '202304');
+    "
+}
+
+crear_imprimir() {
+    crear_iniciar
+
+    sqlite3 "${SQLITE_PATH}" "
+        PRAGMA foreign_keys = ON;
+        update app_invoice set
+            asamblea = 0
+            , jornada_trabajo = 0
+            , traspaso = 0
+            , descuento = 0
+            , otros = 0
+            , estado = 'nueva'
+            , pago_1_al_10 = 0
+            , pago_11_al_30 = 0
+        where mes_facturacion_id = '202304';
+        delete from app_payment where
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+    "
+}
+
+crear_actualizar() {
+    crear_iniciar
+    sqlite3 "${SQLITE_PATH}" "
+        PRAGMA foreign_keys = ON;
+        update app_invoice set
+            estado = 'pendiente_de_cobro'
+            , pago_1_al_10 = 0
+            , pago_11_al_30 = 0
+        where mes_facturacion_id = '202304';
+        delete from app_payment where
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+    "
+}
+
+case "${1}" in
+    vacia)
+        echo "Creando base de datos vacia"
+        crear_vacia
+        ;;
+    iniciar)
+        echo "Creando base de datos para Iniciar facturación"
+        crear_iniciar
+        ;;
+    importar)
+        echo "Creando base de datos para Importar lecturas"
+        crear_importar
+        ;;
+    imprimir)
+        echo "Creando base de datos para Imprimir facturas"
+        crear_imprimir
+        ;;
+    actualizar)
+        echo "Creando base de datos para Actualizar pagos"
+        crear_actualizar
+        ;;
+    '') echo "" ;;
+    *)
+        echo "Error. Parámetro no reconocido"
+        exit 1
+        ;; # In case you typed a different option other than a,b,c
+esac

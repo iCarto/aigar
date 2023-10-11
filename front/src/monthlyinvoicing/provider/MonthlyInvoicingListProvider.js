@@ -7,59 +7,48 @@ let MonthlyInvoicingListContext = createContext(null);
 export default function MonthlyInvoicingListProvider({children}) {
     const [invoices, setInvoices] = useState([]);
     const [invoicesIds, setInvoicesIds] = useState([]);
-    const [filteredInvoices, setFilteredInvoices] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
+    const [invoicingMonthsForNavigator, setInvoicingMonthsForNavigator] = useState([]);
     const [selectedInvoicingMonth, setSelectedInvoicingMonth] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
+    const [areInvoicesLoading, setAreInvoicesLoading] = useState(null);
     const [isDataUpdated, setIsDataUpdated] = useState(false);
 
     const {getCurrentInvoicingMonth, getNextInvoicingMonth} = useInvoicingMonths();
 
     useEffect(() => {
-        setIsLoading(true);
-        let invoicingMonthOpened;
-        InvoicingMonthService.getInvoicingMonths()
-            .then(invoicingMonths => {
-                invoicingMonthOpened = getCurrentInvoicingMonth(invoicingMonths);
-                // Next month add to allow the creation of a new monthly invoicing process
-                setInvoicingMonths([
-                    ...invoicingMonths,
-                    getNextInvoicingMonth(invoicingMonthOpened),
-                ]);
-                setSelectedInvoicingMonth(invoicingMonthOpened);
-            })
-            .then(() =>
-                InvoicingMonthService.getInvoicingMonthInvoices(
-                    invoicingMonthOpened.id_mes_facturacion
-                )
-                    .then(invoices => {
-                        setInvoices(invoices);
-                        setInvoicesIds(invoices?.map(invoice => invoice.id));
-                    })
-                    .catch(error => console.log(error))
-            )
-            .finally(() => setIsLoading(false));
-    }, [isDataUpdated]);
+        InvoicingMonthService.getInvoicingMonths().then(months => {
+            const currentMonth = getCurrentInvoicingMonth(months);
+            const nextMonth = getNextInvoicingMonth(currentMonth);
+            setInvoicingMonths(months);
+            setSelectedInvoicingMonth(currentMonth);
+            setInvoicingMonthsForNavigator([...months, nextMonth]);
+        });
+    }, []);
 
     useEffect(() => {
-        if (filteredInvoices.length) {
-            const filteredInvoicesIds = filteredInvoices?.map(invoice => invoice.id);
-            setInvoicesIds(filteredInvoicesIds);
+        setAreInvoicesLoading(true);
+        if (selectedInvoicingMonth) {
+            InvoicingMonthService.getInvoicingMonthInvoices(
+                selectedInvoicingMonth?.id_mes_facturacion
+            )
+                .then(invoices => {
+                    setInvoices(invoices);
+                    setInvoicesIds(invoices?.map(invoice => invoice.id));
+                })
+                .catch(error => console.log(error))
+                .finally(() => setAreInvoicesLoading(false));
         }
-    }, [filteredInvoices]);
+    }, [isDataUpdated, invoicingMonths, selectedInvoicingMonth]);
 
     let value = {
         invoices,
-        filteredInvoices,
-        setFilteredInvoices,
         invoicesIds,
-        setInvoicesIds,
+        areInvoicesLoading,
+        setIsDataUpdated,
         invoicingMonths,
-        setInvoicingMonths,
+        invoicingMonthsForNavigator,
         selectedInvoicingMonth,
         setSelectedInvoicingMonth,
-        isLoading,
-        setIsDataUpdated,
     };
 
     return (

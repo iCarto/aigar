@@ -1,29 +1,30 @@
-import {useEffect} from "react";
-
 import {useList} from "base/entity/provider";
-import {useFilter} from "base/filter/hooks";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
-import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
+import {useEffect, useState} from "react";
+import {useFilter} from "base/filter/hooks";
 
 const ViewMonthlyInvoicingPage = () => {
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
     const {
         invoices,
-        filteredInvoices,
-        setFilteredInvoices,
-        invoicingMonths,
+        areInvoicesLoading,
         selectedInvoicingMonth,
+        invoicingMonthsForNavigator,
         setSelectedInvoicingMonth,
-        isLoading,
     } = useMonthlyInvoicingList();
+
+    const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const [loading, setLoading] = useState(areInvoicesLoading);
 
     useEffect(() => {
         setFilteredInvoices(filterFunction(invoices));
-    }, [selectedInvoicingMonth, invoices, filter]);
+        if (invoices) setLoading(false);
+    }, [invoices, filter]);
 
     const handleFilterChange = newFilter => {
         const filterValue = Object.values(newFilter)[0];
@@ -37,23 +38,24 @@ const ViewMonthlyInvoicingPage = () => {
     };
 
     const handleChangeInvoicingMonth = selectedInvoicingMonth => {
+        setLoading(true);
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
     return (
         <PageLayout
             sidebar={
-                selectedInvoicingMonth && invoices ? (
+                selectedInvoicingMonth && filteredInvoices ? (
                     <ListMonthlyInvoicesSidebar
                         invoices={filteredInvoices}
-                        invoicingMonths={invoicingMonths}
+                        invoicingMonths={invoicingMonthsForNavigator}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         handleChangeInvoicingMonth={handleChangeInvoicingMonth}
                     />
                 ) : null
             }
         >
-            {isLoading ? (
+            {areInvoicesLoading || loading ? (
                 <Spinner message="Cargando datos" />
             ) : (
                 <ListMonthlyInvoicesPage

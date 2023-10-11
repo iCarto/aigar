@@ -22,6 +22,7 @@ import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
 import {ViewInvoicesStatsPage} from "stats/container";
 import {LoadMeasurementsWizard} from "measurement/container";
 import {LoadPaymentsWizard} from "payment/container";
+import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 
 export default function AigarRoutes() {
     return (
@@ -59,7 +60,11 @@ export default function AigarRoutes() {
                         />
                         <Route
                             path=":member_id/nueva_factura"
-                            element={<CreateInvoiceSubpage />}
+                            element={
+                                <MonthlyInvoicingListProvider>
+                                    <CreateInvoiceSubpage />
+                                </MonthlyInvoicingListProvider>
+                            }
                         />
                     </Route>
 

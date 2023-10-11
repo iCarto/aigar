@@ -1,10 +1,12 @@
 import {useDomain} from "aigar/domain/provider";
 import {useList} from "base/entity/provider";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {InvoicesStatsFilterFormFields} from "stats/presentational";
 
 const InvoicesStatsFilterForm = ({handleFilterChange}) => {
     const {filter} = useList();
-    const {sectors, invoicingMonths} = useDomain();
+    const {sectors} = useDomain();
+    const {invoicingMonths} = useMonthlyInvoicingList();
 
     const fields = {
         sector: filter?.sector || "",

@@ -4,17 +4,17 @@ import {useNavigate, useParams} from "react-router-dom";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {DataValidatorService} from "validation/service";
-import {useDomain} from "aigar/domain/provider";
-
-import {InvoiceForm} from "invoice/presentational";
-import {PageLayout} from "base/ui/page";
-import {CreateInvoiceSidebar} from ".";
-import {Spinner} from "base/common";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {
     createInvoice,
     createInvoiceForMember,
     invoice_view_adapter,
 } from "invoice/model";
+
+import {InvoiceForm} from "invoice/presentational";
+import {PageLayout} from "base/ui/page";
+import {CreateInvoiceSidebar} from ".";
+import {Spinner} from "base/common";
 
 const CreateInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(createInvoice());
@@ -25,12 +25,12 @@ const CreateInvoiceSubpage = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const {member_id} = useParams();
-    const {currentInvoicingMonth} = useDomain();
+    const {selectedInvoicingMonth} = useMonthlyInvoicingList();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (currentInvoicingMonth) loadDataForInvoice();
-    }, [member_id, currentInvoicingMonth]);
+        if (selectedInvoicingMonth) loadDataForInvoice();
+    }, [member_id, selectedInvoicingMonth]);
 
     const loadDataForInvoice = () => {
         setIsLoading(true);
@@ -44,12 +44,12 @@ const CreateInvoiceSubpage = () => {
                 const invoicesForMember = result[1].filter(
                     invoice =>
                         invoice?.mes_facturacion.toString() ===
-                        currentInvoicingMonth?.id_mes_facturacion?.toString()
+                        selectedInvoicingMonth?.id_mes_facturacion?.toString()
                 );
 
                 const currentInvoice = createInvoiceForMember(
                     member,
-                    currentInvoicingMonth,
+                    selectedInvoicingMonth,
                     invoicesForMember.length + 1
                 );
 

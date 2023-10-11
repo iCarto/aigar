@@ -8,6 +8,7 @@ import {Spinner} from "base/common";
 import {InvoicesStatsFilterForm, ListInvoicesStatsPage} from ".";
 import {EntityListFilterForm} from "base/entity/components/form";
 import Grid from "@mui/material/Grid";
+import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 
 const ViewInvoicesStatsPage = () => {
     const [invoices, setInvoices] = useState([]);
@@ -57,9 +58,11 @@ const ViewInvoicesStatsPage = () => {
                         >
                             <EntityListFilterForm
                                 filterForm={
-                                    <InvoicesStatsFilterForm
-                                        handleFilterChange={handleFilterChange}
-                                    />
+                                    <MonthlyInvoicingListProvider>
+                                        <InvoicesStatsFilterForm
+                                            handleFilterChange={handleFilterChange}
+                                        />
+                                    </MonthlyInvoicingListProvider>
                                 }
                             />
                         </Grid>

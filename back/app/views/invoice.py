@@ -52,6 +52,21 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=["put"])
+    def total(self, request, pk=None):
+        instance = self.get_object()
+
+        def noop_save(*args, **kwargs):  # noqa: WPS430
+            """Don't save the instance, just recalculate values and return then."""
+
+        instance.save = noop_save
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        instance.update_total()
+
+        return Response(serializer.data)
+
     # Override destroy method to set Invoice as inactive and return a new version of the same invoice
     def destroy(self, request, *args, **kwargs):
         invoice = self.get_object()

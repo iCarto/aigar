@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+from django.forms import model_to_dict
 from rest_framework import status
 
 from app.models.invoice import Invoice, InvoiceStatus
@@ -72,3 +73,25 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     assert invoice.deuda == 0
     assert invoice.mora == 1
     assert invoice.saldo_pendiente == 50
+
+
+def test_total_endpoint(api_client, create_invoicing_month):
+    invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=True)
+    invoice = InvoiceFactory.create(mes_facturacion=invoicing_month)
+
+    sanitiy_check = {key: getattr(invoice, key) for key in ("total", "asamblea")}
+    assert sanitiy_check == {"total": 6.25, "asamblea": 0}, "Check arrange data is ok"
+    d = model_to_dict(invoice) | {"asamblea": 2}
+    response = api_client.put(f"/api/invoices/{invoice.id}/total/", d)
+    response_data = response.json()
+    assert response.status_code == status.HTTP_200_OK, response_data
+    expected = {key: response_data[key] for key in ("total", "asamblea")}
+    assert expected == {
+        "total": 8.25,
+        "asamblea": 2,
+    }, f"JSON Response has bad values, {response_data}"
+    invoice.refresh_from_db()
+    assert sanitiy_check == {
+        "total": 6.25,
+        "asamblea": 0,
+    }, "DB Invoice has been modified"

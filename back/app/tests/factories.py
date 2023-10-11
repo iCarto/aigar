@@ -54,7 +54,7 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     saldo_pendiente = 0
     descuento = 0
     otros = 0
-    total = 6.0
+    total = 6.25
     estado = "nueva"
     observaciones = None
     entrega = False

@@ -293,14 +293,10 @@ crear_imprimir() {
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
         update app_invoice set
-            asamblea = 0
-            , jornada_trabajo = 0
-            , traspaso = 0
-            , descuento = 0
-            , otros = 0
-            , estado = 'nueva'
-            , pago_1_al_10 = 0
-            , pago_11_al_30 = 0
+            estado = 'nueva'
+            , ontime_payment = 0
+            , late_payment = 0
+
         where mes_facturacion_id = '202304';
         delete from app_payment where
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');

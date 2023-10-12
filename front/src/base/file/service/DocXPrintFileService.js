@@ -5,7 +5,7 @@ import BarcodeService from "./BarcodeService";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const logoPath = "http://localhost:8000/media/logo.png";
-const invoiceTemplatePath = "http://localhost:8000/media/plantilla_factura.docx";
+const invoiceTemplatePath = "http://localhost:8000/media/plantilla_recibo.docx";
 
 const DocXPrintFileService = {
     async getLogo() {

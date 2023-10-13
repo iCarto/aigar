@@ -5,6 +5,7 @@ const ESTADOS_FACTURA = {
     NUEVA: "nueva",
     PENDIENTE_DE_COBRO: "pendiente_de_cobro",
     COBRADA: "cobrada",
+    NO_COBRADA: "no_cobrada",
     ANULADA: "anulada",
 };
 

@@ -53,7 +53,7 @@ const ViewMonthlyInvoicingPage = () => {
             sidebar={
                 selectedInvoicingMonth && filteredInvoices ? (
                     <ListMonthlyInvoicesSidebar
-                        invoices={filteredInvoices}
+                        invoices={invoices}
                         invoicingMonths={invoicingMonthsForNavigator}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         handleChangeInvoicingMonth={handleChangeInvoicingMonth}

@@ -47,7 +47,11 @@ const FormSelect = ({
                 {(showEmptyOption ? [emptyOption, ...options] : options).map(
                     (option, index) => {
                         return (
-                            <MenuItem key={index} value={option.key}>
+                            <MenuItem
+                                key={index}
+                                value={option.key}
+                                disabled={!!option.disabled}
+                            >
                                 {option.value}
                             </MenuItem>
                         );

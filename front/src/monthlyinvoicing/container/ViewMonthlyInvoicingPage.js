@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useList} from "base/entity/provider";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
+import {useButtonDisablingLogic} from "monthlyinvoicing/hooks";
 import {useFilter} from "base/filter/hooks";
 
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
@@ -19,6 +20,12 @@ const ViewMonthlyInvoicingPage = () => {
         isDataUpdated,
         setIsDataUpdated,
     } = useMonthlyInvoicingList();
+
+    const buttonDisableRules = useButtonDisablingLogic(
+        invoices,
+        invoicingMonthsForNavigator,
+        selectedInvoicingMonth
+    );
 
     const [filteredInvoices, setFilteredInvoices] = useState([]);
     const [loading, setLoading] = useState(areInvoicesLoading);
@@ -56,7 +63,9 @@ const ViewMonthlyInvoicingPage = () => {
                         invoices={invoices}
                         invoicingMonths={invoicingMonthsForNavigator}
                         selectedInvoicingMonth={selectedInvoicingMonth}
+                        buttonDisableRules={buttonDisableRules}
                         handleChangeInvoicingMonth={handleChangeInvoicingMonth}
+                        handleDataUpdate={refreshTable}
                     />
                 ) : null
             }

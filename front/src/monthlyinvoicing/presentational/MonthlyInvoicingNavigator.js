@@ -8,8 +8,8 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 const MonthlyInvoicingNavigator = ({
     invoicingMonths,
     selectedInvoicingMonth,
+    buttonDisableRules,
     handleChangeInvoicingMonth,
-    isNextMonthButtonDisabled,
 }) => {
     const getInvoicingMonthCurrentIndex = () => {
         return invoicingMonths.findIndex(
@@ -57,23 +57,19 @@ const MonthlyInvoicingNavigator = ({
         handleChangeInvoicingMonth(newSelectedInvoicingMonth);
     };
 
-    const isPreviousButtonDisabled = () => {
-        return getInvoicingMonthCurrentIndex() === 0;
-    };
+    const filteredOptions = invoicingMonths.filter(
+        invoicingMonth => invoicingMonth.anho === selectedInvoicingMonth.anho
+    );
 
-    const isNextButtonDisabled = () => {
-        return (
-            isNextMonthButtonDisabled ||
-            getInvoicingMonthCurrentIndex() === invoicingMonths.length - 1
-        );
-    };
-
-    const monthOptions = invoicingMonths
-        .filter(invoicingMonth => invoicingMonth.anho === selectedInvoicingMonth.anho)
-        .map(invoicingMonth => ({
+    const monthOptions = filteredOptions.map((invoicingMonth, index) => {
+        return {
             key: invoicingMonth.mes,
             value: DateUtil.getShortMonthName(invoicingMonth.mes),
-        }));
+            disabled:
+                index === filteredOptions.length - 1 &&
+                buttonDisableRules?.isLastMonthOptionDisabled,
+        };
+    });
 
     const yearOptions = [
         ...new Set(invoicingMonths.map(invoicingMonth => invoicingMonth.anho)),
@@ -93,7 +89,7 @@ const MonthlyInvoicingNavigator = ({
         <Box display="flex" justifyContent="space-between" alignItems="center" pb={0.5}>
             <IconButton
                 onClick={handleMonthChangePrevious}
-                disabled={isPreviousButtonDisabled()}
+                disabled={buttonDisableRules?.isPreviousButtonDisabled}
                 size="small"
                 sx={arrowBtnStyle}
             >
@@ -119,7 +115,7 @@ const MonthlyInvoicingNavigator = ({
             </Box>
             <IconButton
                 onClick={handleMonthChangeNext}
-                disabled={isNextButtonDisabled()}
+                disabled={buttonDisableRules?.isNextMonthButtonDisabled}
                 size="small"
                 sx={arrowBtnStyle}
             >

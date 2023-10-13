@@ -26,8 +26,10 @@ const DateUtil = {
     },
 
     parseISO(value) {
-        var tokens = value.trim().split("-");
-        return new Date(Date.UTC(tokens[0], tokens[1] - 1, tokens[2]));
+        if (value) {
+            var tokens = value?.trim().split("-");
+            return new Date(Date.UTC(tokens[0], tokens[1] - 1, tokens[2]));
+        }
     },
 
     // Transform to UI format date DD/MM/YYYY from DD-MM-YYYY

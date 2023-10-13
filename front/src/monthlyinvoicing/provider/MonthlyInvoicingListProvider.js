@@ -23,7 +23,7 @@ export default function MonthlyInvoicingListProvider({children}) {
             setSelectedInvoicingMonth(currentMonth);
             setInvoicingMonthsForNavigator([...months, nextMonth]);
         });
-    }, []);
+    }, [isDataUpdated]);
 
     useEffect(() => {
         setAreInvoicesLoading(true);

@@ -17,7 +17,7 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
     const location = useLocation();
     const basePath = location.pathname;
 
-    const {setSelectedInvoicingMonth} = useMonthlyInvoicingList();
+    const {setSelectedInvoicingMonth, setIsDataUpdated} = useMonthlyInvoicingList();
 
     const handleClickAccept = () => {
         startInvoicingMonth();
@@ -35,6 +35,7 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
         InvoicingMonthService.startInvoicingMonth(invoicingMonth, false)
             .then(newInvoicingMonth => {
                 setSelectedInvoicingMonth(newInvoicingMonth);
+                setIsDataUpdated(prevState => !prevState);
                 setOperationStatus(ModalOperationStatus.SUCCESS);
                 setErrorMessage(null);
             })

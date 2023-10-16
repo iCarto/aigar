@@ -1,5 +1,4 @@
 import datetime
-
 from typing import List, Self
 
 from django.db import models
@@ -9,6 +8,7 @@ from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
     ForthcomingInvoiceItemName,
 )
+from app.models.invoice_value import InvoiceValue
 from back.utils.dates import next_month
 from domains.models import aigar_config
 
@@ -19,18 +19,6 @@ class InvoiceStatus(models.TextChoices):
     COBRADA = "cobrada"  # noqa: WPS115
     NO_COBRADA = "no_cobrada"  # noqa: WPS115
     ANULADA = "anulada"  # noqa: WPS115
-
-
-class InvoiceValue(models.TextChoices):
-    # name = value, label
-    JORNADA_TRABAJO = "jornada_trabajo", "Jornada de trabajo"  # noqa: WPS115
-    ASAMBLEA = "asamblea", "Inasistencia a Asamblea"  # noqa: WPS115
-
-    @classmethod
-    def from_value(cls, value: str):
-        for c in cls:
-            if c.value == value:
-                return c
 
 
 def _calculated_forthcomingitem(member, name: ForthcomingInvoiceItemName):

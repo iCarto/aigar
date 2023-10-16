@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from app.models.invoice import Invoice, InvoiceValue
+from app.models.invoice import Invoice
+from app.models.invoice_value import InvoiceValue
 from app.serializers.member import MemberShortSerializer
 
 

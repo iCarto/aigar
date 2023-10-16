@@ -1,10 +1,13 @@
 import datetime
-from typing import Self
+from typing import List, Self
 
 from django.db import models
 
 from app.models.fixed_values import fixed_values
-from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
+from app.models.forthcoming_invoice_item import (
+    ForthcomingInvoiceItem,
+    ForthcomingInvoiceItemName,
+)
 from back.utils.dates import next_month
 from domains.models import aigar_config
 
@@ -29,11 +32,20 @@ class InvoiceValue(models.TextChoices):
                 return c
 
 
-def _calculated_reconexion(member) -> float:
-    item = member.forthcominginvoiceitem_set.filter(item="DERECHO_RECONEXION").first()
+def _calculated_forthcomingitem(member, name: ForthcomingInvoiceItemName):
+    item = member.forthcominginvoiceitem_set.filter(item=name).first()
     if item:
+        item.delete()
         return item.value
     return 0
+
+
+def _calculated_reconexion(member) -> float:
+    return _calculated_forthcomingitem(member, ForthcomingInvoiceItemName.reconexion)
+
+
+def _calculated_derecho(member) -> float:
+    return _calculated_forthcomingitem(member, ForthcomingInvoiceItemName.derecho)
 
 
 class InvoiceQuerySet(models.QuerySet["Invoice"]):
@@ -76,7 +88,7 @@ class InvoiceManager(models.Manager["Invoice"]):
             "comision": member.comision,
             "ahorro": member.ahorro,
             "caudal_anterior": last_invoice.caudal_actual,
-            "derecho": last_invoice.calculated_derecho(),
+            "derecho": _calculated_derecho(member),
             "reconexion": _calculated_reconexion(member),
             "mora": last_invoice.calculated_mora(),
             "saldo_pendiente": last_invoice.deuda,
@@ -121,7 +133,7 @@ class InvoiceManager(models.Manager["Invoice"]):
         como no cobrada). La deuda pendiente se gestionará si vuelve a Activa.
         """
 
-    def handle_invoices_for_new_active_members(self, member):
+    def handle_invoices_for_re_active_members(self, member):
         """Gestiona los cambios en la facturación cuando un socio vuelve a activo.
 
         La deuda que tenga pendiente se incluirá en su nueva factura cuando se creen las
@@ -129,10 +141,30 @@ class InvoiceManager(models.Manager["Invoice"]):
 
         Se anota en la cola que debe pagar el derecho de reconexión.
         """
+        value = getattr(
+            aigar_config.get_config(), ForthcomingInvoiceItemName.reconexion
+        )
         ForthcomingInvoiceItem.objects.create(
-            member=member,
-            item="DERECHO_RECONEXION",
-            value=fixed_values["DERECHO_RECONEXION"],
+            member=member, item=ForthcomingInvoiceItemName.reconexion, value=value
+        )
+
+    def handle_invoices_for_new_members(
+        self, member, d
+    ) -> List[ForthcomingInvoiceItem]:
+        """Gestiona los cambios en la facturación cuando se crea un nuevo socio.
+
+        Se anota en la cola los pagos que debe realizar por el derecho de conexión.
+        """
+        remaining_value = d["total"] - d["primera_cuota"]
+        siguientes_cuotas = remaining_value / d["numero_cuotas"]
+        cuotas = [d["primera_cuota"]] + [siguientes_cuotas] * d["numero_cuotas"]
+        return ForthcomingInvoiceItem.objects.bulk_create(
+            [
+                ForthcomingInvoiceItem(
+                    item=ForthcomingInvoiceItemName.derecho, value=c, member=member
+                )
+                for c in cuotas
+            ]
         )
 
 
@@ -194,7 +226,11 @@ class Invoice(models.Model):
     )
 
     derecho = models.FloatField(
-        null=False, blank=False, default=0, verbose_name="Derecho", help_text=""
+        null=False,
+        blank=False,
+        default=0,
+        verbose_name="Derecho conexión",
+        help_text="Parte del pago (cuota) del derecho de conexión",
     )
 
     reconexion = models.FloatField(

@@ -5,6 +5,7 @@ from django.core import exceptions
 
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
+from app.models.member import UseTypes
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 
 
@@ -80,3 +81,42 @@ def test_previous_month_is_closed_current_is_open(_, api_client):
     invoicingmonth.refresh_from_db()
     assert invoicingmonth.is_open is False
     assert InvoicingMonth.objects.filter(is_open=True).count() == 1
+
+
+@patch("app.models.invoicing_month.any_payments_for", return_value=True)
+def test_derecho_conexion_invoice_generation(_, api_client, create_invoicing_month):
+    create_invoicing_month(anho="2019", mes="09", is_open=True)
+    member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL)
+    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
+    response_data = response.json()
+    assert response.status_code == 201, response_data
+    invoice = Invoice.objects.get(
+        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+    )
+    assert invoice.derecho == 150
+    invoice.caudal_actual = 5
+    invoice.save()
+    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 11})
+    response_data = response.json()
+    invoice = Invoice.objects.get(
+        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+    )
+    assert invoice.derecho == 125
+
+    invoice.caudal_actual = 5
+    invoice.save()
+    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 12})
+    response_data = response.json()
+    invoice = Invoice.objects.get(
+        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+    )
+    assert invoice.derecho == 125
+
+    invoice.caudal_actual = 5
+    invoice.save()
+    response = api_client.post("/api/invoicingmonths/", {"anho": 2020, "mes": 1})
+    response_data = response.json()
+    invoice = Invoice.objects.get(
+        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+    )
+    assert invoice.derecho == 0

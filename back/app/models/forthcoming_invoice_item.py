@@ -12,18 +12,23 @@ https://www.dictionary.com/browse/forthcoming
 from django.db import models
 
 
+class ForthcomingInvoiceItemName(models.TextChoices):
+    derecho = "derecho"
+    reconexion = "reconexion"
+
+
 class ForthcomingInvoiceItem(models.Model):
     class Meta(object):
         verbose_name = "concepto a facturar en siguientes meses"
         verbose_name_plural = "conceptos a facturar en siguientes meses"
         ordering = ("id",)
-        constraints = [
-            models.UniqueConstraint(
-                name="%(app_label)s_%(class)s_unique_member_item",  # noqa: WPS323
-                violation_error_message="Ya existe el concepto para esa socia",
-                fields=["member", "item"],
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         name="%(app_label)s_%(class)s_unique_member_item",  # noqa: WPS323
+        #         violation_error_message="Ya existe el concepto para esa socia",
+        #         fields=["member", "item"],
+        #     )
+        # ]
 
     created_at = models.DateTimeField(null=False, auto_now_add=True)
     updated_at = models.DateTimeField(null=False, auto_now=True)

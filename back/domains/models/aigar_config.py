@@ -410,3 +410,13 @@ class AigarConfig(SingletonModel):
 
 def get_config() -> AigarConfig:
     return AigarConfig.get_solo()
+
+
+def get_config_nuevo_derecho(member):
+    config = get_config()
+    tipo_uso = member.tipo_uso.lower()
+    return {
+        "total": getattr(config, f"{tipo_uso}_nuevo_derecho_total"),
+        "primera_cuota": getattr(config, f"{tipo_uso}_nuevo_derecho_primera_cuota"),
+        "numero_cuotas": getattr(config, f"{tipo_uso}_nuevo_derecho_numero_cuotas"),
+    }

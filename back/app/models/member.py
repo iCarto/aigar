@@ -6,6 +6,7 @@ from django.db import models, transaction
 from app.models.fixed_values import fixed_values
 from app.models.invoice import Invoice
 from back.fields import RangedIntegerField
+from domains.models import aigar_config
 from domains.models.member_status import MemberStatus
 from domains.models.zone import Zone
 
@@ -165,13 +166,18 @@ class Member(models.Model):
         self.full_clean()
         with transaction.atomic():
             old_order = None
-            if self.pk:
+            is_creating = self.pk is None
+            if not is_creating:
                 old_order = Member.objects.values_list("orden", flat=True).get(
                     pk=self.pk
                 )
+
             new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
             Member.objects.update_order(new_order=new_order, old_order=old_order)
             super().save(**kwargs)
+            if is_creating:
+                d = aigar_config.get_config_nuevo_derecho(self)
+                Invoice.objects.handle_invoices_for_new_members(self, d)
             Invoice.objects.member_updated(self)
 
     @property
@@ -234,6 +240,6 @@ class Member(models.Model):
         if self.status == MemberStatus.INACTIVE:
             Invoice.objects.handle_invoices_for_new_inactive_members(self)
         if self.status == MemberStatus.ACTIVE:
-            Invoice.objects.handle_invoices_for_new_active_members(self)
+            Invoice.objects.handle_invoices_for_re_active_members(self)
 
         self.save()

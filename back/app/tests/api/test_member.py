@@ -3,7 +3,10 @@ from django.core import exceptions
 from django.forms.models import model_to_dict
 from rest_framework import status
 
-from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
+from app.models.forthcoming_invoice_item import (
+    ForthcomingInvoiceItem,
+    ForthcomingInvoiceItemName,
+)
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.member import Member
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
@@ -66,14 +69,16 @@ def test_create_reconnect_debt_when_activating_member(api_client):
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert ForthcomingInvoiceItem.objects.filter(
-        member=member, item="DERECHO_RECONEXION", value=10
+        member=member, item=ForthcomingInvoiceItemName.reconexion, value=10
     ).exists()
 
 
 def test_not_create_reconnect_debt_when_creating_member(api_client, new_member_data):
     response = api_client.post("/api/members/", new_member_data)
     assert response.status_code == status.HTTP_201_CREATED
-    assert not ForthcomingInvoiceItem.objects.filter(item="DERECHO_RECONEXION").exists()
+    assert not ForthcomingInvoiceItem.objects.filter(
+        item=ForthcomingInvoiceItemName.reconexion
+    ).exists()
 
 
 def test_update_member_with_invoices(api_client):

@@ -63,9 +63,29 @@ else
 
     PRAGMA foreign_keys = ON;
 
-    INSERT INTO domains_aigarconfig (name, payment_csv, payment_due_day) VALUES
-        ('Junta de Agua ASCATLI', 1, 10)
+    /* cuota_variable_cuarto_tramo_cantidad, cuota_variable_cuarto_tramo_coste */
+    /* comercial_cuota_variable_cuarto_tramo_cantidad, comercial_cuota_variable_cuarto_tramo_coste */
+    INSERT INTO domains_aigarconfig
+        (
+            id, name, payment_csv, payment_due_day, recargo_mora, reconexion, traspaso_derecho, otros, humano_nuevo_derecho_total, humano_nuevo_derecho_primera_cuota, humano_nuevo_derecho_numero_cuotas, comercial_nuevo_derecho_total, comercial_nuevo_derecho_primera_cuota, comercial_nuevo_derecho_numero_cuotas
+            , asamblea, jornada_trabajo
+            , comision_pago_banco
+            , humano_cuota_fija, comercial_cuota_fija
+            , ahorro
+            , humano_cuota_variable_primer_tramo_cantidad, humano_cuota_variable_primer_tramo_coste, humano_cuota_variable_segundo_tramo_cantidad, humano_cuota_variable_segundo_tramo_coste, humano_cuota_variable_tercer_tramo_cantidad, humano_cuota_variable_tercer_tramo_coste
+            , comercial_cuota_variable_primer_tramo_cantidad, comercial_cuota_variable_primer_tramo_coste, comercial_cuota_variable_segundo_tramo_cantidad, comercial_cuota_variable_segundo_tramo_coste, comercial_cuota_variable_tercer_tramo_cantidad, comercial_cuota_variable_tercer_tramo_coste
+        )
+    VALUES (1, 'Junta de Agua', 0, 16, '1.00', '10.00', '0.00', '0.00', '300.00', '100.00', 4, '400.00', '150.00', 2
+            , '2.00', '2.00'
+            , '0.28'
+            , '5.72', '5.72'
+            , '0.25'
+            , 14, 0, 20, '0.75', NULL, '2'
+            , 14, 0, 20, '0.75', NULL, '2'
+        )
     ;
+
+
 
     INSERT INTO domains_locality (name, short_name, number_of_sectors) VALUES
         ('Tihuapa norte', 'Tihuapa norte', 4)
@@ -81,31 +101,7 @@ else
         , ('6 - Tlacuxtli', '6', 'Tlacuxtli', 27)
         , ('7 - Tlacuxtli', '7', 'Tlacuxtli', 27)
     ;
-/*
-    INSERT INTO domains_invoiceconcepts (name, value) VALUES
-        ('Comisión de pago banco (dentro de la cuota)', 0.28)
-        , ('Recargo por mora', 1)
-        , ('Inasistencia a asambleas', 2)
-        , ('Jornada de trabajo', 0)
-        , ('Reconexión', 10)
-        , ('Ahorro mano de obra (centro de la cuota)', 0.25)
-        , ('Traspaso de derecho (cambio de nombre)', 5)
-        , ('Jornadas de trabajo', 2)
-        , ('Cuota fija - Consumo Humano - €', 5.72)
-        , ('Cuota fija - Consumo Comercial - €', 100)
-        , ('Cuota fija - Consumo Humano - m3', 14)
-        , ('Cuota fija - Consumo Comercial - m3', 100)
 
-
-            , ('Cuota Variable',)
-
-        , ('Nuevo derecho - total',)
-        , ('Nuevo derecho - número de cuotas',)
-        , ('Nuevo derecho - pago inicial',)
-
-
-    ;
-*/
     /* #4234-16 */
     WITH
         socias AS (

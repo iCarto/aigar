@@ -5,7 +5,6 @@ fixed_values = {
     "CUOTA_VARIABLE_MENOS_14": 0,
     "CUOTA_VARIABLE_14_20": 0.75,
     "CUOTA_VARIABLE_MAS_20": 2.5,
-    "MORA": 1,
     "JORNADA_TRABAJO": 1,
     "ASAMBLEA": 2,
 }

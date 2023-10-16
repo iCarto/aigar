@@ -3,8 +3,9 @@ from typing import Any
 
 from django.db import models, transaction
 from django.forms import ValidationError
+from app.models.latest_invoice import LatestInvoice, NoLatestInvoice
 
-from app.models.invoice import Invoice, InvoiceStatus, NoLastInvoice
+from app.models.invoice import Invoice, InvoiceStatus
 from app.models.member import Member
 from back.base.base_expressions import JsonGroupArray
 
@@ -81,7 +82,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
     def _create_new_invoices(self, new_invoicing_month):
         p = models.Prefetch(
             "invoice_set",
-            queryset=Invoice.objects.filter(
+            queryset=LatestInvoice.objects.filter(
                 estado__in=[InvoiceStatus.COBRADA, InvoiceStatus.NO_COBRADA]
             ).order_by("id"),
             to_attr="filtered_invoices",
@@ -94,7 +95,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
             if member.filtered_invoices:
                 last_invoice = member.filtered_invoices[-1]
             else:
-                last_invoice = NoLastInvoice()
+                last_invoice = NoLatestInvoice()
             Invoice.objects.create_from(member, last_invoice, new_invoicing_month)
 
 

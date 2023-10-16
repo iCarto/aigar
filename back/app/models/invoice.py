@@ -1,4 +1,5 @@
 import datetime
+
 from typing import List, Self
 
 from django.db import models
@@ -77,7 +78,7 @@ class InvoiceManager(models.Manager["Invoice"]):
             last_invoice.update_total()
             last_invoice.save()
 
-    def create_from(self, member, last_invoice, new_invoicing_month) -> "Invoice":
+    def create_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":
         invoice = {
             # New monthly invoices are always version 1
             "version": 1,
@@ -87,11 +88,11 @@ class InvoiceManager(models.Manager["Invoice"]):
             "cuota_fija": member.cuota_fija,
             "comision": member.comision,
             "ahorro": member.ahorro,
-            "caudal_anterior": last_invoice.caudal_actual,
+            "caudal_anterior": latest_invoice.caudal_actual,
             "derecho": _calculated_derecho(member),
             "reconexion": _calculated_reconexion(member),
-            "mora": last_invoice.calculated_mora(),
-            "saldo_pendiente": last_invoice.deuda,
+            "mora": latest_invoice.calculated_mora(),
+            "saldo_pendiente": latest_invoice.deuda,
             "mes_facturacion": new_invoicing_month,
         }
         return self.create(**invoice)
@@ -403,9 +404,6 @@ class Invoice(models.Model):
         if self.monto >= self.total_or0:
             self.estado = InvoiceStatus.COBRADA
 
-    def calculated_mora(self) -> float:
-        return fixed_values["MORA"] if (self.ontime_payment or 0) == 0 else 0
-
     def calculated_cuota_variable(self) -> float | None:
         if self.consumo_final is None:
             return None
@@ -421,19 +419,3 @@ class Invoice(models.Model):
             + (fixed_values["CUOTA_VARIABLE_14_20"] * 6)
             + fixed_values["CUOTA_VARIABLE_MAS_20"] * (self.consumo_final - 20)
         )
-
-
-class NoLastInvoice(object):
-    @property
-    def deuda(self) -> float:
-        return 0
-
-    @property
-    def caudal_actual(self) -> float:
-        return 0
-
-    def calculated_derecho(self) -> float:
-        return 0
-
-    def calculated_mora(self) -> float:
-        return 0

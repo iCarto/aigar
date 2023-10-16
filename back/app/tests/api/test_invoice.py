@@ -76,13 +76,16 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
 
 
 def test_total_endpoint(api_client, create_invoicing_month):
-    invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=True)
-    invoice = InvoiceFactory.create(mes_facturacion=invoicing_month)
+    invoice = InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
 
-    sanitiy_check = {key: getattr(invoice, key) for key in ("total", "asamblea")}
-    assert sanitiy_check == {"total": 6.25, "asamblea": 0}, "Check arrange data is ok"
-    d = model_to_dict(invoice) | {"asamblea": 2}
-    response = api_client.put(f"/api/invoices/{invoice.id}/total/", d)
+    sanity_check = {key: getattr(invoice, key) for key in ("total", "asamblea")}
+    assert sanity_check == {"total": 6.25, "asamblea": 0}, "Check arrange data is ok"
+
+    response = api_client.put(
+        f"/api/invoices/{invoice.id}/total/", model_to_dict(invoice) | {"asamblea": 2}
+    )
     response_data = response.json()
     assert response.status_code == status.HTTP_200_OK, response_data
     expected = {key: response_data[key] for key in ("total", "asamblea")}
@@ -91,7 +94,7 @@ def test_total_endpoint(api_client, create_invoicing_month):
         "asamblea": 2,
     }, f"JSON Response has bad values, {response_data}"
     invoice.refresh_from_db()
-    assert sanitiy_check == {
+    assert sanity_check == {
         "total": 6.25,
         "asamblea": 0,
     }, "DB Invoice has been modified"

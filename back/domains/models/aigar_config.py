@@ -37,10 +37,12 @@ https://forum.djangoproject.com/t/business-logic-constants-the-best-place-to-def
 
 
 from decimal import Decimal
+
 from django.core import validators
 from django.db import models
 from solo.models import SingletonModel
 
+from app.models.invoice_value import InvoiceValue
 from back.fields import RangedIntegerField, StrictCharField
 
 
@@ -181,7 +183,7 @@ class AigarConfig(SingletonModel):
         help_text="Cuota fija - Consumo Humano (valor en $)",
         validators=[validators.MinValueValidator(0)],
     )
-    comercial_cuota_fija_comercial = models.DecimalField(
+    comercial_cuota_fija = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=False,
@@ -420,3 +422,12 @@ def get_config_nuevo_derecho(member):
         "primera_cuota": getattr(config, f"{tipo_uso}_nuevo_derecho_primera_cuota"),
         "numero_cuotas": getattr(config, f"{tipo_uso}_nuevo_derecho_numero_cuotas"),
     }
+
+
+def get_invoice_value(invoice_value: InvoiceValue, member=None) -> Decimal | int:
+    # https://stackoverflow.com/questions/60616802/how-to-type-hint-a-generic-numeric-type-in-python
+    config = get_config()
+    tipo_uso = getattr(member, "tipo_uso", "").lower()
+    if tipo_uso:
+        return getattr(config, f"{tipo_uso}_{invoice_value.value}")
+    return getattr(config, invoice_value.value)

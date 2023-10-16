@@ -69,7 +69,7 @@ else
         (
             id, name, payment_csv, payment_due_day, recargo_mora, reconexion, traspaso_derecho, otros, humano_nuevo_derecho_total, humano_nuevo_derecho_primera_cuota, humano_nuevo_derecho_numero_cuotas, comercial_nuevo_derecho_total, comercial_nuevo_derecho_primera_cuota, comercial_nuevo_derecho_numero_cuotas
             , asamblea, jornada_trabajo
-            , comision_pago_banco
+            , comision
             , humano_cuota_fija, comercial_cuota_fija
             , ahorro
             , humano_cuota_variable_primer_tramo_cantidad, humano_cuota_variable_primer_tramo_coste, humano_cuota_variable_segundo_tramo_cantidad, humano_cuota_variable_segundo_tramo_coste, humano_cuota_variable_tercer_tramo_cantidad, humano_cuota_variable_tercer_tramo_coste

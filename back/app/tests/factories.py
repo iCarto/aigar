@@ -1,6 +1,5 @@
 import factory
 
-from app.models.fixed_values import fixed_values
 from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth
 from app.models.member import Member, UseTypes
@@ -41,10 +40,10 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     mes_facturado = factory.SelfAttribute("mes_facturacion.mes")
     caudal_anterior = 1390
     caudal_actual = 1400
-    cuota_fija = fixed_values["CUOTA_FIJA_NORMAL"]
+    cuota_fija = 5.72
     cuota_variable = 0
-    comision = fixed_values["COMISION"]
-    ahorro = fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
+    comision = 0.28
+    ahorro = 0.25
     mora = 0
     derecho = 0
     reconexion = 0

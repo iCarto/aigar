@@ -45,9 +45,8 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     def value(self, request):
         serializer = InvoiceValueSerializer(data=request.data)
         if serializer.is_valid():
-            Invoice.objects.update_value(
-                serializer.validated_data["pks"], serializer.validated_data["value"]
-            )
+            data = serializer.validated_data
+            Invoice.objects.update_value(data["pks"], data["invoice_value"])
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

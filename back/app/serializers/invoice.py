@@ -9,7 +9,7 @@ class InvoiceValueSerializer(serializers.Serializer):
     pks = serializers.ListField(
         child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1
     )
-    value = serializers.ChoiceField(
+    invoice_value = serializers.ChoiceField(
         choices=InvoiceValue, allow_blank=False, required=True
     )
 

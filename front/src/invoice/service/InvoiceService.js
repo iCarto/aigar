@@ -84,7 +84,7 @@ const InvoiceService = {
         console.log(pks);
         return ApiService.put("/invoices/value/", {
             pks,
-            value: "jornada_trabajo",
+            invoice_value: "jornada_trabajo",
         });
     },
 
@@ -92,7 +92,7 @@ const InvoiceService = {
         console.log(pks);
         return ApiService.put("/invoices/value/", {
             pks,
-            value: "asamblea",
+            invoice_value: "asamblea",
         });
     },
 };

@@ -3,7 +3,6 @@ import re
 from django.core import exceptions
 from django.db import models, transaction
 
-from app.models.fixed_values import fixed_values
 from app.models.invoice import Invoice
 from back.fields import RangedIntegerField
 from domains.models import aigar_config
@@ -179,18 +178,6 @@ class Member(models.Model):
                 d = aigar_config.get_config_nuevo_derecho(self)
                 Invoice.objects.handle_invoices_for_new_members(self, d)
             Invoice.objects.member_updated(self)
-
-    @property
-    def cuota_fija(self):
-        return fixed_values["CUOTA_FIJA_NORMAL"]
-
-    @property
-    def ahorro(self):
-        return fixed_values["AHORRO_MANO_DE_OBRA_NORMAL"]
-
-    @property
-    def comision(self):
-        return fixed_values["COMISION"]
 
     @property
     def lectura_anterior(self):

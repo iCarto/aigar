@@ -1,5 +1,6 @@
 import datetime
-from typing import List, Self
+from decimal import Decimal
+from typing import List, Self, cast
 
 from django.db import models
 
@@ -19,6 +20,12 @@ class InvoiceStatus(models.TextChoices):
     COBRADA = "cobrada"  # noqa: WPS115
     NO_COBRADA = "no_cobrada"  # noqa: WPS115
     ANULADA = "anulada"  # noqa: WPS115
+
+
+def _cuota_fija(member) -> Decimal:
+    return cast(
+        Decimal, aigar_config.get_invoice_value(InvoiceValue.CUOTA_FIJA, member)
+    )
 
 
 def _calculated_forthcomingitem(member, name: ForthcomingInvoiceItemName):
@@ -73,9 +80,9 @@ class InvoiceManager(models.Manager["Invoice"]):
             "anho": new_invoicing_month.anho,
             "mes_facturado": new_invoicing_month.mes,
             "member": member,
-            "cuota_fija": member.cuota_fija,
-            "comision": member.comision,
-            "ahorro": member.ahorro,
+            "cuota_fija": _cuota_fija(member),
+            "comision": aigar_config.get_invoice_value(InvoiceValue.COMISION),
+            "ahorro": aigar_config.get_invoice_value(InvoiceValue.AHORRO),
             "caudal_anterior": latest_invoice.caudal_actual,
             "derecho": _calculated_derecho(member),
             "reconexion": _calculated_reconexion(member),
@@ -96,10 +103,10 @@ class InvoiceManager(models.Manager["Invoice"]):
     def update_status(self, pks: list[int], status: str) -> None:
         self.filter(id__in=pks).update(estado=status)
 
-    def update_value(self, pks: list[int], value: str) -> None:
-        fix_value = InvoiceValue.from_value(value).name
+    def update_value(self, pks: list[int], invoice_value: InvoiceValue) -> None:
+        invoice_value_value = aigar_config.get_invoice_value(invoice_value)
         for invoice in self.filter(id__in=pks):
-            setattr(invoice, value, fixed_values[fix_value])
+            setattr(invoice, invoice_value.name, invoice_value_value)
             invoice.update_total()
             invoice.save()
 
@@ -361,8 +368,8 @@ class Invoice(models.Model):
         if self.consumo is None or self.consumo_final is None:
             return
 
-        self.cuota_fija = self.member.cuota_fija
-        self.ahorro = self.member.ahorro
+        self.cuota_fija = float(_cuota_fija(self.member))
+        self.ahorro = float(aigar_config.get_invoice_value(InvoiceValue.AHORRO))
 
         self.cuota_variable = self.calculated_cuota_variable()
 

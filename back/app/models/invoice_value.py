@@ -5,9 +5,6 @@ class InvoiceValue(models.TextChoices):
     # name = value, label
     JORNADA_TRABAJO = "jornada_trabajo", "Jornada de trabajo"  # noqa: WPS115
     ASAMBLEA = "asamblea", "Inasistencia a Asamblea"  # noqa: WPS115
-
-    @classmethod
-    def from_value(cls, value: str):
-        for c in cls:
-            if c.value == value:
-                return c
+    COMISION = "comision", "Comisión de pago banco"  # noqa: WPS115
+    CUOTA_FIJA = "cuota_fija", "Cuota fija"  # noqa: WPS115
+    AHORRO = "ahorro", "Ahorro mano de obra"  # noqa: WPS115

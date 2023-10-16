@@ -51,6 +51,15 @@ const InvoiceService = {
         );
     },
 
+    updateInvoiceTotal(invoice) {
+        return ApiService.put("/invoices/" + invoice.id + "/total/", invoice).then(
+            response => {
+                let invoice = invoice_api_adapter(response);
+                return createInvoice(invoice);
+            }
+        );
+    },
+
     updateInvoiceStatus(pks, status) {
         return ApiService.put("/invoices/status/", {
             pks,

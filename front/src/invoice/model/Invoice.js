@@ -176,46 +176,6 @@ const createInvoice = ({
     return Object.freeze(publicApi);
 };
 
-const refreshInvoiceValues = (invoice, consumo_maximo, consumo_reduccion_fija) => {
-    const consumo_final =
-        (consumo_maximo != null
-            ? Math.min(invoice.consumo, consumo_maximo)
-            : invoice.consumo) - (consumo_reduccion_fija || 0);
-    let cuota_variable = null;
-    if (consumo_final <= 14) {
-        cuota_variable = COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * consumo_final;
-    } else if (consumo_final > 14 && consumo_final < 20) {
-        cuota_variable =
-            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * 14 +
-            COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * (consumo_final - 14);
-    } else if (consumo_final >= 20) {
-        cuota_variable =
-            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MENOS_14 * 14 +
-            COSTE_METRO_CUBICO.CUOTA_VARIABLE_14_20 * 6 +
-            COSTE_METRO_CUBICO.CUOTA_VARIABLE_MAS_20 * (consumo_final - 20);
-    }
-    let total =
-        invoice.cuota_fija +
-        cuota_variable +
-        invoice.comision +
-        invoice.ahorro +
-        invoice.mora +
-        invoice.asamblea +
-        invoice.jornada_trabajo +
-        invoice.derecho +
-        invoice.reconexion +
-        invoice.traspaso +
-        invoice.otros +
-        invoice.saldo_pendiente -
-        invoice.descuento;
-    if (isNaN(total)) {
-        total = null;
-    } else {
-        total = total.toFixed(2);
-    }
-    return createInvoice(Object.assign({}, invoice, {cuota_variable, total}));
-};
-
 const createInvoiceForMember = (member, invoicingMonth, version) => {
     const invoicingMonthAnho = parseInt(invoicingMonth.anho);
     const invoicingMonthMes = parseInt(invoicingMonth.mes);
@@ -236,6 +196,5 @@ export {
     invoice_api_adapter,
     invoices_api_adapter,
     invoice_view_adapter,
-    refreshInvoiceValues,
     ESTADOS_FACTURA,
 };

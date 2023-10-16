@@ -1,8 +1,13 @@
+import {InvoiceService} from "invoice/service";
+import {ESTADOS_FACTURA, createInvoice} from "invoice/model";
+
 import {EntityFormLayout} from "base/entity/components/form";
-import {ESTADOS_FACTURA, createInvoice, refreshInvoiceValues} from "invoice/model";
 import {MemberDetail} from "member/presentational";
 import {InvoiceDetailShort, InvoiceFormFields} from ".";
 import Grid from "@mui/material/Grid";
+
+const WAIT_INTERVAL = 500;
+let timerID;
 
 const InvoiceForm = ({
     invoice = null,
@@ -34,18 +39,25 @@ const InvoiceForm = ({
     const isReadOnlyInvoice = invoice?.estado !== ESTADOS_FACTURA.NUEVA;
 
     const handleChange = (name, value) => {
-        const invoiceDataWithNewChange = {
+        const invoiceDataWithNewValue = {
             ...invoice,
             [name]: value,
         };
-        let updatedInvoice = createInvoice(invoiceDataWithNewChange);
-        updatedInvoice = refreshInvoiceValues(
-            updatedInvoice,
-            member.consumo_maximo,
-            member.consumo_reduccion_fija
-        );
 
+        let updatedInvoice = createInvoice(invoiceDataWithNewValue);
         onUpdate(updatedInvoice);
+
+        clearTimeout(timerID);
+
+        timerID = setTimeout(() => {
+            updateInvoice(invoiceDataWithNewValue);
+        }, WAIT_INTERVAL);
+    };
+
+    const updateInvoice = updatedData => {
+        InvoiceService.updateInvoiceTotal(updatedData).then(response => {
+            onUpdate(response);
+        });
     };
 
     const handleSubmit = event => {

@@ -27,6 +27,7 @@ const DateUtil = {
 
     parseISO(value) {
         if (value) {
+            if (value instanceof Date) return value;
             var tokens = value?.trim().split("-");
             return new Date(Date.UTC(tokens[0], tokens[1] - 1, tokens[2]));
         }

@@ -57,7 +57,7 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     old_invoice = InvoiceFactory.create(
         estado=InvoiceStatus.NO_COBRADA,
         total=100,
-        pago_11_al_30=50,
+        late_payment=50,
         member__status=MemberStatus.INACTIVE,
         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=False),
     )

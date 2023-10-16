@@ -164,12 +164,14 @@ else
 
     INSERT INTO app_invoice
     (
-        id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+        id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
         , jornada_trabajo
+        , ontime_payment, late_payment
     )
     SELECT
-        id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, pago_1_al_10, pago_11_al_30, created_at, updated_at, member_id, mes_facturacion_id
+        id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
         , 0
+        pago_1_al_10, pago_11_al_30,
         FROM api_invoice;
 
     INSERT INTO app_measurement
@@ -273,8 +275,8 @@ crear_importar() {
             , otros = 0
             , total = null
             , estado = 'nueva'
-            , pago_1_al_10 = 0
-            , pago_11_al_30 = 0
+            , ontime_payment = 0
+            , late_payment = 0
         where mes_facturacion_id = '202304';
         delete from app_payment where
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
@@ -292,7 +294,6 @@ crear_imprimir() {
             estado = 'nueva'
             , ontime_payment = 0
             , late_payment = 0
-
         where mes_facturacion_id = '202304';
         delete from app_payment where
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
@@ -305,8 +306,8 @@ crear_actualizar() {
         PRAGMA foreign_keys = ON;
         update app_invoice set
             estado = 'pendiente_de_cobro'
-            , pago_1_al_10 = 0
-            , pago_11_al_30 = 0
+            , ontime_payment = 0
+            , late_payment = 0
         where mes_facturacion_id = '202304';
         delete from app_payment where
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');

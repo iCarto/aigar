@@ -110,13 +110,13 @@ def get_fixtures_invoices(invoices):
                 # estos pagos se corresponden con la factura del mes anterior
                 # y se utiliza en el excel para determinar si hay mora o no
                 # pero no se pueden cargar en la factura actual, sino en la anterior
-                pago_1_al_10 = float(invoice.get("pago_1_al_10", 0) or 0)
-                pago_11_al_30 = float(invoice.get("pago_11_al_30", 0) or 0)
-                comprobar_pago_1_al_10 = float(
-                    invoice.get("comprobar_pago_1_al_10", 0) or 0
+                ontime_payment = float(invoice.get("ontime_payment", 0) or 0)
+                late_payment = float(invoice.get("late_payment", 0) or 0)
+                comprobar_ontime_payment = float(
+                    invoice.get("comprobar_ontime_payment", 0) or 0
                 )
-                comprobar_pago_11_al_30 = float(
-                    invoice.get("comprobar_pago_11_al_30", 0) or 0
+                comprobar_late_payment = float(
+                    invoice.get("comprobar_late_payment", 0) or 0
                 )
                 if mes_facturacion_previo is not None:
                     last_month_fixture_invoice = [
@@ -130,15 +130,15 @@ def get_fixtures_invoices(invoices):
                     if last_month_fixture_invoice:
                         last_month_fixture_invoice = last_month_fixture_invoice[0]
                         last_month_fixture_invoice["fields"][
-                            "pago_11_al_30"
-                        ] = pago_11_al_30
+                            "late_payment"
+                        ] = late_payment
                         last_month_fixture_invoice["fields"][
-                            "pago_1_al_10"
-                        ] = pago_1_al_10
+                            "ontime_payment"
+                        ] = ontime_payment
                         last_month_fixture_invoice["fields"]["estado"] = (
                             "no_cobrada"
-                            if comprobar_pago_1_al_10 == 0
-                            and comprobar_pago_11_al_30 == 0
+                            if comprobar_ontime_payment == 0
+                            and comprobar_late_payment == 0
                             else "cobrada"
                         )
                 # Error control for invoices in Oct 2019 with negative measurements

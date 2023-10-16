@@ -54,8 +54,8 @@ def test_create_with_previous(_, api_client):
         mes_facturacion=invoicingmonth,
         estado=InvoiceStatus.COBRADA,
         caudal_actual=10,
-        pago_1_al_10=0,
-        pago_11_al_30=1,
+        ontime_payment=0,
+        late_payment=1,
         total=1,
     )
 

@@ -53,10 +53,10 @@ def parse_invoice_spreadsheet(xls):
         "Comunidad": "comunidad",
         "MesFact": "mes_facturado",
         "ENTREGA": "entrega",
-        "Pago1al11": "pago_1_al_10",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
-        "Comprobar": "comprobar_pago_1_al_10",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
-        "Pago11al30": "pago_11_al_30",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
-        "Comprobar.1": "comprobar_pago_11_al_30",  # saldo_pendiente - pago_11_al_30
+        "Pago1al11": "ontime_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
+        "Comprobar": "comprobar_ontime_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
+        "Pago11al30": "late_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
+        "Comprobar.1": "comprobar_late_payment",  # saldo_pendiente - late_payment
     }
     df = pd.read_excel(xls, **excel_options)
     df.rename(columns=column_names, inplace=True)

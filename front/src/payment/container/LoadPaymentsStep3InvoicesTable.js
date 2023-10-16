@@ -60,10 +60,10 @@ const LoadPaymentsStep3InvoicesTable = ({
                 invoice.errors.push("La factura tiene varios pagos");
                 return;
             }
-            if (invoice.total > invoice.pago_1_al_10 + invoice.pago_11_al_30) {
+            if (invoice.total > invoice.ontime_payment + invoice.late_payment) {
                 invoice.errors.push("El pago no cubre el total");
             }
-            if (invoice.total < invoice.pago_1_al_10 + invoice.pago_11_al_30) {
+            if (invoice.total < invoice.ontime_payment + invoice.late_payment) {
                 invoice.errors.push("El pago supera el total");
             }
         }

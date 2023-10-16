@@ -47,7 +47,7 @@ const invoice_api_adapter = invoice => {
     invoice["nombre"] = invoice.member_data.name;
     invoice["status"] = getTipoSocio(invoice.member_data);
     invoice["sector"] = invoice.member_data.sector;
-    invoice["total_pagado"] = invoice.pago_1_al_10 + invoice.pago_11_al_30;
+    invoice["total_pagado"] = invoice.ontime_payment + invoice.late_payment;
     invoice["is_active"] = invoice.estado !== ESTADOS_FACTURA.ANULADA;
     return invoice;
 };
@@ -100,14 +100,14 @@ const createInvoice = ({
     numero = "",
     estado = "",
     is_active = true,
-    comprobar_pago_11_al_30 = null,
-    comprobar_pago_1_al_10 = null,
+    comprobar_late_payment = null,
+    comprobar_ontime_payment = null,
     asamblea = null,
     jornada_trabajo = null,
     cuota_variable = null,
     entrega = false,
-    pago_11_al_30 = null,
-    pago_1_al_10 = null,
+    late_payment = null,
+    ontime_payment = null,
     total_pagado = null,
     descuento = null,
     traspaso = null,
@@ -141,15 +141,15 @@ const createInvoice = ({
         total: NumberUtil.parseFloatOrNull(total),
         asamblea: NumberUtil.parseFloatOrNull(asamblea),
         jornada_trabajo: NumberUtil.parseFloatOrNull(jornada_trabajo),
-        comprobar_pago_11_al_30,
-        comprobar_pago_1_al_10,
+        comprobar_late_payment,
+        comprobar_ontime_payment,
         cuota_variable: NumberUtil.parseFloatOrNull(cuota_variable),
         entrega,
         numero,
         estado,
         is_active,
-        pago_11_al_30: NumberUtil.parseFloatOrNull(pago_11_al_30),
-        pago_1_al_10: NumberUtil.parseFloatOrNull(pago_1_al_10),
+        late_payment: NumberUtil.parseFloatOrNull(late_payment),
+        ontime_payment: NumberUtil.parseFloatOrNull(ontime_payment),
         total_pagado: NumberUtil.parseFloatOrNull(total_pagado),
         descuento: NumberUtil.parseFloatOrNull(descuento),
         traspaso: NumberUtil.parseFloatOrNull(traspaso),

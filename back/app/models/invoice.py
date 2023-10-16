@@ -53,8 +53,8 @@ class InvoiceQuerySet(models.QuerySet["Invoice"]):
         return self.alias(
             deudadb=models.ExpressionWrapper(
                 models.functions.Coalesce("total", 0)
-                - models.functions.Coalesce("pago_1_al_10", 0)
-                - models.functions.Coalesce("pago_11_al_30", 0),
+                - models.functions.Coalesce("ontime_payment", 0)
+                - models.functions.Coalesce("late_payment", 0),
                 output_field=models.FloatField(),
             )
         )
@@ -289,11 +289,11 @@ class Invoice(models.Model):
         blank=False, null=False, default=False, verbose_name="Entrega", help_text=""
     )
 
-    pago_1_al_10 = models.FloatField(
+    ontime_payment = models.FloatField(
         null=True, blank=True, default=0, verbose_name="Pago 1 al 15", help_text=""
     )
 
-    pago_11_al_30 = models.FloatField(
+    late_payment = models.FloatField(
         null=True, blank=True, default=0, verbose_name="Pago 16 al 30", help_text=""
     )
 
@@ -338,7 +338,7 @@ class Invoice(models.Model):
 
     @property
     def monto(self) -> float:
-        return (self.pago_1_al_10 or 0) + (self.pago_11_al_30 or 0)
+        return (self.ontime_payment or 0) + (self.late_payment or 0)
 
     @property
     def total_or0(self) -> float:

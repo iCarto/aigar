@@ -68,13 +68,13 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
                 className: "cubic-metre bold",
             },
             {
-                Header: "Pago 1 al 15",
-                accessor: "pago_1_al_10",
+                Header: "Pago en plazo",
+                accessor: "ontime_payment",
                 className: "dollar",
             },
             {
-                Header: "Pago 16 al 30",
-                accessor: "pago_11_al_30",
+                Header: "Pago con mora",
+                accessor: "late_payment",
                 className: "dollar",
             },
             {

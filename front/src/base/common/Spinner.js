@@ -1,11 +1,21 @@
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
 const Spinner = ({message = ""}) => {
     return (
-        <div className="h-100 text-center d-flex align-items-center justify-content-center mt-3">
-            <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">{message}...</span>
-            </div>
-            <strong className="ml-3">{message ? message + "..." : ""}</strong>
-        </div>
+        <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+            mt={2}
+        >
+            <CircularProgress color="primary" />
+            <Typography variant="subtitle2" ml={2}>
+                {message ? `${message}...` : ""}
+            </Typography>
+        </Box>
     );
 };
 

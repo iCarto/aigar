@@ -163,11 +163,10 @@ const createInvoice = ({
         errors,
 
         get consumo() {
-            let _consumo = this.caudal_actual - this.caudal_anterior;
-            if (isNaN(_consumo)) {
+            if (!this.caudal_actual) {
                 return null;
             }
-            return _consumo;
+            return this.caudal_actual - this.caudal_anterior;
         },
 
         get isNewInvoice() {

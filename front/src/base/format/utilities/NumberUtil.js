@@ -42,6 +42,7 @@ const NumberUtil = {
     },
 
     parseIntOrNull(value) {
+        // FIXME
         if (value == null) {
             return "";
         }

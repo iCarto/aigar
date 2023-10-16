@@ -84,7 +84,7 @@ class AigarConfig(SingletonModel):
         blank=False,
         min_value=1,
         max_value=28,
-        default=10,
+        default=16,
         verbose_name="Día límite de pago",
         help_text="Día del mes hasta el que (incluido) el pago no tendrá mora.",
     )

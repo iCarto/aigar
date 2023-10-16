@@ -396,7 +396,7 @@ class Invoice(models.Model):
         )
 
     def update_with_payment(self, fecha_pago, monto_pago):
-        if fecha_pago.day < 16:
+        if fecha_pago <= self.due_date:
             self.ontime_payment = self.ontime_payment + monto_pago
         else:
             self.late_payment = self.late_payment + monto_pago

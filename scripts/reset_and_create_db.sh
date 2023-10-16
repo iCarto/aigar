@@ -171,7 +171,7 @@ else
     SELECT
         id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
         , 0
-        pago_1_al_10, pago_11_al_30,
+        , COALESCE(pago_1_al_10, 0), COALESCE(pago_11_al_30, 0)
         FROM api_invoice;
 
     INSERT INTO app_measurement

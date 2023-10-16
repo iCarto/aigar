@@ -53,8 +53,8 @@ class InvoiceQuerySet(models.QuerySet["Invoice"]):
         return self.alias(
             deudadb=models.ExpressionWrapper(
                 models.functions.Coalesce("total", 0)
-                - models.functions.Coalesce("ontime_payment", 0)
-                - models.functions.Coalesce("late_payment", 0),
+                - models.F("ontime_payment")
+                - models.F("late_payment"),
                 output_field=models.FloatField(),
             )
         )
@@ -290,11 +290,11 @@ class Invoice(models.Model):
     )
 
     ontime_payment = models.FloatField(
-        null=True, blank=True, default=0, verbose_name="Pago 1 al 15", help_text=""
+        null=False, blank=False, default=0, verbose_name="Pago en plazo"
     )
 
     late_payment = models.FloatField(
-        null=True, blank=True, default=0, verbose_name="Pago 16 al 30", help_text=""
+        null=False, blank=False, default=0, verbose_name="Pago con mora"
     )
 
     # null debería ser falso pero para evitar problemas con las fixtures
@@ -338,7 +338,7 @@ class Invoice(models.Model):
 
     @property
     def monto(self) -> float:
-        return (self.ontime_payment or 0) + (self.late_payment or 0)
+        return self.ontime_payment + self.late_payment
 
     @property
     def total_or0(self) -> float:
@@ -397,17 +397,14 @@ class Invoice(models.Model):
 
     def update_with_payment(self, fecha_pago, monto_pago):
         if fecha_pago.day < 16:
-            self.pago_1_al_10 = self.pago_1_al_10 + monto_pago
+            self.ontime_payment = self.ontime_payment + monto_pago
         else:
-            self.pago_11_al_30 = self.pago_11_al_30 + monto_pago
+            self.late_payment = self.late_payment + monto_pago
         if self.monto >= self.total_or0:
             self.estado = InvoiceStatus.COBRADA
 
     def calculated_mora(self) -> float:
-        return fixed_values["MORA"] if (self.pago_1_al_10 or 0) == 0 else 0
-
-    def calculated_derecho(self) -> float:
-        return fixed_values["DERECHO_CONEXION"]
+        return fixed_values["MORA"] if (self.ontime_payment or 0) == 0 else 0
 
     def calculated_cuota_variable(self) -> float | None:
         if self.consumo_final is None:

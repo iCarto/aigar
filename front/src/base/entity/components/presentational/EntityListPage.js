@@ -1,3 +1,4 @@
+import {Fragment} from "react";
 import {ActionsBurgerMenu} from "base/ui/menu/components";
 import {
     SortedPaginatedSelectableTable,
@@ -20,7 +21,13 @@ const EntityListPage = ({
     selectable = true,
 }) => {
     const displayActions = pageActions?.length > 0;
-    const groupedActions = <ActionsBurgerMenu>{pageActions}</ActionsBurgerMenu>;
+    const groupedActions = (
+        <ActionsBurgerMenu>
+            {pageActions.map((action, index) => (
+                <Fragment key={index}>{action}</Fragment>
+            ))}
+        </ActionsBurgerMenu>
+    );
 
     return (
         <>

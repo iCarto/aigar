@@ -1,4 +1,4 @@
-export {default as SortedTable} from "./SortedTable";
+export {default as SortedEditableTable} from "./SortedEditableTable";
 export {default as SortedPaginatedTable} from "./SortedPaginatedTable";
 export {default as SortedPaginatedSelectableTable} from "./SortedPaginatedSelectableTable";
 export {default as SortedTableHead} from "./SortedTableHead";

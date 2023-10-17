@@ -2,8 +2,10 @@ import {useEffect, useState} from "react";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadDataValidatorService} from "validation/service";
 import {createMeasurement} from "measurement/model";
-import {LoadMeasurementsList} from "../presentational";
-import {LoadDataTableFilter} from "loaddata/presentational";
+import {useLoadMeasurementsTableColumns} from "measurement/data";
+
+import {MemberViewModal} from "member/presentational";
+import {LoadDataTable, LoadDataTableFilter} from "loaddata/presentational";
 import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -13,6 +15,8 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     onChangeMeasurements,
     onValidateStep,
 }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
     const [filter, setFilter] = useState({
         textSearch: "",
         showOnlyErrors: false,
@@ -24,6 +28,26 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         onValidateStep(false);
         reviewMeasurements(measurements);
     }, []);
+
+    const handleClickViewMember = member_id => {
+        setIsModalOpen(true);
+        setSelectedMemberForModal(member_id);
+    };
+
+    const onClickCancelViewMember = () => {
+        setIsModalOpen(false);
+        setSelectedMemberForModal(null);
+    };
+
+    const {tableColumns} = useLoadMeasurementsTableColumns(handleClickViewMember);
+
+    const modal = (
+        <MemberViewModal
+            id={selectedMemberForModal}
+            isOpen={isModalOpen}
+            onClose={onClickCancelViewMember}
+        />
+    );
 
     const handleUpdateMeasurement = (rowId, columnId, value) => {
         const updatedMeasurements = measurements.map((measurement, index) => {
@@ -74,10 +98,12 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         <Grid>
             {totalRegistersWithErrors ? <ErrorMessage message={errorsMessage} /> : null}
             <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
-            <LoadMeasurementsList
-                measurements={filteredMeasurements}
-                onUpdateMeasurement={handleUpdateMeasurement}
+            <LoadDataTable
+                items={filteredMeasurements}
+                columns={tableColumns}
+                onUpdateData={handleUpdateMeasurement}
             />
+            {modal}
         </Grid>
     );
 };

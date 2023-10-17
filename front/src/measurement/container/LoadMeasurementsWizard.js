@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import {loadMeasurementsSteps} from "payment/data";
+import {loadMeasurementsSteps} from "measurement/data";
 
 import {LoadMeasurementsWizardSteps} from ".";
 import {Wizard} from "base/ui/wizard";

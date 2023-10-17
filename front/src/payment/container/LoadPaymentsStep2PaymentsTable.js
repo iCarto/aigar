@@ -3,9 +3,10 @@ import {LoadDataValidatorService} from "validation/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {createPayment} from "payment/model";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
+import {useLoadPaymentsTableColumns} from "payment/data";
 
-import {LoadPaymentsList} from "../presentational";
-import {LoadDataTableFilter} from "loaddata/presentational";
+import {MemberViewModal} from "member/presentational";
+import {LoadDataTable, LoadDataTableFilter} from "loaddata/presentational";
 import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/common";
 import Grid from "@mui/material/Grid";
@@ -18,6 +19,8 @@ const LoadPaymentsStep2PaymentsTable = ({
     onValidateStep,
 }) => {
     const [invoices, setInvoices] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
     const [filter, setFilter] = useState({
         textSearch: "",
         showOnlyErrors: false,
@@ -36,6 +39,26 @@ const LoadPaymentsStep2PaymentsTable = ({
             }
         );
     }, [id_mes_facturacion]);
+
+    const handleClickViewMember = member_id => {
+        setIsModalOpen(true);
+        setSelectedMemberForModal(member_id);
+    };
+
+    const onClickCancelViewMember = () => {
+        setIsModalOpen(false);
+        setSelectedMemberForModal(null);
+    };
+
+    const {tableColumns} = useLoadPaymentsTableColumns(handleClickViewMember);
+
+    const modal = (
+        <MemberViewModal
+            id={selectedMemberForModal}
+            isOpen={isModalOpen}
+            onClose={onClickCancelViewMember}
+        />
+    );
 
     const handleUpdatePayment = (rowId, columnId, value) => {
         const updatedPayments = payments.map(payment => {
@@ -123,10 +146,12 @@ const LoadPaymentsStep2PaymentsTable = ({
                     <ErrorMessage message={errorsMessage} />
                 ) : null}
                 <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
-                <LoadPaymentsList
-                    payments={paymentsFiltered}
-                    onUpdatePayment={handleUpdatePayment}
+                <LoadDataTable
+                    items={paymentsFiltered}
+                    columns={tableColumns}
+                    onUpdateData={handleUpdatePayment}
                 />
+                {modal}
             </Grid>
         );
     }

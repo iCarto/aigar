@@ -1,5 +1,7 @@
 // https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/master/examples/editable-data
-import React from "react";
+import {useEffect, useState} from "react";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const EditableSelectCellTable = ({
     cell: {value: initialValue},
@@ -8,61 +10,64 @@ const EditableSelectCellTable = ({
     onUpdateData, // This is a custom function that we supplied to our table instance
 }) => {
     // We need to keep and update the state of the cell normally
-    const [value, setValue] = React.useState(initialValue);
-    const [readOnly, setReadOnly] = React.useState(true);
+    const [value, setValue] = useState(initialValue);
+    const [readOnly, setReadOnly] = useState(true);
 
     const onChange = e => {
-        setValue(e.target.value === "true");
+        console.log(e.target.value);
+        setValue(e.target.value === true);
     };
 
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
-        onUpdateData(row.original.id, id, value);
+        onUpdateData(row.index, id, value);
         setReadOnly(true);
     };
 
     // If the initialValue is changed external, sync it up with our state
-    React.useEffect(() => {
+    useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
-
-    const errorStyle = {color: "red"};
-
-    const fieldErrors = row.original.errors
-        .filter(error => error.field === id)
-        .map(error => <div key={error.msg}>{error.msg}</div>);
 
     const enableInput = () => {
         console.log("enableInput");
         setReadOnly(false);
     };
 
+    const smallInputStyle = {
+        "& .MuiInputBase-input": {
+            overflow: "visible",
+        },
+        "& .MuiSelect-icon": {
+            fontSize: "18px",
+        },
+    };
+
+    const options = [
+        {key: false, value: "No"},
+        {key: true, value: "Sí"},
+    ];
+
     return (
-        <div>
-            {readOnly ? (
-                <input
-                    value={value === true ? "Sí" : "No"}
-                    onDoubleClick={enableInput}
-                    style={fieldErrors.length !== 0 ? errorStyle : null}
-                    className="form-control"
-                    readOnly={readOnly}
-                />
-            ) : (
-                <select
-                    value={value}
-                    onChange={onChange}
-                    onDoubleClick={enableInput}
-                    onBlur={onBlur}
-                    style={fieldErrors.length !== 0 ? errorStyle : null}
-                    className="form-control"
-                    disabled={readOnly}
-                >
-                    <option value={true}>Sí</option>
-                    <option value={false}>No</option>
-                </select>
-            )}
-            <small className="text-danger">{fieldErrors}</small>
-        </div>
+        <Select
+            value={value}
+            name="editableSelectCell"
+            onChange={!readOnly ? onChange : null}
+            onDoubleClick={enableInput}
+            onBlur={!readOnly ? onBlur : null}
+            disabled={readOnly}
+            size="small"
+            sx={smallInputStyle}
+            fullWidth
+        >
+            {options.map((option, index) => {
+                return (
+                    <MenuItem key={index} value={option.key}>
+                        {option.value}
+                    </MenuItem>
+                );
+            })}
+        </Select>
     );
 };
 

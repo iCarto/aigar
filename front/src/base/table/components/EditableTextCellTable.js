@@ -1,5 +1,6 @@
 // https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/master/examples/editable-data
 import {useEffect, useState} from "react";
+import TextField from "@mui/material/TextField";
 
 const EditableTextCellTable = ({
     cell: {value: initialValue},
@@ -17,7 +18,7 @@ const EditableTextCellTable = ({
 
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
-        onUpdateData(row.original.id, id, value);
+        onUpdateData(row.index, id, value);
         setReadOnly(true);
     };
 
@@ -25,8 +26,6 @@ const EditableTextCellTable = ({
     useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
-
-    const errorStyle = {color: "red"};
 
     const fieldErrors = row.original.errors
         .filter(error => error.field === id)
@@ -38,18 +37,23 @@ const EditableTextCellTable = ({
     };
 
     return (
-        <div>
-            <input
-                value={value != null ? value : ""}
-                onChange={onChange}
-                onBlur={onBlur}
-                onDoubleClick={enableInput}
-                style={fieldErrors.length !== 0 ? errorStyle : null}
-                className="form-control"
-                readOnly={readOnly}
-            />
-            <small className="text-danger">{fieldErrors}</small>
-        </div>
+        <TextField
+            value={value != null ? value : ""}
+            disabled={readOnly}
+            onChange={onChange}
+            onBlur={onBlur}
+            onDoubleClick={enableInput}
+            error={Boolean(fieldErrors.length)}
+            helperText={fieldErrors}
+            variant="standard"
+            margin="dense"
+            size="small"
+            sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#495057",
+                },
+            }}
+        />
     );
 };
 

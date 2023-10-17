@@ -8,7 +8,7 @@ from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItemName,
 )
 from app.models.invoice import Invoice, InvoiceStatus
-from app.models.member import Member
+from app.models.member import Member, UseTypes
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 from domains.models.member_status import MemberStatus
 
@@ -81,18 +81,17 @@ def test_not_create_reconnect_debt_when_creating_member(api_client, new_member_d
     ).exists()
 
 
-def test_update_member_with_invoices(api_client):
-    invoicing_month = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
-    invoicing_month.save()
+def test_update_member_with_invoices(api_client, create_invoicing_month):
     invoice = InvoiceFactory.create(
         estado=InvoiceStatus.NUEVA,
-        mes_facturacion=invoicing_month,
+        mes_facturacion=create_invoicing_month(anho=2019, mes=9, is_open=True),
         caudal_anterior=10,
         caudal_actual=110,
+        member__tipo_uso=UseTypes.HUMANO,
     )
     invoice.update_total()
     invoice.save()
-    assert invoice.total == pytest.approx(210.75)
+    assert invoice.total == pytest.approx(170.75)
     d = model_to_dict(
         invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
     ) | {"name": "foo bar", "consumo_maximo": 15}

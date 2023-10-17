@@ -4,7 +4,6 @@ from typing import List, Self, cast
 
 from django.db import models
 
-from app.models.fixed_values import fixed_values
 from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
     ForthcomingInvoiceItemName,
@@ -70,8 +69,7 @@ class InvoiceManager(models.Manager["Invoice"]):
             member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
         ).first()
         if last_invoice:
-            last_invoice.update_total()
-            last_invoice.save()
+            last_invoice.update_for_member()
 
     def create_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":
         invoice = {
@@ -368,10 +366,7 @@ class Invoice(models.Model):
         if self.consumo is None or self.consumo_final is None:
             return
 
-        self.cuota_fija = float(_cuota_fija(self.member))
-        self.ahorro = float(aigar_config.get_invoice_value(InvoiceValue.AHORRO))
-
-        self.cuota_variable = self.calculated_cuota_variable()
+        self.cuota_variable = self.calculated_variable_fee()
 
         # TODO Review if store invoice in decimal fields is a better option
         self.total = round(
@@ -391,6 +386,11 @@ class Invoice(models.Model):
             2,
         )
 
+    def update_for_member(self):
+        self.cuota_fija = float(_cuota_fija(self.member))
+        self.update_total()
+        self.save()
+
     def update_with_payment(self, fecha_pago, monto_pago):
         if fecha_pago <= self.due_date:
             self.ontime_payment = self.ontime_payment + monto_pago
@@ -399,18 +399,24 @@ class Invoice(models.Model):
         if self.monto >= self.total_or0:
             self.estado = InvoiceStatus.COBRADA
 
-    def calculated_cuota_variable(self) -> float | None:
+    def calculated_variable_fee(self) -> float | None:
         if self.consumo_final is None:
             return None
-        if self.consumo_final <= 14:
-            return fixed_values["CUOTA_VARIABLE_MENOS_14"] * self.consumo_final
-        if 14 < self.consumo_final < 20:
-            return (fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14) + fixed_values[
-                "CUOTA_VARIABLE_14_20"
-            ] * (self.consumo_final - 14)
+        stretches = aigar_config.get_config().get_stretches(self.member)
+        return calculate_variable_fee(stretches, self.consumo_final)
 
-        return (
-            (fixed_values["CUOTA_VARIABLE_MENOS_14"] * 14)
-            + (fixed_values["CUOTA_VARIABLE_14_20"] * 6)
-            + fixed_values["CUOTA_VARIABLE_MAS_20"] * (self.consumo_final - 20)
-        )
+
+def calculate_variable_fee(stretches: aigar_config.Stretches, consumo_final) -> float:
+    remaining_consumption = consumo_final
+    partial_sum = 0
+    last_limit = 0
+    for stretch in stretches:
+        if remaining_consumption <= 0:
+            break
+        current_limit = stretch["limit"] - last_limit
+        consuption = min(current_limit, remaining_consumption)
+        partial_sum += consuption * stretch["cost"]
+        remaining_consumption -= consuption
+        last_limit = stretch["limit"]
+
+    return float(partial_sum)

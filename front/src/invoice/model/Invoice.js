@@ -9,12 +9,6 @@ const ESTADOS_FACTURA = {
     ANULADA: "anulada",
 };
 
-const COSTE_METRO_CUBICO = {
-    CUOTA_VARIABLE_MENOS_14: 0,
-    CUOTA_VARIABLE_14_20: 0.75,
-    CUOTA_VARIABLE_MAS_20: 2.5,
-};
-
 class Invoices extends Array {
     getInvoice(num_factura) {
         const invoices = this.filter(invoice => {

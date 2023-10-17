@@ -37,13 +37,21 @@ https://forum.djangoproject.com/t/business-logic-constants-the-best-place-to-def
 
 
 from decimal import Decimal
+from typing import NewType, cast
 
-from django.core import validators
+from django.core import exceptions, validators
 from django.db import models
 from solo.models import SingletonModel
 
 from app.models.invoice_value import InvoiceValue
 from back.fields import RangedIntegerField, StrictCharField
+
+
+Stretches = NewType("Stretches", list[dict[str, int | Decimal]])
+
+# Valor de consumo que nunca será alcanzado para las comparaciones de tramos
+# en la cuota variable
+MAX_LIMIT_VALUE = 10000
 
 
 class AigarConfig(SingletonModel):
@@ -304,7 +312,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=False,
         blank=False,
-        default=Decimal("0"),
+        default=Decimal("2"),
         verbose_name="Cuota Variable - Humano - Tercer tramo ($)",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
@@ -408,6 +416,75 @@ class AigarConfig(SingletonModel):
 
     def __str__(self):
         return "Configuración de AIGAR"
+
+    def clean(self) -> None:
+        self._validate_stretches(self._prepare_stretches("comercial"))
+        self._validate_stretches(self._prepare_stretches("humano"))
+
+    def get_stretches(self, member) -> Stretches:
+        tipo_uso = getattr(member, "tipo_uso", "").lower()
+        results = self._prepare_stretches(tipo_uso)
+        results = [result for result in results if result["limit"]]
+        return cast(Stretches, results)
+
+    def _prepare_stretches(self, tipo_uso: str) -> Stretches:
+        results = []
+        for stretch in ("primer", "segundo", "tercer"):
+            limit = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad")
+            cost = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_coste")
+            results.append({"cost": cost, "limit": limit})
+
+        for r in results:
+            if r["limit"] is None and r["cost"] > 0:
+                r["limit"] = MAX_LIMIT_VALUE
+        return cast(Stretches, results)
+
+    def _validate_stretches(self, stretches: Stretches) -> None:
+        try:
+            min_index_of_none = min(
+                i
+                for i, result in enumerate(stretches)
+                if result["limit"] in {None, MAX_LIMIT_VALUE}
+            )
+        except ValueError:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: f"Debe dejar al menos un tramo con la cantidad en blanco: {stretches}"
+                }
+            )
+        foo = [
+            result
+            for result in (stretches[min_index_of_none:])
+            if result["limit"] not in {None, MAX_LIMIT_VALUE}
+        ]
+        if foo:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: f"No puede haber mezclados valores en blanco en la cuota variable: {stretches}"
+                }
+            )
+
+        more_than_one_with_no_limit_and_cost = [
+            r
+            for r in stretches
+            if r["limit"] in {None, MAX_LIMIT_VALUE} and r["cost"] > 0
+        ]
+        if len(more_than_one_with_no_limit_and_cost) > 1:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: f"No puede haber más de un tramo de cuota variable con el límite en blanco y el coste mayor a 0: {more_than_one_with_no_limit_and_cost}"
+                }
+            )
+
+        results_sorted = sorted(
+            stretches, key=lambda x: (x["limit"] is None, x["limit"])
+        )
+        if stretches != results_sorted:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: f"Los rangos de la cuota variable no están bien definidos: {stretches}"
+                }
+            )
 
 
 def get_config() -> AigarConfig:

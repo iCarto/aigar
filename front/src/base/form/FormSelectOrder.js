@@ -1,3 +1,7 @@
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+
 const FormSelectOrder = ({label, name, field, items, onChange}) => {
     const handleChangeEvent = event => {
         const newOrden = parseInt(event.target.value);
@@ -33,24 +37,29 @@ const FormSelectOrder = ({label, name, field, items, onChange}) => {
     };
 
     return (
-        <div className="form-group">
-            <label htmlFor={name}>{label}</label>
-            <select
-                className="form-control"
-                name={name}
+        <FormControl fullWidth sx={{mt: 2, mb: 1}}>
+            <InputLabel shrink htmlFor={name}>
+                {label}
+            </InputLabel>
+            <Select
+                multiple
+                native
+                value={[field.value]}
                 onChange={handleChangeEvent}
-                value={field.value}
-                size={10}
+                label={label}
+                inputProps={{
+                    id: name,
+                    size: 10,
+                }}
             >
                 <option value=""></option>
-                {items?.map((element, index) => (
-                    <option key={index} value={element.order}>
-                        {element.order} - {element.name}
+                {items?.map((item, index) => (
+                    <option key={index} value={item.order}>
+                        {item.order} - {item.name}
                     </option>
                 ))}
-            </select>
-            <div className="invalid-feedback d-block">{field?.errors}</div>
-        </div>
+            </Select>
+        </FormControl>
     );
 };
 

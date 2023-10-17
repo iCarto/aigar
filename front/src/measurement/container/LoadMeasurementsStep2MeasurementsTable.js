@@ -14,7 +14,7 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     onValidateStep,
 }) => {
     const [filter, setFilter] = useState({
-        text: "",
+        textSearch: "",
         showOnlyErrors: false,
     });
 

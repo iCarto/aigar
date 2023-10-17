@@ -19,7 +19,7 @@ const LoadPaymentsStep2PaymentsTable = ({
 }) => {
     const [invoices, setInvoices] = useState([]);
     const [filter, setFilter] = useState({
-        text: "",
+        textSearch: "",
         showOnlyErrors: false,
     });
     const [loading, setLoading] = useState(false);

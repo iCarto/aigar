@@ -95,7 +95,7 @@ class InvoiceStatsView(ListAPIView):
         all_invoices = Invoice.objects.values(
             "id",
             "mes_facturacion",
-            "mes_facturado",
+            "mes",
             "anho",
             "member",
             "total",
@@ -106,15 +106,14 @@ class InvoiceStatsView(ListAPIView):
 
         all_invoices_payments_info = []
         for invoice in all_invoices:
-            mes_facturado = invoice["mes_facturado"]
-            previous_mes_facturado = 12 if mes_facturado == 1 else mes_facturado - 1
-            previous_anho = (
-                invoice["anho"] - 1 if mes_facturado == 1 else invoice["anho"]
-            )
+            mes = int(invoice["mes"])
+            anho = int(invoice["anho"])
+            previous_mes = str(12 if mes == 1 else mes - 1).zfill(2)
+            previous_anho = str(anho - 1 if mes == 1 else anho)
             previous_invoice = [
                 previous_invoice
                 for previous_invoice in all_invoices
-                if previous_invoice["mes_facturado"] == previous_mes_facturado
+                if previous_invoice["mes"] == previous_mes
                 and previous_invoice["anho"] == previous_anho
                 and previous_invoice["member"] == invoice["member"]
             ]

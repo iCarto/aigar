@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 const InvoiceMonthCellTable = ({item}) => {
     return (
         <Box flexWrap="nowrap">
-            {DateUtil.getMonthName(item.mes_facturado)} - {item.anho}
+            {DateUtil.getMonthName(item.mes)} - {item.anho}
         </Box>
     );
 };

@@ -37,7 +37,7 @@ class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore
 class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     version = 1
     anho = factory.SelfAttribute("mes_facturacion.anho")
-    mes_facturado = factory.SelfAttribute("mes_facturacion.mes")
+    mes = factory.SelfAttribute("mes_facturacion.mes")
     caudal_anterior = 1390
     caudal_actual = 1400
     cuota_fija = 5.72

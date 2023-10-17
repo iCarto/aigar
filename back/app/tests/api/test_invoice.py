@@ -66,9 +66,9 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     api_client.put(
         "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE}
     )
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 11})
+    response = api_client.post("/api/invoicingmonths/", {"anho": "2019", "mes": "11"})
     assert response.status_code == 201, response.json()
-    invoice = Invoice.objects.get(anho=2019, mes_facturado=11)
+    invoice = Invoice.objects.get(anho="2019", mes="11")
     assert invoice.reconexion == 10
     assert invoice.deuda == 0
     assert invoice.mora == 1

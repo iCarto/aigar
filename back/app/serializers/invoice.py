@@ -30,7 +30,7 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "mes_facturacion",
             "mes_abierto",
             "anho",
-            "mes_facturado",
+            "mes",
             "consumo",
             "mora",
             "mora_por_retraso",

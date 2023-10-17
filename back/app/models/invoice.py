@@ -76,7 +76,7 @@ class InvoiceManager(models.Manager["Invoice"]):
             # New monthly invoices are always version 1
             "version": 1,
             "anho": new_invoicing_month.anho,
-            "mes_facturado": new_invoicing_month.mes,
+            "mes": new_invoicing_month.mes,
             "member": member,
             "cuota_fija": _cuota_fija(member),
             "comision": aigar_config.get_invoice_value(InvoiceValue.COMISION),
@@ -183,13 +183,9 @@ class Invoice(models.Model):
         null=False, blank=False, unique=False, verbose_name="Version", help_text=""
     )
 
-    anho = models.PositiveSmallIntegerField(
-        null=False, blank=False, unique=False, verbose_name="Año", help_text=""
-    )
+    anho = models.TextField(null=False, blank=False, verbose_name="Año")
 
-    mes_facturado = models.PositiveSmallIntegerField(
-        null=False, blank=False, verbose_name="Mes facturado", help_text=""
-    )
+    mes = models.TextField(null=False, blank=False, verbose_name="Mes")
 
     caudal_anterior = models.PositiveIntegerField(
         null=False, blank=False, verbose_name="Caudal anterior"
@@ -316,13 +312,13 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.member} - {self.mes_facturado} - {self.anho} - {self.total} - {self.estado}"
+        return f"{self.id} - {self.member} - {self.mes} - {self.anho} - {self.total} - {self.estado}"
 
     @property
     def due_date(self) -> datetime.date:
         payment_due_date = aigar_config.get_config().payment_due_day
         return next_month(
-            datetime.date(self.anho, self.mes_facturado, payment_due_date)
+            datetime.date(int(self.anho), int(self.mes), payment_due_date)
         )
 
     @property

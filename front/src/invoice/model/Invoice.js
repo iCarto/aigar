@@ -21,11 +21,11 @@ class Invoices extends Array {
     }
 }
 
-const getNumero = (member_id, anho, mes_facturado, version) => {
+const getNumero = (member_id, anho, mes, version) => {
     return (
         member_id.toString().padStart(4, "0") +
         anho.toString() +
-        mes_facturado.toString().padStart(2, "0") +
+        mes.toString().padStart(2, "0") +
         version.toString().padStart(2, "0")
     );
 };
@@ -34,7 +34,7 @@ const invoice_api_adapter = invoice => {
     invoice["numero"] = getNumero(
         invoice.member_data.id,
         invoice.anho,
-        invoice.mes_facturado,
+        invoice.mes,
         invoice.version
     );
     invoice["member_id"] = invoice.member_data.id;
@@ -76,7 +76,7 @@ const createInvoice = ({
     id = -1,
     version = null,
     anho = null,
-    mes_facturado = 0,
+    mes = null,
     mes_facturacion = "",
     due_date = null,
     member = null,
@@ -118,7 +118,7 @@ const createInvoice = ({
         id,
         version,
         anho,
-        mes_facturado,
+        mes,
         mes_facturacion,
         due_date: DateUtil.parseISO(due_date),
         member,
@@ -173,13 +173,11 @@ const createInvoice = ({
 };
 
 const createInvoiceForMember = (member, invoicingMonth, version) => {
-    const invoicingMonthAnho = parseInt(invoicingMonth.anho);
-    const invoicingMonthMes = parseInt(invoicingMonth.mes);
     return createInvoice({
         numero: getNumero(member.id, invoicingMonth.anho, invoicingMonth.mes, version),
         mes_facturacion: invoicingMonth.id_mes_facturacion,
-        anho: invoicingMonthAnho,
-        mes_facturado: invoicingMonthMes,
+        anho: invoicingMonth.anho,
+        mes: invoicingMonth.mes,
         estado: ESTADOS_FACTURA.NUEVA,
         version,
     });

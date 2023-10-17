@@ -16,7 +16,7 @@ pytestmark = pytest.mark.django_db
 def test_calculate_derecho_conextion():
     """Ejemplo de query.
 
-    select nombre, anho, mes_facturado, derecho from back_invoice where derecho != 0 order by 1, 2, 3, 4;
+    select nombre, anho, mes, derecho from back_invoice where derecho != 0 order by 1, 2, 3, 4;
     """
 
 
@@ -59,12 +59,12 @@ def test_create_with_previous(_, api_client):
         total=1,
     )
 
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
+    response = api_client.post("/api/invoicingmonths/", {"anho": "2019", "mes": "10"})
     assert response.status_code == 201, response.content
     assert InvoicingMonth.objects.count() == 2
     assert Invoice.objects.count() == 2
     new_invoice = Invoice.objects.filter(
-        anho=2019, mes_facturado=10, estado=InvoiceStatus.NUEVA
+        anho="2019", mes="10", estado=InvoiceStatus.NUEVA
     ).last()
     assert new_invoice.caudal_anterior == 10
     assert new_invoice.mora == 1
@@ -72,10 +72,10 @@ def test_create_with_previous(_, api_client):
 
 @patch("app.models.invoicing_month.any_payments_for", return_value=True)
 def test_previous_month_is_closed_current_is_open(_, api_client):
-    invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
+    invoicingmonth = InvoicingMonthFactory.build(anho="2019", mes="09", is_open=True)
     invoicingmonth.save()
 
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
+    response = api_client.post("/api/invoicingmonths/", {"anho": "2019", "mes": "10"})
     assert response.status_code == 201, response.content
 
     invoicingmonth.refresh_from_db()

@@ -164,12 +164,12 @@ else
 
     INSERT INTO app_invoice
     (
-        id, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
+        id, version, anho, mes, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
         , jornada_trabajo
         , ontime_payment, late_payment
     )
     SELECT
-        id_factura, version, anho, mes_facturado, caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
+        id_factura, version, printf('%02.0f', anho), printf('%02.0f', mes_facturado), caudal_anterior, caudal_actual, cuota_fija, cuota_variable, comision, ahorro, mora, derecho, reconexion, asamblea, traspaso, saldo_pendiente, descuento, otros,  total, estado, observaciones, entrega, created_at, updated_at, member_id, mes_facturacion_id
         , 0
         , COALESCE(pago_1_al_10, 0), COALESCE(pago_11_al_30, 0)
         FROM api_invoice;

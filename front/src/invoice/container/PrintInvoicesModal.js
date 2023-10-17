@@ -33,7 +33,7 @@ const PrintInvoicesModal = ({
         return {
             ...invoice,
             nombre_junta: communityName,
-            fecha_lectura: `${readingDay}/${invoice.mes_facturado}/${invoice.anho}`,
+            fecha_lectura: `${readingDay}/${invoice.mes}/${invoice.anho}`,
             due_date: DateUtil.format(invoice.due_date),
         };
     });

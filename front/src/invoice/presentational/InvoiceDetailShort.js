@@ -33,9 +33,7 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
             <Grid item xs={6}>
                 <SectionField
                     label="Mes de cobro"
-                    value={`${DateUtil.getMonthName(invoice?.mes_facturado)} - ${
-                        invoice?.anho
-                    }`}
+                    value={`${DateUtil.getMonthName(invoice?.mes)} - ${invoice?.anho}`}
                 />
             </Grid>
 

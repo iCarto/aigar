@@ -21,7 +21,7 @@ const PrintInvoicesModal = ({
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    const {basicConfig} = useDomain();
+    const {basicConfig, sectorsLong} = useDomain();
 
     // Basic config is always a list with one single object
     const communityName = basicConfig[0]?.name;
@@ -35,6 +35,7 @@ const PrintInvoicesModal = ({
             ...invoice,
             nombre_junta: communityName,
             payment_method: paymentMethod,
+            comunidad: sectorsLong[invoice.sector].long_name,
             fecha_lectura: `${readingDay}/${invoice.mes}/${invoice.anho}`,
             due_date: DateUtil.format(invoice.due_date),
             mes: DateUtil.getMonthName(invoice.mes),

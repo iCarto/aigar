@@ -10,9 +10,11 @@ const DomainService = {
                     value: domainEntity.name,
                 };
             });
-            const longNames = response.map(domainEntity => ({
-                value: domainEntity.long_name,
-            }));
+            const longNames = response.reduce(
+                (obj, cur) => ({...obj, [cur.name]: cur}),
+                {}
+            );
+
             const readingDays = response.map(domainEntity => ({
                 key: domainEntity.name,
                 value: domainEntity.reading_day,

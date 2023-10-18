@@ -101,7 +101,7 @@ class Zone(models.Model):
     def long_name(self) -> str:
         locality_long_name = self.locality.name
         if self.code:
-            return f"{self.code} - {locality_long_name}"
+            return f"{locality_long_name} sector {self.code}"
         return locality_long_name
 
 

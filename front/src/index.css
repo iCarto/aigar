@@ -2,77 +2,21 @@ body {
     margin: 0;
 }
 
-@media screen and (width <= 1280px) {
-    body {
-        font-size: 0.8rem;
-    }
-
-    .btn,
-    .custom-select,
-    .form-control {
-        font-size: 0.8rem;
-    }
-
-    .form-group {
-        margin-bottom: 5px;
-    }
-
-    label {
-        margin: 0;
-    }
-
-    .table td,
-    .table th {
-        padding: 0.55rem;
-    }
-}
-
-.link-button {
-    background-color: transparent;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    display: inline;
-    margin: 0;
-    padding: 0;
-    text-decoration: underline;
-}
-
-.link-button:hover,
-.link-button:focus {
-    color: #333;
-    text-decoration: underline;
-}
-
-.modal-dialog {
-    margin: 4rem auto;
-}
-
+/* TO-DO: Remove form-control selectors after migrating stats component to MUI */
 .form-control[readonly] {
     background-color: white;
     border: 1px solid #f8f5f5;
-}
-
-.form-inline label {
-    border-bottom: 1px dotted #ccc;
-    flex-grow: 1;
-    justify-content: flex-start;
-    margin-right: 10px;
-    white-space: nowrap;
-}
-
-.form-inline input {
-    margin-right: 10px;
-    text-align: left;
-    white-space: nowrap;
 }
 
 .form-control:not([readonly]):focus {
     background-color: rgb(247 251 255);
 }
 
+/* ------------- CSS properties for table cell content ------------- */
+
+/* MUI sets 'text-align: left' to MuiTableCell-root, which prevails over index.css */
 .cubic-metre {
-    text-align: right;
+    text-align: right !important;
     white-space: nowrap;
 }
 
@@ -84,7 +28,7 @@ body {
 }
 
 .dollar {
-    text-align: right;
+    text-align: right !important;
     white-space: nowrap;
 }
 
@@ -95,30 +39,14 @@ body {
     font-weight: normal;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgb(0 0 0 / 2%);
+.bold {
+    font-weight: 600;
 }
 
-.table-hover tbody tr:hover {
-    background-color: rgb(0 0 0 / 7.5%);
+.text-danger {
+    color: red;
 }
 
-.field-label label {
-    color: grey;
-    padding-right: 5px;
-}
-
-.field-label label::after {
-    content: ":";
-}
-
-.navbar-brand {
-    background-color: white;
-    border-radius: 5px;
-    padding: 2px 20px;
-}
-
-.table .thead-dark th {
-    font-size: 0.85em;
-    text-align: center;
+.small {
+    font-size: 85%;
 }

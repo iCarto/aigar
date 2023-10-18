@@ -15,7 +15,6 @@ export function useMonthlyInvoicingTableColumns() {
                     />
                 );
             },
-            style: {textAlign: "center"},
         },
         {
             label: "Socio",
@@ -39,13 +38,11 @@ export function useMonthlyInvoicingTableColumns() {
             label: "Lectura",
             id: "consumo",
             className: "cubic-metre",
-            style: {textAlign: "right"},
         },
         {
             label: "Importe",
             id: "total",
-            className: "dollar font-weight-bold",
-            style: {textAlign: "right"},
+            className: "dollar bold",
         },
         {
             label: "Estado",
@@ -53,7 +50,6 @@ export function useMonthlyInvoicingTableColumns() {
             formatFunction: item => {
                 return <InvoiceStatusCellTable value={item.estado} />;
             },
-            style: {textAlign: "center"},
         },
         {
             label: "Meses previos",
@@ -61,7 +57,6 @@ export function useMonthlyInvoicingTableColumns() {
             formatFunction: item => {
                 return <InvoiceResumenCellTable value={item.resumen} />;
             },
-            style: {textAlign: "center"},
         },
     ];
 

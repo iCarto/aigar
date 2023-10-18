@@ -41,7 +41,7 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
         {
             Header: "Consumo",
             accessor: "consumo",
-            className: "cubic-metre font-weight-bold",
+            className: "cubic-metre bold",
         },
     ];
 

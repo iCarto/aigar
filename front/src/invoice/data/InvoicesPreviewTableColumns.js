@@ -36,7 +36,7 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
             {
                 Header: "Consumo",
                 accessor: "consumo",
-                className: "cubic-metre font-weight-bold",
+                className: "cubic-metre bold",
             },
             {
                 Header: "Cuota fija",
@@ -56,7 +56,7 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
             {
                 Header: "Total factura",
                 accessor: "total",
-                className: "dollar font-weight-bold",
+                className: "dollar bold",
             }
         );
     }
@@ -65,7 +65,7 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
             {
                 Header: "Consumo",
                 accessor: "consumo",
-                className: "cubic-metre font-weight-bold",
+                className: "cubic-metre bold",
             },
             {
                 Header: "Pago 1 al 15",
@@ -80,7 +80,7 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
             {
                 Header: "Total factura",
                 accessor: "total",
-                className: "dollar font-weight-bold",
+                className: "dollar bold",
             },
             {
                 Header: "Estado",

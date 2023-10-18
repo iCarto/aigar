@@ -36,25 +36,21 @@ export function useInvoicesTableColumns() {
             label: "Caudal anterior",
             id: "caudal_anterior",
             className: "cubic-metre",
-            style: {textAlign: "right"},
         },
         {
             label: "Caudal actual",
             id: "caudal_actual",
             className: "cubic-metre",
-            style: {textAlign: "right"},
         },
         {
             label: "Consumo",
             id: "consumo",
             className: "cubic-metre",
-            style: {textAlign: "right"},
         },
         {
             label: "Mora",
             id: "mora",
             className: "dollar",
-            style: {textAlign: "right"},
         },
         {
             label: "Otros",
@@ -65,8 +61,7 @@ export function useInvoicesTableColumns() {
         {
             label: "Total",
             id: "total",
-            className: "dollar font-weight-bold",
-            style: {textAlign: "right"},
+            className: "dollar bold",
         },
         {
             label: "Estado",

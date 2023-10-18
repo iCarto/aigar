@@ -69,13 +69,11 @@ const SortedPaginatedTable = ({columns, data}) => {
                                     sx={{cursor: "pointer"}}
                                 >
                                     {columns.map((column, index) => {
-                                        // TO-DO: We are mixing classes (for units) & inline style --Fix
                                         return (
                                             <TableCell
                                                 key={index}
                                                 id={column.label}
                                                 className={column.className || null}
-                                                sx={column.style || {}}
                                             >
                                                 {column.formatFunction
                                                     ? column.formatFunction(row)

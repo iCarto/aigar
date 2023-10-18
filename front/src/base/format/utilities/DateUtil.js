@@ -25,6 +25,14 @@ const DateUtil = {
         return moment(date, BANK_DATEFORMAT, true).format(API_DATEFORMAT);
     },
 
+    parseDateToAPIFormat(date) {
+        if (date instanceof Date) {
+            return moment(date).format(API_DATEFORMAT);
+        } else {
+            return date;
+        }
+    },
+
     parseISO(value) {
         if (value) {
             if (value instanceof Date) return value;

@@ -1,4 +1,8 @@
 import {LoadDataFilesInput} from ".";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const LoadDataFileUploadArea = ({
     dataFiles,
@@ -6,56 +10,49 @@ const LoadDataFileUploadArea = ({
     handleLoadedDataFile,
     handleRemoveDataFile,
 }) => {
-    const RemoveButton = ({filename}) => {
-        return (
-            <button
-                type="button"
-                className="close"
-                aria-label="Close"
-                onClick={() => handleRemoveDataFile(filename)}
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        );
-    };
-
     const renderDataFiles = () => {
         return dataFiles.map(dataFile => {
             if (dataFile.errors.length !== 0) {
                 return (
-                    <div className="alert alert-danger" key={dataFile.file.name}>
-                        <strong>{dataFile.file.name}</strong>
-                        <RemoveButton filename={dataFile.file.name} />
+                    <Alert
+                        severity="error"
+                        key={dataFile.file.name}
+                        onClose={() => handleRemoveDataFile(dataFile.file.name)}
+                        sx={{mt: 2}}
+                    >
+                        <AlertTitle>{dataFile.file.name}</AlertTitle>
                         <ul>
                             {dataFile.errors.map(error => (
                                 <li key={error.msg}>{error.msg}</li>
                             ))}
                         </ul>
-                    </div>
+                    </Alert>
                 );
             }
             return (
-                <div className="alert alert-success" key={dataFile.file.name}>
+                <Alert
+                    severity="success"
+                    key={dataFile.file.name}
+                    onClose={() => handleRemoveDataFile(dataFile.file.name)}
+                    sx={{mt: 2}}
+                >
                     {dataFile.file.name}
-                    <RemoveButton filename={dataFile.file.name} />
-                </div>
+                </Alert>
             );
         });
     };
 
     return (
-        <div className="form-group">
-            <div name="fileUpload" className="form-control-file">
-                <LoadDataFilesInput
-                    allowedFormats={allowedFormats}
-                    handleLoadedDataFile={handleLoadedDataFile}
-                />
-                <small id="fileUploadHelp" className="form-text text-muted">
-                    Extensiones permitidas ({allowedFormats.join(",")})
-                </small>
-                {renderDataFiles()}
-            </div>
-        </div>
+        <Box>
+            <LoadDataFilesInput
+                allowedFormats={allowedFormats}
+                handleLoadedDataFile={handleLoadedDataFile}
+            />
+            <Typography variant="caption">
+                Extensiones permitidas ({allowedFormats.join(",")})
+            </Typography>
+            {renderDataFiles()}
+        </Box>
     );
 };
 

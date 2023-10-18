@@ -3,6 +3,7 @@ import {useState, useRef} from "react";
 import {LoadDataFile} from "loaddata/model";
 import {Spinner} from "base/common";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 const LoadDataFilesInput = ({allowedFormats, handleLoadedDataFile}) => {
     const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const LoadDataFilesInput = ({allowedFormats, handleLoadedDataFile}) => {
     };
 
     return (
-        <div className="d-flex flex-column align-items-start">
+        <Box display="flex" flexDirection="column" alignItems="start">
             <input
                 type="file"
                 id="file"
@@ -53,7 +54,6 @@ const LoadDataFilesInput = ({allowedFormats, handleLoadedDataFile}) => {
                 ref={event => {
                     inputRef.current = event;
                 }}
-                className="input-file"
                 accept={allowedFormats.join(",")}
                 onChange={e => handleFileChosen(e.target.files)}
                 aria-describedby="fileUploadHelp"
@@ -63,7 +63,7 @@ const LoadDataFilesInput = ({allowedFormats, handleLoadedDataFile}) => {
                 Seleccione los archivos...
             </Button>
             {loading ? <Spinner message="Subiendo archivo" /> : null}
-        </div>
+        </Box>
     );
 };
 

@@ -77,6 +77,13 @@ const PrintInvoicesModal = ({
                 .filter(invoice => invoice.estado === ESTADOS_FACTURA.NUEVA)
                 .map(invoice => invoice.id);
 
+            if (!invoiceIdsToUpdate.length) {
+                setOperationStatus(ModalOperationStatus.SUCCESS);
+                setErrorMessage(null);
+                if (onDataUpdate) onDataUpdate();
+                return;
+            }
+
             InvoiceService.updateInvoiceStatus(
                 invoiceIdsToUpdate,
                 ESTADOS_FACTURA.PENDIENTE_DE_COBRO

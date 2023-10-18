@@ -1,5 +1,8 @@
 import pytest
+from rest_framework import status
 
+from app.models.invoicing_month import InvoicingMonth
+from domains.models import aigar_config
 from domains.tests import factories
 
 
@@ -23,3 +26,12 @@ def test_zone_api(api_client):
         {"long_name": "Mi comunidad 1", "name": "Comunidad 1"},
         {"long_name": "Mi comunidad 2", "name": "Comunidad 2"},
     ]
+
+
+def test_aigar_config_api(api_client):
+    aigar_config.get_config()
+    response = api_client.get("/api/domains/basicconfig/")
+    assert response.status_code == status.HTTP_200_OK, response.json()
+    response_data = response.json()[0]
+    assert response_data["payment_method"] == "BANCO .... Cuenta No: .... "
+    assert response_data["name"] == "Junta de Agua"

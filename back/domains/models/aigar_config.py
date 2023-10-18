@@ -77,8 +77,15 @@ class AigarConfig(SingletonModel):
         verbose_name="Nombre de la Junta de Agua",
         help_text="Nombre de la Junta de Agua como desea que aparezca en las facturas",
         default="Junta de Agua",
-        unique=True,
         min_length=3,
+    )
+
+    payment_method = models.TextField(
+        null=False,
+        blank=False,
+        verbose_name="Forma de pago",
+        help_text="Tal cual quiere que aparezca en el recibo",
+        default="BANCO .... Cuenta No: .... ",
     )
 
     payment_csv = models.BooleanField(

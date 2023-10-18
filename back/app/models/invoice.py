@@ -273,15 +273,15 @@ class Invoice(models.Model):
     )
 
     asamblea = models.FloatField(
-        null=False, blank=False, default=0, verbose_name="Asamblea", help_text=""
+        null=False, blank=False, default=0, verbose_name="Inasistencia a Asambleas"
     )
 
     jornada_trabajo = models.FloatField(
         null=False,
         blank=False,
         default=0,
-        verbose_name="Jornada de Trabajo",
-        help_text="",
+        verbose_name="Jornadas",
+        help_text="Inasistencia a Jornadas de trabajo",
     )
 
     traspaso = models.FloatField(
@@ -296,7 +296,7 @@ class Invoice(models.Model):
         null=False,
         blank=False,
         default=0,
-        verbose_name="Descuento",
+        verbose_name="Descuentos",
         help_text="Si la factura tiene algún descuento especial introduzcalo",
     )
 

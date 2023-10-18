@@ -9,7 +9,7 @@ import {OperationWithConfirmationModal} from "base/ui/modal";
 import Alert from "@mui/material/Alert";
 import PrintIcon from "@mui/icons-material/Print";
 import AlertTitle from "@mui/material/AlertTitle";
-import {DateUtil} from "base/format/utilities";
+import {DateUtil, NumberUtil} from "base/format/utilities";
 
 const PrintInvoicesModal = ({
     invoices,
@@ -25,6 +25,7 @@ const PrintInvoicesModal = ({
 
     // Basic config is always a list with one single object
     const communityName = basicConfig[0]?.name;
+    const paymentMethod = basicConfig[0]?.payment_method;
 
     const getReadingDay = useGetSectorReadingDay;
 
@@ -33,8 +34,23 @@ const PrintInvoicesModal = ({
         return {
             ...invoice,
             nombre_junta: communityName,
+            payment_method: paymentMethod,
             fecha_lectura: `${readingDay}/${invoice.mes}/${invoice.anho}`,
             due_date: DateUtil.format(invoice.due_date),
+            mes: DateUtil.getMonthName(invoice.mes),
+            cuota_fija: NumberUtil.formatFloat(invoice.cuota_fija),
+            cuota_variable: NumberUtil.formatFloat(invoice.cuota_variable),
+            comision: NumberUtil.formatFloat(invoice.comision),
+            ahorro: NumberUtil.formatFloat(invoice.ahorro),
+            mora: NumberUtil.formatFloat(invoice.mora),
+            asamblea: NumberUtil.formatFloat(invoice.asamblea),
+            jornada_trabajo: NumberUtil.formatFloat(invoice.jornada_trabajo),
+            reconexion: NumberUtil.formatFloat(invoice.reconexion),
+            traspaso: NumberUtil.formatFloat(invoice.traspaso),
+            otros: NumberUtil.formatFloat(invoice.otros),
+            saldo_pendiente: NumberUtil.formatFloat(invoice.saldo_pendiente),
+            descuento: NumberUtil.formatFloat(invoice.descuento),
+            total: NumberUtil.formatFloat(invoice.total),
         };
     });
 

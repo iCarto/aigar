@@ -1,18 +1,17 @@
 import createReport from "docx-templates";
 import FileService from "./FileService";
 import BarcodeService from "./BarcodeService";
-import logoAscatliPath from "assets/print-templates/invoice/logo_ascatli.png";
-import {DateUtil, NumberUtil} from "base/format/utilities";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
+const logoPath = "http://localhost:8000/media/logo.png";
 const invoiceTemplatePath = "http://localhost:8000/media/plantilla_factura.docx";
 
 const DocXPrintFileService = {
-    async getLogoAscatli() {
+    async getLogo() {
         const IMAGE_WITDH = 2.4;
         const IMAGE_HEIGHT = 2.4;
-        const logo = await FileService.readPublicFileAsArrayBuffer(logoAscatliPath);
+        const logo = await FileService.readPublicFileAsArrayBuffer(logoPath);
         return {
             width: IMAGE_WITDH,
             height: IMAGE_HEIGHT,
@@ -37,20 +36,18 @@ const DocXPrintFileService = {
             invoiceTemplatePath
         );
 
-        const logoAscatli = await this.getLogoAscatli();
+        const logo = await this.getLogo();
         const invoicesDocument = await createReport({
             template: invoicesDocumentTemplate,
             output: outputFilename + ".docx",
             data,
             additionalJsContext: {
-                // To avoid "this.getLogoAscatli()" function on every loop iteration
+                // To avoid "this.getLogo()" function on every loop iteration
                 // The logo should be initialized before the call to createReport()
-                getLogoAscatli: () => {
-                    return logoAscatli;
+                getLogo: () => {
+                    return logo;
                 },
                 getInvoiceBarcode: this.getInvoiceBarcode,
-                getMonthName: DateUtil.getMonthName,
-                getDecimal: NumberUtil.formatFloat,
             },
             /*
             With the default configuration, browser usage can become slow with

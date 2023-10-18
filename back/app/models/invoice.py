@@ -320,10 +320,6 @@ class Invoice(models.Model):
         null=True, blank=True, default="", verbose_name="Observaciones", help_text=""
     )
 
-    entrega = models.BooleanField(
-        blank=False, null=False, default=False, verbose_name="Entrega", help_text=""
-    )
-
     ontime_payment = models.FloatField(
         null=False, blank=False, default=0, verbose_name="Pago en plazo"
     )

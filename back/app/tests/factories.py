@@ -56,7 +56,6 @@ class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
     total = 6.25
     estado = "nueva"
     observaciones = None
-    entrega = False
     ontime_payment = 0
     late_payment = 0
     member = factory.SubFactory(MemberFactory)

@@ -164,7 +164,6 @@ def get_fixtures_invoices(invoices):
                         "cuota_fija": float(invoice.get("cuota_fija", 0) or 0),
                         "cuota_variable": float(invoice.get("cuota_variable", 0) or 0),
                         "derecho": float(invoice.get("derecho", 0) or 0),
-                        "entrega": True if invoice.get("entrega") == "Si" else False,
                         "mes_facturado": int(invoice.get("mes_facturado") or 0),
                         "mora": float(invoice.get("mora", 0) or 0),
                         "reconexion": float(invoice.get("reconexion", 0) or 0),

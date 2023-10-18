@@ -52,7 +52,6 @@ def parse_invoice_spreadsheet(xls):
         "Comentarios": "observaciones",
         "Comunidad": "comunidad",
         "MesFact": "mes_facturado",
-        "ENTREGA": "entrega",
         "Pago1al11": "ontime_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
         "Comprobar": "comprobar_ontime_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())
         "Pago11al30": "late_payment",  # =VLOOKUP($Todos.G2,$del1_10.$A$2:$D$300,3,FALSE())

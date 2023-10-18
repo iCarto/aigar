@@ -12,6 +12,7 @@ class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     resumen = serializers.JSONField(allow_null=True, read_only=True)
+    due_date = serializers.DateField(read_only=True)
 
 
 class InvoicingMonthInvoicesViewSet(viewsets.ReadOnlyModelViewSet):

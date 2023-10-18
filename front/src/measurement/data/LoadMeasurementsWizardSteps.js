@@ -1,26 +1,31 @@
+import UploadIcon from "@mui/icons-material/Upload";
+import ListIcon from "@mui/icons-material/List";
+import DescriptionIcon from "@mui/icons-material/Description";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 export const loadMeasurementsSteps = [
     {
         index: 1,
         text: "Cargar archivos",
-        icon: "upload",
+        icon: <UploadIcon />,
         help: "Localice el fichero y súbalo al sistema.",
     },
     {
         index: 2,
         text: "Revisar lecturas",
-        icon: "table",
+        icon: <ListIcon />,
         help: "Revise los datos y corrija posibles errores.",
     },
     {
         index: 3,
         text: "Revisar facturas",
-        icon: "file-invoice",
+        icon: <DescriptionIcon />,
         help: "Revise las facturas con los consumos aplicados.",
     },
     {
         index: 4,
         text: "Resultado",
-        icon: "check-circle",
+        icon: <CheckCircleIcon />,
         help: "Revise el resultado de la operación.",
     },
 ];

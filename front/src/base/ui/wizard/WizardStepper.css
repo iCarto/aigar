@@ -5,17 +5,6 @@
     position: relative;
 }
 
-.stepper .step .circle {
-    background: green;
-    border-radius: 2em;
-    color: white;
-    height: 4em;
-    line-height: 4em;
-    margin: 0 6em;
-    text-align: center;
-    width: 4em;
-}
-
 .stepper .step::before {
     background: green;
     content: "";
@@ -27,7 +16,7 @@
 }
 
 .stepper .step:first-child::before {
-    left: 10em;
+    left: 8em;
     width: 6em;
 }
 

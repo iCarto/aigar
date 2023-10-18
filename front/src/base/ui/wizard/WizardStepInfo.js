@@ -1,18 +1,28 @@
+import Grid from "@mui/material/Grid";
+
 const WizardStepInfo = ({steps, currentStep}) => {
     const step = steps[currentStep - 1];
 
     if (step) {
         return (
-            <div className="d-flex justify-content-between bg-secondary text-white p-3 rounded-top">
+            <Grid
+                container
+                justifyContent="space-between"
+                color="white"
+                p={3}
+                sx={{
+                    backgroundColor: "grey",
+                    borderTopLeftRadius: 5,
+                    borderTopRightRadius: 5,
+                }}
+            >
                 <div>
-                    <i className={"fa fa-" + step.icon} />
-                    &nbsp;
-                    {step.text}
+                    {step.icon} {step.text}
                 </div>
                 <div>
                     Paso {step.index} de {steps.length}
                 </div>
-            </div>
+            </Grid>
         );
     }
 

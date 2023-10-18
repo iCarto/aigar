@@ -1,28 +1,45 @@
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+
 const InvoiceGroupFieldsCellTable = ({item}) => {
     return (
-        <div className="small text-nowrap">
+        <Grid container flexDirection="column">
             {item.derecho !== 0 ? (
-                <div className="dollar">Derecho: {item.derecho}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Derecho: {item.derecho}
+                </Typography>
             ) : null}
             {item.reconexion !== 0 ? (
-                <div className="dollar">Re-conexión: {item.reconexion}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Re-conexión: {item.reconexion}
+                </Typography>
             ) : null}
             {item.asamblea !== 0 ? (
-                <div className="dollar">Asamblea: {item.asamblea}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Asamblea: {item.asamblea}
+                </Typography>
             ) : null}
             {item.jornada_trabajo !== 0 ? (
-                <div className="dollar">Jornada trabajo: {item.jornada_trabajo}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Jornada trabajo: {item.jornada_trabajo}
+                </Typography>
             ) : null}
             {item.traspaso !== 0 ? (
-                <div className="dollar">Traspaso: {item.traspaso}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Traspaso: {item.traspaso}
+                </Typography>
             ) : null}
             {item.otros !== 0 ? (
-                <div className="dollar">Otros: {item.otros}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Otros: {item.otros}
+                </Typography>
             ) : null}
             {item.descuento !== 0 ? (
-                <div className="dollar">Descuento: {item.descuento}</div>
+                <Typography variant="caption" component="span" className="dollar">
+                    Descuento: {item.descuento}
+                </Typography>
             ) : null}
-        </div>
+        </Grid>
     );
 };
 

@@ -1,10 +1,11 @@
 import {DateUtil} from "base/format/utilities";
+import Box from "@mui/material/Box";
 
 const InvoiceMonthCellTable = ({item}) => {
     return (
-        <div className="text-nowrap">
+        <Box flexWrap="nowrap">
             {DateUtil.getMonthName(item.mes_facturado)} - {item.anho}
-        </div>
+        </Box>
     );
 };
 

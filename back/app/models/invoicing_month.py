@@ -3,9 +3,9 @@ from typing import Any
 
 from django.db import models, transaction
 from django.forms import ValidationError
-from app.models.latest_invoice import LatestInvoice, NoLatestInvoice
 
 from app.models.invoice import Invoice, InvoiceStatus
+from app.models.latest_invoice import LatestInvoice, NoLatestInvoice
 from app.models.member import Member
 from back.base.base_expressions import JsonGroupArray
 

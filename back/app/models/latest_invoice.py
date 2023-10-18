@@ -1,8 +1,7 @@
+from decimal import Decimal
+
 from app.models.invoice import Invoice
 from domains.models import aigar_config
-
-
-from decimal import Decimal
 
 
 class LatestInvoice(Invoice):

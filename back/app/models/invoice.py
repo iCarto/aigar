@@ -1,8 +1,9 @@
 import datetime
 from decimal import Decimal
-from typing import List, Self, cast
+from typing import Any, List, Self, cast
 
-from django.db import models
+from django.core import exceptions
+from django.db import models, transaction
 
 from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
@@ -60,6 +61,40 @@ class InvoiceManager(models.Manager["Invoice"]):
         return InvoiceQuerySet(self.model, using=self._db).exclude(
             estado=InvoiceStatus.ANULADA
         )
+
+    @transaction.atomic
+    def create(self, **kwargs: Any) -> "Invoice":
+        mes_facturacion = kwargs.get("mes_facturacion", None)
+        if mes_facturacion:
+            # No viene de de POST /api/invoices/
+            return super().create(**kwargs)
+
+        mes_facturacion_id = Invoice.objects.filter(
+            mes_facturacion__is_open=True
+        ).values_list("mes_facturacion_id", flat=True)[0]
+        anho = kwargs.get("anho", mes_facturacion_id[:4])
+        mes = kwargs.get("mes", mes_facturacion_id[4:])
+        if anho != mes_facturacion_id[:4] or mes != mes_facturacion_id[4:]:
+            raise exceptions.ValidationError(
+                {
+                    exceptions.NON_FIELD_ERRORS: f"El mes no está abierto o no existe. {anho} - {mes}"
+                }
+            )
+        kwargs["mes_facturacion_id"] = mes_facturacion_id
+        kwargs.setdefault("caudal_actual", 0)
+        kwargs.setdefault("caudal_anterior", 0)
+
+        latest_invoice = Invoice.objects.filter(member=kwargs["member"]).first()
+        if latest_invoice:
+            kwargs["mora"] = latest_invoice.calculated_mora()
+            kwargs["saldo_pendiente"] = latest_invoice.deuda
+            kwargs["reconexion"] = _calculated_reconexion(latest_invoice.member)
+        instance = super().create(**kwargs)
+        instance.full_clean()
+        instance.derecho = _calculated_derecho(instance.member)
+        instance.update_total()
+        instance.save()
+        return instance
 
     def with_cancelled(self) -> InvoiceQuerySet:
         return InvoiceQuerySet(self.model, using=self._db)
@@ -151,7 +186,9 @@ class InvoiceManager(models.Manager["Invoice"]):
         """
         remaining_value = d["total"] - d["primera_cuota"]
         siguientes_cuotas = remaining_value / d["numero_cuotas"]
-        cuotas = [d["primera_cuota"]] + [siguientes_cuotas] * d["numero_cuotas"]
+        cuotas = [d["primera_cuota"]]
+        for _ in range(d["numero_cuotas"]):
+            cuotas.append(siguientes_cuotas)
         return ForthcomingInvoiceItem.objects.bulk_create(
             [
                 ForthcomingInvoiceItem(
@@ -170,6 +207,14 @@ class Invoice(models.Model):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
         ordering = ("id",)
+        constraints = [
+            models.UniqueConstraint(
+                name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",  # noqa: WPS323
+                violation_error_message="Una socia no puede tener más de dos facturas no anuladas en el mismo mes.",
+                fields=["mes_facturacion_id", "member_id"],
+                condition=~models.Q(estado=InvoiceStatus.ANULADA),
+            )
+        ]
 
     objects: InvoiceManager = _InvoiceManager()
 
@@ -294,11 +339,7 @@ class Invoice(models.Model):
     updated_at = models.DateTimeField(null=True, auto_now=True)
 
     member = models.ForeignKey(
-        "Member",
-        null=False,
-        blank=False,
-        related_query_name="invoice",
-        on_delete=models.CASCADE,
+        "Member", null=False, blank=False, on_delete=models.CASCADE
     )
 
     mes_facturacion = models.ForeignKey(
@@ -350,6 +391,11 @@ class Invoice(models.Model):
             consumo_tmp = self.consumo
 
         return consumo_tmp - (self.member.consumo_reduccion_fija or 0)
+
+    def calculated_mora(self) -> Decimal:
+        if self.ontime_payment >= self.total_or0:
+            return Decimal(0)
+        return aigar_config.get_config().recargo_mora
 
     def update_with_measurement(self, caudal_actual, caudal_anterior):
         self.caudal_actual = int(caudal_actual)

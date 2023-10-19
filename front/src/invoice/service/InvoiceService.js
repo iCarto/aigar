@@ -9,7 +9,7 @@ import {createPayments, payments_api_adapter} from "payment/model";
 
 const InvoiceService = {
     getInvoices() {
-        return ApiService.get("/invoices").then(response => {
+        return ApiService.get("/invoices/").then(response => {
             return createInvoices(invoices_api_adapter(response));
         });
     },

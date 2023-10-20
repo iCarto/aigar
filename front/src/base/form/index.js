@@ -5,3 +5,4 @@ export {default as FormInputInteger} from "./FormInputInteger";
 export {default as FormSelect} from "./FormSelect";
 export {default as FormTextArea} from "./FormTextArea";
 export {default as FormSelectOrder} from "./FormSelectOrder";
+export {default as FormCheckbox} from "./FormCheckbox";

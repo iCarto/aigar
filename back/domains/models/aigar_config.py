@@ -164,7 +164,7 @@ class AigarConfig(SingletonModel):
         blank=False,
         default=Decimal("0.25"),
         verbose_name="Ahorro mano de obra",
-        help_text="Ahorro mano de obra (centro de la cuota)",
+        help_text="Ahorro mano de obra (dentro de la cuota)",
         validators=[validators.MinValueValidator(0)],
     )
     traspaso_derecho = models.DecimalField(

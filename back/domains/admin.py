@@ -86,4 +86,112 @@ class LocalityAdmin(admin.ModelAdmin):
         return format_html_join("", "{0}<br>", ((name,) for name in zone_names))
 
 
-admin.site.register(AigarConfig, SingletonModelAdmin)
+@admin.register(AigarConfig)
+class AigarConfigAdmin(SingletonModelAdmin):
+    fieldsets = [
+        (None, {"fields": ["name"]}),
+        (
+            "Pagos",
+            {
+                "classes": ["collapse"],
+                "fields": ["payment_due_day", "payment_method", "payment_csv"],
+            },
+        ),
+        (
+            "Cuota Fija",
+            {
+                "classes": ["collapse", "wide"],
+                "fields": [
+                    "humano_cuota_fija",
+                    "comercial_cuota_fija",
+                    "comision",
+                    "ahorro",
+                ],
+            },
+        ),
+        (
+            "Recibos - Conceptos Generales",
+            {
+                "classes": ["collapse"],
+                "fields": [
+                    # "comision",
+                    "recargo_mora",
+                    "asamblea",
+                    "jornada_trabajo",
+                    "reconexion",
+                    # "ahorro",
+                    "traspaso_derecho",
+                ],
+            },
+        ),
+        (
+            "Consumo Humano - Nuevo derecho",
+            {
+                "classes": ["collapse", "wide"],
+                "fields": [
+                    "humano_nuevo_derecho_total",
+                    "humano_nuevo_derecho_primera_cuota",
+                    "humano_nuevo_derecho_numero_cuotas",
+                ],
+            },
+        ),
+        (
+            "Consumo Comercial - Nuevo derecho",
+            {
+                "classes": ["collapse", "wide"],
+                "fields": [
+                    "comercial_nuevo_derecho_total",
+                    "comercial_nuevo_derecho_primera_cuota",
+                    "comercial_nuevo_derecho_numero_cuotas",
+                ],
+            },
+        ),
+        (
+            "Consumo Humano - Cuota Variable",
+            {
+                "classes": ["collapse", "wide"],
+                "fields": [
+                    (
+                        "humano_cuota_variable_primer_tramo_cantidad",
+                        "humano_cuota_variable_primer_tramo_coste",
+                    ),
+                    (
+                        "humano_cuota_variable_segundo_tramo_cantidad",
+                        "humano_cuota_variable_segundo_tramo_coste",
+                    ),
+                    (
+                        "humano_cuota_variable_tercer_tramo_cantidad",
+                        "humano_cuota_variable_tercer_tramo_coste",
+                    ),
+                    (
+                        "humano_cuota_variable_cuarto_tramo_cantidad",
+                        "humano_cuota_variable_cuarto_tramo_coste",
+                    ),
+                ],
+            },
+        ),
+        (
+            "Consumo Comercial - Cuota Variable",
+            {
+                "classes": ["collapse", "wide"],
+                "fields": [
+                    (
+                        "comercial_cuota_variable_primer_tramo_cantidad",
+                        "comercial_cuota_variable_primer_tramo_coste",
+                    ),
+                    (
+                        "comercial_cuota_variable_segundo_tramo_cantidad",
+                        "comercial_cuota_variable_segundo_tramo_coste",
+                    ),
+                    (
+                        "comercial_cuota_variable_tercer_tramo_cantidad",
+                        "comercial_cuota_variable_tercer_tramo_coste",
+                    ),
+                    (
+                        "comercial_cuota_variable_cuarto_tramo_cantidad",
+                        "comercial_cuota_variable_cuarto_tramo_coste",
+                    ),
+                ],
+            },
+        ),
+    ]

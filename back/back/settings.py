@@ -265,6 +265,8 @@ if not DEBUG and DESKTOP:
         },
     }
 
+SOLO_CACHE_TIMEOUT = 3600  # 1 hour
+
 
 SHELL_PLUS_IMPORTS = ["from django.db import models"]
 SHELL_PLUS_PRINT_SQL = True

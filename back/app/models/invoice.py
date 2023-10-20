@@ -339,11 +339,9 @@ class Invoice(models.Model):
     )
 
     mes_facturacion = models.ForeignKey(
-        "InvoicingMonth",
+        "app.InvoicingMonth",
         null=False,
         blank=False,
-        related_name="invoices",
-        related_query_name="invoice",
         on_delete=models.CASCADE,
         editable=False,
     )

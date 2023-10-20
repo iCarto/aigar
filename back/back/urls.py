@@ -19,6 +19,7 @@ urlpatterns = [
     # - index.html served on /
     # - all /static/... files served on /...
     # Django REST Framework urls
+    path("api/invoices/stats/", InvoiceStatsView.as_view()),
     path("api/", include(router.urls)),
     path(
         "api/invoicingmonths/<str:pk>/measurements/previewinvoices/",
@@ -28,7 +29,6 @@ urlpatterns = [
         "api/invoicingmonths/<str:pk>/payments/previewinvoices/",
         PaymentInvoicePreview.as_view(),
     ),
-    path("api/invoices/stats/", InvoiceStatsView.as_view()),
     # path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api/domains/", include(domains_urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),

@@ -13,7 +13,6 @@ import Checkbox from "@mui/material/Checkbox";
 const SortedPaginatedSelectableTable = ({
     columns,
     data,
-    selectAttribute,
     tableActions = [],
     onClickRows,
     selectedTableRows,
@@ -37,7 +36,7 @@ const SortedPaginatedSelectableTable = ({
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
-            const newSelected = data.map(item => item[selectAttribute]);
+            const newSelected = data;
             onClickRows(newSelected);
             return;
         }
@@ -60,6 +59,7 @@ const SortedPaginatedSelectableTable = ({
                 selectedTableRows.slice(selectedIndex + 1)
             );
         }
+
         onClickRows(newSelected);
     };
 
@@ -105,15 +105,13 @@ const SortedPaginatedSelectableTable = ({
                     />
                     <TableBody>
                         {visibleRows.map((row, index) => {
-                            const isItemSelected = isSelected(row[selectAttribute]);
+                            const isItemSelected = isSelected(row);
                             const labelId = `enhanced-table-checkbox-${index}`;
 
                             return (
                                 <TableRow
                                     hover
-                                    onClick={event =>
-                                        handleClick(event, row[selectAttribute])
-                                    }
+                                    onClick={event => handleClick(event, row)}
                                     role="checkbox"
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}

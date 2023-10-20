@@ -15,7 +15,6 @@ const EntityListPage = ({
     pageActions = [],
     tableActions = [],
     groupActions = true,
-    selectAttribute = "",
     onClickRows = null,
     selectedTableRows = [],
     selectable = true,
@@ -71,7 +70,6 @@ const EntityListPage = ({
                         <SortedPaginatedSelectableTable
                             columns={columns}
                             data={items}
-                            selectAttribute={selectAttribute}
                             tableActions={tableActions}
                             onClickRows={onClickRows}
                             selectedTableRows={selectedTableRows}

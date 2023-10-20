@@ -80,7 +80,7 @@ const InvoiceService = {
         });
     },
 
-    addWorkingDayPenaltyPenalty(pks) {
+    addWorkingDayPenalty(pks) {
         console.log(pks);
         return ApiService.put("/invoices/value/", {
             pks,

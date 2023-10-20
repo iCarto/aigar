@@ -7,6 +7,8 @@ import {useFilter} from "base/filter/hooks";
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
+import {Modal} from "base/ui/modal";
+import Alert from "@mui/material/Alert";
 
 const ViewMonthlyInvoicingPage = () => {
     const {filter, setFilter} = useList();
@@ -28,6 +30,7 @@ const ViewMonthlyInvoicingPage = () => {
     );
 
     const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [loading, setLoading] = useState(areInvoicesLoading);
 
     useEffect(() => {
@@ -53,7 +56,16 @@ const ViewMonthlyInvoicingPage = () => {
 
     const refreshTable = () => {
         setIsDataUpdated(prevState => !prevState);
+        setIsSuccessModalOpen(true);
     };
+
+    const closeModal = () => {
+        setIsSuccessModalOpen(false);
+    };
+
+    const successModalMessage = (
+        <Alert severity="success">Las facturas se han actualizado correctamente.</Alert>
+    );
 
     return (
         <PageLayout
@@ -80,6 +92,13 @@ const ViewMonthlyInvoicingPage = () => {
                     refreshTable={refreshTable}
                 />
             )}
+            {isSuccessModalOpen ? (
+                <Modal
+                    isOpen={isSuccessModalOpen}
+                    onClose={closeModal}
+                    body={successModalMessage}
+                />
+            ) : null}
         </PageLayout>
     );
 };

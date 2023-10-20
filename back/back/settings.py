@@ -1,11 +1,15 @@
 import os
+from pathlib import Path
 
 import environ
 from corsheaders.defaults import default_headers
 
 
-# Build paths inside the project like this: base('desired/local/path')
-base = environ.Path(__file__) - 2  # Folder of manage.py
+# Build paths inside the project like:
+# * managepy_dir / "subpath" / "subpath"
+# * or  Path(managepy_dir, "../subpath"), ...
+managepy_dir = Path(__file__, "..", "..").resolve(strict=True)
+
 
 env = environ.Env(  # set default values and casting
     DEBUG=(bool, True),
@@ -14,16 +18,8 @@ env = environ.Env(  # set default values and casting
     SENTRY_DSN=(str, ""),
     DESKTOP=(bool, True),
 )
-
-
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = base()
-root = environ.Path(__file__) - 1  # Folder of this file (settings.py)
-# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = root()
-
-
-environ.Env.read_env(env_file=base(".env"))  # reading .env file
+env_file = (managepy_dir / ".env").resolve()
+environ.Env.read_env(env_file=env_file)
 
 
 SECRET_KEY = env("SECRET_KEY")
@@ -98,7 +94,7 @@ ROOT_URLCONF = "back.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [managepy_dir / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -131,8 +127,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 appname = "aigar_data"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = base(appname)
-SQLITE_PATH = base(appname, "db.sqlite3")
+MEDIA_ROOT = managepy_dir / appname
+SQLITE_PATH = str(managepy_dir / appname / "db.sqlite3")
 
 
 if DESKTOP:
@@ -159,12 +155,12 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_ROOT = base("static")
+STATIC_ROOT = managepy_dir / "static"
 STATIC_URL = "/staticfiles/"
 # Extra places for collectstatic to find static files.
-# STATICFILES_DIRS = (root("static"), root("front_build"), base("app/static"))
 if not DESKTOP:
-    STATICFILES_DIRS = (root("front_build"),)
+    front_build = managepy_dir / ".." / "front" / "build"
+    STATICFILES_DIRS = (front_build,)
 
 # Django SPA - simple setup for serving modern SPAs from Django
 # https://github.com/metakermit/django-spa

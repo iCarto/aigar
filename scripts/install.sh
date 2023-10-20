@@ -53,17 +53,8 @@ bash scripts/install.front.sh
 
 # ./scripts/util/prod-package.sh
 
-# FIXME
 # link to UI
-if [[ ! -e back/back/static && ! -L back/back/static ]]; then
-    echo "* linking Django app to the JS frontend"
-    mkdir -p "${this_dir}"/../front/build
-    cd "back/back"
-    ln -s ../../front/build front_build
-    cd "${this_dir}"
-else
-    echo "* frontend already linked"
-fi
+bash scripts/install.link_back_front.sh
 
 # app-specific
 #-------------

@@ -20,6 +20,7 @@ def test_valid_stretches():
         {"limit": 14, "cost": 0},
         {"limit": 20, "cost": 0.75},
         {"limit": None, "cost": 2},
+        {"limit": None, "cost": 0},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -41,6 +42,7 @@ def test_invalid_unordered():
         {"limit": 20, "cost": 0},
         {"limit": 5, "cost": 0.75},
         {"limit": None, "cost": 2},
+        {"limit": None, "cost": 0},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -61,6 +63,7 @@ def test_invalid_none():
         {"limit": None, "cost": 0},
         {"limit": 5, "cost": 0.75},
         {"limit": None, "cost": 2},
+        {"limit": None, "cost": 0},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -75,15 +78,7 @@ def test_invalid_none():
 def test_invalid_more_than_one_cost_for_none_limit():
     config = AigarConfig().get_solo()
 
-    _set_stretches(
-        "comercial",
-        [
-            {"limit": None, "cost": 1},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-        ],
-        config,
-    )
+    _set_unused_stretch("comercial", config)
 
     config.comercial_cuota_variable_primer_tramo_cantidad = None
     config.comercial_cuota_variable_primer_tramo_coste = Decimal("1")
@@ -91,6 +86,7 @@ def test_invalid_more_than_one_cost_for_none_limit():
         {"limit": 1, "cost": 0},
         {"limit": None, "cost": 0.75},
         {"limit": None, "cost": 2},
+        {"limit": None, "cost": 0},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -105,19 +101,13 @@ def test_invalid_more_than_one_cost_for_none_limit():
 def test_invalid_at_least_one_none():
     config = AigarConfig().get_solo()
 
-    _set_stretches(
-        "comercial",
-        [
-            {"limit": None, "cost": 1},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-        ],
-        config,
-    )
+    _set_unused_stretch("comercial", config)
+
     stretches = [
         {"limit": 2, "cost": 0},
         {"limit": 5, "cost": 0.75},
         {"limit": 10, "cost": 2},
+        {"limit": 15, "cost": 3},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -135,6 +125,7 @@ def test_get_stretches_comercial():
         {"limit": 5, "cost": 1},
         {"limit": 20, "cost": 0.75},
         {"limit": None, "cost": 2},
+        {"limit": None, "cost": 0},
     ]
     tipo_uso = "comercial"
     _set_stretches(tipo_uso, stretches, config)
@@ -144,14 +135,28 @@ def test_get_stretches_comercial():
     config.refresh_from_db()
 
     stretches[2]["limit"] = MAX_LIMIT_VALUE
+
     assert (
         config.get_stretches(MemberFactory.create(tipo_uso=UseTypes.COMERCIAL))
-        == stretches
+        == stretches[:-1]
+    )
+
+
+def _set_unused_stretch(tipo_uso, config):
+    _set_stretches(
+        tipo_uso,
+        [
+            {"limit": None, "cost": 1},
+            {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
+        ],
+        config,
     )
 
 
 def _set_stretches(tipo_uso, stretches, config):
-    for i, stretch in enumerate(("primer", "segundo", "tercer")):
+    for i, stretch in enumerate(("primer", "segundo", "tercer", "cuarto")):
         setattr(
             config,
             f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad",

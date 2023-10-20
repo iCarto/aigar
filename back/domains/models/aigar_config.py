@@ -177,17 +177,6 @@ class AigarConfig(SingletonModel):
         help_text="Traspaso de derecho (cambio de nombre)",
         validators=[validators.MinValueValidator(0)],
     )
-
-    otros = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        null=False,
-        blank=False,
-        default=Decimal("0"),
-        verbose_name="Otros",
-        help_text="Otros",
-        validators=[validators.MinValueValidator(0)],
-    )
     humano_cuota_fija = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -324,25 +313,25 @@ class AigarConfig(SingletonModel):
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
-    # cuota_variable_cuarto_tramo_cantidad = models.DecimalField(
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Cuota Variable - Humano - Cuarto tramo (z - w m3)",
-    #     help_text="Cuota Variable - Humano - Cuarto tramo (z - w m3)",
-    #     validators=[validators.MinValueValidator(0)],
-    # )
-    # humano_cuota_variable_cuarto_tramo_coste = models.DecimalField(
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     null=False,
-    #     blank=False,
-    #     default=Decimal('0'),
-    #     verbose_name="Humano - Cuota Variable - Cuarto tramo ($)",
-    #     help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
-    #     validators=[validators.MinValueValidator(0)],
-    # )
+    humano_cuota_variable_cuarto_tramo_cantidad = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Cuota Variable - Humano - Cuarto tramo (m3)",
+        help_text="El cuarto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
+        validators=[validators.MinValueValidator(0)],
+    )
+    humano_cuota_variable_cuarto_tramo_coste = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=False,
+        blank=False,
+        default=Decimal("0"),
+        verbose_name="Humano - Cuota Variable - Cuarto tramo ($)",
+        help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
+        validators=[validators.MinValueValidator(0)],
+    )
 
     comercial_cuota_variable_primer_tramo_cantidad = models.DecimalField(
         max_digits=5,
@@ -401,25 +390,25 @@ class AigarConfig(SingletonModel):
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
-    # comercial_cuota_variable_cuarto_tramo_cantidad = models.DecimalField(
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     null=True,
-    #     blank=True,
-    #     verbose_name="Comercial - Cuota Variable - Cuarto tramo (m3)",
-    #     help_text="Cuota Variable - Comercial - Cuarto tramo (z - w m3)",
-    #     validators=[validators.MinValueValidator(0)],
-    # )
-    # comercial_cuota_variable_cuarto_tramo_coste = models.DecimalField(
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     null=False,
-    #     blank=False,
-    #     default=Decimal('0'),
-    #     verbose_name="Comercial - Cuota Variable - Cuarto tramo ($)",
-    #     help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
-    #     validators=[validators.MinValueValidator(0)],
-    # )
+    comercial_cuota_variable_cuarto_tramo_cantidad = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Comercial - Cuota Variable - Cuarto tramo (m3)",
+        help_text="El cuarto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
+        validators=[validators.MinValueValidator(0)],
+    )
+    comercial_cuota_variable_cuarto_tramo_coste = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=False,
+        blank=False,
+        default=Decimal("0"),
+        verbose_name="Comercial - Cuota Variable - Cuarto tramo ($)",
+        help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
+        validators=[validators.MinValueValidator(0)],
+    )
 
     def __str__(self):
         return "Configuración de AIGAR"
@@ -436,7 +425,7 @@ class AigarConfig(SingletonModel):
 
     def _prepare_stretches(self, tipo_uso: str) -> Stretches:
         results = []
-        for stretch in ("primer", "segundo", "tercer"):
+        for stretch in ("primer", "segundo", "tercer", "cuarto"):
             limit = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad")
             cost = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_coste")
             results.append({"cost": cost, "limit": limit})

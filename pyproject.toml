@@ -84,8 +84,8 @@ dev = [
     "django-debug-toolbar==4.0.0",
     "django-extensions==3.2.1",
     "vulture==2.7",
-    "django-stubs==4.2.4",
-    "djangorestframework-stubs-3.14.3",
+    "django-stubs==4.2.5",
+    "djangorestframework-stubs",
     # "aigar[test]",
 ]
 

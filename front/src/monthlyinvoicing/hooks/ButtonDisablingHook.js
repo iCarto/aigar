@@ -30,13 +30,7 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
         * o alguna factura tienen estado = pendiente de cobro (es decir, que ya se han impreso)
     */
     const isPrintInvoicesButtonDisabled = useMemo(() => {
-        return (
-            !invoices?.length ||
-            invoices?.some(invoice => !invoice.caudal_actual) ||
-            invoices?.some(
-                invoice => invoice.estado === ESTADOS_FACTURA.PENDIENTE_DE_COBRO
-            )
-        );
+        return !invoices?.length || invoices?.some(invoice => !invoice.caudal_actual);
     }, [invoices]);
 
     /*

@@ -4,13 +4,13 @@ import {useParams} from "react-router-dom";
 import {InvoiceService} from "invoice/service";
 import {MemberService} from "member/service";
 import {useInvoicesList} from "invoice/provider";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 import {PageLayout} from "base/ui/page";
 import {Spinner} from "base/common";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
 import {InvoicePageSidebar} from ".";
-import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 const ViewInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(null);
@@ -20,13 +20,17 @@ const ViewInvoiceSubpage = () => {
     const [error, setError] = useState("");
 
     const {idFactura} = useParams();
+
     const allInvoicesList = useInvoicesList();
     const monthlyInvoicesList = useMonthlyInvoicingList();
+    const invoicesList = allInvoicesList || monthlyInvoicesList;
 
-    const invoicesIds =
-        allInvoicesList?.invoicesIds || monthlyInvoicesList?.invoicesIds;
-
+    const invoicesIds = invoicesList?.invoicesIds;
     const urlPath = allInvoicesList ? "facturas" : "facturas_mes";
+
+    const refreshInvoice = () => {
+        invoicesList?.setIsDataUpdated(prevState => !prevState);
+    };
 
     useEffect(() => {
         setError("");
@@ -51,10 +55,14 @@ const ViewInvoiceSubpage = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [idFactura]);
+    }, [idFactura, invoicesList]);
 
     return (
-        <PageLayout sidebar={<InvoicePageSidebar invoice={invoice} />}>
+        <PageLayout
+            sidebar={
+                <InvoicePageSidebar invoice={invoice} onDataUpdate={refreshInvoice} />
+            }
+        >
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
             {invoicesIds?.length ? (

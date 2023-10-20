@@ -1,28 +1,24 @@
-const InvoicesStatsFieldSelect = ({fields, selectedField, handleChange}) => {
+import Grid from "@mui/material/Grid";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
+
+const InvoicesStatsFieldSelect = ({views, selectedView, handleChange}) => {
     const handleClick = key => {
         handleChange(key);
     };
 
     return (
-        <div className="d-flex justify-content-center">
-            <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                {fields.map(field => (
-                    <button
-                        type="button"
-                        key={field.key}
-                        className={
-                            "btn " +
-                            (selectedField === field.key
-                                ? "btn-primary"
-                                : "btn-secondary")
-                        }
-                        onClick={e => handleClick(field.key)}
-                    >
-                        {field.text}
-                    </button>
-                ))}
-            </div>
-        </div>
+        <ButtonGroup>
+            {views.map(view => (
+                <Button
+                    key={view.key}
+                    variant={selectedView === view.key ? "contained" : "outlined"}
+                    onClick={() => handleClick(view.key)}
+                >
+                    {view.text}
+                </Button>
+            ))}
+        </ButtonGroup>
     );
 };
 

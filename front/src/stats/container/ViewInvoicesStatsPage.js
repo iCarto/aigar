@@ -1,23 +1,36 @@
 import {useEffect, useState} from "react";
 import {InvoiceService} from "invoice/service";
 import {useList} from "base/entity/provider";
+import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 import {useFilter} from "base/filter/hooks";
+
 import {PageLayout} from "base/ui/page";
 import {NoItemsMessage} from "base/error/components";
 import {Spinner} from "base/common";
-import {InvoicesStatsFilterForm, ListInvoicesStatsPage} from ".";
+import {InvoicesStatsFilterForm, InvoicesStatsList} from ".";
 import {EntityListFilterForm} from "base/entity/components/form";
+import {
+    InvoicesStatOpenedMonthInfo,
+    InvoicesStatsFieldSelect,
+} from "stats/presentational";
 import Grid from "@mui/material/Grid";
-import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 
 const ViewInvoicesStatsPage = () => {
     const [invoices, setInvoices] = useState([]);
     const [filteredInvoices, setFilteredInvoices] = useState([]);
-    const [selectedField, setSelectedField] = useState("monto");
+    const [selectedView, setSelectedView] = useState("monto");
     const [isLoading, setIsLoading] = useState(null);
 
     const {filter, setFilter} = useList();
     const {filterFunction} = useFilter();
+
+    const views = [
+        {key: "monto", text: "Monto", unit: "$", unitClass: "dollar"},
+        {key: "consumo", text: "Consumo", unit: "㎥", unitClass: "cubic-metre"},
+        {key: "mora", text: "Mora", unit: "$", unitClass: "dollar"},
+    ];
+
+    const displayStatsInfo = selectedView === "monto" && invoices;
 
     useEffect(() => {
         setIsLoading(true);
@@ -37,7 +50,7 @@ const ViewInvoicesStatsPage = () => {
     };
 
     const handleChangeStatsField = selectedField => {
-        setSelectedField(selectedField);
+        setSelectedView(selectedField);
     };
 
     return (
@@ -46,16 +59,22 @@ const ViewInvoicesStatsPage = () => {
                 <Spinner message="Cargando datos" />
             ) : (
                 <>
-                    <Grid item container alignItems="flex-end">
-                        <Grid
-                            item
-                            container
-                            xs={10}
-                            md={8}
-                            columnSpacing={1}
-                            alignItems="flex-end"
-                            sx={{zIndex: 1}}
-                        >
+                    <Grid
+                        container
+                        flexDirection="row"
+                        columnSpacing={2}
+                        justifyContent="space-between"
+                        mb={1}
+                    >
+                        <Grid item mt={1}>
+                            <InvoicesStatsFieldSelect
+                                views={views}
+                                selectedView={selectedView}
+                                handleChange={handleChangeStatsField}
+                            />
+                        </Grid>
+
+                        <Grid item container xs={6} columnSpacing={1} component="form">
                             <EntityListFilterForm
                                 filterForm={
                                     <MonthlyInvoicingListProvider>
@@ -66,13 +85,19 @@ const ViewInvoicesStatsPage = () => {
                                 }
                             />
                         </Grid>
+
+                        {displayStatsInfo ? (
+                            <Grid item xs={3} mt={1}>
+                                <InvoicesStatOpenedMonthInfo invoices={invoices} />
+                            </Grid>
+                        ) : null}
                     </Grid>
+
                     {filteredInvoices?.length ? (
-                        <ListInvoicesStatsPage
+                        <InvoicesStatsList
                             invoices={filteredInvoices}
-                            totalInvoices={invoices.length}
-                            onChangeStatsField={handleChangeStatsField}
-                            currentField={selectedField}
+                            views={views}
+                            currentView={selectedView}
                         />
                     ) : (
                         <NoItemsMessage itemsLength={filteredInvoices?.length} />

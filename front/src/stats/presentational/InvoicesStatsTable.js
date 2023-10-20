@@ -1,9 +1,8 @@
 import {SortedPaginatedTable} from "base/table/components";
 import {useInvoiceStatsTableColumns} from "stats/data";
 
-const InvoicesStatsList = ({
+const InvoicesStatsTable = ({
     invoicesStats,
-    totalInvoices,
     invoicingMonths,
     selectedField,
     unitClass,
@@ -19,4 +18,4 @@ const InvoicesStatsList = ({
     ) : null;
 };
 
-export default InvoicesStatsList;
+export default InvoicesStatsTable;

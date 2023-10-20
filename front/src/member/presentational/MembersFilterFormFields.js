@@ -1,4 +1,4 @@
-import {FormInputInteger, FormInputText, FormSelect} from "base/form";
+import {FormInputText, FormSelect} from "base/form";
 import Grid from "@mui/material/Grid";
 
 const MembersFilterFormFields = ({onFieldChange, fields, domains}) => {

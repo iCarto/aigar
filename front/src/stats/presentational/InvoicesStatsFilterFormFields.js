@@ -1,4 +1,5 @@
 import {DateUtil} from "base/format/utilities";
+import {FormSelect} from "base/form";
 import Grid from "@mui/material/Grid";
 
 const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
@@ -8,57 +9,44 @@ const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
         onFieldChange({[name]: value});
     };
 
+    const monthsList = domains.invoicingMonths.map(month => {
+        return {
+            key: month.id_mes_facturacion,
+            value: `${DateUtil.getMonthName(month.mes)} - ${month.anho}`,
+        };
+    });
+
     return (
         <>
             <Grid item xs>
-                <label htmlFor="sector">Sector</label>
-                <select
-                    className="form-control"
+                <FormSelect
+                    label="Sector"
                     name="sector"
+                    options={domains.sectors}
+                    onChange={handleInputChange}
                     value={fields.sector}
-                    onChange={handleInputChange}
-                >
-                    <option></option>
-                    {domains.sectors.map((sector, index) => (
-                        <option key={index} value={sector.key}>
-                            {sector.value}
-                        </option>
-                    ))}
-                </select>
+                    showEmptyOption
+                />
             </Grid>
             <Grid item xs>
-                <label htmlFor="startInvoicingMonth">Mes de inicio</label>
-                <select
-                    className="form-control"
+                <FormSelect
+                    label="Mes de inicio"
                     name="startInvoicingMonth"
-                    value={fields.startInvoicingMonth}
+                    options={monthsList}
                     onChange={handleInputChange}
-                >
-                    <option></option>
-                    {domains.invoicingMonths.map((invoicingMonth, index) => (
-                        <option key={index} value={invoicingMonth.id_mes_facturacion}>
-                            {DateUtil.getMonthName(invoicingMonth.mes)} -{" "}
-                            {invoicingMonth.anho}
-                        </option>
-                    ))}
-                </select>
+                    value={fields.startInvoicingMonth}
+                    showEmptyOption
+                />
             </Grid>
             <Grid item xs>
-                <label htmlFor="endInvoicingMonth">Mes de fin</label>
-                <select
-                    className="form-control"
+                <FormSelect
+                    label="Mes de fin"
                     name="endInvoicingMonth"
-                    value={fields.endInvoicingMonth}
+                    options={monthsList}
                     onChange={handleInputChange}
-                >
-                    <option></option>
-                    {domains.invoicingMonths.map((invoicingMonth, index) => (
-                        <option key={index} value={invoicingMonth.id_mes_facturacion}>
-                            {DateUtil.getMonthName(invoicingMonth.mes)} -{" "}
-                            {invoicingMonth.anho}
-                        </option>
-                    ))}
-                </select>
+                    value={fields.endInvoicingMonth}
+                    showEmptyOption
+                />
             </Grid>
         </>
     );

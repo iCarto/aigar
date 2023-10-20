@@ -80,7 +80,7 @@ const MemberDetail = ({member, isSummary = false}) => {
         },
         {
             label: "Consumo máximo",
-            value: member?.consumo_maximo
+            value: member?.consumo_maximoinvoicedetailsho
                 ? `${member?.consumo_maximo} ${WATER_CONSUMPTION_SYMBOL}`
                 : "",
         },

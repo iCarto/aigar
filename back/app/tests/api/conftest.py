@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from app.models.invoicing_month import InvoicingMonth
@@ -16,7 +18,7 @@ def five_members_in_order() -> list[Member]:
 
 
 @pytest.fixture
-def new_member_data() -> dict:
+def new_member_data() -> dict[str, Any]:
     return {
         "name": "foo",
         "medidor": "123456",
@@ -25,6 +27,7 @@ def new_member_data() -> dict:
         "status": MemberStatus.ACTIVE,
         "sector": ZoneFactory.create().name,
         "tipo_uso": "Humano",
+        "selected_fee_value": 0,
     }
 
 

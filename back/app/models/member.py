@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 from django.core import exceptions
 from django.db import models, transaction
@@ -16,6 +17,14 @@ class UseTypes(models.TextChoices):
 
 
 class MemberManager(models.Manager["Member"]):
+    @transaction.atomic
+    def create(self, **kwargs: Any) -> "Member":
+        selected_fee_value = kwargs.pop("selected_fee_value", None)
+        instance = super().create(**kwargs)
+        d = aigar_config.get_config_nuevo_derecho(instance)
+        Invoice.objects.handle_invoices_for_new_members(instance, d, selected_fee_value)
+        return instance
+
     def active(self) -> models.QuerySet:
         return self.filter(status=MemberStatus.ACTIVE)
 
@@ -174,9 +183,7 @@ class Member(models.Model):
             new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
             Member.objects.update_order(new_order=new_order, old_order=old_order)
             super().save(**kwargs)
-            if is_creating:
-                d = aigar_config.get_config_nuevo_derecho(self)
-                Invoice.objects.handle_invoices_for_new_members(self, d)
+
             Invoice.objects.member_updated(self)
 
     @property

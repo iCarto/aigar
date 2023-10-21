@@ -1,6 +1,6 @@
 import datetime
 from decimal import Decimal
-from typing import Any, List, Self, cast
+from typing import Any, Self, cast
 
 from django.core import exceptions
 from django.db import models, transaction
@@ -72,8 +72,8 @@ class InvoiceManager(models.Manager["Invoice"]):
         mes_facturacion_id = Invoice.objects.filter(
             mes_facturacion__is_open=True
         ).values_list("mes_facturacion_id", flat=True)[0]
-        anho = kwargs.get("anho", mes_facturacion_id[:4])
-        mes = kwargs.get("mes", mes_facturacion_id[4:])
+        anho = kwargs.setdefault("anho", mes_facturacion_id[:4])
+        mes = kwargs.setdefault("mes", mes_facturacion_id[4:])
         if anho != mes_facturacion_id[:4] or mes != mes_facturacion_id[4:]:
             raise exceptions.ValidationError(
                 {
@@ -177,19 +177,23 @@ class InvoiceManager(models.Manager["Invoice"]):
             member=member, item=ForthcomingInvoiceItemName.reconexion, value=value
         )
 
-    def handle_invoices_for_new_members(
-        self, member, d
-    ) -> List[ForthcomingInvoiceItem]:
+    def handle_invoices_for_new_members(self, member, d, selected_fee_value=None):
         """Gestiona los cambios en la facturación cuando se crea un nuevo socio.
 
         Se anota en la cola los pagos que debe realizar por el derecho de conexión.
         """
-        remaining_value = d["total"] - d["primera_cuota"]
-        siguientes_cuotas = remaining_value / d["numero_cuotas"]
-        cuotas = [d["primera_cuota"]]
-        for _ in range(d["numero_cuotas"]):
-            cuotas.append(siguientes_cuotas)
-        return ForthcomingInvoiceItem.objects.bulk_create(
+        if not selected_fee_value:
+            return
+
+        first_fee = max(d["primera_cuota"], selected_fee_value)
+        remaining_value = d["total"] - first_fee
+        cuotas = [first_fee]
+        while remaining_value > 0:
+            fee_value = min(remaining_value, selected_fee_value)
+            cuotas.append(fee_value)
+            remaining_value -= fee_value
+
+        ForthcomingInvoiceItem.objects.bulk_create(
             [
                 ForthcomingInvoiceItem(
                     item=ForthcomingInvoiceItemName.derecho, value=c, member=member
@@ -197,6 +201,7 @@ class InvoiceManager(models.Manager["Invoice"]):
                 for c in cuotas
             ]
         )
+        self.create(member=member, version=1, caudal_anterior=0, caudal_actual=0)
 
 
 _InvoiceManager = InvoiceManager.from_queryset(InvoiceQuerySet)

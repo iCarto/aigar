@@ -85,38 +85,60 @@ def test_previous_month_is_closed_current_is_open(_, api_client):
 
 @patch("app.models.invoicing_month.any_payments_for", return_value=True)
 def test_derecho_conexion_invoice_generation(_, api_client, create_invoicing_month):
-    create_invoicing_month(anho="2019", mes="09", is_open=True)
-    member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL)
+    invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=True)
+    InvoiceFactory.create(mes_facturacion=invoicing_month)
+    member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL, selected_fee_value=50)
+
+    assert Invoice.objects.filter(
+        member=member, mes_facturacion=invoicing_month
+    ).values("derecho", "total", "caudal_actual", "caudal_anterior").first() == {
+        "derecho": 150,
+        "total": 150,
+        "caudal_actual": 0,
+        "caudal_anterior": 0,
+    }
+
+    year_month = ((2019, 10), (2019, 11), (2019, 12), (2020, 1), (2020, 2))
+    for year, month in year_month:
+        response = api_client.post(
+            "/api/invoicingmonths/", {"anho": year, "mes": month}
+        )
+        response_data = response.json()
+        invoice = Invoice.objects.get(
+            member=member, mes_facturacion=response_data["id_mes_facturacion"]
+        )
+        assert invoice.derecho == 50
+        Invoice.objects.update(caudal_actual=5)
+
+    response = api_client.post("/api/invoicingmonths/", {"anho": "2020", "mes": "3"})
+    response_data = response.json()
+    invoice = Invoice.objects.get(
+        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+    )
+    assert invoice.derecho == 0
+
+
+@patch("app.models.invoicing_month.any_payments_for", return_value=True)
+def test_derecho_conexion_pay_full_fee_in_one(
+    _, api_client, create_invoicing_month, new_member_data
+):
+    InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
+
+    member_data = new_member_data | {"selected_fee_value": 300}
+    response = api_client.post("/api/members/", member_data)
+    assert response.status_code == 201, response.json()
+    member_id = response.json()["id"]
+    invoice = Invoice.objects.get(member_id=member_id, anho="2019", mes="09")
+    assert invoice.derecho == 300
+    invoice.caudal_actual = 0
+    invoice.save()
+
     response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
     response_data = response.json()
     assert response.status_code == 201, response_data
     invoice = Invoice.objects.get(
-        member=member, mes_facturacion=response_data["id_mes_facturacion"]
-    )
-    assert invoice.derecho == 150
-    invoice.caudal_actual = 5
-    invoice.save()
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 11})
-    response_data = response.json()
-    invoice = Invoice.objects.get(
-        member=member, mes_facturacion=response_data["id_mes_facturacion"]
-    )
-    assert invoice.derecho == 125
-
-    invoice.caudal_actual = 5
-    invoice.save()
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 12})
-    response_data = response.json()
-    invoice = Invoice.objects.get(
-        member=member, mes_facturacion=response_data["id_mes_facturacion"]
-    )
-    assert invoice.derecho == 125
-
-    invoice.caudal_actual = 5
-    invoice.save()
-    response = api_client.post("/api/invoicingmonths/", {"anho": 2020, "mes": 1})
-    response_data = response.json()
-    invoice = Invoice.objects.get(
-        member=member, mes_facturacion=response_data["id_mes_facturacion"]
+        member=member_id, mes_facturacion=response_data["id_mes_facturacion"]
     )
     assert invoice.derecho == 0

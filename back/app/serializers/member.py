@@ -9,6 +9,12 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MemberCreateSerializer(MemberSerializer):
+    selected_fee_value = serializers.DecimalField(
+        required=True, write_only=True, max_digits=5, decimal_places=2
+    )
+
+
 class MemberShortSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member

@@ -1,15 +1,24 @@
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 
 from app.models.member import Member
 from app.serializers.entity_status_serializer import MemberStatusSerializer
-from app.serializers.member import MemberExportSerializerV1, MemberSerializer
+from app.serializers.member import (
+    MemberExportSerializerV1,
+    MemberSerializer,
+    MemberCreateSerializer,
+)
 
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
-    serializer_class = MemberSerializer
+
+    def get_serializer_class(self) -> type[BaseSerializer]:
+        if self.action == "create":
+            return MemberCreateSerializer
+        return MemberSerializer
 
     @action(detail=False, methods=["put"])
     def status(self, request):

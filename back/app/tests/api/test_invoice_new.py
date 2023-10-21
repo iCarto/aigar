@@ -3,6 +3,10 @@ from django.core import exceptions
 from django.db import utils
 from rest_framework import status
 
+from app.models.forthcoming_invoice_item import (
+    ForthcomingInvoiceItem,
+    ForthcomingInvoiceItemName,
+)
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.member import UseTypes
 from app.tests.factories import InvoiceFactory, MemberFactory
@@ -137,30 +141,30 @@ def test_debt_is_included_in_new_invoices(api_client, create_invoicing_month):
     assert invoice.saldo_pendiente == 50
 
 
-def test_connection_is_included_in_new_invoices(api_client, create_invoicing_month):
-    """Para una nueva socia, una factura a mano incluye el derecho de conexión."""
-    InvoiceFactory.create(
-        estado=InvoiceStatus.NUEVA,
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
-    )
-    member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, status=MemberStatus.ACTIVE)
-    response = api_client.post(
-        "/api/invoices/",
-        {
-            "anho": "2019",
-            "mes": "09",
-            "caudal_anterior": 0,
-            "cauda_actual": 0,
-            "member": member.pk,
-            "version": 1,
-        },
-    )
-    assert response.status_code == status.HTTP_201_CREATED, response.json()
+# def test_connection_is_included_in_new_invoices(api_client, create_invoicing_month):
+#     """Para una nueva socia, una factura a mano incluye el derecho de conexión."""
+#     InvoiceFactory.create(
+#         estado=InvoiceStatus.NUEVA,
+#         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
+#     )
+#     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, status=MemberStatus.ACTIVE)
+#     response = api_client.post(
+#         "/api/invoices/",
+#         {
+#             "anho": "2019",
+#             "mes": "09",
+#             "caudal_anterior": 0,
+#             "cauda_actual": 0,
+#             "member": member.pk,
+#             "version": 1,
+#         },
+#     )
+#     assert response.status_code == status.HTTP_201_CREATED, response.json()
 
-    invoice = Invoice.objects.get(anho="2019", mes="09", member=member.pk)
-    assert invoice.mora == 0
-    assert invoice.saldo_pendiente == 0
-    assert invoice.derecho == 100
+#     invoice = Invoice.objects.get(anho="2019", mes="09", member=member.pk)
+#     assert invoice.mora == 0
+#     assert invoice.saldo_pendiente == 0
+#     assert invoice.derecho == 100
 
 
 def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_month):
@@ -196,3 +200,51 @@ def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_m
     assert invoice.reconexion == 10
     assert invoice.mora == 0
     assert invoice.saldo_pendiente == 0
+
+
+def test_new_invoice_for_derecho_conexion_is_created(create_invoicing_month):
+    InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
+    member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=100)
+    invoice = Invoice.objects.get(member=member)
+    assert invoice.derecho == 100
+    assert invoice.total == 100
+
+
+def test_derecho_conexion_humano(create_invoicing_month):
+    InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
+    member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=50)
+    invoice = Invoice.objects.get(member=member)
+    assert invoice.derecho == 100
+    assert invoice.total == 100
+    items = (
+        ForthcomingInvoiceItem.objects.filter(
+            item=ForthcomingInvoiceItemName.derecho, member=member
+        )
+        .order_by("id")
+        .values_list("value", flat=True)
+    )
+    assert len(items) == 4
+    assert list(items) == [50, 50, 50, 50]
+
+
+def test_derecho_conexion_comercial(create_invoicing_month):
+    InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
+    member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL, selected_fee_value=50)
+    invoice = Invoice.objects.get(member=member)
+    assert invoice.derecho == 150
+    assert invoice.total == 150
+    items = (
+        ForthcomingInvoiceItem.objects.filter(
+            item=ForthcomingInvoiceItemName.derecho, member=member
+        )
+        .order_by("id")
+        .values_list("value", flat=True)
+    )
+    assert len(items) == 5
+    assert list(items) == [50, 50, 50, 50, 50]

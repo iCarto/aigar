@@ -9,7 +9,7 @@ from app.models.forthcoming_invoice_item import (
 )
 from app.models.invoice import Invoice, InvoiceStatus
 from app.models.member import Member, UseTypes
-from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
+from app.tests.factories import InvoiceFactory, MemberFactory
 from domains.models.member_status import MemberStatus
 
 
@@ -73,7 +73,12 @@ def test_create_reconnect_debt_when_activating_member(api_client):
     ).exists()
 
 
-def test_not_create_reconnect_debt_when_creating_member(api_client, new_member_data):
+def test_not_create_reconnect_debt_when_creating_member(
+    api_client, new_member_data, create_invoicing_month
+):
+    InvoiceFactory.create(
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+    )
     response = api_client.post("/api/members/", new_member_data)
     assert response.status_code == status.HTTP_201_CREATED
     assert not ForthcomingInvoiceItem.objects.filter(

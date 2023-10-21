@@ -57,7 +57,8 @@ const CreateMemberSubpage = () => {
 
     const handleSubmit = updatedMember => {
         setIsSaving(true);
-        MemberService.createMember(updatedMember)
+        const selected_fee_value = 25; // TODO
+        MemberService.createMember(updatedMember, selected_fee_value)
             .then(createdMember => {
                 fetchMembersList();
                 navigate(`/socios/${createdMember.id}`);

@@ -125,24 +125,23 @@ class AigarConfigAdmin(SingletonModelAdmin):
             },
         ),
         (
-            "Consumo Humano - Nuevo derecho",
+            "Nuevo derecho",
             {
                 "classes": ["collapse", "wide"],
                 "fields": [
-                    "humano_nuevo_derecho_total",
-                    "humano_nuevo_derecho_primera_cuota",
-                    "humano_nuevo_derecho_numero_cuotas",
-                ],
-            },
-        ),
-        (
-            "Consumo Comercial - Nuevo derecho",
-            {
-                "classes": ["collapse", "wide"],
-                "fields": [
-                    "comercial_nuevo_derecho_total",
-                    "comercial_nuevo_derecho_primera_cuota",
-                    "comercial_nuevo_derecho_numero_cuotas",
+                    (
+                        "humano_nuevo_derecho_total",
+                        "humano_nuevo_derecho_primera_cuota",
+                    ),
+                    (
+                        "comercial_nuevo_derecho_total",
+                        "comercial_nuevo_derecho_primera_cuota",
+                    ),
+                    (
+                        "nuevo_derecho_siguientes_cuotas_opcion1",
+                        "nuevo_derecho_siguientes_cuotas_opcion2",
+                        "nuevo_derecho_siguientes_cuotas_opcion3",
+                    ),
                 ],
             },
         ),

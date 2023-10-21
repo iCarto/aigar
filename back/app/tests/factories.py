@@ -22,6 +22,7 @@ class MemberFactory(BaseFactory[Member]):  # type: ignore
     sector = factory.SubFactory(ZoneFactory)
     tipo_uso = factory.Faker("random_element", elements=UseTypes.labels)
     status = MemberStatus.ACTIVE
+    selected_fee_value = None
 
 
 class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore

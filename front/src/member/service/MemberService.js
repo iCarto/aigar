@@ -28,8 +28,9 @@ const MemberService = {
         });
     },
 
-    createMember(member) {
-        return ApiService.post("/members/", member).then(response => {
+    createMember(member, selected_fee_value = 0) {
+        const member_with_fee = {...member, selected_fee_value};
+        return ApiService.post("/members/", member_with_fee).then(response => {
             let member = member_api_adapter(response);
             return createMember(member);
         });

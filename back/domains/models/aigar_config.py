@@ -217,14 +217,7 @@ class AigarConfig(SingletonModel):
         help_text="Nuevo derecho - Humano (pago mínimo en $ / primera cuota)",
         validators=[validators.MinValueValidator(0)],
     )
-    humano_nuevo_derecho_numero_cuotas = models.SmallIntegerField(
-        null=False,
-        blank=False,
-        default=4,
-        verbose_name="Nuevo derecho - Humano (valor siguientes cuotas en $, descontando la primera)",
-        help_text="Nuevo derecho - Humano (valor siguientes cuotas en $, descontando la primera)",
-        validators=[validators.MinValueValidator(0)],
-    )
+
     comercial_nuevo_derecho_total = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -245,12 +238,32 @@ class AigarConfig(SingletonModel):
         help_text="Nuevo derecho - Humano (pago mínimo en $ / primera cuota)",
         validators=[validators.MinValueValidator(0)],
     )
-    comercial_nuevo_derecho_numero_cuotas = models.SmallIntegerField(
-        null=False,
-        blank=False,
-        default=2,
-        verbose_name="valor",
-        help_text="Nuevo derecho - Humano (valor siguientes cuotas en $, descontando la primera)",
+
+    nuevo_derecho_siguientes_cuotas_opcion1 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 1 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
+        validators=[validators.MinValueValidator(0)],
+    )
+    nuevo_derecho_siguientes_cuotas_opcion2 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 2 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
+        validators=[validators.MinValueValidator(0)],
+    )
+    nuevo_derecho_siguientes_cuotas_opcion3 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 3 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
         validators=[validators.MinValueValidator(0)],
     )
 
@@ -493,7 +506,7 @@ def get_config_nuevo_derecho(member):
     return {
         "total": getattr(config, f"{tipo_uso}_nuevo_derecho_total"),
         "primera_cuota": getattr(config, f"{tipo_uso}_nuevo_derecho_primera_cuota"),
-        "numero_cuotas": getattr(config, f"{tipo_uso}_nuevo_derecho_numero_cuotas"),
+        "numero_cuotas": 4 if tipo_uso == "humano" else 2,
     }
 
 

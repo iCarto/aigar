@@ -1,11 +1,7 @@
 import pytest
 from django.core import exceptions
 
-from app.models.forthcoming_invoice_item import (
-    ForthcomingInvoiceItem,
-    ForthcomingInvoiceItemName,
-)
-from app.models.member import Member, UseTypes
+from app.models.member import Member
 from app.tests.factories import MemberFactory
 from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
@@ -42,29 +38,3 @@ def test_none_order_only_allowed_for_deleted():
     member.save()
     assert member.status == MemberStatus.DELETED
     assert member.orden is None
-
-
-def test_derecho_conexion_humano():
-    member = MemberFactory.create(tipo_uso=UseTypes.HUMANO)
-    items = (
-        ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member
-        )
-        .order_by("id")
-        .values_list("value", flat=True)
-    )
-    assert len(items) == 5
-    assert list(items) == [100, 50, 50, 50, 50]
-
-
-def test_derecho_conexion_comercial():
-    member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL)
-    items = (
-        ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member
-        )
-        .order_by("id")
-        .values_list("value", flat=True)
-    )
-    assert len(items) == 3
-    assert list(items) == [150, 125, 125]

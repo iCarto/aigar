@@ -3,15 +3,47 @@ import {LoadDataValidatorService} from "validation/service";
 import {MeasurementService} from "measurement/service";
 import {LoadDataFileUploadArea} from "loaddata/presentational";
 import Grid from "@mui/material/Grid";
+import {useDomain} from "aigar/domain/provider";
 
 const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) => {
     const [dataFiles, setDataFiles] = useState([]);
+
+    const {sectors} = useDomain();
 
     useEffect(() => {
         onValidateStep(false);
     }, []);
 
+    const adaptDataFileFromV1 = dataFile => {
+        const content = JSON.parse(dataFile.content);
+        const newContent = content.map(r => {
+            const sector = sectors.find(element =>
+                element.key.startsWith(r.sector)
+            ).key;
+            const newRow = {
+                member_name: r.name,
+                orden: r.orden,
+                sector: sector,
+                caudal_anterior: r.lectura_anterior,
+                caudal_actual: r.lectura,
+                // consumo_calculado: r.consumo_calculado,
+                // tarifa_calculada: r.tarifa_calculada,
+                medidor: r.medidor,
+                cambio_medidor: r.cambio_medidor,
+                // cuota_fija: r.cuota_fija,
+                // comision: r.comision,
+                // ahorro: r.ahorro,
+            };
+            if (r.id || r.num_socio) {
+                newRow.member_id = r.id || r.num_socio;
+            }
+            return newRow;
+        });
+        dataFile.content = JSON.stringify(newContent);
+    };
+
     const handleLoadedDataFile = dataFile => {
+        adaptDataFileFromV1(dataFile);
         dataFile.errors = LoadDataValidatorService.validateMeasurementsFile(dataFile);
         setDataFiles(prevDataFiles => {
             const updatedDataFiles = [...prevDataFiles, dataFile];
@@ -38,9 +70,7 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
             const content = MeasurementService.mergeFileContents(
                 updatedDataFiles.map(dataFile => dataFile.content)
             );
-            MeasurementService.getMeasurementsFromJSONContent(
-                JSON.stringify(content)
-            ).then(measurements => {
+            MeasurementService.getMeasurements(content).then(measurements => {
                 onChangeMeasurements(measurements);
             });
         }

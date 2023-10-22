@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from app.models.member import Member
 from app.serializers.entity_status_serializer import MemberStatusSerializer
-from app.serializers.member import MemberExportSerializer, MemberSerializer
+from app.serializers.member import MemberExportSerializerV1, MemberSerializer
 
 
 class MemberViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,7 @@ class MemberViewSet(viewsets.ModelViewSet):
 
 class MemberExportViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Member.objects.active().all()
-    serializer_class = MemberExportSerializer
+    serializer_class = MemberExportSerializerV1
 
     def list(self, request):  # noqa: WPS612
         return super().list(request)

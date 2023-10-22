@@ -1,27 +1,17 @@
 import {createMeasurement, measurement_api_adapter} from "measurement/model";
 
 const MeasurementsService = {
-    getMeasurementsFromJSONContent: function (content) {
-        const jsonMeasurements = JSON.parse(content);
-        console.log(jsonMeasurements);
+    getMeasurements: function (jsonMeasurements) {
         return Promise.resolve(
             jsonMeasurements
                 .map(jsonMeasurement => {
                     // TODO Deberíamos poder utilizar los valores por defecto sin tener que invocarlos
                     // aquí y delegarlo en la creación del objeto
-                    if (jsonMeasurement.lectura == null) {
+                    if (jsonMeasurement.caudal_actual == null) {
                         return null;
                     }
                     return createMeasurement(
-                        measurement_api_adapter({
-                            sector: jsonMeasurement.sector,
-                            member_id: jsonMeasurement.member_id,
-                            member_name: jsonMeasurement.member_name,
-                            caudal_anterior: jsonMeasurement.lectura_anterior,
-                            caudal_actual: jsonMeasurement.lectura,
-                            medidor: jsonMeasurement.medidor,
-                            cambio_medidor: jsonMeasurement.cambio_medidor,
-                        })
+                        measurement_api_adapter({...jsonMeasurement})
                     );
                 })
                 .filter(jsonMeasurement => jsonMeasurement != null)

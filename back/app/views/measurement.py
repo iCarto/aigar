@@ -85,7 +85,7 @@ def get_invoices_for_measurements(measurements, invoicing_month):
 
 
 def get_invoice_by_num_socio(invoices, member_id):
-    invoice = [invoice for invoice in invoices if member_id == invoice.member.member_id]
+    invoice = [invoice for invoice in invoices if member_id == invoice.member_id]
     if invoice:
         return invoice[0]
     return None

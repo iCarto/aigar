@@ -8,7 +8,7 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
     const tableColumns = [
         {
             Header: "Socio",
-            accessor: d => `${d.id} - ${d.nombre}`,
+            accessor: d => `${d.member_id} - ${d.member_name}`,
             Cell: LinkAccessorCellTable,
             getProps: () => ({
                 handleClick: onClickViewMember,

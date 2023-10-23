@@ -1,4 +1,5 @@
 import datetime
+import logging
 from decimal import Decimal
 from typing import Any, Self, cast
 
@@ -12,6 +13,9 @@ from app.models.forthcoming_invoice_item import (
 from app.models.invoice_value import InvoiceValue
 from back.utils.dates import next_month
 from domains.models import aigar_config
+
+
+logger = logging.getLogger(__name__)
 
 
 class InvoiceStatus(models.TextChoices):
@@ -396,11 +400,21 @@ class Invoice(models.Model):
             return Decimal(0)
         return aigar_config.get_config().recargo_mora
 
-    def update_with_measurement(self, caudal_actual, caudal_anterior):
+    def update_with_measurement(
+        self, caudal_actual: int, caudal_anterior: int, cambio_medidor: bool
+    ) -> None:
         self.caudal_actual = int(caudal_actual)
-        self.caudal_anterior = (
-            caudal_anterior if caudal_anterior is not None else self.caudal_anterior
-        )
+        if cambio_medidor:
+            self.caudal_anterior = 0
+        elif caudal_anterior != int(self.caudal_anterior):
+            logger.warning(
+                "Caudal anterior: %s distinto a Medida %s para factura %s",  # noqa:WPS323
+                self.caudal_anterior,
+                caudal_anterior,
+                self.id,
+            )
+            self.caudal_anterior = int(caudal_anterior)
+
         self.update_total()
 
     def update_total(self):

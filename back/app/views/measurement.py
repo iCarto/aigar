@@ -65,9 +65,8 @@ class MeasurementInvoicePreview(CreateAPIView):
             if invoice is not None:
                 invoice.update_with_measurement(
                     measurement["caudal_actual"],
-                    measurement["caudal_anterior"]
-                    if measurement["cambio_medidor"]
-                    else None,
+                    measurement["caudal_anterior"],
+                    measurement["cambio_medidor"],
                 )
                 updated_invoices.append(invoice)
         serializer = InvoiceSerializer(

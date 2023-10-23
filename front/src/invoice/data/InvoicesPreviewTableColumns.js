@@ -5,7 +5,7 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
     const tableColumns = [
         {
             Header: "Socio",
-            accessor: d => `${d.id} - ${d.nombre}`,
+            accessor: d => `${d.member_id} - ${d.nombre}`,
             Cell: LinkAccessorCellTable,
             getProps: () => ({
                 handleClick: onClickViewMember,

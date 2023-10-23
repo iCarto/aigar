@@ -22,7 +22,7 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
     };
 
     useEffect(() => {
-        InvoicingMonthService.saveMeasurements(id_mes_facturacion, measurements)
+        InvoicingMonthService.saveMeasurements(measurements)
             .then(() => {
                 setResult(true);
             })

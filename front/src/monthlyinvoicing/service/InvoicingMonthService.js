@@ -1,6 +1,10 @@
 import {ApiService} from "base/api/service";
 import {createInvoices, invoices_api_adapter} from "invoice/model";
-import {createMeasurements, measurements_api_adapter} from "measurement/model";
+import {
+    createMeasurements,
+    measurements_api_adapter,
+    measurements_view_adapter,
+} from "measurement/model";
 import {
     createInvoicingMonth,
     createInvoicingMonths,
@@ -48,19 +52,18 @@ const InvoicingMonthService = {
         });
     },
 
-    previewInvoicesWithMeasurements(id_mes_facturacion, measurements) {
-        return ApiService.post(
-            "/invoicingmonths/" + id_mes_facturacion + "/measurements/previewinvoices/",
-            measurements
-        ).then(response => {
-            return createInvoices(invoices_api_adapter(response));
-        });
+    previewInvoicesWithMeasurements(measurements) {
+        return ApiService.post("/measurements/previewinvoices/", measurements).then(
+            response => {
+                return createInvoices(invoices_api_adapter(response));
+            }
+        );
     },
 
-    saveMeasurements(id_mes_facturacion, measurements) {
+    saveMeasurements(measurements) {
         return ApiService.post(
-            "/invoicingmonths/" + id_mes_facturacion + "/measurements/",
-            measurements
+            "/measurements/",
+            measurements_view_adapter(measurements)
         ).then(response => {
             return createMeasurements(measurements_api_adapter(response));
         });

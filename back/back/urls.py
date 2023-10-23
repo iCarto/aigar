@@ -5,7 +5,6 @@ from django.urls import include, path
 
 from app.urls import router
 from app.views.invoice import InvoiceStatsView
-from app.views.measurement import MeasurementInvoicePreview
 from app.views.payment import PaymentInvoicePreview
 from domains import urls as domains_urls
 
@@ -21,10 +20,6 @@ urlpatterns = [
     # Django REST Framework urls
     path("api/invoices/stats/", InvoiceStatsView.as_view()),
     path("api/", include(router.urls)),
-    path(
-        "api/invoicingmonths/<str:pk>/measurements/previewinvoices/",
-        MeasurementInvoicePreview.as_view(),
-    ),
     path(
         "api/invoicingmonths/<str:pk>/payments/previewinvoices/",
         PaymentInvoicePreview.as_view(),

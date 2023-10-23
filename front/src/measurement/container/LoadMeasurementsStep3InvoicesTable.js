@@ -28,10 +28,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
 
     useEffect(() => {
         onValidateStep(false);
-        InvoicingMonthService.previewInvoicesWithMeasurements(
-            id_mes_facturacion,
-            measurements
-        )
+        InvoicingMonthService.previewInvoicesWithMeasurements(measurements)
             .then(invoices => {
                 reviewMeasurements(measurements, invoices);
                 onChangeInvoices(invoices);

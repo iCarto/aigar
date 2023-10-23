@@ -182,26 +182,24 @@ else
 
     INSERT INTO app_measurement
     (
-        id,
-        caudal_anterior,
-        caudal_actual,
-        cambio_medidor,
-        medidor,
-        created_at,
-        updated_at,
-        factura_id,
-        mes_facturacion_id
+        id
+        , caudal_anterior
+        , caudal_actual
+        , cambio_medidor
+        , medidor
+        , created_at
+        , updated_at
+        , invoice_id
     )
     SELECT
-        id_lectura,
-        caudal_anterior,
-        caudal_actual,
-        cambio_medidor,
-        medidor,
-        created_at,
-        updated_at,
-        factura_id,
-        mes_facturacion_id
+        id_lectura
+        , caudal_anterior
+        , caudal_actual
+        , cambio_medidor
+        , medidor
+        , created_at
+        , updated_at
+        , factura_id
     FROM api_measurement;
 
 
@@ -287,7 +285,7 @@ crear_importar() {
         delete from app_payment where
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
         delete from app_measurement where
-            factura_id in (select id from app_invoice where mes_facturacion_id = '202304');
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
     "
 }
 

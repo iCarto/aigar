@@ -33,24 +33,12 @@ class Measurement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    mes_facturacion = models.ForeignKey(
-        "InvoicingMonth",
-        null=False,
-        blank=False,
-        related_name="measurements",
-        on_delete=models.CASCADE,
-    )
-
-    factura = models.ForeignKey(
-        "Invoice",
-        null=False,
-        blank=False,
-        related_name="measurements",
-        on_delete=models.CASCADE,
+    invoice = models.ForeignKey(
+        "Invoice", null=False, blank=False, on_delete=models.CASCADE
     )
 
     def __str__(self):
-        return f"{self.factura} - {self.caudal_anterior} - {self.caudal_actual}"
+        return f"{self.invoice} - {self.caudal_anterior} - {self.caudal_actual}"
 
     def save(self, **kwargs) -> None:
         self.full_clean()

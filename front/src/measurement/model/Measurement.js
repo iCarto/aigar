@@ -4,19 +4,29 @@ const measurement_api_adapter = measurement => {
     return measurement;
 };
 
-const measurements_api_adapter = measurments =>
-    measurments.map(measurement_api_adapter);
+const measurement_view_adapter = measurementOrg => {
+    const measurement = {...measurementOrg};
+    delete measurement["errors"];
+    delete measurement["consumo"];
+    // delete measurement["member_id"];
+    delete measurement["member_name"];
+    delete measurement["sector"];
+    return measurement;
+};
+
+const measurements_api_adapter = measurements =>
+    measurements.map(measurement_api_adapter);
+
+const measurements_view_adapter = measurements =>
+    measurements.map(measurement_view_adapter);
 
 const createMeasurements = (data = []) => {
-    const members = Measurements.from(data, measurement =>
-        createMeasurement(measurement)
-    );
-    return members;
+    return Measurements.from(data, measurement => createMeasurement(measurement));
 };
 
 const createMeasurement = ({
     id = null,
-    factura = null,
+    invoice = null,
     sector = "",
     member_id = null,
     member_name = "",
@@ -28,7 +38,7 @@ const createMeasurement = ({
 } = {}) => {
     const publicApi = {
         id: id,
-        factura,
+        invoice,
         member_id,
         member_name,
         sector,

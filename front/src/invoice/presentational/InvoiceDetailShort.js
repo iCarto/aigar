@@ -22,18 +22,24 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
         <SectionSummaryCard>
             {inactiveInvoiceMessage}
             <Grid item xs={6}>
-                <SectionField label="Nº recibo" value={invoice?.numero} />
+                <SectionField
+                    label="Nº recibo"
+                    value={invoice?.numero}
+                    containerWidth="short"
+                />
             </Grid>
             <Grid item xs={6}>
                 <SectionField
                     label="Estado"
                     value={<InvoiceStatusLabel estado={invoice?.estado} />}
+                    containerWidth="short"
                 />
             </Grid>
             <Grid item xs={6}>
                 <SectionField
                     label="Mes de cobro"
                     value={`${DateUtil.getMonthName(invoice?.mes)} - ${invoice?.anho}`}
+                    containerWidth="short"
                 />
             </Grid>
 

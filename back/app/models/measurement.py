@@ -1,5 +1,27 @@
+from typing import Any
+
 from django.core import exceptions
-from django.db import models
+from django.db import models, transaction
+
+
+class MeasurementManager(models.Manager["Measurement"]):
+    @transaction.atomic
+    def create(self, **kwargs: Any) -> "Measurement":
+        measurement = super().create(**kwargs)
+        invoice = measurement.invoice
+        invoice.update_with_measurement(
+            measurement.caudal_actual,
+            measurement.caudal_anterior,
+            measurement.cambio_medidor,
+        )
+        invoice.save()
+
+        if measurement.cambio_medidor:
+            member = invoice.member
+            member.medidor = measurement.medidor
+            member.save()
+
+        return measurement
 
 
 class Measurement(models.Model):
@@ -7,6 +29,8 @@ class Measurement(models.Model):
         verbose_name = "lectura"
         verbose_name_plural = "lecturas"
         ordering = ("id",)
+
+    objects: MeasurementManager = MeasurementManager()
 
     id = models.AutoField(
         primary_key=True,

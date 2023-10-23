@@ -59,6 +59,11 @@ class InvoiceQuerySet(models.QuerySet["Invoice"]):
             )
         )
 
+    def new_and_open(self) -> Self:
+        return self.filter(mes_facturacion__is_open=True).filter(
+            estado=InvoiceStatus.NUEVA
+        )
+
 
 class InvoiceManager(models.Manager["Invoice"]):
     def get_queryset(self) -> InvoiceQuerySet:
@@ -104,9 +109,7 @@ class InvoiceManager(models.Manager["Invoice"]):
         return InvoiceQuerySet(self.model, using=self._db)
 
     def member_updated(self, member):
-        last_invoice = Invoice.objects.filter(
-            member=member, mes_facturacion__is_open=True, estado=InvoiceStatus.NUEVA
-        ).first()
+        last_invoice = self.filter(member=member).new_and_open().first()
         if last_invoice:
             last_invoice.update_for_member()
 

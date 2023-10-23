@@ -144,9 +144,9 @@ class InvoiceManager(models.Manager["Invoice"]):
         self.filter(id__in=pks).update(estado=status)
 
     def update_value(self, pks: list[int], invoice_value: InvoiceValue) -> None:
-        invoice_value_value = aigar_config.get_invoice_value(invoice_value)
+        invoice_value_value = float(aigar_config.get_invoice_value(invoice_value))
         for invoice in self.filter(id__in=pks):
-            setattr(invoice, invoice_value.name, invoice_value_value)
+            setattr(invoice, invoice_value.value, invoice_value_value)
             invoice.update_total()
             invoice.save()
 

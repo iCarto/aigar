@@ -23,18 +23,26 @@ function useFilter() {
             Object.entries(filter).every(([key, value]) => {
                 const filterValue = normalizeText(value?.toString());
 
-                if (!item.hasOwnProperty(key) && !isCombinedFilter(key)) return false;
-
                 if (isCombinedFilter(key)) {
                     return matchesCombinedFilter(key, item, filterValue);
                 } else {
-                    const itemValue = getItemValue(item, key);
-
-                    if (textFilters.includes(key)) {
-                        return matchesTextSearch(itemValue, filterValue);
+                    if (key === "startInvoicingMonth") {
+                        return parseInt(item.mes_facturacion) >= parseInt(value);
                     }
+                    if (key === "endInvoicingMonth") {
+                        return parseInt(item.mes_facturacion) <= parseInt(value);
+                    }
+                    if (item.member_data.sector && key === "sector") {
+                        return item.member_data.sector === value;
+                    } else {
+                        const itemValue = getItemValue(item, key);
 
-                    return itemValue === filterValue;
+                        if (textFilters.includes(key)) {
+                            return matchesTextSearch(itemValue, filterValue);
+                        }
+
+                        return itemValue === filterValue;
+                    }
                 }
             })
         );

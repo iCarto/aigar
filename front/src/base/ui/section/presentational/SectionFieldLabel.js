@@ -6,7 +6,6 @@ const SectionFieldLabel = ({labelText, labelIcon = null, tooltipText = null}) =>
     const labelStyle = {
         lineHeight: {xs: 1.5, sm: 1.75},
         color: "text.secondary",
-        fontSize: "0.8rem",
         fontWeight: "regular",
         textTransform: "uppercase",
         hyphens: "auto",
@@ -18,9 +17,7 @@ const SectionFieldLabel = ({labelText, labelIcon = null, tooltipText = null}) =>
         <>
             {tooltipText && (
                 <Tooltip title={tooltipText} arrow enterDelay={500}>
-                    <InfoOutlinedIcon
-                        sx={{mr: 1, color: "grey.500", fontSize: "0.9rem"}}
-                    />
+                    <InfoOutlinedIcon sx={{mr: 1, color: "grey.500"}} />
                 </Tooltip>
             )}
             {labelIcon && (

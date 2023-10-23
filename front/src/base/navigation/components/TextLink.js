@@ -9,7 +9,6 @@ const TextLink = ({text, to, textStyle = {}}) => {
         display: "inline-block",
         whiteSpace: "nowrap",
         fontWeight: "600",
-        fontSize: "inherit",
         color: "inherit",
         "&:hover": {
             textDecoration: "underline",
@@ -19,7 +18,12 @@ const TextLink = ({text, to, textStyle = {}}) => {
 
     return (
         <Link component={HashLink} to={to} smooth style={textLinkStyle}>
-            <Typography sx={{...textLinkStyle, ...textStyle}}>{text}</Typography>
+            <Typography
+                sx={{...textLinkStyle, ...textStyle}}
+                style={{fontSize: "inherit"}}
+            >
+                {text}
+            </Typography>
         </Link>
     );
 };

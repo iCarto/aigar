@@ -1,5 +1,5 @@
-import Grid from "@mui/material/Grid";
 import {NumberUtil} from "base/format/utilities";
+import Grid from "@mui/material/Grid";
 
 const InvoiceDetailField = ({
     label,

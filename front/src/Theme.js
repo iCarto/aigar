@@ -58,7 +58,7 @@ const customTheme = createTheme(
         palette: {},
 
         typography: {
-            // fontSize: 12,
+            fontSize: 16,
         },
 
         components: {
@@ -70,6 +70,14 @@ const customTheme = createTheme(
                     h4: customHeadingsStyle,
                     h5: customHeadingsStyle,
                     h6: {...customHeadingsStyle, color: CUSTOM_COLORS.secondary.dark},
+                },
+            },
+
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        fontSize: 14,
+                    },
                 },
             },
 

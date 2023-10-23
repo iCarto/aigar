@@ -15,7 +15,6 @@ const Unit = ({unit}) => {
                 ml: 1,
                 overflowWrap: "break-word",
                 whiteSpace: "pre-line;",
-                fontSize: "0.8em",
                 color: "grey",
             }}
         >
@@ -39,7 +38,6 @@ const SectionField = ({
     const valueStyle = {
         overflowWrap: "break-word",
         lineHeight: {xs: 1.5, sm: 1.75},
-        fontSize: "0.8rem",
         fontWeight: highlightValue ? "600" : "regular",
         ...valueCustomStyle,
     };
@@ -54,16 +52,10 @@ const SectionField = ({
         </>
     );
 
-    const linkField = (
-        <TextLink text={value} to={linkPath} textStyle={{fontSize: "14px"}} />
-    );
+    const linkField = <TextLink text={value} to={linkPath} />;
 
     const emptyField = (
-        <Typography
-            variant="subtitle2"
-            component="p"
-            sx={{...valueStyle, fontStyle: "italic"}}
-        >
+        <Typography variant="subtitle2" component="p" sx={{...valueStyle}}>
             —
         </Typography>
     );

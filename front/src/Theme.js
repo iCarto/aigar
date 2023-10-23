@@ -10,18 +10,7 @@ import grey from "@mui/material/colors/grey";
 // When no customTheme is available, just export defaultTheme in order to use MUI default theme.
 const defaultTheme = createTheme();
 
-export const CUSTOM_FONT_FAMILY = [
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-].join(",");
+export const CUSTOM_FONT_FAMILY = "Roboto";
 
 const customHeadingsStyle = {fontFamily: CUSTOM_FONT_FAMILY, fontWeight: "bold"};
 

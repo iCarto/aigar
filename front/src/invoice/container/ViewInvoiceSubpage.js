@@ -66,11 +66,7 @@ const ViewInvoiceSubpage = () => {
             <ErrorMessage message={error} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
             {invoicesIds?.length ? (
-                <InvoiceNavigator
-                    currentInvoiceId={idFactura}
-                    navigatorIds={invoicesIds}
-                    path={urlPath}
-                />
+                <InvoiceNavigator navigatorIds={invoicesIds} path={urlPath} />
             ) : null}
             {invoice ? (
                 <InvoiceDetail invoice={invoice} member={member} payments={payments} />

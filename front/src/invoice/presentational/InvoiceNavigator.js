@@ -1,12 +1,13 @@
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 
-const InvoiceNavigator = ({navigatorIds, currentInvoiceId, path}) => {
+const InvoiceNavigator = ({navigatorIds, path}) => {
     const navigate = useNavigate();
+    const {idFactura} = useParams();
 
-    const currentInvoiceIndex = navigatorIds.indexOf(parseInt(currentInvoiceId));
+    const currentInvoiceIndex = navigatorIds.indexOf(parseInt(idFactura));
     const isPreviousButtonDisabled = currentInvoiceIndex === 0;
     const isNextButtonDisabled = currentInvoiceIndex === navigatorIds.length - 1;
 

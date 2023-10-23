@@ -6,7 +6,6 @@
         "@mui/icons-material": "^5.14.1",
         "@mui/material": "^5.14.0",
         "@mui/x-date-pickers": "^5.0.2",
-        "bootstrap": "4.4.1",
         "chart.js": "^4.3.0",
         "docx-templates": "^4.11.2",
         "jsbarcode": "^3.11.0",

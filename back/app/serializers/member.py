@@ -50,9 +50,6 @@ class MemberExportSerializerV1(serializers.ModelSerializer):
             "cuota_fija",
             "comision",
             "ahorro",
-            "personas_acometida",
-            "dui",
-            "tipo_uso",
         ]
 
     num_socio = serializers.ReadOnlyField(source="id")
@@ -60,6 +57,11 @@ class MemberExportSerializerV1(serializers.ModelSerializer):
     consumo_calculado = serializers.ReadOnlyField(default=None)
     tarifa_calculada = serializers.ReadOnlyField(default=None)
     cambio_medidor = serializers.ReadOnlyField(default=False)
+
+    lectura_anterior = serializers.ReadOnlyField(default=None)
+    cuota_fija = serializers.ReadOnlyField(default=5.72)
+    comision = serializers.ReadOnlyField(default=0.28)
+    ahorro = serializers.ReadOnlyField(default=0.25)
 
 
 class MemberExportSerializer(serializers.ModelSerializer):
@@ -70,21 +72,19 @@ class MemberExportSerializer(serializers.ModelSerializer):
             "id",
             "orden",
             "sector",
-            "lectura_anterior",
-            "lectura",
-            "consumo_calculado",
+            "caudal_anterior",
+            "caudal_actual",
+            "consumo",
             "tarifa_calculada",
             "medidor",
             "cambio_medidor",
             "cuota_fija",
             "comision",
             "ahorro",
-            "personas_acometida",
-            "dui",
             "tipo_uso",
         ]
 
-    lectura = serializers.ReadOnlyField(default=None)
-    consumo_calculado = serializers.ReadOnlyField(default=None)
+    caudal_actual = serializers.ReadOnlyField(default=None)
+    consumo = serializers.ReadOnlyField(default=None)
     tarifa_calculada = serializers.ReadOnlyField(default=None)
     cambio_medidor = serializers.ReadOnlyField(default=False)

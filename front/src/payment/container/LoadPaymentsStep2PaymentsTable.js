@@ -97,9 +97,9 @@ const LoadPaymentsStep2PaymentsTable = ({
             if (invoiceForPayment) {
                 invoiceFieldsForPayment = {
                     member_id: invoiceForPayment.member_id,
-                    member_name: invoiceForPayment.nombre,
+                    member_name: invoiceForPayment.member_name,
                     sector: invoiceForPayment.sector,
-                    id_factura: invoiceForPayment.id,
+                    invoice: invoiceForPayment.id,
                 };
             }
             return createPayment({

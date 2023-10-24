@@ -28,10 +28,7 @@ const LoadPaymentsStep3InvoicesTable = ({
     useEffect(() => {
         if (!invoices.length) {
             onValidateStep(false);
-            InvoicingMonthService.previewInvoicesWithPayments(
-                id_mes_facturacion,
-                payments
-            )
+            InvoicingMonthService.previewInvoicesWithPayments(payments)
                 .then(fetchedInvoices => {
                     reviewInvoices(payments, fetchedInvoices);
                     onChangeInvoices(fetchedInvoices);

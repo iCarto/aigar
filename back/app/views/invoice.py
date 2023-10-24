@@ -119,7 +119,7 @@ class InvoiceStatsView(ListAPIView):
             ]
             previous_invoice = previous_invoice[0] if previous_invoice else None
             invoice_payment_info = {
-                "id_factura": invoice["id"],
+                "invoice": invoice["id"],
                 "mora": invoice["mora"],
                 "mora_por_retraso": 1
                 if invoice["mora"] != 0

@@ -1,39 +1,15 @@
-from typing import Any, Dict, List
+from typing import Any
 
 from django.db import models, transaction
-from django.shortcuts import get_object_or_404
 
-from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth
 
 
-def get_invoices_for_payments(payments):
-    num_socios = [payment["id_factura"] for payment in payments]
-    return Invoice.objects.filter(id_factura__in=num_socios)
-
-
-def get_invoice_by_id_factura(invoices, id_):
-    invoice = [invoice for invoice in invoices if id_ == invoice.id]
-    if invoice:
-        return invoice[0]
-    return None
-
-
 class PaymentManager(models.Manager["Payment"]):
-    def create_many(self, payments: List[Dict[str, Any]]):
-        invoicing_month = get_object_or_404(InvoicingMonth, is_open=True)
-        # TODO. Check if valid invoicing_month
-
-        invoices = get_invoices_for_payments(payments)
-        for payment in payments:
-            invoice = get_invoice_by_id_factura(invoices, payment["id_factura"])
-            payment["factura"] = payment["id_factura"]
-            payment["mes_facturacion"] = invoicing_month.id_mes_facturacion
-
     @transaction.atomic
     def create(self, **kwargs: Any) -> "Payment":
         payment = super().create(**kwargs)
-        invoice = payment.factura
+        invoice = payment.invoice
         # reload data because another payment could have updated the invoice
         invoice.refresh_from_db()
         invoice.update_with_payment(payment.fecha, payment.monto)
@@ -72,4 +48,4 @@ class Payment(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.invoice_id} - {self.fecha} - {self.monto}"
+        return f"{self.id} - {self.invoice} - {self.monto}"

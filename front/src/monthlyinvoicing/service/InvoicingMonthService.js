@@ -69,12 +69,10 @@ const InvoicingMonthService = {
         });
     },
 
-    previewInvoicesWithPayments(id_mes_facturacion, payments) {
-        const paymentsToApi = payments_api_adapter(payments);
-        console.log(paymentsToApi);
+    previewInvoicesWithPayments(payments) {
         return ApiService.post(
-            "/invoicingmonths/" + id_mes_facturacion + "/payments/previewinvoices",
-            paymentsToApi
+            "/payments/previewinvoices/",
+            payments_view_adapter(payments)
         ).then(response => {
             return createInvoices(invoices_api_adapter(response));
         });

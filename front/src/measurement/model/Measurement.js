@@ -37,7 +37,7 @@ const createMeasurement = ({
     errors = [],
 } = {}) => {
     const publicApi = {
-        id: id,
+        id,
         invoice,
         member_id,
         member_name,

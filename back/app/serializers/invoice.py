@@ -67,5 +67,5 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
         return [
             invoice_payment_info
             for invoice_payment_info in all_invoices_payments_info
-            if invoice_payment_info["id_factura"] == obj.id
+            if invoice_payment_info["invoice"] == obj.id
         ][0]

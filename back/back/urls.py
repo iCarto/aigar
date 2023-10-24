@@ -5,7 +5,6 @@ from django.urls import include, path
 
 from app.urls import router
 from app.views.invoice import InvoiceStatsView
-from app.views.payment import PaymentInvoicePreview
 from domains import urls as domains_urls
 
 
@@ -20,11 +19,6 @@ urlpatterns = [
     # Django REST Framework urls
     path("api/invoices/stats/", InvoiceStatsView.as_view()),
     path("api/", include(router.urls)),
-    path(
-        "api/invoicingmonths/<str:pk>/payments/previewinvoices/",
-        PaymentInvoicePreview.as_view(),
-    ),
-    # path("api/domains/<str:entity>", DomainsView.as_view()),
     path("api/domains/", include(domains_urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too

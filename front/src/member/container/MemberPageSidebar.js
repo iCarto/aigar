@@ -11,7 +11,8 @@ const MemberPageSidebar = ({member, onUpdateStatus}) => {
 
     const menuActions = [
         <EditButton disabled={member.isDeleted || isMemberInactive} />,
-        <CreateInvoiceButton disabled={member.isDeleted} />,
+        // A new invoice is automatically issued when a new member is created. We no longer allow a new invoice to be created from scratch.
+        // <CreateInvoiceButton disabled={member.isDeleted} />,
         isMemberInactive ? (
             <ConnectMemberButton member={member} onUpdateStatus={onUpdateStatus} />
         ) : null,

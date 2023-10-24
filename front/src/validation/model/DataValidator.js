@@ -6,7 +6,7 @@ class DataValidator extends Validator {
         if (value !== "" && value !== null && typeof value !== "undefined") {
             return null;
         }
-        return "El campo no puede estar vacío";
+        return "Este campo no puede estar vacío";
     }
 
     isDate(value) {
@@ -23,7 +23,7 @@ class DataValidator extends Validator {
             return;
         }
         if (!typeof value === "boolean") {
-            return "El campo no tiene un formato válido";
+            return "Este campo no tiene un formato válido";
         }
     }
 
@@ -33,7 +33,7 @@ class DataValidator extends Validator {
         }
         var integerRegExp = /^[-]?[0-9]+$/;
         if (!integerRegExp.test(value)) {
-            return "El campo no tiene un formato válido";
+            return "Este campo no tiene un formato válido";
         }
     }
 
@@ -43,13 +43,13 @@ class DataValidator extends Validator {
         }
         var decimalRegExp = /^-?\d+(\.\d{0,2})?$/;
         if (!decimalRegExp.test(value)) {
-            return "El campo no tiene un formato válido";
+            return "Este campo no tiene un formato válido";
         }
     }
 
     isPositive(value) {
         if (value < 0) {
-            return "El valor no puede ser negativo";
+            return "Este valor no puede ser negativo";
         }
     }
 
@@ -58,7 +58,7 @@ class DataValidator extends Validator {
             return;
         }
         if (value < max) {
-            return "El valor no puede ser inferior a " + max;
+            return "Este valor no puede ser inferior a " + max;
         }
     }
 
@@ -67,7 +67,7 @@ class DataValidator extends Validator {
             return;
         }
         if (value.length !== length) {
-            return "El campo debe tener " + length + " caracteres";
+            return "Este campo debe tener " + length + " caracteres";
         }
     }
 
@@ -76,7 +76,7 @@ class DataValidator extends Validator {
             return;
         }
         if (!regex.test(value)) {
-            return `El campo debe tener el siguiente formato: ${format}`;
+            return `Este campo debe tener el siguiente formato: ${format}`;
         }
     }
 }

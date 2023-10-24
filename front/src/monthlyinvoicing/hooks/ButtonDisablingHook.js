@@ -27,7 +27,6 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
         Botón 3. IMPRIMIR FACTURAS deshabilitado cuando:
         * No haya facturas para ese mes
         * o alguna factura no tenga caudal_actual o es 0. Es decir no se ha importado la lectura para alguna.
-        * o alguna factura tienen estado = pendiente de cobro (es decir, que ya se han impreso)
     */
     const isPrintInvoicesButtonDisabled = useMemo(() => {
         return !invoices?.length || invoices?.some(invoice => !invoice.caudal_actual);
@@ -53,13 +52,11 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
 
     /*
         Sabemos que el proceso de facturación ha terminado cuando:
-        * el botón de imprimir facturas está desactivado (ya se han impreso)
         * Y no hay ninguna factura nueva ni no cobrada (porque entonces estaríamos en el punto 1 o 2 del proceso, iniciar facturación o importar lecturas)
         * PERO ADEMÁS no todas están pendientes de cobro (porque entonces significa que los pagos aún no se han actualizado)
     */
     const isMonthlyInvoicingDone = useMemo(() => {
         return (
-            isPrintInvoicesButtonDisabled &&
             !invoices?.some(
                 invoice =>
                     invoice.estado === ESTADOS_FACTURA.NUEVA ||
@@ -69,9 +66,9 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
                 invoice => invoice.estado !== ESTADOS_FACTURA.PENDIENTE_DE_COBRO
             )
         );
-    }, [invoices, isPrintInvoicesButtonDisabled]);
+    }, [invoices]);
 
-    // ------- Navigator buttons ------- //
+    // ------- Month navigator buttons ------- //
 
     const getInvoicingMonthCurrentIndex = () => {
         return invoicingMonths.findIndex(

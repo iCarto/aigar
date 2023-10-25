@@ -42,9 +42,16 @@ const ViewInvoiceSubpage = () => {
                 MemberService.getMember(invoiceData.member_id).then(memberData => {
                     setMember(memberData);
                 });
-                InvoiceService.getInvoicePayments(idFactura).then(paymentsData => {
-                    setPayments(paymentsData);
-                });
+                InvoiceService.getInvoicePayments(idFactura)
+                    .then(paymentsData => {
+                        setPayments(paymentsData);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        setError(
+                            "Se ha producido un error y no se han podido obtener los pagos de esta factura"
+                        );
+                    });
             })
             .catch(error => {
                 console.log(error);

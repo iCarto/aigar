@@ -38,7 +38,7 @@ const FormSelectOrder = ({label, name, field, items, onChange}) => {
 
     return (
         <FormControl fullWidth sx={{mt: 2, mb: 1}}>
-            <InputLabel shrink htmlFor={name}>
+            <InputLabel htmlFor={name} sx={{mt: -1}}>
                 {label}
             </InputLabel>
             <Select
@@ -46,7 +46,6 @@ const FormSelectOrder = ({label, name, field, items, onChange}) => {
                 native
                 value={[field.value]}
                 onChange={handleChangeEvent}
-                label={label}
                 inputProps={{
                     id: name,
                     size: 10,

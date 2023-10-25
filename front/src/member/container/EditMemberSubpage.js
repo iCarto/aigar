@@ -5,6 +5,7 @@ import {MemberService} from "member/service";
 import {DataValidatorService} from "validation/service";
 import {createMember} from "member/model";
 import {useMembersList} from "member/provider";
+import {useDomain} from "aigar/domain/provider";
 
 import {PageLayout} from "base/ui/page";
 import {MemberForm} from "member/presentational";
@@ -17,8 +18,10 @@ const EditMemberSubpage = () => {
     const [error, setError] = useState("");
     const [isSaving, setIsSaving] = useState(null);
 
+    const domains = useDomain();
     const {sortedMembersList, fetchMembersList} = useMembersList();
     const {member_id} = useParams();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,6 +65,7 @@ const EditMemberSubpage = () => {
             <MemberForm
                 member={member}
                 membersList={membersList}
+                domains={domains}
                 onSubmit={handleSubmit}
                 onUpdate={handleUpdateForm}
                 onUpdateMembersList={handleUpdateMembersList}

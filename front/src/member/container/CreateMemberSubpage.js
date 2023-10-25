@@ -5,6 +5,7 @@ import {MemberService} from "member/service";
 import {DataValidatorService} from "validation/service";
 import {createMember} from "member/model";
 import {useMembersList} from "member/provider";
+import {useDomain} from "aigar/domain/provider";
 
 import {PageLayout} from "base/ui/page";
 import {MemberForm} from "member/presentational";
@@ -13,15 +14,24 @@ import {CreateMemberSidebar} from ".";
 const CreateMemberSubpage = () => {
     const [member, setMember] = useState(createMember());
     const [membersList, setMembersList] = useState([]);
+    const [selectedFeeValue, setSelectedFeeValue] = useState({value: 0, errors: ""});
     const [validationErrors, setValidationErrors] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
+    const domains = useDomain();
     const {sortedMembersList, fetchMembersList} = useMembersList();
+
     const navigate = useNavigate();
+
+    const maxPayment =
+        member.tipo_uso === "Humano"
+            ? domains.basicConfig?.humano_nuevo_derecho_total
+            : domains.basicConfig?.comercial_nuevo_derecho_total;
 
     useEffect(() => {
         assignNewMemberOrder();
+        setSelectedFeeValue({value: maxPayment, errors: ""});
     }, [sortedMembersList]);
 
     const assignNewMemberOrder = () => {
@@ -46,8 +56,9 @@ const CreateMemberSubpage = () => {
         setMember(updatedMember);
     };
 
-    const handleUpdateForm = updatedMember => {
+    const handleUpdateForm = (updatedMember, updatedFeeValue) => {
         setValidationErrors(DataValidatorService.validateMember(updatedMember));
+        setSelectedFeeValue(updatedFeeValue);
         setMember(updatedMember);
     };
 
@@ -57,8 +68,7 @@ const CreateMemberSubpage = () => {
 
     const handleSubmit = updatedMember => {
         setIsSaving(true);
-        const selected_fee_value = 25; // TODO
-        MemberService.createMember(updatedMember, selected_fee_value)
+        MemberService.createMember(updatedMember, selectedFeeValue.value)
             .then(createdMember => {
                 fetchMembersList();
                 navigate(`/socios/${createdMember.id}`);
@@ -82,6 +92,8 @@ const CreateMemberSubpage = () => {
                 <MemberForm
                     member={member}
                     membersList={membersList}
+                    selectedFeeValue={selectedFeeValue}
+                    domains={domains}
                     onSubmit={handleSubmit}
                     onUpdate={handleUpdateForm}
                     onUpdateMembersList={handleUpdateMembersList}

@@ -1,5 +1,3 @@
-import {useParams} from "react-router-dom";
-
 import {createMember} from "member/model";
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {EntityFormLayout} from "base/entity/components/form";
@@ -8,6 +6,8 @@ import {MemberFormFields} from ".";
 const MemberForm = ({
     member,
     membersList,
+    selectedFeeValue = null,
+    domains,
     onUpdate,
     onUpdateMembersList,
     onSubmit,
@@ -15,11 +15,9 @@ const MemberForm = ({
     error = "",
     validationErrors = [],
 }) => {
-    const {id: member_id} = useParams();
-    const params = useParams();
-    console.log(params);
+    const isNewMember = member?.id === -1;
+
     const getReadingDay = useGetSectorReadingDay;
-    const isNewMember = member_id === "nuevo";
 
     const getFieldErrorFromProps = field => {
         const fieldErrors = validationErrors
@@ -35,9 +33,11 @@ const MemberForm = ({
             formData[memberField].value = member[memberField];
             formData[memberField].errors = getFieldErrorFromProps(memberField);
         });
+
         return {
             ...formData,
-            reading_day: {value: getReadingDay(formData.sector?.value), errors: []},
+            reading_day: {value: getReadingDay(formData.sector?.value), errors: ""},
+            selected_fee_value: selectedFeeValue,
         };
     };
 
@@ -48,7 +48,8 @@ const MemberForm = ({
             ...member,
             [name]: value,
         });
-        onUpdate(updatedMember);
+        const updatedFeeValue = getSelectedFeeValue(name, value);
+        onUpdate(updatedMember, updatedFeeValue);
     };
 
     const handleChangeOrder = updatedMembersList => {
@@ -60,14 +61,21 @@ const MemberForm = ({
             ...member,
             orden: orderForItem,
         });
-
+        const selectedFeeValue = getSelectedFeeValue();
         onUpdateMembersList(updatedMembersList);
-        onUpdate(updatedMember);
+        onUpdate(updatedMember, selectedFeeValue);
     };
 
     const handleSubmit = event => {
         event.preventDefault();
         onSubmit(member);
+    };
+
+    const getSelectedFeeValue = (name, value) => {
+        let updatedFeeValue = formData.selected_fee_value;
+        if (name === "selected_fee_value")
+            updatedFeeValue = {value: parseInt(value), errors: ""};
+        return updatedFeeValue;
     };
 
     return (
@@ -79,9 +87,11 @@ const MemberForm = ({
         >
             <MemberFormFields
                 formData={formData}
+                isNewMember={isNewMember}
                 members={membersList}
                 onChange={handleChange}
                 onChangeOrder={handleChangeOrder}
+                domains={domains}
             />
         </EntityFormLayout>
     );

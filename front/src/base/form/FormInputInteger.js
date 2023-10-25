@@ -2,10 +2,10 @@ import {FormInput} from ".";
 
 const FormInputInteger = ({
     label,
-    name,
+    name = "",
     field = null,
-    value = "",
-    onChange,
+    value = null,
+    onChange = null,
     readOnly = false,
     required = false,
     placeholder = "",

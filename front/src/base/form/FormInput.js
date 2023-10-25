@@ -5,7 +5,7 @@ const FormInput = ({
     label,
     name,
     value = "",
-    onChange,
+    onChange = null,
     type = "text",
     step = "",
     disabled = false,
@@ -19,7 +19,7 @@ const FormInput = ({
     errors = [],
 }) => {
     const handleChangeEvent = event => {
-        onChange(event);
+        if (onChange) onChange(event);
     };
 
     let inputProps = {};

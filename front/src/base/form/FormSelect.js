@@ -5,9 +5,10 @@ import Select from "@mui/material/Select";
 
 const FormSelect = ({
     label,
-    name,
+    name = "",
     field = null,
     value = "",
+    defaultValue = {},
     options,
     onChange,
     disabled = false,
@@ -39,6 +40,7 @@ const FormSelect = ({
                 id={`${name}-id`}
                 name={name}
                 value={fieldValue}
+                defaultValue={defaultValue}
                 label={label}
                 onChange={onChange}
                 disabled={disabled}

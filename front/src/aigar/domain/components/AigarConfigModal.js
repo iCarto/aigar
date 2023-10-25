@@ -13,7 +13,7 @@ const AigarConfigModal = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
-            setIsModalOpen(!basicConfig?.length);
+            setIsModalOpen(!basicConfig);
         }, 2000);
 
         return () => {

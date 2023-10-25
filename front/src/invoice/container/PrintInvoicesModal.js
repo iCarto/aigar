@@ -24,8 +24,8 @@ const PrintInvoicesModal = ({
     const {basicConfig, sectorsLong} = useDomain();
 
     // Basic config is always a list with one single object
-    const communityName = basicConfig[0]?.name;
-    const paymentMethod = basicConfig[0]?.payment_method;
+    const communityName = basicConfig?.name;
+    const paymentMethod = basicConfig?.payment_method;
 
     const getReadingDay = useGetSectorReadingDay;
 

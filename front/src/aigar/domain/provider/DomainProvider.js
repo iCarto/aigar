@@ -10,7 +10,7 @@ export default function DomainProvider({children}) {
     const [memberTypes, setMemberTypes] = useState([]);
     const [memberUseTypes, setMemberUseTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
-    const [basicConfig, setBasicConfig] = useState([]);
+    const [basicConfig, setBasicConfig] = useState({});
 
     useEffect(() => {
         Promise.all([
@@ -27,7 +27,7 @@ export default function DomainProvider({children}) {
                 setMemberTypes(memberTypes);
                 setMemberUseTypes(memberUseTypes);
                 setInvoiceStatus(invoiceStatus);
-                setBasicConfig(basicConfig);
+                setBasicConfig(basicConfig[0]);
             }
         );
     }, []);

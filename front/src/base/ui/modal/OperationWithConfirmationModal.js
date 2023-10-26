@@ -1,6 +1,7 @@
 import {ModalOperationStatus} from "./config";
 import {Modal} from "base/ui/modal";
-import {AcceptButton, CancelButton, CloseButton, Spinner} from "base/common";
+import {Spinner} from "base/common";
+import {BasicButton} from "base/ui/buttons/components";
 import Alert from "@mui/material/Alert";
 
 const OperationWithConfirmationModal = ({
@@ -31,12 +32,18 @@ const OperationWithConfirmationModal = ({
             body: modalContentStart,
             footer: (
                 <>
-                    {<CancelButton onClick={onClose} />}
                     {
-                        <AcceptButton
-                            onClick={onClickAccept}
+                        <BasicButton
+                            text="Cancelar"
+                            onClick={onClose}
+                            variant="outlined"
+                        />
+                    }
+                    {
+                        <BasicButton
                             text={modalAcceptText}
                             icon={modalAcceptIcon}
+                            onClick={onClickAccept}
                         />
                     }
                 </>
@@ -49,7 +56,13 @@ const OperationWithConfirmationModal = ({
         {
             status: ModalOperationStatus.SUCCESS,
             body: modalContentFinished,
-            footer: <CloseButton onClick={onClickFinished} />,
+            footer: (
+                <BasicButton
+                    text="Cerrar"
+                    onClick={onClickFinished}
+                    variant="outlined"
+                />
+            ),
         },
         {
             status: ModalOperationStatus.ERROR,

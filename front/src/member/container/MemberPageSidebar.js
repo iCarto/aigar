@@ -1,6 +1,6 @@
 import {MEMBER_TYPES} from "member/config";
 import {ActionsSidebarMenu} from "base/ui/menu/components";
-import {EditButton} from "base/common";
+import {EditButton} from "base/ui/buttons/components";
 import {CreateInvoiceButton} from "invoice/presentational";
 import {ConnectMemberButton, DeleteMemberButton, DisconnectMemberButton} from ".";
 

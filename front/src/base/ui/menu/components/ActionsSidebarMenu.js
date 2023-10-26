@@ -1,4 +1,4 @@
-import {BackButton} from "base/common";
+import {BackButton} from "base/ui/buttons/components";
 import MenuList from "@mui/material/MenuList";
 
 const ActionsSidebarMenu = ({

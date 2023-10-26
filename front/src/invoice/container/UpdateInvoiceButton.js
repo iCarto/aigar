@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {ESTADOS_FACTURA} from "invoice/model";
-import {EditButton} from "base/common";
+import {EditButton} from "base/ui/buttons/components";
 import {UpdateInvoiceModal} from ".";
 
 const UpdateInvoiceButton = ({invoice}) => {

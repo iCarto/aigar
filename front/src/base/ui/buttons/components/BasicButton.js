@@ -1,7 +1,13 @@
 import {cloneElement} from "react";
 import Button from "@mui/material/Button";
 
-const AcceptButton = ({text = "", onClick, disabled = false, icon = null}) => {
+const BasicButton = ({
+    text = "",
+    onClick,
+    icon = null,
+    variant = "contained",
+    disabled = false,
+}) => {
     const handleClick = () => {
         if (onClick) onClick();
     };
@@ -9,7 +15,7 @@ const AcceptButton = ({text = "", onClick, disabled = false, icon = null}) => {
     return (
         <Button
             onClick={handleClick}
-            variant="contained"
+            variant={variant}
             startIcon={
                 icon
                     ? cloneElement(icon, {
@@ -25,4 +31,4 @@ const AcceptButton = ({text = "", onClick, disabled = false, icon = null}) => {
     );
 };
 
-export default AcceptButton;
+export default BasicButton;

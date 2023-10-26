@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {loadMeasurementsSteps} from "measurement/data";
 
 import {LoadMeasurementsWizardSteps} from ".";
@@ -12,21 +12,20 @@ import {ErrorMessage} from "base/error/components";
 const LoadMeasurementsWizard = () => {
     const [measurements, setMeasurements] = useState([]);
     const [invoices, setInvoices] = useState([]);
-    const [invoicingMonth, setInvoicingMonth] = useState(null);
     const [isValidStep, setIsValidStep] = useState(true);
 
     // TO-DO: Review this - same state is also handled in component Wizard
     const [currentStep, setCurrentStep] = useState(1);
 
-    const {id_mes_facturacion} = useParams();
+    const {id_mes_facturacion: urlMonthId} = useParams();
+    const {selectedInvoicingMonth} = useMonthlyInvoicingList();
+
+    const urlMatchesSelectedMonth =
+        urlMonthId === selectedInvoicingMonth?.id_mes_facturacion;
 
     useEffect(() => {
-        InvoicingMonthService.getInvoicingMonth(id_mes_facturacion).then(
-            invoicingMonth => {
-                setInvoicingMonth(invoicingMonth);
-            }
-        );
-    }, [id_mes_facturacion]);
+        if (!urlMatchesSelectedMonth) setIsValidStep(false);
+    }, [urlMatchesSelectedMonth]);
 
     const handleChangeMeasurements = measurements => {
         console.log("handleChangeMeasurements", measurements);
@@ -53,9 +52,11 @@ const LoadMeasurementsWizard = () => {
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >
-            {!invoicingMonth ? (
+            {!selectedInvoicingMonth ? (
                 <Spinner message="Cargando mes de facturación" />
-            ) : invoicingMonth.is_open ? (
+            ) : !selectedInvoicingMonth.is_open || !urlMatchesSelectedMonth ? (
+                <ErrorMessage message="El mes de facturación no está abierto" />
+            ) : (
                 <LoadMeasurementsWizardSteps
                     currentStep={currentStep}
                     onValidateStep={validateStep}
@@ -64,8 +65,6 @@ const LoadMeasurementsWizard = () => {
                     onChangeMeasurements={handleChangeMeasurements}
                     onChangeInvoices={handleChangeInvoices}
                 />
-            ) : (
-                <ErrorMessage message="El mes de facturación no está abierto" />
             )}
         </Wizard>
     );

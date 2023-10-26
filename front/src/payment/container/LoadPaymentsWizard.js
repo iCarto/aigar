@@ -1,31 +1,31 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import {loadPaymentsSteps} from "payment/data";
-import {Wizard} from "base/ui/wizard/components";
-import {ErrorMessage} from "base/error/components";
-import {Spinner} from "base/ui/other/components";
+
 import {LoadPaymentsWizardSteps} from ".";
+import {Wizard} from "base/ui/wizard/components";
+import {Spinner} from "base/ui/other/components";
+import {ErrorMessage} from "base/error/components";
 
 const LoadPaymentsWizard = () => {
     const [payments, setPayments] = useState([]);
     const [invoices, setInvoices] = useState([]);
-    const [invoicingMonth, setInvoicingMonth] = useState(null);
     const [isValidStep, setIsValidStep] = useState(true);
 
     // TO-DO: Review this - same state is also handled in component Wizard
     const [currentStep, setCurrentStep] = useState(1);
 
-    const {id_mes_facturacion} = useParams();
+    const {id_mes_facturacion: urlMonthId} = useParams();
+    const {selectedInvoicingMonth} = useMonthlyInvoicingList();
+
+    const urlMatchesSelectedMonth =
+        urlMonthId === selectedInvoicingMonth?.id_mes_facturacion;
 
     useEffect(() => {
-        InvoicingMonthService.getInvoicingMonth(id_mes_facturacion).then(
-            invoicingMonth => {
-                setInvoicingMonth(invoicingMonth);
-            }
-        );
-    }, [id_mes_facturacion]);
+        if (!urlMatchesSelectedMonth) setIsValidStep(false);
+    }, [urlMatchesSelectedMonth]);
 
     const handleChangePayments = payments => {
         console.log("handleChangePayments", payments);
@@ -38,7 +38,6 @@ const LoadPaymentsWizard = () => {
     };
 
     const handleChangeStep = currentStep => {
-        console.log(currentStep);
         setCurrentStep(currentStep);
     };
 
@@ -53,9 +52,11 @@ const LoadPaymentsWizard = () => {
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >
-            {!invoicingMonth ? (
+            {!selectedInvoicingMonth ? (
                 <Spinner message="Cargando mes de facturación" />
-            ) : invoicingMonth.is_open ? (
+            ) : !selectedInvoicingMonth.is_open || !urlMatchesSelectedMonth ? (
+                <ErrorMessage message="El mes de facturación no está abierto" />
+            ) : (
                 <LoadPaymentsWizardSteps
                     currentStep={currentStep}
                     onValidateStep={validateStep}
@@ -64,8 +65,6 @@ const LoadPaymentsWizard = () => {
                     onChangePayments={handleChangePayments}
                     onChangeInvoices={handleChangeInvoices}
                 />
-            ) : (
-                <ErrorMessage message="El mes de facturación no está abierto" />
             )}
         </Wizard>
     );

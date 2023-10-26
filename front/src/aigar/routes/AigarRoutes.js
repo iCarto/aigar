@@ -18,11 +18,11 @@ import {MonthlyInvoicingModule} from "monthlyinvoicing/module";
 import {MemberModule} from "member/module";
 import {InvoiceModule} from "invoice/module";
 import {StatsModule} from "stats/module";
+import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
 import {ViewInvoicesStatsPage} from "stats/container";
 import {LoadMeasurementsWizard} from "measurement/container";
 import {LoadPaymentsWizard} from "payment/container";
-import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 
 export default function AigarRoutes() {
     return (
@@ -36,12 +36,12 @@ export default function AigarRoutes() {
                             element={<ViewInvoiceSubpage />}
                         />
                         <Route
-                            path="cargarpagos/:id_mes_facturacion"
-                            element={<LoadPaymentsWizard />}
-                        />
-                        <Route
                             path="cargarlecturas/:id_mes_facturacion"
                             element={<LoadMeasurementsWizard />}
+                        />
+                        <Route
+                            path="cargarpagos/:id_mes_facturacion"
+                            element={<LoadPaymentsWizard />}
                         />
                     </Route>
 

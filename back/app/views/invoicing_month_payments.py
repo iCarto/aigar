@@ -1,4 +1,4 @@
-from rest_framework import generics, serializers, status, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.response import Response
 
 from app.models.payment import Payment

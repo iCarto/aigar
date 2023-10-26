@@ -38,12 +38,13 @@ const InvoicingMonthService = {
         );
     },
 
-    getInvoicingMonthInvoices(id_mes_facturacion) {
-        return ApiService.get(`/invoicingmonths/${id_mes_facturacion}/invoices/`).then(
-            response => {
-                return createInvoices(invoices_api_adapter(response));
-            }
-        );
+    getInvoicingMonthInvoices(id_mes_facturacion, pks = []) {
+        const filters = pks.length ? "?id__in=" + pks.join() : "";
+        return ApiService.get(
+            `/invoicingmonths/${id_mes_facturacion}/invoices/${filters}`
+        ).then(response => {
+            return createInvoices(invoices_api_adapter(response));
+        });
     },
 
     startInvoicingMonth(invoicingMonth) {

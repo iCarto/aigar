@@ -1,9 +1,9 @@
 import {useState} from "react";
 
-import {PageLayout} from "../page";
-import {PageHeading} from "../heading";
+import {PageLayout} from "../../page";
+import {PageHeading} from "../../heading";
 import {WizardButtons, WizardStepInfo, WizardStepper} from ".";
-import {ActionsSidebarMenu} from "../menu/components";
+import {ActionsSidebarMenu} from "../../menu/components";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 

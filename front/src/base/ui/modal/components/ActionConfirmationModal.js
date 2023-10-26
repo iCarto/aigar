@@ -1,10 +1,10 @@
 import {useState} from "react";
 import {useLocation} from "react-router-dom";
 
-import ErrorUtil from "base/error/utilities/ErrorUtil";
+import {ErrorUtil} from "base/error/utilities";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {OperationWithConfirmationModal} from ".";
 
 import Alert from "@mui/material/Alert";
 

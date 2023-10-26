@@ -1,6 +1,6 @@
+import {ErrorUtil} from "base/error/utilities";
 import Alert from "@mui/material/Alert";
 import styled from "@mui/material/styles/styled";
-import ErrorUtil from "../utilities/ErrorUtil";
 
 const AlertStyled = styled(Alert)(({theme}) => ({
     whiteSpace: "pre-line",

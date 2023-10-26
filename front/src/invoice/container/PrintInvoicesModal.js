@@ -5,11 +5,11 @@ import {ESTADOS_FACTURA} from "invoice/model";
 import {useDomain} from "aigar/domain/provider";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {DateUtil, NumberUtil} from "base/format/utilities";
+import {OperationWithConfirmationModal} from "base/ui/modal/components";
 import Alert from "@mui/material/Alert";
 import PrintIcon from "@mui/icons-material/Print";
 import AlertTitle from "@mui/material/AlertTitle";
-import {DateUtil, NumberUtil} from "base/format/utilities";
 
 const PrintInvoicesModal = ({
     invoices,

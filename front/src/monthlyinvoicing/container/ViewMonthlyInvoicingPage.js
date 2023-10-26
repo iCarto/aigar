@@ -6,8 +6,8 @@ import {useFilter} from "base/filter/hooks";
 
 import {ListMonthlyInvoicesPage, ListMonthlyInvoicesSidebar} from ".";
 import {PageLayout} from "base/ui/page";
-import {Spinner} from "base/common";
-import {Modal} from "base/ui/modal";
+import {Spinner} from "base/ui/other/components";
+import {Modal} from "base/ui/modal/components";
 import Alert from "@mui/material/Alert";
 
 const ViewMonthlyInvoicingPage = () => {

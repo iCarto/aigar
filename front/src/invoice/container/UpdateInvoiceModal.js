@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {OperationWithConfirmationModal} from "base/ui/modal/components";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {InvoiceService} from "invoice/service";
 import Alert from "@mui/material/Alert";

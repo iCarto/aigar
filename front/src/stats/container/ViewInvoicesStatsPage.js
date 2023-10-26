@@ -6,7 +6,7 @@ import {useFilter} from "base/filter/hooks";
 
 import {PageLayout} from "base/ui/page";
 import {NoItemsMessage} from "base/error/components";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {InvoicesStatsFilterForm, InvoicesStatsList} from ".";
 import {EntityListFilterForm} from "base/entity/components/form";
 import {

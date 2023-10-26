@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {MEMBER_TYPES} from "member/config";
 import {MemberService} from "member/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {OperationWithConfirmationModal} from "base/ui/modal/components";
 import Alert from "@mui/material/Alert";
 
 const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) => {

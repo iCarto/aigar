@@ -8,7 +8,7 @@ import {useLoadPaymentsTableColumns} from "payment/data";
 import {MemberViewModal} from "member/presentational";
 import {LoadDataTable, LoadDataTableFilter} from "loaddata/presentational";
 import {ErrorMessage} from "base/error/components";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 

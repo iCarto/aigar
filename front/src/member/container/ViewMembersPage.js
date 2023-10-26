@@ -4,7 +4,7 @@ import {MemberService} from "member/service";
 import {useList} from "base/entity/provider";
 import {useFilter} from "base/filter/hooks";
 import {PageLayout} from "base/ui/page";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {ListMembers} from ".";
 
 const ViewMembersPage = () => {

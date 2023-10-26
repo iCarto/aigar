@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {ActionConfirmationModal} from "base/common";
+import {ActionConfirmationModal} from "base/ui/modal/components";
 import {TableAction} from "base/table/components";
 
 import TaskAltIcon from "@mui/icons-material/TaskAlt";

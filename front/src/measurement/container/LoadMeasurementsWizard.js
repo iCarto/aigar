@@ -5,8 +5,8 @@ import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {loadMeasurementsSteps} from "measurement/data";
 
 import {LoadMeasurementsWizardSteps} from ".";
-import {Wizard} from "base/ui/wizard";
-import {Spinner} from "base/common";
+import {Wizard} from "base/ui/wizard/components";
+import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 
 const LoadMeasurementsWizard = () => {

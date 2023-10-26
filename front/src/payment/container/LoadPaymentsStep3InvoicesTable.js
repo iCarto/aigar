@@ -5,7 +5,7 @@ import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {LoadDataTableFilter} from "loaddata/presentational";
 import {InvoicesListPreview} from "invoice/presentational";
 import {ErrorMessage} from "base/error/components";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 

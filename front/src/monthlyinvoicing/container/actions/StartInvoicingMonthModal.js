@@ -4,7 +4,7 @@ import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {DateUtil} from "base/format/utilities";
-import {OperationWithConfirmationModal} from "base/ui/modal";
+import {OperationWithConfirmationModal} from "base/ui/modal/components";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 import Alert from "@mui/material/Alert";
 import DescriptionIcon from "@mui/icons-material/Description";

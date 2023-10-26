@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {useDomain} from "aigar/domain/provider";
-import {Modal} from "base/ui/modal";
+import {Modal} from "base/ui/modal/components";
 import {ErrorMessage} from "base/error/components";
 import {ButtonLink} from "base/navigation/components";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 
 const AigarConfigModal = () => {
     const [isLoading, setIsLoading] = useState(false);

@@ -3,9 +3,9 @@ import {useParams} from "react-router-dom";
 
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {loadPaymentsSteps} from "payment/data";
-import {Wizard} from "base/ui/wizard";
+import {Wizard} from "base/ui/wizard/components";
 import {ErrorMessage} from "base/error/components";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {LoadPaymentsWizardSteps} from ".";
 
 const LoadPaymentsWizard = () => {

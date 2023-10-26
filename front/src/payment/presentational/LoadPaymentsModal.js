@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 
-import {Modal} from "base/ui/modal";
+import {Modal} from "base/ui/modal/components";
 import {BasicButton} from "base/ui/buttons/components";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";

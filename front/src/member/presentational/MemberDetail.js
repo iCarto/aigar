@@ -1,13 +1,13 @@
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
 import {USE_TYPES_MAPPING, MEMBER_TYPES_MAPPING} from "member/config";
-import {ValueWithIcon} from "base/common";
+import {ValueWithIcon} from "base/ui/other/components";
 import {
     SectionField,
     SectionFieldLabel,
     SectionFieldValue,
     SectionSummaryCard,
-} from "base/ui/section/presentational";
+} from "base/ui/section/components";
 import {ErrorMessage} from "base/error/components";
 import {TextLink} from "base/navigation/components";
 import Grid from "@mui/material/Grid";

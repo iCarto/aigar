@@ -6,7 +6,7 @@ import {
     SectionFieldLabel,
     SectionFieldValue,
     SectionSummaryCard,
-} from "base/ui/section/presentational";
+} from "base/ui/section/components";
 import {InvoiceStatusLabel} from ".";
 import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";

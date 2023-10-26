@@ -1,6 +1,6 @@
 import {MEMBER_TYPES_MAPPING} from "member/config";
 import {InvoiceResumenCellTable, InvoiceStatusCellTable} from "invoice/presentational";
-import {ValueWithIcon} from "base/common";
+import {ValueWithIcon} from "base/ui/other/components";
 import {TextLink} from "base/navigation/components";
 
 export function useMonthlyInvoicingTableColumns() {

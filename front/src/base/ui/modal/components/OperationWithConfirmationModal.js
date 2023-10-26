@@ -1,6 +1,6 @@
-import {ModalOperationStatus} from "./config";
-import {Modal} from "base/ui/modal";
-import {Spinner} from "base/common";
+import {ModalOperationStatus} from "../config";
+import {Modal} from "base/ui/modal/components";
+import {Spinner} from "base/ui/other/components";
 import {BasicButton} from "base/ui/buttons/components";
 import Alert from "@mui/material/Alert";
 

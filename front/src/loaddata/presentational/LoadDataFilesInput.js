@@ -1,7 +1,7 @@
 import {useState, useRef} from "react";
 
 import {LoadDataFile} from "loaddata/model";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 

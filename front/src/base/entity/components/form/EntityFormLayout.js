@@ -1,5 +1,5 @@
 import {PageHeading} from "base/ui/heading";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";

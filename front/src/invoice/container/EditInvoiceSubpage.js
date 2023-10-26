@@ -8,7 +8,7 @@ import {DataValidatorService} from "validation/service";
 import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";
 import {EditInvoiceSidebar} from ".";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 
 const EditInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(null);

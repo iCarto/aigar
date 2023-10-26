@@ -7,7 +7,7 @@ import {useInvoicesList} from "invoice/provider";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 import {PageLayout} from "base/ui/page";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
 import {InvoicePageSidebar} from ".";

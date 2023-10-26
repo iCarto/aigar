@@ -14,7 +14,7 @@ import {
 import {InvoiceForm} from "invoice/presentational";
 import {PageLayout} from "base/ui/page";
 import {CreateInvoiceSidebar} from ".";
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 
 const CreateInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(createInvoice());

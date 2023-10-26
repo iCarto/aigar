@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-import {Spinner} from "base/common";
+import {Spinner} from "base/ui/other/components";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {useNavigateWithReload} from "base/navigation/hooks";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";

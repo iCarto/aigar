@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {MemberService} from "member/service";
-import {Modal} from "base/ui/modal";
-import {Spinner} from "base/common";
+import {Modal} from "base/ui/modal/components";
+import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 import {ListMemberInvoices} from "member/container";
 import {MemberDetail} from ".";

@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-import {ActionConfirmationModal} from "base/common";
+import {ActionConfirmationModal} from "base/ui/modal/components";
 import {MenuAction} from "base/ui/menu/components";
 import {TableAction} from "base/table/components";
 

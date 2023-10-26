@@ -8,28 +8,28 @@ import {
 } from "base/form";
 import Grid from "@mui/material/Grid";
 
-const MemberNewPaymentFormFields = ({formData, onChange, basicConfig}) => {
+const MemberNewPaymentFormFields = ({formData, onChange, aigarConfig}) => {
     const [isMinPaymentSelected, setIsMinPaymentSelected] = useState(false);
 
     const payment = useMemo(() => {
         const isHumanUse = formData?.tipo_uso?.value === "Humano";
 
         const maxPayment = isHumanUse
-            ? basicConfig?.humano_nuevo_derecho_total
-            : basicConfig?.comercial_nuevo_derecho_total;
+            ? aigarConfig?.humano_nuevo_derecho_total
+            : aigarConfig?.comercial_nuevo_derecho_total;
         const minPayment = isHumanUse
-            ? basicConfig?.humano_nuevo_derecho_primera_cuota
-            : basicConfig?.comercial_nuevo_derecho_primera_cuota;
+            ? aigarConfig?.humano_nuevo_derecho_primera_cuota
+            : aigarConfig?.comercial_nuevo_derecho_primera_cuota;
 
         return {maxPayment, minPayment};
-    }, [formData?.tipo_uso?.value, basicConfig]);
+    }, [formData?.tipo_uso?.value, aigarConfig]);
 
     const newMemberPaymentOptions = [
         {value: "max", label: "Pago máximo"},
         {value: "min", label: "Pago mínimo"},
     ];
 
-    const nextFeesOptions = [...basicConfig.nuevo_derecho_siguientes_cuotas_opciones];
+    const nextFeesOptions = [...aigarConfig.nuevo_derecho_siguientes_cuotas_opciones];
 
     const selectedFeeValueOptions = nextFeesOptions.map(option => ({
         value: `${option} ${CURRENCY_SYMBOL}`,

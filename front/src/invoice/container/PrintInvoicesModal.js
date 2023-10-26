@@ -21,11 +21,11 @@ const PrintInvoicesModal = ({
     const [operationStatus, setOperationStatus] = useState(ModalOperationStatus.START);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    const {basicConfig, sectorsLong} = useDomain();
+    const {aigarConfig, sectorsLong} = useDomain();
 
     // Basic config is always a list with one single object
-    const communityName = basicConfig?.name;
-    const paymentMethod = basicConfig?.payment_method;
+    const communityName = aigarConfig?.name;
+    const paymentMethod = aigarConfig?.payment_method;
 
     const getReadingDay = useGetSectorReadingDay;
 

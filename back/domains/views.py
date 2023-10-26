@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from app.models.invoice import InvoiceStatus
 from domains.models.aigar_config import AigarConfig
 from domains.models.zone import Zone
-from domains.serializers import BasicConfigSerializer, ZoneSerializer
+from domains.serializers import AigarConfigSerializer, ZoneSerializer
 
 
 TWO_HOURS = 60 * 60 * 2
@@ -22,11 +22,9 @@ class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @method_decorator(cache_page(TWO_HOURS), name="dispatch")
-class BasicConfigViewSet(viewsets.ReadOnlyModelViewSet):
-    """API endpoint that allows BasicConfig to be viewed."""
-
+class AigarConfigViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AigarConfig.objects.all()
-    serializer_class = BasicConfigSerializer
+    serializer_class = AigarConfigSerializer
 
 
 @api_view(["GET"])

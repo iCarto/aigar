@@ -30,7 +30,7 @@ def test_zone_api(api_client):
 
 def test_aigar_config_api(api_client):
     aigar_config.get_config()
-    response = api_client.get("/api/domains/basicconfig/")
+    response = api_client.get("/api/domains/aigarconfig/")
     assert response.status_code == status.HTTP_200_OK, response.json()
     response_data = response.json()[0]
     assert response_data["payment_method"] == "BANCO .... Cuenta No: .... "

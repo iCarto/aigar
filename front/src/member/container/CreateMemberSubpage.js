@@ -26,8 +26,8 @@ const CreateMemberSubpage = () => {
 
     const maxPayment =
         member.tipo_uso === "Humano"
-            ? domains.basicConfig?.humano_nuevo_derecho_total
-            : domains.basicConfig?.comercial_nuevo_derecho_total;
+            ? domains.aigarConfig?.humano_nuevo_derecho_total
+            : domains.aigarConfig?.comercial_nuevo_derecho_total;
 
     useEffect(() => {
         assignNewMemberOrder();

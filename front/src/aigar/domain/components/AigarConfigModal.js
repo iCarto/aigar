@@ -8,18 +8,18 @@ import {Spinner} from "base/common";
 const AigarConfigModal = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {basicConfig} = useDomain();
+    const {aigarConfig} = useDomain();
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
-            setIsModalOpen(!basicConfig);
+            setIsModalOpen(!aigarConfig);
         }, 2000);
 
         return () => {
             clearTimeout(timer);
         };
-    }, [basicConfig]);
+    }, [aigarConfig]);
 
     const handleCloseModal = () => {
         return;

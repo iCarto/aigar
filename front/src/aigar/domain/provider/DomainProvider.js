@@ -10,7 +10,7 @@ export default function DomainProvider({children}) {
     const [memberTypes, setMemberTypes] = useState([]);
     const [memberUseTypes, setMemberUseTypes] = useState([]);
     const [invoiceStatus, setInvoiceStatus] = useState([]);
-    const [basicConfig, setBasicConfig] = useState({});
+    const [aigarConfig, setAigarConfig] = useState({});
 
     useEffect(() => {
         Promise.all([
@@ -18,16 +18,16 @@ export default function DomainProvider({children}) {
             DomainService.getMemberTypes(),
             DomainService.getMemberUseTypes(),
             DomainService.getInvoiceStatus(),
-            DomainService.getBasicConfig(),
+            DomainService.getAigarConfig(),
         ]).then(
-            ([sectors, memberTypes, memberUseTypes, invoiceStatus, basicConfig]) => {
+            ([sectors, memberTypes, memberUseTypes, invoiceStatus, aigarConfig]) => {
                 setSectors(sectors.short);
                 setSectorsLong(sectors.long);
                 setReadingDays(sectors.readingDays);
                 setMemberTypes(memberTypes);
                 setMemberUseTypes(memberUseTypes);
                 setInvoiceStatus(invoiceStatus);
-                setBasicConfig(basicConfig[0]);
+                setAigarConfig(aigarConfig[0]);
             }
         );
     }, []);
@@ -39,7 +39,7 @@ export default function DomainProvider({children}) {
         memberTypes,
         memberUseTypes,
         invoiceStatus,
-        basicConfig,
+        aigarConfig,
     };
 
     return <DomainContext.Provider value={value}>{children}</DomainContext.Provider>;

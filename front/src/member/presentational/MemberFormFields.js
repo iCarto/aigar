@@ -119,7 +119,7 @@ const MemberFormFields = ({
                         <MemberNewPaymentFormFields
                             formData={formData}
                             onChange={onChange}
-                            basicConfig={domains.basicConfig}
+                            aigarConfig={domains.aigarConfig}
                         />
                     ) : (
                         formFieldsForNewMember

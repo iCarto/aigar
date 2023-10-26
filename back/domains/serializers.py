@@ -10,7 +10,7 @@ class ZoneSerializer(serializers.ModelSerializer):
         fields = ["name", "long_name", "reading_day"]
 
 
-class BasicConfigSerializer(serializers.ModelSerializer):
+class AigarConfigSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = AigarConfig()
         exclude = (

@@ -70,8 +70,8 @@ const DomainService = {
         });
     },
 
-    getBasicConfig() {
-        return ApiService.get("/domains/basicconfig/").then(response => {
+    getAigarConfig() {
+        return ApiService.get("/domains/aigarconfig/").then(response => {
             return response;
         });
     },

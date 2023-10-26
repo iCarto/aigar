@@ -6,7 +6,7 @@ from domains import views
 
 router = routers.DefaultRouter()
 router.register("zones", views.ZoneViewSet)
-router.register("basicconfig", views.BasicConfigViewSet)
+router.register("aigarconfig", views.AigarConfigViewSet)
 
 
 urlpatterns = [

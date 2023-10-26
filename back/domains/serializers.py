@@ -13,4 +13,10 @@ class ZoneSerializer(serializers.ModelSerializer):
 class BasicConfigSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = AigarConfig()
-        fields = "__all__"
+        exclude = (
+            "nuevo_derecho_siguientes_cuotas_opcion1",
+            "nuevo_derecho_siguientes_cuotas_opcion2",
+            "nuevo_derecho_siguientes_cuotas_opcion3",
+        )
+
+    nuevo_derecho_siguientes_cuotas_opciones = serializers.ReadOnlyField()

@@ -36,6 +36,7 @@ https://forum.djangoproject.com/t/business-logic-constants-the-best-place-to-def
 """
 
 
+import decimal
 from decimal import Decimal
 from typing import NewType, cast
 
@@ -425,6 +426,20 @@ class AigarConfig(SingletonModel):
 
     def __str__(self):
         return "Configuración de AIGAR"
+
+    @property
+    def nuevo_derecho_siguientes_cuotas_opciones(self) -> list[decimal.Decimal]:
+        options = [
+            self.nuevo_derecho_siguientes_cuotas_opcion1,
+            self.nuevo_derecho_siguientes_cuotas_opcion2,
+            self.nuevo_derecho_siguientes_cuotas_opcion3,
+        ]
+        print(options)
+        options = [o for o in options if o]
+        options.sort()
+        print(options)
+
+        return options
 
     def clean(self) -> None:
         self._validate_stretches(self._prepare_stretches("comercial"))

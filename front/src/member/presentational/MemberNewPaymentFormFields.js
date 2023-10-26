@@ -29,11 +29,7 @@ const MemberNewPaymentFormFields = ({formData, onChange, basicConfig}) => {
         {value: "min", label: "Pago mínimo"},
     ];
 
-    const nextFeesOptions = [
-        basicConfig.nuevo_derecho_siguientes_cuotas_opcion1,
-        basicConfig.nuevo_derecho_siguientes_cuotas_opcion2,
-        basicConfig.nuevo_derecho_siguientes_cuotas_opcion3,
-    ];
+    const nextFeesOptions = [...basicConfig.nuevo_derecho_siguientes_cuotas_opciones];
 
     const selectedFeeValueOptions = nextFeesOptions.map(option => ({
         value: `${option} ${CURRENCY_SYMBOL}`,

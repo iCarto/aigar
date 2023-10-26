@@ -28,6 +28,8 @@ class Payment(models.Model):
         verbose_name_plural = "pagos"
         ordering = ("id",)
 
+    invoice_id: int
+
     objects: PaymentManager = PaymentManager()
 
     id = models.AutoField(
@@ -48,4 +50,4 @@ class Payment(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.invoice} - {self.monto}"
+        return f"{self.id} - {self.invoice_id} - {self.monto}"

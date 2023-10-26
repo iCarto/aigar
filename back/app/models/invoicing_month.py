@@ -110,6 +110,8 @@ class InvoicingMonth(models.Model):
                 condition=models.Q(is_open=True),
             )
         ]
+        verbose_name = "mes de facturación"
+        verbose_name_plural = "meses de facturación"
 
     objects: InvoicingMonthManager = InvoicingMonthManager()
 
@@ -133,7 +135,7 @@ class InvoicingMonth(models.Model):
         blank=False,
         editable=False,
         default=True,
-        verbose_name="Mes",
+        verbose_name="Facturación en curso",
         help_text="",
     )
 

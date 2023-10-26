@@ -30,6 +30,9 @@ class ForthcomingInvoiceItem(models.Model):
         #     )
         # ]
 
+    # https://github.com/typeddjango/django-stubs/issues/579#issuecomment-1100770074
+    member_id: int
+
     created_at = models.DateTimeField(null=False, auto_now_add=True)
     updated_at = models.DateTimeField(null=False, auto_now=True)
 
@@ -49,3 +52,6 @@ class ForthcomingInvoiceItem(models.Model):
         verbose_name="socia",
         help_text="",
     )
+
+    def __str__(self):
+        return f"Número Socia: {self.member_id}. Concepto: {self.item}. Valor: {self.value}"

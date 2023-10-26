@@ -228,6 +228,8 @@ class Invoice(models.Model):
             )
         ]
 
+    member_id: int
+
     objects: InvoiceManager = _InvoiceManager()
 
     id = models.AutoField(
@@ -359,7 +361,11 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.member} - {self.mes} - {self.anho} - {self.total} - {self.estado}"
+        return f"{self.id} - {self.member_id} - {self.mes} - {self.anho} - {self.total} - {self.estado}"
+
+    @property
+    def numero(self):
+        return f"{str(self.member_id).zfill(4)}{self.anho}{self.mes}{str(self.version).zfill(2)}"
 
     @property
     def due_date(self) -> datetime.date:

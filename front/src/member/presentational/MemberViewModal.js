@@ -33,7 +33,6 @@ const MemberViewModal = ({id, isOpen, onClose}) => {
         }
     };
 
-    const modalHeader = "Detalle del/de la socio/a";
     const modalBody = isLoading ? (
         <Spinner message="Cargando datos" />
     ) : (
@@ -46,14 +45,7 @@ const MemberViewModal = ({id, isOpen, onClose}) => {
         </>
     );
 
-    return (
-        <Modal
-            isOpen={isOpen}
-            onClose={onClose}
-            header={modalHeader}
-            body={modalBody}
-        />
-    );
+    return <Modal isOpen={isOpen} onClose={onClose} body={modalBody} />;
 };
 
 export default MemberViewModal;

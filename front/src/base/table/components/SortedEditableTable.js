@@ -26,6 +26,7 @@ const SortedEditableTable = ({columns, data, onUpdateData}) => {
                                 {...column.getHeaderProps(
                                     column.getSortByToggleProps()
                                 )}
+                                sx={{verticalAlign: "top", lineHeight: 1.5}}
                             >
                                 {column.render("Header")}
                                 {column.canSort && (

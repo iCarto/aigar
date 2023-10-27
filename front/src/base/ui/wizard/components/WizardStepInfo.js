@@ -1,4 +1,6 @@
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 const WizardStepInfo = ({steps, currentStep}) => {
     const step = steps[currentStep - 1];
@@ -8,6 +10,7 @@ const WizardStepInfo = ({steps, currentStep}) => {
             <Grid
                 container
                 justifyContent="space-between"
+                alignItems="center"
                 color="white"
                 p={3}
                 sx={{
@@ -16,9 +19,9 @@ const WizardStepInfo = ({steps, currentStep}) => {
                     borderTopRightRadius: 5,
                 }}
             >
-                <div>
-                    {step.icon} {step.text}
-                </div>
+                <Box display="flex" alignItems="center">
+                    {step.icon} <Typography pl={2}>{step.text}</Typography>
+                </Box>
                 <div>
                     Paso {step.index} de {steps.length}
                 </div>

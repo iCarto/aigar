@@ -218,7 +218,7 @@ class Invoice(models.Model):
     class Meta(object):
         verbose_name = "factura"
         verbose_name_plural = "facturas"
-        ordering = ("id",)
+        ordering = ("-mes_facturacion_id", "-version", "member_id")
         constraints = [
             models.UniqueConstraint(
                 name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",  # noqa: WPS323

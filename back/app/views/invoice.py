@@ -24,10 +24,8 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = InvoiceFilter
-    queryset = (
-        Invoice.objects.with_cancelled()
-        .select_related("member", "member__sector")
-        .order_by("member_id")
+    queryset = Invoice.objects.with_cancelled().select_related(
+        "member", "member__sector"
     )
 
     @action(detail=False, methods=["put"])

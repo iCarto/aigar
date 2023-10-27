@@ -19,7 +19,7 @@ const SortedPaginatedTable = ({columns, data}) => {
         order,
         setOrder,
         sortFunction,
-    } = useSort("id", "asc");
+    } = useSort("", ""); // using to empty strings the default sort is taken from backend
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";

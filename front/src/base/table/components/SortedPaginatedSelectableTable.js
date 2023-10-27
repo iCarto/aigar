@@ -26,7 +26,7 @@ const SortedPaginatedSelectableTable = ({
         order,
         setOrder,
         sortFunction,
-    } = useSort("id", "asc");
+    } = useSort("", "");
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";

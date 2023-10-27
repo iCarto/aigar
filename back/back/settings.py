@@ -128,16 +128,16 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 appname = "aigar_data"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = managepy_dir / appname
-SQLITE_PATH = str(managepy_dir / appname / "db.sqlite3")
+SQLITE_PATH = str(MEDIA_ROOT / "db.sqlite3")
 
 
 if DESKTOP:
     from platformdirs import PlatformDirs  # noqa: WPS433
 
     dirs = PlatformDirs(appname=appname, appauthor=False, ensure_exists=True)
-    MEDIA_ROOT = dirs.user_documents_dir
+    MEDIA_ROOT = os.path.join(dirs.user_documents_dir, appname)
     print(MEDIA_ROOT)  # noqa: WPS421
-    SQLITE_PATH = os.path.join(dirs.user_documents_dir, "db.sqlite3")
+    SQLITE_PATH = os.path.join(MEDIA_ROOT, "db.sqlite3")
 
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": SQLITE_PATH}}

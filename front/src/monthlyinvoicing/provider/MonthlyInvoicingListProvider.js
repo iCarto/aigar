@@ -7,6 +7,7 @@ let MonthlyInvoicingListContext = createContext(null);
 export default function MonthlyInvoicingListProvider({children}) {
     const [invoices, setInvoices] = useState([]);
     const [invoicesIds, setInvoicesIds] = useState([]);
+    const [invoicesToUpdate, setInvoicesToUpdate] = useState([]);
     const [invoicingMonths, setInvoicingMonths] = useState([]);
     const [invoicingMonthsForNavigator, setInvoicingMonthsForNavigator] = useState([]);
     const [selectedInvoicingMonth, setSelectedInvoicingMonth] = useState(null);
@@ -43,6 +44,8 @@ export default function MonthlyInvoicingListProvider({children}) {
     let value = {
         invoices,
         invoicesIds,
+        invoicesToUpdate,
+        setInvoicesToUpdate,
         areInvoicesLoading,
         setIsDataUpdated,
         invoicingMonths,

@@ -19,6 +19,7 @@ const ViewMonthlyInvoicingPage = () => {
         selectedInvoicingMonth,
         invoicingMonthsForNavigator,
         setSelectedInvoicingMonth,
+        setInvoicesToUpdate,
         isDataUpdated,
         setIsDataUpdated,
     } = useMonthlyInvoicingList();
@@ -30,6 +31,7 @@ const ViewMonthlyInvoicingPage = () => {
     );
 
     const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const [selectedInvoices, setSelectedInvoices] = useState([]);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [loading, setLoading] = useState(areInvoicesLoading);
 
@@ -54,6 +56,11 @@ const ViewMonthlyInvoicingPage = () => {
         setSelectedInvoicingMonth(selectedInvoicingMonth);
     };
 
+    const handleSelectedTableRows = selectedInvoices => {
+        setSelectedInvoices(selectedInvoices);
+        setInvoicesToUpdate(selectedInvoices);
+    };
+
     const refreshTable = () => {
         setIsDataUpdated(prevState => !prevState);
         setIsSuccessModalOpen(true);
@@ -73,6 +80,7 @@ const ViewMonthlyInvoicingPage = () => {
                 selectedInvoicingMonth && filteredInvoices ? (
                     <ListMonthlyInvoicesSidebar
                         invoices={invoices}
+                        selectedInvoicesLength={selectedInvoices.length}
                         invoicingMonths={invoicingMonthsForNavigator}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         buttonDisableRules={buttonDisableRules}
@@ -88,7 +96,9 @@ const ViewMonthlyInvoicingPage = () => {
                 <ListMonthlyInvoicesPage
                     key={isDataUpdated}
                     invoices={filteredInvoices}
-                    handleFilterChange={handleFilterChange}
+                    selectedTableRows={selectedInvoices}
+                    onFilterChange={handleFilterChange}
+                    onClickTableRows={handleSelectedTableRows}
                     refreshTable={refreshTable}
                 />
             )}

@@ -5,16 +5,6 @@ body {
     margin: 0;
 }
 
-/* TO-DO: Remove form-control selectors after migrating stats component to MUI */
-.form-control[readonly] {
-    background-color: white;
-    border: 1px solid #f8f5f5;
-}
-
-.form-control:not([readonly]):focus {
-    background-color: rgb(247 251 255);
-}
-
 /* ------------- CSS properties for table cell content ------------- */
 
 /* MUI sets 'text-align: left' to MuiTableCell-root, which prevails over index.css */

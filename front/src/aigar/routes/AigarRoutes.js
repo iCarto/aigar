@@ -22,7 +22,7 @@ import {MonthlyInvoicingListProvider} from "monthlyinvoicing/provider";
 import {ViewMonthlyInvoicingPage} from "monthlyinvoicing/container";
 import {ViewInvoicesStatsPage} from "stats/container";
 import {LoadMeasurementsWizard} from "measurement/container";
-import {LoadPaymentsWizard} from "payment/container";
+import {UpdatePaymentsSubpage} from "payment/container";
 
 export default function AigarRoutes() {
     return (
@@ -40,8 +40,8 @@ export default function AigarRoutes() {
                             element={<LoadMeasurementsWizard />}
                         />
                         <Route
-                            path="cargarpagos/:id_mes_facturacion"
-                            element={<LoadPaymentsWizard />}
+                            path="actualizarpagos/:id_mes_facturacion/:mode"
+                            element={<UpdatePaymentsSubpage />}
                         />
                     </Route>
 

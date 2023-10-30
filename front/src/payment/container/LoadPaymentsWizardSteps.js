@@ -43,7 +43,7 @@ const LoadPaymentsWizardSteps = ({
             onValidateStep={onValidateStep}
         />,
         <LoadPaymentsStep4Result
-            id_mes_facturacion={id_mes_facturacion}
+            invoicingMonthId={id_mes_facturacion}
             payments={payments}
         />,
     ];

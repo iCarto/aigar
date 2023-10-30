@@ -5,19 +5,28 @@ import {BasicButton} from "base/ui/buttons/components";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 
-const LoadPaymentsModal = ({isOpen = false, onClose, invoicingMonthId}) => {
+const UpdatePaymentsModal = ({
+    invoicingMonthId,
+    invoicesLength,
+    paymentType,
+    isOpen = false,
+    onClose,
+}) => {
     const navigate = useNavigate();
 
     const closeModal = () => {
         onClose();
     };
 
+    const textForHeader = paymentType === "ontime" ? "en plazo" : "con mora";
+    const textForUrlSlug = paymentType === "ontime" ? "plazo" : "mora";
+
     const openLoadPaymentsWizard = () => {
-        navigate(`/actualizarpagos/${invoicingMonthId}/cargarcsv`);
+        navigate(`/actualizarpagos/${invoicingMonthId}/manual_${textForUrlSlug}`);
     };
 
-    const modalHeader = "Importar pagos del mes";
-    const modalBody = (
+    const modalHeader = `Actualizar pagos del mes ${textForHeader}`;
+    const modalBody = invoicesLength ? (
         <Alert severity="warning">
             <AlertTitle>Antes de continuar, asegúrese de haber:</AlertTitle>
             <ul>
@@ -26,14 +35,16 @@ const LoadPaymentsModal = ({isOpen = false, onClose, invoicingMonthId}) => {
                 <li>Guardado una copia de seguridad</li>
             </ul>
         </Alert>
+    ) : (
+        <Alert severity="error">No se ha seleccionado ninguna factura.</Alert>
     );
 
-    const modalFooter = (
+    const modalFooter = invoicesLength ? (
         <>
             <BasicButton text="Cancelar" onClick={closeModal} variant="outlined" />
             <BasicButton text="Continuar" onClick={openLoadPaymentsWizard} />
         </>
-    );
+    ) : null;
 
     return isOpen ? (
         <Modal
@@ -46,4 +57,4 @@ const LoadPaymentsModal = ({isOpen = false, onClose, invoicingMonthId}) => {
     ) : null;
 };
 
-export default LoadPaymentsModal;
+export default UpdatePaymentsModal;

@@ -1,9 +1,11 @@
+import {useDomain} from "aigar/domain/provider";
 import {MonthlyInvoicingNavigator} from "../presentational";
 import {ActionsSidebarMenu} from "base/ui/menu/components";
 import {
     ExportMemberButton,
     LoadMeasurementsButton,
     LoadPaymentsButton,
+    UpdatePaymentsButton,
     PrintInvoicesButton,
     StartInvoicingMonthButton,
 } from "./actions";
@@ -12,14 +14,17 @@ const ListMonthlyInvoicesSidebar = ({
     invoices,
     invoicingMonths,
     selectedInvoicingMonth,
+    selectedInvoicesLength,
     buttonDisableRules,
     handleChangeInvoicingMonth,
     handleDataUpdate,
 }) => {
-    const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
+    const {aigarConfig} = useDomain();
 
     const isCurrentInvoicingMonthSelected = selectedInvoicingMonth?.is_open;
     const isNewMonthSelected = selectedInvoicingMonth?.id_mes_facturacion === -1;
+
+    const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
 
     const menuActions = [
         <StartInvoicingMonthButton
@@ -39,17 +44,25 @@ const ListMonthlyInvoicesSidebar = ({
             disabled={buttonDisableRules?.isPrintInvoicesButtonDisabled}
         />,
         <ExportMemberButton />,
-        <LoadPaymentsButton
-            invoicingMonth={selectedInvoicingMonth}
-            disabled={buttonDisableRules?.isLoadPaymentsButtonDisabled}
-        />,
+        aigarConfig.payment_csv ? (
+            <LoadPaymentsButton
+                invoicingMonth={selectedInvoicingMonth}
+                disabled={buttonDisableRules?.isLoadPaymentsButtonDisabled}
+            />
+        ) : (
+            <UpdatePaymentsButton
+                invoicingMonthId={selectedInvoicingMonth.id_mes_facturacion}
+                invoicesLength={selectedInvoicesLength}
+                disabled={buttonDisableRules?.isLoadPaymentsButtonDisabled}
+            />
+        ),
     ];
 
     return (
         <>
             <MonthlyInvoicingNavigator
-                selectedInvoicingMonth={selectedInvoicingMonth}
                 invoicingMonths={invoicingMonths}
+                selectedInvoicingMonth={selectedInvoicingMonth}
                 handleChangeInvoicingMonth={handleChangeInvoicingMonth}
                 buttonDisableRules={buttonDisableRules}
             />

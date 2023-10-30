@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 
 // TO-DO: This component & LoadMeasurementsStep4Result can be abstracted into one common component --only the service is different
-const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
+const LoadPaymentsStep4Result = ({invoicingMonthId, payments}) => {
     const [result, setResult] = useState(null);
     const {setIsDataUpdated} = useMonthlyInvoicingList();
 
@@ -23,7 +23,7 @@ const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
     };
 
     useEffect(() => {
-        InvoicingMonthService.savePayments(id_mes_facturacion, payments)
+        InvoicingMonthService.savePayments(invoicingMonthId, payments)
             .then(() => {
                 setResult(true);
             })
@@ -31,7 +31,7 @@ const LoadPaymentsStep4Result = ({id_mes_facturacion, payments}) => {
                 console.log(error);
                 setResult(false);
             });
-    }, [id_mes_facturacion, payments]);
+    }, [invoicingMonthId, payments]);
 
     const SuccessMessage = () => {
         return (

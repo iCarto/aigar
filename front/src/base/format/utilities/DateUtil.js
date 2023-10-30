@@ -17,6 +17,10 @@ const DateUtil = {
         return (month.charAt(0).toLocaleUpperCase() + month.slice(1)).substring(0, 3);
     },
 
+    getDateString(year, month, day) {
+        return `${day}/0${month}/${year}`;
+    },
+
     // Transform to API format date YYYY-MM-DD from DD-MMM-YYYY or DD/MM/YYYY
     parse(date) {
         if (moment(date, TIGO_DATEFORMAT, true).isValid()) {

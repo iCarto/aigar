@@ -10,6 +10,7 @@ export const useItemToInvoicesHook = ({
     invoiceItemName,
     invoiceItemIcon,
     actionToPerform,
+    isActionDisabled = false,
     invoicesToUpdate,
     refreshTable,
 }) => {
@@ -42,6 +43,7 @@ export const useItemToInvoicesHook = ({
             title={`Asignar ${invoiceItemName}`}
             handleClick={handleClickAction}
             selectedItems={invoicesToUpdate}
+            disabled={isActionDisabled}
         />
     );
 

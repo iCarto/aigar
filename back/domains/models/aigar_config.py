@@ -101,7 +101,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         min_value=1,
-        max_value=28,
+        max_value=27,
         default=16,
         verbose_name="Día límite de pago",
         help_text="Día del mes hasta el que (incluido) el pago no tendrá mora.",
@@ -434,10 +434,8 @@ class AigarConfig(SingletonModel):
             self.nuevo_derecho_siguientes_cuotas_opcion2,
             self.nuevo_derecho_siguientes_cuotas_opcion3,
         ]
-        print(options)
         options = [o for o in options if o]
         options.sort()
-        print(options)
 
         return options
 

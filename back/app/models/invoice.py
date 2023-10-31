@@ -33,10 +33,11 @@ def _cuota_fija(member) -> Decimal:
 
 
 def _calculated_forthcomingitem(member, name: ForthcomingInvoiceItemName):
-    item = member.forthcominginvoiceitem_set.filter(item=name).first()
-    if item:
-        item.delete()
-        return item.value
+    # Al iterar por .all() en lugar de hacer un .filter no se lanzan nuevas queries
+    for item in member.forthcominginvoiceitem_set.all():
+        if item.item == name:
+            item.delete()
+            return item.value
     return 0
 
 
@@ -113,7 +114,7 @@ class InvoiceManager(models.Manager["Invoice"]):
         if last_invoice:
             last_invoice.update_for_member()
 
-    def create_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":
+    def build_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":
         invoice = {
             # New monthly invoices are always version 1
             "version": 1,
@@ -130,7 +131,7 @@ class InvoiceManager(models.Manager["Invoice"]):
             "saldo_pendiente": latest_invoice.deuda,
             "mes_facturacion": new_invoicing_month,
         }
-        return self.create(**invoice)
+        return self.model(**invoice)
 
     def update_state_for(self, invoicing_month) -> None:
         open_invoices = Invoice.objects.filter(

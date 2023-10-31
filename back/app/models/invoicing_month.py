@@ -82,21 +82,25 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
     def _create_new_invoices(self, new_invoicing_month):
         p = models.Prefetch(
             "invoice_set",
-            queryset=LatestInvoice.objects.filter(
-                estado__in=[InvoiceStatus.COBRADA, InvoiceStatus.NO_COBRADA]
-            ).order_by("id"),
+            queryset=LatestInvoice.objects.with_cancelled()
+            .filter(estado__in=[InvoiceStatus.COBRADA, InvoiceStatus.NO_COBRADA])
+            .order_by("id"),
             to_attr="filtered_invoices",
         )
         active_members = Member.objects.active().prefetch_related(
             p, "forthcominginvoiceitem_set"
         )
 
+        invoices_to_create = []
         for member in active_members:
             if member.filtered_invoices:
                 last_invoice = member.filtered_invoices[-1]
             else:
                 last_invoice = NoLatestInvoice()
-            Invoice.objects.create_from(member, last_invoice, new_invoicing_month)
+            invoices_to_create.append(
+                Invoice.objects.build_from(member, last_invoice, new_invoicing_month)
+            )
+        Invoice.objects.bulk_create(invoices_to_create)
 
 
 class InvoicingMonth(models.Model):

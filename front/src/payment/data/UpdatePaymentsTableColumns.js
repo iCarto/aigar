@@ -1,4 +1,4 @@
-import {EditableTextCellTable, LinkAccessorCellTable} from "base/table/components";
+import {EditableIntegerCellTable, LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 
 export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
@@ -31,7 +31,7 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
             ? {
                   Header: "Pago en plazo",
                   accessor: "ontime_payment",
-                  Cell: EditableTextCellTable,
+                  Cell: EditableIntegerCellTable,
               }
             : {
                   Header: "Pago en plazo",
@@ -42,7 +42,7 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
             ? {
                   Header: "Pago con mora",
                   accessor: "late_payment",
-                  Cell: EditableTextCellTable,
+                  Cell: EditableIntegerCellTable,
               }
             : {
                   Header: "Pago con mora",

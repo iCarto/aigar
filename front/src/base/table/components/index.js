@@ -8,3 +8,4 @@ export {default as EditableDateCellTable} from "./EditableDateCellTable";
 export {default as EditableTextCellTable} from "./EditableTextCellTable";
 export {default as EditableSelectCellTable} from "./EditableSelectCellTable";
 export {default as LinkAccessorCellTable} from "./LinkAccessorCellTable";
+export {default as EditableIntegerCellTable} from "./EditableIntegerCellTable";

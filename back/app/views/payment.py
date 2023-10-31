@@ -8,7 +8,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from app.models.invoice import Invoice
-from app.models.invoicing_month import InvoicingMonth
 from app.models.payment import Payment
 from app.serializers.invoice import InvoiceSerializer
 from app.serializers.payment import PaymentSerializer
@@ -55,14 +54,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def previewinvoices(self, request):
         payments = request.data
         invoices = get_invoices_for_payments(payments)
-        updated_invoices = []
-        for payment in payments:
-            invoice = get_invoice_by_id_factura(invoices, payment["invoice"])
-            if invoice:
-                invoice.update_with_payment(
-                    datetime.date.fromisoformat(payment["fecha"]), payment["monto"]
-                )
-                updated_invoices.append(invoice)
+        updated_invoices = get_updated_invoices(payments, invoices)
         serializer = InvoiceSerializer(
             data=updated_invoices, many=True, context={"request": request}
         )
@@ -77,16 +69,21 @@ class PaymentViewSet(viewsets.ModelViewSet):
     #     return super().get_serializer(*args, **kwargs)
 
 
-def get_invoices_for_payments(payments):
-    invoicing_month = InvoicingMonth.objects.get(is_open=True)
+def get_invoices_for_payments(payments) -> dict[int, Invoice]:
     invoice_ids = [payment["invoice"] for payment in payments]
-    return Invoice.objects.prefetch_related("member").filter(
-        id__in=invoice_ids, mes_facturacion=invoicing_month
+    invoices = Invoice.objects.prefetch_related("member").filter(
+        id__in=invoice_ids, mes_facturacion__is_open=True
     )
+    return {invoice.id: invoice for invoice in invoices}
 
 
-def get_invoice_by_id_factura(invoices, invoice_id):
-    for invoice in invoices:
-        if invoice_id == invoice.id:
-            return invoice
-    return None
+def get_updated_invoices(payments, invoices):
+    updated_invoices = []
+    for payment in payments:
+        invoice = invoices.get(payment["invoice"])
+        if invoice:
+            invoice.update_with_payment(
+                datetime.date.fromisoformat(payment["fecha"]), payment["monto"]
+            )
+            updated_invoices.append(invoice)
+    return updated_invoices

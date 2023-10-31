@@ -11,6 +11,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
         {
             label: "N.º",
             id: "id",
+            width: 2,
         },
         {
             label: "Socio",
@@ -23,7 +24,12 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
     ];
 
     if (invoicingMonths.length > 0) {
-        const invoicingMonthsColumns = invoicingMonths.map(invoicingMonth => {
+        const recentMonths = invoicingMonths
+            .sort((a, b) => b.localeCompare(a))
+            .slice(0, 6)
+            .reverse();
+
+        const invoicingMonthsColumns = recentMonths.map(invoicingMonth => {
             return {
                 label:
                     invoicingMonth.substring(4, 6) +
@@ -41,6 +47,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
                 id: selectedField,
                 className: unitClass,
                 style: {textAlign: "right"},
+                width: 10,
             };
         });
         tableColumns = [...tableColumns, ...invoicingMonthsColumns];

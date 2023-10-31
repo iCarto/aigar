@@ -52,6 +52,7 @@ const EditableTextCellTable = ({
                 "& .MuiInputBase-input.Mui-disabled": {
                     WebkitTextFillColor: "#495057",
                 },
+                "& .MuiInputBase-input": {textAlign: "end"},
             }}
         />
     );

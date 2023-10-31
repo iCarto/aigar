@@ -31,7 +31,6 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
             ? {
                   Header: "Pago en plazo",
                   accessor: "ontime_payment",
-                  className: "dollar",
                   Cell: EditableTextCellTable,
               }
             : {
@@ -43,7 +42,6 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
             ? {
                   Header: "Pago con mora",
                   accessor: "late_payment",
-                  className: "dollar",
                   Cell: EditableTextCellTable,
               }
             : {

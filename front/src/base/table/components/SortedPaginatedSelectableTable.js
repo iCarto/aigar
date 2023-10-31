@@ -18,7 +18,7 @@ const SortedPaginatedSelectableTable = ({
     selectedTableRows,
 }) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
 
     const {
         attribute: orderBy,
@@ -157,7 +157,7 @@ const SortedPaginatedSelectableTable = ({
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 50]}
+                rowsPerPageOptions={[15, 25, 50]}
                 component="div"
                 count={data.length}
                 rowsPerPage={rowsPerPage}

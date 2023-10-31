@@ -15,8 +15,6 @@ const LoadPaymentsWizard = () => {
     const [invoices, setInvoices] = useState([]);
     const [invoicingMonth, setInvoicingMonth] = useState(null);
     const [isValidStep, setIsValidStep] = useState(true);
-
-    // TO-DO: Review this - same state is also handled in component Wizard
     const [currentStep, setCurrentStep] = useState(1);
 
     const {id_mes_facturacion} = useParams();
@@ -52,6 +50,7 @@ const LoadPaymentsWizard = () => {
         <Wizard
             heading="Importar pagos"
             steps={loadPaymentsSteps}
+            currentStep={currentStep}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >

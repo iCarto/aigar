@@ -1,5 +1,3 @@
-import {useState} from "react";
-
 import {PageLayout} from "../../page";
 import {PageHeading} from "../../heading";
 import {WizardButtons, WizardStepInfo, WizardStepper} from ".";
@@ -7,22 +5,17 @@ import {ActionsSidebarMenu} from "../../menu/components";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
-const Wizard = ({heading, steps, isValidStep, onChangeStep, children}) => {
-    const [currentStep, setCurrentStep] = useState(1);
-
+const Wizard = ({heading, steps, isValidStep, onChangeStep, currentStep, children}) => {
     const handleNextStep = () => {
         const newStep =
             currentStep >= steps?.length - 1 ? steps?.length : currentStep + 1;
-        setCurrentStep(newStep);
         onChangeStep(newStep);
     };
 
     const handlePrevStep = () => {
         const newStep = currentStep <= 1 ? 1 : currentStep - 1;
-        setCurrentStep(newStep);
         onChangeStep(newStep);
     };
-
     const stepper = steps ? (
         <WizardStepper
             steps={steps}

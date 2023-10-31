@@ -13,8 +13,6 @@ const LoadMeasurementsWizard = () => {
     const [measurements, setMeasurements] = useState([]);
     const [invoices, setInvoices] = useState([]);
     const [isValidStep, setIsValidStep] = useState(true);
-
-    // TO-DO: Review this - same state is also handled in component Wizard
     const [currentStep, setCurrentStep] = useState(1);
 
     const {id_mes_facturacion: urlMonthId} = useParams();
@@ -49,6 +47,7 @@ const LoadMeasurementsWizard = () => {
         <Wizard
             heading="Importar lecturas"
             steps={loadMeasurementsSteps}
+            currentStep={currentStep}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >

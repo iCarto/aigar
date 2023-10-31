@@ -45,10 +45,10 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
 
             {payments?.length ? (
                 <Grid item container xs={6} columnSpacing={1}>
-                    <Grid item xs={5}>
+                    <Grid item xs={6}>
                         <SectionFieldLabel labelText="Pago/s" />
                     </Grid>
-                    <Grid item xs={7}>
+                    <Grid item xs={6}>
                         {payments?.map(payment => {
                             return (
                                 <SectionFieldValue

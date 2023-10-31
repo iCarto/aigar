@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import {
     LoadPaymentsStep1ReadFile,
     LoadPaymentsStep2PaymentsTable,
@@ -7,15 +6,14 @@ import {
 } from ".";
 
 const LoadPaymentsWizardSteps = ({
-    currentStep,
-    onValidateStep,
     payments,
     invoices,
+    invoicingMonthId,
+    currentStep,
+    onValidateStep,
     onChangePayments,
     onChangeInvoices,
 }) => {
-    const {id_mes_facturacion} = useParams();
-
     const handleChangePayments = payments => {
         onChangePayments(payments);
     };
@@ -31,20 +29,20 @@ const LoadPaymentsWizardSteps = ({
         />,
         <LoadPaymentsStep2PaymentsTable
             payments={payments}
-            id_mes_facturacion={id_mes_facturacion}
+            invoicingMonthId={invoicingMonthId}
             onChangePayments={handleChangePayments}
             onValidateStep={onValidateStep}
         />,
         <LoadPaymentsStep3InvoicesTable
-            id_mes_facturacion={id_mes_facturacion}
             payments={payments}
             invoices={invoices}
+            invoicingMonthId={invoicingMonthId}
             onChangeInvoices={handleChangeInvoices}
             onValidateStep={onValidateStep}
         />,
         <LoadPaymentsStep4Result
-            invoicingMonthId={id_mes_facturacion}
             payments={payments}
+            invoicingMonthId={invoicingMonthId}
         />,
     ];
 

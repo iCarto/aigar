@@ -57,10 +57,11 @@ const LoadPaymentsWizard = () => {
                 <Spinner message="Cargando mes de facturación" />
             ) : invoicingMonth.is_open ? (
                 <LoadPaymentsWizardSteps
-                    currentStep={currentStep}
-                    onValidateStep={validateStep}
                     payments={payments}
                     invoices={invoices}
+                    invoicingMonthId={id_mes_facturacion}
+                    currentStep={currentStep}
+                    onValidateStep={validateStep}
                     onChangePayments={handleChangePayments}
                     onChangeInvoices={handleChangeInvoices}
                 />

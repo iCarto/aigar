@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 const LoadPaymentsStep2PaymentsTable = ({
-    id_mes_facturacion,
+    invoicingMonthId,
     payments,
     onChangePayments,
     onValidateStep,
@@ -31,14 +31,14 @@ const LoadPaymentsStep2PaymentsTable = ({
 
     useEffect(() => {
         setLoading(true);
-        InvoicingMonthService.getInvoicingMonthInvoices(id_mes_facturacion).then(
+        InvoicingMonthService.getInvoicingMonthInvoices(invoicingMonthId).then(
             invoices => {
                 setInvoices(invoices);
                 reviewPayments(payments, invoices);
                 setLoading(false);
             }
         );
-    }, [id_mes_facturacion]);
+    }, [invoicingMonthId]);
 
     const handleClickViewMember = member_id => {
         setIsModalOpen(true);
@@ -97,7 +97,7 @@ const LoadPaymentsStep2PaymentsTable = ({
             if (invoiceForPayment) {
                 invoiceFieldsForPayment = {
                     member_id: invoiceForPayment.member_id,
-                    member_name: invoiceForPayment.member_name,
+                    member_name: invoiceForPayment.nombre,
                     sector: invoiceForPayment.sector,
                     invoice: invoiceForPayment.id,
                 };
@@ -112,7 +112,6 @@ const LoadPaymentsStep2PaymentsTable = ({
             });
         });
         onChangePayments(paymentsWithErrors);
-        console.log(getPaymentsTotalErrors(paymentsWithErrors) === 0);
         onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
     };
 

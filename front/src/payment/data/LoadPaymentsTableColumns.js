@@ -7,8 +7,10 @@ import {
 export function useLoadPaymentsTableColumns(onClickViewMember) {
     const tableColumns = [
         {
-            Header: "Socio",
-            accessor: d => `${d.member_id} - ${d.member_name}`,
+            Header: "Socio/a",
+            accessor: invoice => {
+                return `${invoice.member_id} - ${invoice.member_name}`;
+            },
             Cell: LinkAccessorCellTable,
             getProps: () => ({
                 handleClick: onClickViewMember,

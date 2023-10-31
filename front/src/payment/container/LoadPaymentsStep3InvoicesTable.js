@@ -10,9 +10,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 const LoadPaymentsStep3InvoicesTable = ({
-    invoices,
     payments,
-    id_mes_facturacion,
+    invoices,
+    invoicingMonthId,
     onChangeInvoices,
     onValidateStep,
 }) => {
@@ -39,7 +39,7 @@ const LoadPaymentsStep3InvoicesTable = ({
                     onValidateStep(false);
                 });
         }
-    }, [id_mes_facturacion, invoices, payments]);
+    }, [invoicingMonthId, invoices, payments]);
 
     const reviewInvoices = (payments, invoices) => {
         invoices.forEach(invoice => {

@@ -14,14 +14,17 @@ import {UpdatePaymentsWizardSteps} from ".";
 import {Wizard} from "base/ui/wizard/components";
 import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
+import {Modal} from "base/ui/modal/components";
+import {BasicButton} from "base/ui/buttons/components";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const UpdatePaymentsWizard = () => {
     const [payments, setPayments] = useState([]);
     const [prefilledInvoices, setPrefilledInvoices] = useState([]);
     const [isValidStep, setIsValidStep] = useState(true);
-
-    // TO-DO: Review this - same state is also handled in component Wizard
     const [currentStep, setCurrentStep] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {id_mes_facturacion: urlMonthId, mode} = useParams();
     const {aigarConfig} = useDomain();
@@ -134,17 +137,65 @@ const UpdatePaymentsWizard = () => {
     };
 
     const handleChangeStep = currentStep => {
-        setCurrentStep(currentStep);
+        if (currentStep !== updatePaymentsSteps.length - 1) {
+            setIsModalOpen(true);
+        } else {
+            setCurrentStep(currentStep);
+        }
+    };
+
+    const navigateToNextStep = () => {
+        setIsModalOpen(false);
+        setCurrentStep(2);
     };
 
     const validateStep = isStepValid => {
         setIsValidStep(isStepValid);
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleClickOutsideModal = () => {
+        return;
+    };
+
+    const modalBody = (
+        <Alert severity="warning">
+            <AlertTitle>Antes de continuar, asegúrese de revisar:</AlertTitle>
+            <ul>
+                <li>Los montos y números de las facturas</li>
+                <li>Los montos de los pagos realizados</li>
+            </ul>
+        </Alert>
+    );
+
+    const modalFooter = (
+        <>
+            <BasicButton
+                text="Volver a revisar"
+                onClick={closeModal}
+                variant="outlined"
+            />
+            <BasicButton text="Continuar" onClick={navigateToNextStep} />
+        </>
+    );
+
+    const confirmationModal = (
+        <Modal
+            isOpen={isModalOpen}
+            onClose={handleClickOutsideModal}
+            body={modalBody}
+            footer={modalFooter}
+        />
+    );
+
     return (
         <Wizard
             heading="Actualizar pagos"
             steps={updatePaymentsSteps}
+            currentStep={currentStep}
             isValidStep={isValidStep}
             onChangeStep={handleChangeStep}
         >
@@ -164,6 +215,7 @@ const UpdatePaymentsWizard = () => {
                     onValidateStep={validateStep}
                 />
             )}
+            {confirmationModal}
         </Wizard>
     );
 };

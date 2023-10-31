@@ -38,7 +38,6 @@ const LoadPaymentsWizard = () => {
     };
 
     const handleChangeStep = currentStep => {
-        console.log(currentStep);
         setCurrentStep(currentStep);
     };
 

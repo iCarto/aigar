@@ -93,7 +93,7 @@ const LoadPaymentsStep3InvoicesTable = ({
 
     return (
         <Box display="flex" flexDirection="column" justifyContent="space-around">
-            {invoices ? (
+            {invoices.length ? (
                 <>
                     {getErrorMessages()}
                     <LoadDataTableFilter

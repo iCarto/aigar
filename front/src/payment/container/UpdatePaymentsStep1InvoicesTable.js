@@ -26,6 +26,7 @@ const UpdatePaymentsStep1InvoicesTable = ({
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
+    const [totalInvoicesWithErrors, setTotalInvoicesWithErrors] = useState(0);
 
     const {filterMonthlyData} = useFilterMonthlyData();
 
@@ -51,6 +52,11 @@ const UpdatePaymentsStep1InvoicesTable = ({
         else {
             onValidateStep(true);
             reviewInvoices(payments, invoices);
+
+            const invoicesWithErrors = invoices.filter(
+                invoice => invoice.errors.length !== 0
+            );
+            setTotalInvoicesWithErrors(invoicesWithErrors.length);
         }
     }, [invoicingMonth, invoices, payments]);
 
@@ -65,15 +71,24 @@ const UpdatePaymentsStep1InvoicesTable = ({
             payment => invoice.numero === payment.num_factura
         );
 
-        if (paymentsForInvoice.length !== 0) {
+        const errorMessages = {
+            multiplePayments: "La factura tiene varios pagos. ",
+            paymentsDoNotCoverTotal: "Los pagos no cubren el total de la factura.",
+            paymentsExceedTotal: "Los pagos superan el total de la factura.",
+        };
+
+        if (paymentsForInvoice.length) {
             if (paymentsForInvoice.length > 1) {
-                invoice.errors.push("La factura tiene varios pagos. ");
+                if (!invoice.errors.includes(errorMessages.multiplePayments))
+                    invoice.errors.push(errorMessages.multiplePayments);
             }
             if (invoice.total > invoice.ontime_payment + invoice.late_payment) {
-                invoice.errors.push("Los pagos no cubren el total de la factura. ");
+                if (!invoice.errors.includes(errorMessages.paymentsDoNotCoverTotal))
+                    invoice.errors.push(errorMessages.paymentsDoNotCoverTotal);
             }
             if (invoice.total < invoice.ontime_payment + invoice.late_payment) {
-                invoice.errors.push("Los pagos superan el total de la factura. ");
+                if (!invoice.errors.includes(errorMessages.paymentsExceedTotal))
+                    invoice.errors.push(errorMessages.paymentsExceedTotal);
             }
         }
     };
@@ -113,23 +128,12 @@ const UpdatePaymentsStep1InvoicesTable = ({
         }));
     };
 
-    const getTotalErrors = items => {
-        return items.filter(item => item.errors.length !== 0).length;
-    };
-
-    const getErrorMessages = () => {
-        const totalInvoicesWithErrors = getTotalErrors(invoices);
-        if (totalInvoicesWithErrors) {
-            const errorMessage = (
-                <Typography>
-                    Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
-                    alertas que debería revisar.
-                </Typography>
-            );
-            return <ErrorMessage message={errorMessage} />;
-        }
-        return null;
-    };
+    const errorMessage = (
+        <Typography>
+            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            debería revisar.
+        </Typography>
+    );
 
     const modal = (
         <MemberViewModal
@@ -143,7 +147,9 @@ const UpdatePaymentsStep1InvoicesTable = ({
         <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices.length ? (
                 <>
-                    {getErrorMessages()}
+                    {totalInvoicesWithErrors ? (
+                        <ErrorMessage message={errorMessage} />
+                    ) : null}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}

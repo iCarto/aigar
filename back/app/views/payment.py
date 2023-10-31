@@ -21,6 +21,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.prefetch_related("invoice").all()
     serializer_class = PaymentSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def list(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 

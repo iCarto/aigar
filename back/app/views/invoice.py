@@ -12,6 +12,7 @@ from app.serializers.invoice import (
     InvoiceStatsSerializer,
     InvoiceValueSerializer,
 )
+from app.serializers.payment import PaymentSerializer
 
 
 class InvoiceFilter(filters.FilterSet):
@@ -27,6 +28,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.with_cancelled().select_related(
         "member", "member__sector"
     )
+
+    @action(detail=True, methods=["get"])
+    def payments(self, request, pk=None):
+        instance = self.get_object()
+        serializer = PaymentSerializer(instance.payment_set.all(), many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["put"])
     def status(self, request):

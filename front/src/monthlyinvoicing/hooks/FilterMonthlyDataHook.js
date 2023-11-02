@@ -6,13 +6,13 @@ function useFilterMonthlyData() {
     function filterMonthlyData(items, filter) {
         return items.filter(item => {
             let filtered = true;
-            if (filter.text) {
-                filtered = filterByTextFunction(item, filter.text, [
+            if (filter.textSearch) {
+                filtered = filterByTextFunction(item, filter.textSearch, [
                     "numero",
-                    "member_id",
+                    "num_factura",
                     "nombre",
                     "member_name",
-                    "num_factura",
+                    "member_id",
                     "fecha",
                 ]);
             }

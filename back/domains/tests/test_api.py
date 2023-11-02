@@ -1,7 +1,6 @@
 import pytest
 from rest_framework import status
 
-from app.models.invoicing_month import InvoicingMonth
 from domains.models import aigar_config
 from domains.tests import factories
 
@@ -29,7 +28,7 @@ def test_zone_api(api_client):
 
 
 def test_aigar_config_api(api_client):
-    aigar_config.get_config()
+    aigar_config.AigarConfig().get_solo()
     response = api_client.get("/api/domains/aigarconfig/")
     assert response.status_code == status.HTTP_200_OK, response.json()
     response_data = response.json()[0]

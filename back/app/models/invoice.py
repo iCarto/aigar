@@ -247,6 +247,7 @@ class Invoice(models.Model):
         ]
 
     member_id: int
+    mes_facturacion_id: int
 
     objects: InvoiceManager = _InvoiceManager()
 
@@ -379,11 +380,13 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.member_id} - {self.mes} - {self.anho} - {self.total} - {self.estado}"
+        return f"{self.mes_facturacion_id}: {self.member_id} - {self.estado}"
 
     @property
     def numero(self):
-        return f"{str(self.member_id).zfill(4)}{self.anho}{self.mes}{str(self.version).zfill(2)}"
+        member_id = str(self.member_id).zfill(4)
+        version = str(self.version).zfill(2)
+        return f"{member_id}{self.anho}{self.mes}{version}"
 
     @property
     def due_date(self) -> datetime.date:
@@ -395,11 +398,8 @@ class Invoice(models.Model):
     @property
     def deuda(self) -> float:
         # calculated_saldo_pendiente
-        return self.total_or0 - self.monto
-
-    @property
-    def monto(self) -> float:
-        return self.ontime_payment + self.late_payment
+        monto = self.ontime_payment + self.late_payment
+        return self.total_or0 - monto
 
     @property
     def total_or0(self) -> float:
@@ -478,7 +478,7 @@ class Invoice(models.Model):
             self.ontime_payment = self.ontime_payment + monto_pago
         else:
             self.late_payment = self.late_payment + monto_pago
-        if self.monto >= self.total_or0:
+        if self.deuda <= 0:
             self.estado = InvoiceStatus.COBRADA
 
     def calculated_variable_fee(self) -> float | None:

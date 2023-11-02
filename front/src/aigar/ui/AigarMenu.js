@@ -12,11 +12,12 @@ const AigarMenu = () => {
             to: "/socios",
             pathname: "socios",
         },
-        {
-            name: "Facturas",
-            to: "/facturas",
-            pathname: "facturas",
-        },
+        // Ver: #4374
+        // {
+        //     name: "Facturas",
+        //     to: "/facturas",
+        //     pathname: "facturas",
+        // },
         {
             name: "Estadísticas",
             to: "/estadisticas",

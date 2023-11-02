@@ -6,7 +6,7 @@ import {useDomain} from "aigar/domain/provider";
 import {ModalOperationStatus} from "base/ui/modal/config";
 import {useGetSectorReadingDay} from "aigar/domain/hooks";
 import {DateUtil, NumberUtil} from "base/format/utilities";
-import {OperationWithConfirmationModal} from "base/ui/modal/components";
+import {Modal, OperationWithConfirmationModal} from "base/ui/modal/components";
 import Alert from "@mui/material/Alert";
 import PrintIcon from "@mui/icons-material/Print";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -121,14 +121,19 @@ const PrintInvoicesModal = ({
         handleClose();
     };
 
+    const modalHeader = "Imprimir facturas";
+
     const modalContentStart = (
         <Alert severity="warning" sx={{marginTop: 2}}>
             <AlertTitle>
                 A continuación procederá a imprimir{" "}
-                {invoices && invoices.length === 1 ? "la factura" : "las facturas"}.
+                {invoices && invoices.length === 1
+                    ? "la factura seleccionada"
+                    : `las facturas seleccionadas (${invoices.length})`}
+                .
             </AlertTitle>
             ¿Ha revisado previamente si es necesario añadir otros importes, como
-            asambleas, jornadas de trabajo, nuevos derechos, reconexiones, traspasos...?
+            penalizaciones, nuevos derechos, reconexiones, traspasos...?
         </Alert>
     );
 
@@ -145,19 +150,32 @@ const PrintInvoicesModal = ({
     );
 
     return isOpen ? (
-        <OperationWithConfirmationModal
-            operationStatus={operationStatus}
-            onClose={handleClose}
-            onClickAccept={handleClickAccept}
-            onClickFinished={handleClickFinished}
-            modalTitle="Imprimir facturas"
-            modalContentStart={modalContentStart}
-            modalContentFinished={modalContentFinished}
-            modalAcceptText="Imprimir"
-            modalAcceptIcon={<PrintIcon />}
-            spinnerMessage="Generando documento"
-            modalErrorText={modalContentError}
-        />
+        invoices.length ? (
+            <OperationWithConfirmationModal
+                operationStatus={operationStatus}
+                onClose={handleClose}
+                onClickAccept={handleClickAccept}
+                onClickFinished={handleClickFinished}
+                modalTitle={modalHeader}
+                modalContentStart={modalContentStart}
+                modalContentFinished={modalContentFinished}
+                modalAcceptText="Imprimir"
+                modalAcceptIcon={<PrintIcon />}
+                spinnerMessage="Generando documento"
+                modalErrorText={modalContentError}
+            />
+        ) : (
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                header={modalHeader}
+                body={
+                    <Alert severity="error">
+                        No se ha seleccionado ninguna factura.
+                    </Alert>
+                }
+            />
+        )
     ) : null;
 };
 

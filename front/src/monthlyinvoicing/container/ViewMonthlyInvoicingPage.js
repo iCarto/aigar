@@ -79,8 +79,7 @@ const ViewMonthlyInvoicingPage = () => {
             sidebar={
                 selectedInvoicingMonth && filteredInvoices ? (
                     <ListMonthlyInvoicesSidebar
-                        invoices={invoices}
-                        selectedInvoicesLength={selectedInvoices.length}
+                        selectedInvoices={selectedInvoices}
                         invoicingMonths={invoicingMonthsForNavigator}
                         selectedInvoicingMonth={selectedInvoicingMonth}
                         buttonDisableRules={buttonDisableRules}

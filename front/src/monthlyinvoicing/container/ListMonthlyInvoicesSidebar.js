@@ -11,10 +11,9 @@ import {
 } from "./actions";
 
 const ListMonthlyInvoicesSidebar = ({
-    invoices,
+    selectedInvoices,
     invoicingMonths,
     selectedInvoicingMonth,
-    selectedInvoicesLength,
     buttonDisableRules,
     handleChangeInvoicingMonth,
     handleDataUpdate,
@@ -24,7 +23,7 @@ const ListMonthlyInvoicesSidebar = ({
     const isCurrentInvoicingMonthSelected = selectedInvoicingMonth?.is_open;
     const isNewMonthSelected = selectedInvoicingMonth?.id_mes_facturacion === -1;
 
-    const outputFilename = `recibo_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_todos`;
+    const outputFilename = `recibos_${selectedInvoicingMonth.anho}_${selectedInvoicingMonth.mes}_${selectedInvoices.length}`;
 
     const menuActions = [
         <StartInvoicingMonthButton
@@ -37,10 +36,10 @@ const ListMonthlyInvoicesSidebar = ({
         />,
         <PrintInvoicesButton
             buttonTitle="3. Imprimir facturas"
-            showIcon={false}
-            invoices={invoices}
+            invoices={selectedInvoices}
             outputFilename={outputFilename}
             onDataUpdate={handleDataUpdate}
+            showIcon={false}
             disabled={buttonDisableRules?.isPrintInvoicesButtonDisabled}
         />,
         <ExportMemberButton />,
@@ -52,7 +51,7 @@ const ListMonthlyInvoicesSidebar = ({
         ) : (
             <UpdatePaymentsButton
                 invoicingMonthId={selectedInvoicingMonth.id_mes_facturacion}
-                invoicesLength={selectedInvoicesLength}
+                invoicesLength={selectedInvoices.length}
                 disabled={buttonDisableRules?.isLoadPaymentsButtonDisabled}
             />
         ),

@@ -396,10 +396,12 @@ class Invoice(models.Model):
         )
 
     @property
+    def monto(self) -> float:
+        return self.ontime_payment + self.late_payment
+
+    @property
     def deuda(self) -> float:
-        # calculated_saldo_pendiente
-        monto = self.ontime_payment + self.late_payment
-        return self.total_or0 - monto
+        return self.total_or0 - self.monto
 
     @property
     def total_or0(self) -> float:

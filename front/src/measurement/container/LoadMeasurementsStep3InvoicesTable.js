@@ -8,6 +8,7 @@ import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/ui/other/components";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,
@@ -69,39 +70,32 @@ const LoadMeasurementsStep3InvoicesTable = ({
         return items.filter(item => item.errors.length !== 0).length;
     };
 
-    const getErrorMessages = () => {
-        const totalInvoicesWithErrors = getTotalErrors(invoices);
-        if (totalInvoicesWithErrors !== 0) {
-            const errorMessage = (
-                <Typography>
-                    Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
-                    alertas que debería revisar.
-                </Typography>
-            );
-            return <ErrorMessage message={errorMessage} />;
-        }
-        return null;
-    };
+    const totalInvoicesWithErrors = getTotalErrors(invoices);
 
-    const getMeasurementsWithoutInvoiceError = () => {
-        if (measurementsWithoutInvoice.length !== 0) {
-            const errorMessage = (
-                <Typography fontWeight={700}>
-                    Se han detectado lecturas para socios que no tienen factura:{" "}
-                    {measurementsWithoutInvoice.join(", ")}
-                </Typography>
-            );
-            return <ErrorMessage message={errorMessage} />;
-        }
-        return null;
-    };
+    const errorsMessage = (
+        <Typography>
+            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            debería revisar.
+        </Typography>
+    );
+
+    const measurementsWithoutInvoiceMessage = (
+        <Typography fontWeight={700}>
+            Se han detectado lecturas para socios que no tienen factura:{" "}
+            {measurementsWithoutInvoice.join(", ")}
+        </Typography>
+    );
 
     return (
         <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices.length ? (
                 <>
-                    {getErrorMessages()}
-                    {getMeasurementsWithoutInvoiceError()}
+                    {totalInvoicesWithErrors ? (
+                        <ErrorMessage message={errorsMessage} />
+                    ) : null}
+                    {measurementsWithoutInvoice.length ? (
+                        <ErrorMessage message={measurementsWithoutInvoiceMessage} />
+                    ) : null}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}

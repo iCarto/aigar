@@ -1,7 +1,11 @@
 import {EditableIntegerCellTable, LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 
-export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
+export function useUpdatePaymentsTableColumns(
+    onClickViewMember,
+    paymentType,
+    displayAlerts
+) {
     const isTimelyPayment = paymentType === "ontime";
 
     const tableColumns = [
@@ -17,6 +21,7 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
         {
             Header: "Sector",
             accessor: "sector",
+            width: 240,
         },
         {
             Header: "Nº Factura",
@@ -59,12 +64,14 @@ export function useUpdatePaymentsTableColumns(onClickViewMember, paymentType) {
             accessor: "estado",
             Cell: InvoiceStatusCellTable,
         },
-        {
+    ];
+
+    displayAlerts &&
+        tableColumns.push({
             Header: "Alertas",
             accessor: "errors",
             className: "text-danger small",
-        },
-    ];
+        });
 
     return {tableColumns};
 }

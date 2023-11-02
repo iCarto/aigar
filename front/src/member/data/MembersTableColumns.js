@@ -9,7 +9,7 @@ export function useMembersTableColumns() {
             id: "id",
         },
         {
-            label: "Socio",
+            label: "Socio/a",
             id: "name",
             formatFunction: item => {
                 return <TextLink text={item.name} to={`/socios/${item.id}`} />;

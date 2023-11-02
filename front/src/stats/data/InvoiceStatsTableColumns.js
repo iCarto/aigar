@@ -14,7 +14,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
             width: 2,
         },
         {
-            label: "Socio",
+            label: "Socio/a",
             id: "nombre",
         },
         {

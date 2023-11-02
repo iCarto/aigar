@@ -1,10 +1,14 @@
 import {LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 
-export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableType) {
+export function useInvoicesPreviewTableColumns(
+    onClickViewMember,
+    invoicesTableType,
+    displayAlerts
+) {
     const tableColumns = [
         {
-            Header: "Socio",
+            Header: "Socio/a",
             accessor: d => `${d.member_id} - ${d.nombre}`,
             Cell: LinkAccessorCellTable,
             getProps: () => ({
@@ -15,9 +19,10 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
         {
             Header: "Sector",
             accessor: "sector",
+            width: 400,
         },
         {
-            Header: "Número factura",
+            Header: "Nº factura",
             accessor: "numero",
         },
     ];
@@ -89,10 +94,11 @@ export function useInvoicesPreviewTableColumns(onClickViewMember, invoicesTableT
             }
         );
     }
-    tableColumns.push({
-        Header: "Alertas",
-        accessor: "errors",
-        className: "text-danger small",
-    });
+    displayAlerts &&
+        tableColumns.push({
+            Header: "Alertas",
+            accessor: "errors",
+            className: "text-danger small",
+        });
     return {tableColumns};
 }

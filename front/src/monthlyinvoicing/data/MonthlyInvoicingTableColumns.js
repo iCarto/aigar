@@ -17,7 +17,7 @@ export function useMonthlyInvoicingTableColumns() {
             },
         },
         {
-            label: "Socio",
+            label: "Socio/a",
             id: "nombre",
             formatFunction: item => {
                 return <TextLink text={item.nombre} to={`/socios/${item.member_id}`} />;

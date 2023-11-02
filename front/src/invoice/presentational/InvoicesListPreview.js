@@ -2,6 +2,7 @@ import {useState} from "react";
 import {useInvoicesPreviewTableColumns} from "invoice/data/InvoicesPreviewTableColumns";
 import {SortedEditableTable} from "base/table/components";
 import {MemberViewModal} from "member/presentational";
+import Box from "@mui/material/Box";
 
 const InvoicesListPreview = ({invoices, invoicesTableType}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,9 +18,12 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
         setSelectedMemberForModal(null);
     };
 
+    const isInvoicesWithErrors = invoices.some(invoice => invoice.errors.length);
+
     const {tableColumns} = useInvoicesPreviewTableColumns(
         handleClickViewMember,
-        invoicesTableType
+        invoicesTableType,
+        isInvoicesWithErrors
     );
 
     const modal = (
@@ -30,16 +34,12 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
         />
     );
 
-    return (
-        <>
-            <SortedEditableTable
-                columns={tableColumns}
-                data={invoices}
-                onUpdateData={undefined}
-            />
+    return invoices.length ? (
+        <Box sx={{overflow: "auto", maxHeight: "450px"}}>
+            <SortedEditableTable columns={tableColumns} data={invoices} />
             {modal}
-        </>
-    );
+        </Box>
+    ) : null;
 };
 
 export default InvoicesListPreview;

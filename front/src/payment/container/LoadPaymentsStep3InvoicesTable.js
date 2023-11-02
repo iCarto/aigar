@@ -77,25 +77,22 @@ const LoadPaymentsStep3InvoicesTable = ({
         return items.filter(item => item.errors.length !== 0).length;
     };
 
-    const getErrorMessages = () => {
-        const totalInvoicesWithErrors = getTotalErrors(invoices);
-        if (totalInvoicesWithErrors !== 0) {
-            const errorMessage = (
-                <Typography>
-                    Existen <strong>{totalInvoicesWithErrors}</strong> facturas con
-                    alertas que debería revisar.
-                </Typography>
-            );
-            return <ErrorMessage message={errorMessage} />;
-        }
-        return null;
-    };
+    const totalInvoicesWithErrors = getTotalErrors(invoices);
+
+    const errorsMessage = (
+        <Typography>
+            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            debería revisar.
+        </Typography>
+    );
 
     return (
         <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices.length ? (
                 <>
-                    {getErrorMessages()}
+                    {totalInvoicesWithErrors ? (
+                        <ErrorMessage message={errorsMessage} />
+                    ) : null}
                     <LoadDataTableFilter
                         filter={filter}
                         onChange={handleFilterChange}

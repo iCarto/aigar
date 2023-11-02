@@ -137,7 +137,7 @@ const LoadPaymentsStep2PaymentsTable = ({
     }
 
     if (payments.length) {
-        const paymentsFiltered = filterMonthlyData(payments, filter);
+        const filteredPayments = filterMonthlyData(payments, filter);
 
         return (
             <Grid>
@@ -146,7 +146,7 @@ const LoadPaymentsStep2PaymentsTable = ({
                 ) : null}
                 <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
                 <LoadDataTable
-                    items={paymentsFiltered}
+                    items={filteredPayments}
                     columns={tableColumns}
                     onUpdateData={handleUpdatePayment}
                 />

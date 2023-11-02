@@ -7,7 +7,7 @@ import {
 export function useLoadMeasurementsTableColumns(onClickViewMember) {
     const tableColumns = [
         {
-            Header: "Socio",
+            Header: "Socio/a",
             accessor: d => `${d.member_id} - ${d.member_name}`,
             Cell: LinkAccessorCellTable,
             getProps: () => ({
@@ -18,6 +18,7 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
         {
             Header: "Sector",
             accessor: "sector",
+            width: 240,
         },
         {
             Header: "Medidor",
@@ -32,6 +33,7 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
         {
             Header: "Lectura anterior",
             accessor: "caudal_anterior",
+            className: "cubic-metre",
         },
         {
             Header: "Lectura actual",

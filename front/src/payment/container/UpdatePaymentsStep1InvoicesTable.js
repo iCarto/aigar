@@ -40,9 +40,12 @@ const UpdatePaymentsStep1InvoicesTable = ({
         setSelectedMemberForModal(null);
     };
 
+    const isInvoicesWithErrors = invoices.some(invoice => invoice.errors.length);
+
     const {tableColumns} = useUpdatePaymentsTableColumns(
         handleClickViewMember,
-        paymentType
+        paymentType,
+        isInvoicesWithErrors
     );
 
     const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];

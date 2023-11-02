@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 
-const SortedEditableTable = ({columns, data, onUpdateData}) => {
+const SortedEditableTable = ({columns, data, onUpdateData = null}) => {
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
         {
             columns,
@@ -26,7 +26,12 @@ const SortedEditableTable = ({columns, data, onUpdateData}) => {
                                 {...column.getHeaderProps(
                                     column.getSortByToggleProps()
                                 )}
-                                sx={{verticalAlign: "top", lineHeight: 1.5}}
+                                sx={{
+                                    minWidth: column.minWidth,
+                                    width: column.width,
+                                    verticalAlign: "top",
+                                    lineHeight: 1.5,
+                                }}
                             >
                                 {column.render("Header")}
                                 {column.canSort && (

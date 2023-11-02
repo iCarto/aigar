@@ -5,6 +5,7 @@ from typing import Any, Self, cast
 
 from django.core import exceptions
 from django.db import models, transaction
+from django.db.models.lookups import GreaterThan
 
 from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
@@ -59,6 +60,22 @@ class InvoiceQuerySet(models.QuerySet["Invoice"]):
                 output_field=models.FloatField(),
             )
         )
+
+    def with_mora_por_impago(self) -> Self:
+        return self.annotate(
+            mora_por_impago=GreaterThan(
+                models.ExpressionWrapper(
+                    models.functions.Coalesce("total", 0)
+                    - models.F("ontime_payment")
+                    - models.F("late_payment"),
+                    output_field=models.FloatField(),
+                ),
+                0,
+            )
+        )
+
+    def with_mora_por_retraso(self) -> Self:
+        return self.annotate(mora_por_retraso=GreaterThan(models.F("late_payment"), 0))
 
     def new_and_open(self) -> Self:
         return self.filter(mes_facturacion__is_open=True).filter(

@@ -42,30 +42,6 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
         ]
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
-    mes_abierto = serializers.SerializerMethodField()
-    mora_por_retraso = serializers.SerializerMethodField()
-    mora_por_impago = serializers.SerializerMethodField()
-
-    def get_mes_abierto(self, obj):
-        last_invoicing_month = self.context["last_invoicing_month"]
-        return (
-            last_invoicing_month is not None
-            and obj.mes_facturacion.id_mes_facturacion
-            == last_invoicing_month.id_mes_facturacion
-        )
-
-    def get_mora_por_retraso(self, obj):
-        invoice_payment_info = self._get_invoice_payment_info(obj)
-        return invoice_payment_info["mora_por_retraso"]
-
-    def get_mora_por_impago(self, obj):
-        invoice_payment_info = self._get_invoice_payment_info(obj)
-        return invoice_payment_info["mora_por_impago"]
-
-    def _get_invoice_payment_info(self, obj):
-        all_invoices_payments_info = self.context["all_invoices_payments_info"]
-        return [
-            invoice_payment_info
-            for invoice_payment_info in all_invoices_payments_info
-            if invoice_payment_info["invoice"] == obj.id
-        ][0]
+    mes_abierto = serializers.ReadOnlyField(source="mes_facturacion__is_open")
+    mora_por_retraso = serializers.ReadOnlyField()
+    mora_por_impago = serializers.ReadOnlyField()

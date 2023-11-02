@@ -5,7 +5,6 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from app.models.invoice import Invoice, InvoiceStatus
-from app.models.invoicing_month import InvoicingMonth
 from app.serializers.entity_status_serializer import InvoiceStatusSerializer
 from app.serializers.invoice import (
     InvoiceSerializer,
@@ -89,68 +88,9 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
 
 class InvoiceStatsView(ListAPIView):
-    queryset = Invoice.objects.prefetch_related("member", "mes_facturacion").order_by(
-        "mes_facturacion", "member"
+    queryset = (
+        Invoice.objects.select_related("member", "mes_facturacion")
+        .with_mora_por_impago()
+        .with_mora_por_retraso()
     )
     serializer_class = InvoiceStatsSerializer
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-
-        all_invoices = Invoice.objects.values(
-            "id",
-            "mes_facturacion",
-            "mes",
-            "anho",
-            "member",
-            "total",
-            "ontime_payment",
-            "late_payment",
-            "mora",
-        )
-
-        all_invoices_payments_info = []
-        for invoice in all_invoices:
-            mes = int(invoice["mes"])
-            anho = int(invoice["anho"])
-            previous_mes = str(12 if mes == 1 else mes - 1).zfill(2)
-            previous_anho = str(anho - 1 if mes == 1 else anho)
-            previous_invoice = [
-                previous_invoice
-                for previous_invoice in all_invoices
-                if previous_invoice["mes"] == previous_mes
-                and previous_invoice["anho"] == previous_anho
-                and previous_invoice["member"] == invoice["member"]
-            ]
-            previous_invoice = previous_invoice[0] if previous_invoice else None
-            invoice_payment_info = {
-                "invoice": invoice["id"],
-                "mora": invoice["mora"],
-                "mora_por_retraso": 1
-                if invoice["mora"] != 0
-                and (
-                    previous_invoice is None
-                    or (
-                        previous_invoice["ontime_payment"] == 0
-                        and previous_invoice["late_payment"] != 0
-                    )
-                )
-                else 0,
-                "mora_por_impago": 1
-                if invoice["mora"] != 0
-                and previous_invoice is not None
-                and previous_invoice["ontime_payment"] == 0
-                and previous_invoice["late_payment"] == 0
-                else 0,
-            }
-            all_invoices_payments_info.append(invoice_payment_info)
-
-        last_invoicing_month = InvoicingMonth.objects.get(is_open=True)
-        context.update(
-            {
-                "request": self.request,
-                "all_invoices_payments_info": all_invoices_payments_info,
-                "last_invoicing_month": last_invoicing_month,
-            }
-        )
-        return context

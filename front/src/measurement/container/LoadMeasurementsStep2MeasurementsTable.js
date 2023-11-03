@@ -51,7 +51,7 @@ const LoadMeasurementsStep2MeasurementsTable = ({
 
     const handleUpdateMeasurement = (rowId, columnId, value) => {
         const updatedMeasurements = measurements.map((measurement, index) => {
-            if (measurement.id === rowId) {
+            if (index === rowId) {
                 const updatedMeasurement = createMeasurement({
                     ...measurements[index],
                     [columnId]: value,

@@ -1,12 +1,15 @@
 from typing import Any
 
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
+from app.admin.import_export_config import MemberResource
 from app.models.member import Member
 
 
 @admin.register(Member)
-class MemberAdmin(admin.ModelAdmin):
+class MemberAdmin(ImportExportModelAdmin):
+    resource_classes = [MemberResource]
     search_fields = ["name"]
     search_help_text = "Busqueda por nombre"
     list_display = (

@@ -8,16 +8,12 @@ const InvoiceDetail = ({invoice, member, payments}) => {
     return (
         <Box mb={3}>
             <Box display="flex" flexDirection="column">
-                {invoice ? (
-                    <Box mb={1}>
-                        <InvoiceDetailShort invoice={invoice} payments={payments} />
-                    </Box>
-                ) : null}
-                {member ? (
-                    <Box>
-                        <MemberDetail member={member} isSummary />
-                    </Box>
-                ) : null}
+                <Box mb={1}>
+                    <InvoiceDetailShort invoice={invoice} payments={payments} />
+                </Box>
+                <Box>
+                    <MemberDetail member={member} isSummary />
+                </Box>
             </Box>
             <Grid container flexDirection="row" justifyContent="space-around" my={2}>
                 <InvoiceDetailHeaderField

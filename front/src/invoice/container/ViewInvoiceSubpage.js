@@ -6,7 +6,6 @@ import {useInvoicesList} from "invoice/provider";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
 import {PageLayout} from "base/ui/page";
-import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 import {InvoiceDetail, InvoiceNavigator} from "invoice/presentational";
 import {InvoicePageSidebar} from ".";
@@ -15,7 +14,6 @@ const ViewInvoiceSubpage = () => {
     const [invoice, setInvoice] = useState(null);
     const [member, setMember] = useState(null);
     const [payments, setPayments] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
     const [error, setError] = useState("");
 
     const {idFactura} = useParams();
@@ -33,7 +31,6 @@ const ViewInvoiceSubpage = () => {
 
     useEffect(() => {
         setError("");
-        setIsLoading(true);
 
         InvoiceService.getInvoice(idFactura)
             .then(invoiceData => {
@@ -55,9 +52,6 @@ const ViewInvoiceSubpage = () => {
                 setError(
                     "Se ha producido un error y no se han podido obtener los datos de la factura"
                 );
-            })
-            .finally(() => {
-                setIsLoading(false);
             });
     }, [idFactura, invoicesList]);
 
@@ -69,7 +63,6 @@ const ViewInvoiceSubpage = () => {
         >
             <ErrorMessage message={error} />
             <InvoiceNavigator navigatorIds={invoicesIds} path={urlPath} />
-            {isLoading ? <Spinner message="Cargando datos" /> : null}
             {invoice ? (
                 <InvoiceDetail invoice={invoice} member={member} payments={payments} />
             ) : null}

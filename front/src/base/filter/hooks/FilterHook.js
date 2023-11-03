@@ -32,7 +32,7 @@ function useFilter() {
                     if (key === "endInvoicingMonth") {
                         return parseInt(item.mes_facturacion) <= parseInt(value);
                     }
-                    if (item.member_data.sector && key === "sector") {
+                    if (item.member_data?.sector && key === "sector") {
                         return item.member_data.sector === value;
                     } else {
                         const itemValue = getItemValue(item, key);

@@ -15,7 +15,7 @@ const EntityFormLayout = ({
 }) => {
     return (
         <Grid container component="form" onSubmit={onSubmit} justifyContent="center">
-            <Grid item my={2} xs={12}>
+            <Grid item mb={2} xs={12}>
                 <PageHeading heading={formTitle} />
             </Grid>
             {error ? <ErrorMessage message={error} /> : null}

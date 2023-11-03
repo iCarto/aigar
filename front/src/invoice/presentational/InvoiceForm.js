@@ -73,11 +73,11 @@ const InvoiceForm = ({
             isSaving={isSaving}
             error={error}
         >
-            <Grid container columnSpacing={1} alignItems="stretch">
-                <Grid item xs={8}>
+            <Grid container direction="column" rowSpacing={1} alignItems="stretch">
+                <Grid item>
                     <MemberDetail member={member} isSummary />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item>
                     <InvoiceDetailShort invoice={invoice} />
                 </Grid>
             </Grid>

@@ -4,7 +4,9 @@ from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
-from app.models.invoice import Invoice, InvoiceStatus
+from app.models.invoice_status import InvoiceStatus
+from app.models.invoice import Invoice
+from app.models.invoice_status import NOT_MODIFICABLE_INVOICES
 from app.serializers.entity_status_serializer import InvoiceStatusSerializer
 from app.serializers.invoice import (
     InvoiceSerializer,

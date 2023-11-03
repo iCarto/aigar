@@ -3,7 +3,8 @@ from unittest.mock import patch
 import pytest
 from django.core import exceptions
 
-from app.models.invoice import Invoice, InvoiceStatus
+from app.models.invoice import Invoice
+from app.models.invoice_status import InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
 from app.models.member import UseTypes
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory

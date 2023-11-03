@@ -4,7 +4,8 @@ import pytest
 from django.forms import model_to_dict
 from rest_framework import status
 
-from app.models.invoice import Invoice, InvoiceStatus
+from app.models.invoice import Invoice
+from app.models.invoice_status import InvoiceStatus
 from app.tests.factories import InvoiceFactory, InvoicingMonthFactory
 from domains.models.member_status import MemberStatus
 

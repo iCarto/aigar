@@ -11,20 +11,13 @@ from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
     ForthcomingInvoiceItemName,
 )
+from app.models.invoice_status import InvoiceStatus
 from app.models.invoice_value import InvoiceValue
 from back.utils.dates import next_month
 from domains.models import aigar_config
 
 
 logger = logging.getLogger(__name__)
-
-
-class InvoiceStatus(models.TextChoices):
-    NUEVA = "nueva"  # noqa: WPS115
-    PENDIENTE_DE_COBRO = "pendiente_de_cobro"  # noqa: WPS115
-    COBRADA = "cobrada"  # noqa: WPS115
-    NO_COBRADA = "no_cobrada"  # noqa: WPS115
-    ANULADA = "anulada"  # noqa: WPS115
 
 
 def _cuota_fija(member) -> Decimal:

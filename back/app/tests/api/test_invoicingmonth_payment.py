@@ -1,6 +1,6 @@
 import pytest
 
-from app.models.invoice import InvoiceStatus
+from app.models.invoice_status import InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
 from app.models.payment import Payment
 from app.tests.factories import InvoiceFactory

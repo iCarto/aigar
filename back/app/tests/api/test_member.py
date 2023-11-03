@@ -7,7 +7,8 @@ from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
     ForthcomingInvoiceItemName,
 )
-from app.models.invoice import Invoice, InvoiceStatus
+from app.models.invoice_status import InvoiceStatus
+from app.models.invoice import Invoice
 from app.models.member import Member, UseTypes
 from app.tests.factories import InvoiceFactory, MemberFactory
 from domains.models.member_status import MemberStatus

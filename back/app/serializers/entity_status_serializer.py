@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.models.invoice import InvoiceStatus
+from app.models.invoice_status import InvoiceStatus
 from domains.models.member_status import MemberStatus
 
 

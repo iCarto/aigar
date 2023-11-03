@@ -3,6 +3,7 @@ from pathlib import Path
 
 import environ
 from corsheaders.defaults import default_headers
+from import_export.formats.base_formats import JSON, ODS, XLSX
 
 
 # Build paths inside the project like:
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_extensions",
     "solo",
+    "import_export",
     "back",
     "domains",
     "app",
@@ -271,3 +273,7 @@ SOLO_CACHE_TIMEOUT = 3600  # 1 hour
 SHELL_PLUS_IMPORTS = ["from django.db import models"]
 SHELL_PLUS_PRINT_SQL = True
 SHELL_PLUS_PRINT_SQL_TRUNCATE = None
+
+# django-import-export
+IMPORT_EXPORT_SKIP_ADMIN_LOG = True
+IMPORT_EXPORT_FORMATS = [XLSX, ODS, JSON]

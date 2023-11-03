@@ -1,5 +1,5 @@
 // https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/master/examples/editable-data
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import TextField from "@mui/material/TextField";
 
 const EditableTextCellTable = ({
@@ -29,7 +29,7 @@ const EditableTextCellTable = ({
 
     const fieldErrors = row.original.errors
         .filter(error => error.field === id)
-        .map(error => <div key={error.msg}>{error.msg}</div>);
+        .map(error => <Fragment key={error.msg}>{error.msg}</Fragment>);
 
     const enableInput = () => {
         console.log("enableInput");

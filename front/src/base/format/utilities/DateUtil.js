@@ -23,6 +23,10 @@ const DateUtil = {
 
     // Transform to API format date YYYY-MM-DD from DD-MMM-YYYY or DD/MM/YYYY
     parse(date) {
+        const apiDateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (apiDateFormatRegex.test(date)) {
+            return date;
+        }
         if (moment(date, TIGO_DATEFORMAT, true).isValid()) {
             return moment(date, TIGO_DATEFORMAT, true).format(API_DATEFORMAT);
         }
@@ -55,6 +59,10 @@ const DateUtil = {
             return moment(date, BANK_DATEFORMAT, true).isValid();
         }
         return moment(date, TIGO_DATEFORMAT).isValid();
+    },
+
+    isDate(value) {
+        return !isNaN(Date.parse(value));
     },
 };
 

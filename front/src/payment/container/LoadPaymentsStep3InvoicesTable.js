@@ -28,18 +28,18 @@ const LoadPaymentsStep3InvoicesTable = ({
     useEffect(() => {
         if (!invoices.length) {
             onValidateStep(false);
-            InvoicingMonthService.previewInvoicesWithPayments(payments)
-                .then(fetchedInvoices => {
-                    reviewInvoices(payments, fetchedInvoices);
-                    onChangeInvoices(fetchedInvoices);
-                    onValidateStep(true);
-                })
-                .catch(error => {
-                    console.log(error);
-                    onValidateStep(false);
-                });
         }
-    }, [invoicingMonthId, invoices, payments]);
+        InvoicingMonthService.previewInvoicesWithPayments(payments)
+            .then(fetchedInvoices => {
+                reviewInvoices(payments, fetchedInvoices);
+                onChangeInvoices(fetchedInvoices);
+                onValidateStep(true);
+            })
+            .catch(error => {
+                console.log(error);
+                onValidateStep(false);
+            });
+    }, [invoicingMonthId]);
 
     const reviewInvoices = (payments, invoices) => {
         invoices.forEach(invoice => {

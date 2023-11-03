@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import {LoadDataValidatorService} from "validation/service";
 import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {MemberService} from "member/service";
 import {createPayment} from "payment/model";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {useLoadPaymentsTableColumns} from "payment/data";
@@ -40,29 +41,63 @@ const LoadPaymentsStep2PaymentsTable = ({
         );
     }, [invoicingMonthId]);
 
-    const handleClickViewMember = member_id => {
-        setIsModalOpen(true);
-        setSelectedMemberForModal(member_id);
+    const findInvoiceForPayment = (payment, invoices) => {
+        let invoiceForPayment = invoices.find(
+            invoice => invoice.numero === payment.num_factura
+        );
+
+        //TO-DO: Review. This will always return undefined, since payment.member_id comes from the invoice object. If no invoice is found for a payment, then this payment will only have a value for fecha, monto & num_factura. Thus payment.member_id will always be null in these cases.
+        if (!invoiceForPayment) {
+            invoiceForPayment = invoices.find(
+                invoice => invoice.member_id === payment.member_id
+            );
+        }
+        return invoiceForPayment;
     };
 
-    const onClickCancelViewMember = () => {
-        setIsModalOpen(false);
-        setSelectedMemberForModal(null);
+    const reviewPayments = async (payments, invoices) => {
+        const paymentsWithErrors = await Promise.all(
+            payments?.map(async payment => {
+                const invoiceForPayment = findInvoiceForPayment(payment, invoices);
+                let invoiceFieldsForPayment = {};
+
+                if (invoiceForPayment) {
+                    invoiceFieldsForPayment = {
+                        member_id: invoiceForPayment.member_id,
+                        member_name: invoiceForPayment.nombre,
+                        sector: invoiceForPayment.sector,
+                        invoice: invoiceForPayment.id,
+                    };
+                } else {
+                    // We need to get the member details for payments without invoice to avoid nulls in the table.
+                    const memberId = payment.num_factura.slice(0, 4);
+                    const member = await MemberService.getMember(memberId);
+
+                    invoiceFieldsForPayment = {
+                        member_id: member?.id,
+                        member_name: member?.name,
+                        sector: member?.sector,
+                    };
+                }
+
+                return createPayment({
+                    ...payment,
+                    ...invoiceFieldsForPayment,
+                    errors: LoadDataValidatorService.validatePaymentEntry(
+                        payment,
+                        invoiceForPayment
+                    ),
+                });
+            })
+        );
+
+        onChangePayments(paymentsWithErrors);
+        onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
     };
-
-    const {tableColumns} = useLoadPaymentsTableColumns(handleClickViewMember);
-
-    const modal = (
-        <MemberViewModal
-            id={selectedMemberForModal}
-            isOpen={isModalOpen}
-            onClose={onClickCancelViewMember}
-        />
-    );
 
     const handleUpdatePayment = (rowId, columnId, value) => {
-        const updatedPayments = payments.map(payment => {
-            if (payment.id === rowId) {
+        const updatedPayments = payments.map((payment, index) => {
+            if (index === rowId) {
                 const updatedPayment = createPayment({
                     ...payment,
                     [columnId]: value,
@@ -74,45 +109,14 @@ const LoadPaymentsStep2PaymentsTable = ({
         reviewPayments(updatedPayments, invoices);
     };
 
-    const getPaymentsTotalErrors = payments => {
-        return payments.filter(payment => payment.errors.length !== 0).length;
+    const handleClickViewMember = member_id => {
+        setIsModalOpen(true);
+        setSelectedMemberForModal(member_id);
     };
 
-    const findInvoiceForPayment = (payment, invoices) => {
-        let invoiceForPayment = invoices.find(
-            invoice => invoice.numero === payment.num_factura
-        );
-        if (!invoiceForPayment) {
-            invoiceForPayment = invoices.find(
-                invoice => invoice.member_id === payment.member_id
-            );
-        }
-        return invoiceForPayment;
-    };
-
-    const reviewPayments = (payments, invoices) => {
-        const paymentsWithErrors = payments?.map(payment => {
-            const invoiceForPayment = findInvoiceForPayment(payment, invoices);
-            let invoiceFieldsForPayment = {};
-            if (invoiceForPayment) {
-                invoiceFieldsForPayment = {
-                    member_id: invoiceForPayment.member_id,
-                    member_name: invoiceForPayment.nombre,
-                    sector: invoiceForPayment.sector,
-                    invoice: invoiceForPayment.id,
-                };
-            }
-            return createPayment({
-                ...payment,
-                ...invoiceFieldsForPayment,
-                errors: LoadDataValidatorService.validatePaymentEntry(
-                    payment,
-                    invoiceForPayment
-                ),
-            });
-        });
-        onChangePayments(paymentsWithErrors);
-        onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
+    const handleClickCancelViewMember = () => {
+        setIsModalOpen(false);
+        setSelectedMemberForModal(null);
     };
 
     const handleFilterChange = newFilter => {
@@ -122,7 +126,21 @@ const LoadPaymentsStep2PaymentsTable = ({
         }));
     };
 
+    const getPaymentsTotalErrors = payments => {
+        return payments.filter(payment => payment.errors.length !== 0).length;
+    };
+
+    const {tableColumns} = useLoadPaymentsTableColumns(handleClickViewMember);
+
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
+
+    const modal = (
+        <MemberViewModal
+            id={selectedMemberForModal}
+            isOpen={isModalOpen}
+            onClose={handleClickCancelViewMember}
+        />
+    );
 
     const errorsMessage = (
         <Typography>

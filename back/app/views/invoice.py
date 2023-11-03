@@ -1,12 +1,12 @@
+from django.core import exceptions
 from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
-from app.models.invoice_status import InvoiceStatus
 from app.models.invoice import Invoice
-from app.models.invoice_status import NOT_MODIFICABLE_INVOICES
+from app.models.invoice_status import NOT_MODIFICABLE_INVOICES, InvoiceStatus
 from app.serializers.entity_status_serializer import InvoiceStatusSerializer
 from app.serializers.invoice import (
     InvoiceSerializer,
@@ -75,18 +75,28 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     # Override destroy method to set Invoice as inactive and return a new version of the same invoice
     def destroy(self, request, *args, **kwargs):
         invoice = self.get_object()
-        version = invoice.version
+        if invoice.estado in NOT_MODIFICABLE_INVOICES:
+            raise exceptions.ValidationError(
+                f"No se puede modificar una  factura en estado {invoice.estado}"
+            )
+        if invoice.payment_set.exists():
+            raise exceptions.ValidationError(
+                "No se puede modificar una factura con pagos asociados"
+            )
         invoice.estado = InvoiceStatus.ANULADA
         invoice.save()
+        measurements = list(invoice.measurement_set.all())
 
-        # https://docs.djangoproject.com/en/2.2/topics/db/queries/#copying-model-instances
+        # https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances
         invoice.pk = None
-        invoice.version = version + 1
+        invoice._state.adding = True  # noqa: WPS437
+        invoice.version += 1
         invoice.estado = InvoiceStatus.NUEVA
         invoice.save()
-        return Response(
-            InvoiceSerializer(context={"request": request}, instance=invoice).data
-        )
+        for m in measurements:
+            m.invoice = invoice
+            m.save()
+        return Response(InvoiceSerializer(instance=invoice).data)
 
 
 class InvoiceStatsView(ListAPIView):

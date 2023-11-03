@@ -142,32 +142,6 @@ def test_debt_is_included_in_new_invoices(api_client, create_invoicing_month):
     assert invoice.saldo_pendiente == 50
 
 
-# def test_connection_is_included_in_new_invoices(api_client, create_invoicing_month):
-#     """Para una nueva socia, una factura a mano incluye el derecho de conexión."""
-#     InvoiceFactory.create(
-#         estado=InvoiceStatus.NUEVA,
-#         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
-#     )
-#     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, status=MemberStatus.ACTIVE)
-#     response = api_client.post(
-#         "/api/invoices/",
-#         {
-#             "anho": "2019",
-#             "mes": "09",
-#             "caudal_anterior": 0,
-#             "cauda_actual": 0,
-#             "member": member.pk,
-#             "version": 1,
-#         },
-#     )
-#     assert response.status_code == status.HTTP_201_CREATED, response.json()
-
-#     invoice = Invoice.objects.get(anho="2019", mes="09", member=member.pk)
-#     assert invoice.mora == 0
-#     assert invoice.saldo_pendiente == 0
-#     assert invoice.derecho == 100
-
-
 def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_month):
     """Para una socia reconectada, una factura a mano incluye la reconexión."""
     old_invoice = InvoiceFactory.create(

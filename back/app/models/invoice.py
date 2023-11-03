@@ -126,8 +126,6 @@ class InvoiceManager(models.Manager["Invoice"]):
 
     def build_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":
         invoice = {
-            # New monthly invoices are always version 1
-            "version": 1,
             "anho": new_invoicing_month.anho,
             "mes": new_invoicing_month.mes,
             "member": member,
@@ -251,7 +249,7 @@ class Invoice(models.Model):
     )
 
     version = models.PositiveSmallIntegerField(
-        null=False, blank=False, unique=False, verbose_name="Version", help_text=""
+        null=False, blank=False, default=1, verbose_name="Version", help_text=""
     )
 
     anho = models.TextField(null=False, blank=False, verbose_name="Año")

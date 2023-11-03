@@ -8,7 +8,8 @@ const InvoiceNavigator = ({navigatorIds, path}) => {
     const {idFactura} = useParams();
 
     const currentInvoiceIndex = navigatorIds.indexOf(parseInt(idFactura));
-    const isPreviousButtonDisabled = !navigatorIds.length || currentInvoiceIndex === 0;
+    const isPreviousButtonDisabled =
+        !navigatorIds.length || currentInvoiceIndex === 0 || currentInvoiceIndex === -1;
     const isNextButtonDisabled =
         !navigatorIds.length || currentInvoiceIndex === navigatorIds.length - 1;
 

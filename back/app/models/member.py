@@ -170,21 +170,15 @@ class Member(models.Model):
     def __str__(self):
         return f"{self.id} - {self.name}"
 
+    @transaction.atomic
     def save(self, **kwargs) -> None:
         self.full_clean()
-        with transaction.atomic():
-            old_order = None
-            is_creating = self.pk is None
-            if not is_creating:
-                old_order = Member.objects.values_list("orden", flat=True).get(
-                    pk=self.pk
-                )
+        current_order = self._get_current_values()["orden"]
+        new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
+        Member.objects.update_order(new_order=new_order, old_order=current_order)
+        super().save(**kwargs)
 
-            new_order = kwargs.get("updated_fields", {}).get("orden", self.orden)
-            Member.objects.update_order(new_order=new_order, old_order=old_order)
-            super().save(**kwargs)
-
-            Invoice.objects.member_updated(self)
+        Invoice.objects.member_updated(self)
 
     @property
     def lectura_anterior(self):
@@ -206,7 +200,7 @@ class Member(models.Model):
         if self.status == MemberStatus.DELETED:
             # No se puede mofificar una socia eliminada. Pero el workaround es para que
             # cuando nos llega un cambio de status a Eliminada si se pueda hacer.
-            current_status = Member.objects.values_list("status").get(pk=self.pk)
+            current_status = self._get_current_values()["status"]
             if current_status == MemberStatus.DELETED:
                 raise exceptions.ValidationError(
                     {
@@ -237,3 +231,11 @@ class Member(models.Model):
             Invoice.objects.handle_invoices_for_re_active_members(self)
 
         self.save()
+
+    def _get_current_values(self):
+        try:
+            return Member.objects.values("status", "orden").get(pk=self.pk)
+        except self.DoesNotExist:
+            # This handles import-export plugin, that sets the pk itself, even
+            # if the row does not already exists.
+            return {"status": None, "orden": None}

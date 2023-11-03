@@ -2,7 +2,6 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
-import {MemberService} from "member/service";
 import {useInvoicesList} from "invoice/provider";
 import {useMonthlyInvoicingList} from "monthlyinvoicing/provider";
 
@@ -39,9 +38,7 @@ const ViewInvoiceSubpage = () => {
         InvoiceService.getInvoice(idFactura)
             .then(invoiceData => {
                 setInvoice(invoiceData);
-                MemberService.getMember(invoiceData.member_id).then(memberData => {
-                    setMember(memberData);
-                });
+                setMember(invoiceData.member_data);
                 InvoiceService.getInvoicePayments(idFactura)
                     .then(paymentsData => {
                         setPayments(paymentsData);
@@ -71,10 +68,8 @@ const ViewInvoiceSubpage = () => {
             }
         >
             <ErrorMessage message={error} />
+            <InvoiceNavigator navigatorIds={invoicesIds} path={urlPath} />
             {isLoading ? <Spinner message="Cargando datos" /> : null}
-            {invoicesIds?.length ? (
-                <InvoiceNavigator navigatorIds={invoicesIds} path={urlPath} />
-            ) : null}
             {invoice ? (
                 <InvoiceDetail invoice={invoice} member={member} payments={payments} />
             ) : null}

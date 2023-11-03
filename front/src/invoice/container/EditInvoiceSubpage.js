@@ -2,7 +2,6 @@ import {useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
 import {InvoiceService} from "invoice/service";
-import {MemberService} from "member/service";
 import {DataValidatorService} from "validation/service";
 
 import {InvoiceForm} from "invoice/presentational";
@@ -28,9 +27,7 @@ const EditInvoiceSubpage = () => {
         InvoiceService.getInvoice(idFactura)
             .then(invoice => {
                 setInvoice(invoice);
-                MemberService.getMember(invoice.member_id).then(member => {
-                    setMember(member);
-                });
+                setMember(invoice.member_data);
             })
             .catch(error => {
                 console.log(error);

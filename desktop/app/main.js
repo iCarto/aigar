@@ -30,13 +30,18 @@ function createWindow(mainAddr) {
     /*
     Este código se usaba para evitar el problema de reusar código antiguo en nuevas
     versiones de la aplicación. Modificando la versión en package no debería suceder
-  */
+    En las actuales se usa para recargar aigar_config
+    */
     /*
-  mainWindow.loadURL(mainAddr, {"extraHeaders" : "pragma: no-cache\n"});
-  mainWindow.webContents.reloadIgnoringCache();
-  mainWindow.webContents.session.clearCache(function(){log('Cache cleared')});
-  mainWindow.webContents.session.clearStorageData(function(){log('StorageData cleared')});
-  */
+    mainWindow.loadURL(mainAddr, {"extraHeaders" : "pragma: no-cache\n"});
+    mainWindow.webContents.reloadIgnoringCache();
+    */
+    mainWindow.webContents.session.clearCache(function () {
+        log("Cache cleared");
+    });
+    mainWindow.webContents.session.clearStorageData(function () {
+        log("StorageData cleared");
+    });
 
     if (process.platform === "linux") {
         mainWindow.webContents.openDevTools();

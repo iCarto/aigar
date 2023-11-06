@@ -20,7 +20,9 @@ cp tools/fixtures/gomi/electron.exe desktop/gomi
 # cp README.md desktop/gomi/src
 
 # ./scripts/create_notice.sh desktop/NOTICE 'web@0.1.0'
-bash ./scripts/util/echo_env_back.sh | sed 's/DESKTOP=False/DESKTOP=True/' | sed 's/DEBUG=True/DEBUG=False/' | sed '/^ALLOWED_/d' | sed 's/# ALLOWED_/ALLOWED_/' > desktop/gomi/.env
+# DEBUG=True hace falta para que funcione servir desde /media. Por algún motivo whitenoise
+# no lo está sirviendo
+bash ./scripts/util/echo_env_back.sh | sed 's/DESKTOP=False/DESKTOP=True/' | sed 's/DEBUG=True/DEBUG=True/' | sed '/^ALLOWED_/d' | sed 's/# ALLOWED_/ALLOWED_/' > desktop/gomi/.env
 cp -r back/aigar_data desktop/gomi/
 cp ./tools/fixtures/gomi/logo-ascatli.png desktop/gomi/aigar_data
 

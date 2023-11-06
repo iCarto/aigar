@@ -1,13 +1,19 @@
+import {useDomain} from "aigar/domain/provider";
 import {CURRENCY_SYMBOL, WATER_CONSUMPTION_SYMBOL} from "base/format/config/i18n";
-import {FormInputInteger, FormInputDecimal} from "base/form";
+import {FormInputInteger, FormInputDecimal, FormCheckboxFieldCombo} from "base/form";
 import Grid from "@mui/material/Grid";
 
 const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
+    const {aigarConfig} = useDomain();
     const isNewInvoice = formData?.id.value == -1;
 
     const handleChangeField = event => {
         const name = event.target.name;
         const value = event.target.value;
+        onChange(name, value);
+    };
+
+    const handleChangeCheckBox = (name, value) => {
         onChange(name, value);
     };
 
@@ -51,6 +57,7 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     name="cuota_fija"
                     field={formData?.cuota_fija}
                     onChange={handleChangeField}
+                    readOnly
                     endAdornment={CURRENCY_SYMBOL}
                 />
                 <FormInputDecimal
@@ -82,23 +89,23 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     name="mora"
                     field={formData?.mora}
                     onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    readOnly
                     endAdornment={CURRENCY_SYMBOL}
                 />
-                <FormInputDecimal
-                    label="Inasistencia a asambleas"
+                <FormCheckboxFieldCombo
+                    label="Inasistencia a asamblea"
                     name="asamblea"
-                    field={formData?.asamblea}
-                    onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    value={formData?.asamblea.value}
+                    predefinedValue={aigarConfig?.asamblea}
+                    onChange={handleChangeCheckBox}
                     endAdornment={CURRENCY_SYMBOL}
                 />
-                <FormInputDecimal
-                    label="Jornada de trabajo"
+                <FormCheckboxFieldCombo
+                    label="Inasistencia a jornada de trabajo"
                     name="jornada_trabajo"
-                    field={formData?.jornada_trabajo}
-                    onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    value={formData?.jornada_trabajo.value}
+                    predefinedValue={aigarConfig?.jornada_trabajo}
+                    onChange={handleChangeCheckBox}
                     endAdornment={CURRENCY_SYMBOL}
                 />
                 <FormInputDecimal
@@ -106,23 +113,23 @@ const InvoiceFormFields = ({formData, isReadOnly, onChange}) => {
                     name="derecho"
                     field={formData?.derecho}
                     onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    readOnly
                     endAdornment={CURRENCY_SYMBOL}
                 />
-                <FormInputDecimal
+                <FormCheckboxFieldCombo
                     label="Re-conexión"
                     name="reconexion"
-                    field={formData?.reconexion}
-                    onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    value={formData?.reconexion.value}
+                    predefinedValue={aigarConfig?.reconexion}
+                    onChange={handleChangeCheckBox}
                     endAdornment={CURRENCY_SYMBOL}
                 />
-                <FormInputDecimal
+                <FormCheckboxFieldCombo
                     label="Traspaso de derecho"
                     name="traspaso"
-                    field={formData?.traspaso}
-                    onChange={handleChangeField}
-                    readOnly={isReadOnly}
+                    value={formData?.traspaso.value}
+                    predefinedValue={aigarConfig?.traspaso_derecho}
+                    onChange={handleChangeCheckBox}
                     endAdornment={CURRENCY_SYMBOL}
                 />
                 <FormInputDecimal

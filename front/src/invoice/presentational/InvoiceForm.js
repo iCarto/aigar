@@ -55,8 +55,8 @@ const InvoiceForm = ({
     };
 
     const updateInvoice = updatedData => {
-        InvoiceService.updateInvoiceTotal(updatedData).then(response => {
-            onUpdate(response);
+        InvoiceService.updateInvoiceTotal(updatedData).then(updatedInvoice => {
+            onUpdate(updatedInvoice);
         });
     };
 

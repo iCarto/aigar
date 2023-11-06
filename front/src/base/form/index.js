@@ -6,5 +6,6 @@ export {default as FormSelect} from "./FormSelect";
 export {default as FormTextArea} from "./FormTextArea";
 export {default as FormSelectOrder} from "./FormSelectOrder";
 export {default as FormCheckbox} from "./FormCheckbox";
+export {default as FormCheckboxFieldCombo} from "./FormCheckboxFieldCombo";
 export {default as FormSectionHeading} from "./FormSectionHeading";
 export {default as FormRadioGroup} from "./FormRadioGroup";

@@ -11,6 +11,7 @@ class InvoiceAdmin(ImportExportModelAdmin):
     search_fields = ["=member__id", "member__name"]
     search_help_text = "Busqueda por nombre o número de socia"
     list_display = ("numero", "mes_facturacion_id", "member", "total", "estado")
+    readonly_fields = ("mes_facturacion_id",)
     list_select_related = True
     list_filter = ("estado", "anho", "mes")
     list_max_show_all = 10

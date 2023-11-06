@@ -1,4 +1,3 @@
-import datetime
 from typing import Any
 
 from django.db import models, transaction
@@ -32,12 +31,11 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
         invoicing_month_to_close.is_open = False
         invoicing_month_to_close.save()
 
-        self._update_id_mes_facturacion_in_kwargs(kwargs)
         kwargs["is_open"] = True
 
         new_invoicing_month = super().create(**kwargs)
 
-        self._create_new_invoices(new_invoicing_month)
+        self.create_new_invoices(new_invoicing_month)
         return new_invoicing_month
 
     def get_invoices(self, mes_facturacion_id: str):
@@ -74,13 +72,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
             .order_by("member_id")
         )
 
-    def _update_id_mes_facturacion_in_kwargs(self, kwargs):
-        year = int(kwargs["anho"])
-        month = kwargs["mes"]
-        date_to_format = datetime.date(year, int(month), 1)
-        kwargs.setdefault("id_mes_facturacion", date_to_format.strftime("%Y%m"))
-
-    def _create_new_invoices(self, new_invoicing_month):
+    def create_new_invoices(self, new_invoicing_month: "InvoicingMonth"):
         p = models.Prefetch(
             "invoice_set",
             queryset=LatestInvoice.objects.with_cancelled()
@@ -155,5 +147,9 @@ class InvoicingMonth(models.Model):
         return f"{self.anho} - {self.mes} - {self.is_open}"
 
     def save(self, **kwargs) -> None:
+        self.anho = str(self.anho).zfill(4)
+        self.mes = str(self.mes).zfill(2)
+        self.id_mes_facturacion = f"{self.anho}{self.mes}"
+
         self.full_clean()
         return super().save(**kwargs)

@@ -1,8 +1,14 @@
+import datetime
+
 from import_export import resources, widgets
 from import_export.fields import Field
 
 from app.models.invoice import Invoice
+from app.models.invoicing_month import InvoicingMonth
+from app.models.measurement import Measurement
 from app.models.member import Member
+from app.models.payment import Payment
+from back.utils.dates import next_month
 from domains.models.member_status import MemberStatus
 from domains.models.zone import Zone
 
@@ -27,7 +33,19 @@ class ChoicesWidget(widgets.CharWidget):
         return result
 
 
-class MemberResource(resources.ModelResource):
+class RemoveEmptyRowsResource(resources.ModelResource):
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        # https://github.com/django-import-export/django-import-export/issues/1005
+        # https://github.com/django-import-export/django-import-export/pull/1490
+        filtered_dataset = [
+            row for row in dataset if not all(value is None for value in row)
+        ]
+        return super().before_import(
+            filtered_dataset, using_transactions, dry_run, **kwargs
+        )
+
+
+class MemberResource(RemoveEmptyRowsResource):
     class Meta(object):
         model = Member
         exclude = ("id", "sector", "created_at", "updated_at")
@@ -49,23 +67,84 @@ class MemberResource(resources.ModelResource):
     )
 
 
-class InvoiceResource(resources.ModelResource):
+class InvoiceResource(RemoveEmptyRowsResource):
     class Meta(object):
         model = Invoice
-        exclude = (
-            "version",
-            "anho",
-            "mes",
-            "estado",
-            "member",
-            "created_at",
-            "updated_at",
+        fields = (
+            "id",
+            "num_socio",
+            "mes_facturacion",
+            "member_name",
+            "caudal_anterior",
+            "caudal_actual",
+            "ontime_payment",
+            "late_payment",
+            "observaciones",
+            "total",
         )
         import_id_fields = ("num_socio",)
 
     id = Field(attribute="id", column_name="id", widget=NotNullIntegerWidget())
-    num_socio = Field(attribute="member_id", column_name="num_socio")
+
+    num_socio = Field(
+        column_name="num_socio",
+        attribute="member",
+        widget=widgets.ForeignKeyWidget(Member, field="id"),
+    )
+    mes_facturacion = Field(
+        column_name="mes_facturacion",
+        attribute="mes_facturacion",
+        widget=widgets.ForeignKeyWidget(InvoicingMonth, field="id_mes_facturacion"),
+    )
+
+    member_name = Field(column_name="Nombre", attribute="member__name", readonly=True)
+
+    def after_save_instance(self, instance, using_transactions, dry_run):
+        total = instance.total
+        ontime_payment = instance.ontime_payment
+        late_payment = instance.late_payment
+        instance.ontime_payment = 0
+        instance.late_payment = 0
+        instance.save()
+        if instance.caudal_actual:
+            Measurement.objects.create(
+                caudal_anterior=instance.caudal_anterior,
+                caudal_actual=instance.caudal_actual,
+                invoice=instance,
+            )
+
+        instance.refresh_from_db()
+        instance.otros = (
+            total
+            - instance.cuota_fija
+            - instance.cuota_variable
+            - instance.ahorro
+            - instance.comision
+        )
+        instance.total = total
+        instance.save()
+
+        if ontime_payment:
+            Payment.objects.create(
+                fecha=next_month(
+                    datetime.date(int(instance.anho), int(instance.mes), 1)
+                ),
+                monto=ontime_payment,
+                invoice=instance,
+            )
+
+        if late_payment:
+            Payment.objects.create(
+                fecha=next_month(
+                    datetime.date(int(instance.anho), int(instance.mes), 28)
+                ),
+                monto=late_payment,
+                invoice=instance,
+            )
 
     def after_import_row(self, row, row_result, **kwargs):
-        if not getattr(row_result.original, "num_socio"):
-            raise Error
+        mes_facturacion_original = getattr(row_result.original, "mes_facturacion_id")
+        if mes_facturacion_original != row["mes_facturacion"]:
+            raise ValueError(
+                f"El mes de facturacion no coincide {mes_facturacion_original}:{row['mes_facturacion']}"
+            )

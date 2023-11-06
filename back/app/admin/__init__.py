@@ -2,11 +2,11 @@ from django.conf.locale.es import formats as es_formats
 from django.contrib import admin, auth
 
 from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
-from app.models.invoicing_month import InvoicingMonth
 from app.models.measurement import Measurement
 from app.models.payment import Payment
 
 from .invoice_admin import InvoiceAdmin
+from .invoicingmonth_admin import InvoicingMonthAdmin
 from .member_admin import MemberAdmin
 
 
@@ -21,14 +21,6 @@ admin.site.index_title = "Panel de configuración de AIGAR"
 
 
 admin.site.register(ForthcomingInvoiceItem)
-
-
-@admin.register(InvoicingMonth)
-class InvoicingMonthAdmin(admin.ModelAdmin):
-    list_display = ("id_mes_facturacion", "anho", "mes", "is_open")
-    list_filter = ("anho", "mes")
-    list_max_show_all = 10
-    ordering = ("-id_mes_facturacion",)
 
 
 @admin.register(Measurement)

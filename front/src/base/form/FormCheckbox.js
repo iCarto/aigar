@@ -6,15 +6,19 @@ import Checkbox from "@mui/material/Checkbox";
 const FormCheckbox = ({
     label,
     name,
-    value = "",
-    onChange,
-    disabled = false,
-    style = {},
+    value = false,
     defaultChecked = false,
+    disabled = false,
     errors = [],
+    style = {},
+    onChange,
 }) => {
-    const handleChange = userValue => {
-        onChange(userValue);
+    const [isChecked, setIsChecked] = useState(defaultChecked || value);
+
+    const handleChange = event => {
+        const userValue = event.target.checked;
+        setIsChecked(userValue);
+        onChange(name, userValue);
     };
 
     return (
@@ -22,14 +26,10 @@ const FormCheckbox = ({
             <FormControlLabel
                 label={label}
                 name={name}
-                value={value}
                 control={
                     <Checkbox
-                        checked={defaultChecked || value}
-                        onChange={event => {
-                            const userValue = event.target.checked;
-                            handleChange(userValue);
-                        }}
+                        checked={isChecked}
+                        onChange={handleChange}
                         disabled={disabled}
                         sx={style}
                     />

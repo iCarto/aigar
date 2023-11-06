@@ -36,7 +36,7 @@ case "${1}" in
         #     die "ERROR: Activate a virtualenv before continue."
         # fi
         # command -v deactivate || die "ERROR: Activate a virtualenv before continue."
-        (cd back && python manage.py runserver)
+        (cd back && python manage.py runserver_plus)
         ;;
     -s | --shell)
         (cd back && python manage.py shell_plus --ipython)

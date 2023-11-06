@@ -120,7 +120,7 @@ class InvoicingMonth(models.Model):
 
     objects: InvoicingMonthManager = InvoicingMonthManager()
 
-    id_mes_facturacion = models.TextField(
+    id_mes_facturacion = models.CharField(
         primary_key=True,
         null=False,
         blank=False,
@@ -128,11 +128,12 @@ class InvoicingMonth(models.Model):
         verbose_name="Identificador",
         help_text="",
         editable=False,
+        max_length=6,
     )
 
-    anho = models.TextField(null=False, blank=False, verbose_name="Año", help_text="")
+    anho = models.CharField(null=False, blank=False, max_length=4, verbose_name="Año")
 
-    mes = models.TextField(null=False, blank=False, verbose_name="Mes", help_text="")
+    mes = models.CharField(null=False, blank=False, max_length=2, verbose_name="Mes")
 
     # There will be always one and only one InvoicingMonth open
     is_open = models.BooleanField(

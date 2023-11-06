@@ -48,22 +48,24 @@ class MemberResource(resources.ModelResource):
         widget=widgets.ForeignKeyWidget(Zone, field="name"),
     )
 
-    # def after_import_row(self, row, row_result, **kwargs):
-    #     if not getattr(row_result.original, "num_socio"):
-    #         raise Error
-
 
 class InvoiceResource(resources.ModelResource):
     class Meta(object):
         model = Invoice
         exclude = (
             "version",
+            "anho",
+            "mes",
             "estado",
             "member",
-            "mes_facturacion",
             "created_at",
             "updated_at",
         )
         import_id_fields = ("num_socio",)
 
+    id = Field(attribute="id", column_name="id", widget=NotNullIntegerWidget())
     num_socio = Field(attribute="member_id", column_name="num_socio")
+
+    def after_import_row(self, row, row_result, **kwargs):
+        if not getattr(row_result.original, "num_socio"):
+            raise Error

@@ -27,4 +27,4 @@ class MemberAdmin(ImportExportModelAdmin):
 
     def save_model(self, request: Any, obj: Any, form: Any, change: Any) -> None:
         super().save_model(request, obj, form, change)
-        obj.forthcominginvoiceitem_set.delete()
+        obj.forthcominginvoiceitem_set.all().delete()

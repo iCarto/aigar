@@ -252,9 +252,9 @@ class Invoice(models.Model):
         null=False, blank=False, default=1, verbose_name="Version", help_text=""
     )
 
-    anho = models.TextField(null=False, blank=False, verbose_name="Año")
+    anho = models.CharField(null=False, blank=False, max_length=4, verbose_name="Año")
 
-    mes = models.TextField(null=False, blank=False, verbose_name="Mes")
+    mes = models.CharField(null=False, blank=False, max_length=2, verbose_name="Mes")
 
     caudal_anterior = models.PositiveIntegerField(
         null=False, blank=False, verbose_name="Caudal anterior"

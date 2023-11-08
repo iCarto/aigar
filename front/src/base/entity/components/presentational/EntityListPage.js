@@ -39,8 +39,8 @@ const EntityListPage = ({
                         xs={10}
                         md={8}
                         flexDirection="row"
+                        alignItems="stretch"
                         columnSpacing={1}
-                        alignItems={"flex-end"}
                     >
                         <EntityListFilterForm filterForm={filterForm} />
                     </Grid>

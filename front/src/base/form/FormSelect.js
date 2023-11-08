@@ -15,6 +15,7 @@ const FormSelect = ({
     required = false,
     showEmptyOption = false,
     smallInput = false,
+    removeMargin = false,
 }) => {
     const fieldValue = field ? field.value : value;
 
@@ -32,8 +33,16 @@ const FormSelect = ({
         },
     };
 
+    const formControlStyle = removeMargin ? {marginY: 0} : {};
+
     return (
-        <FormControl fullWidth margin="dense" size="small" required={required}>
+        <FormControl
+            fullWidth
+            margin="dense"
+            size="small"
+            required={required}
+            sx={formControlStyle}
+        >
             <InputLabel id={`${name}-label`}>{label}</InputLabel>
             <Select
                 labelId={`${name}-label`}

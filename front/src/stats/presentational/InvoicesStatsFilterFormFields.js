@@ -26,6 +26,7 @@ const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
                     onChange={handleInputChange}
                     value={fields.sector}
                     showEmptyOption
+                    removeMargin
                 />
             </Grid>
             <Grid item xs>
@@ -36,6 +37,7 @@ const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
                     onChange={handleInputChange}
                     value={fields.startInvoicingMonth}
                     showEmptyOption
+                    removeMargin
                 />
             </Grid>
             <Grid item xs>
@@ -46,6 +48,7 @@ const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
                     onChange={handleInputChange}
                     value={fields.endInvoicingMonth}
                     showEmptyOption
+                    removeMargin
                 />
             </Grid>
         </>

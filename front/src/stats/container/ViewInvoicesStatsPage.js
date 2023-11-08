@@ -71,6 +71,7 @@ const ViewInvoicesStatsPage = () => {
                         flexDirection="row"
                         columnSpacing={2}
                         justifyContent="space-between"
+                        alignItems="flex-end"
                         mb={1}
                     >
                         <Grid item mt={1}>

@@ -34,7 +34,7 @@ private
 desktop/gomi
 tools/fixtures
 
-back/back/staticfiles
+back/static
 back/aigar_data/db.sqlite3
 back/back/front_build
 back/**/migrations/0*.py

@@ -101,9 +101,7 @@ const PrintInvoicesModal = ({
                 .catch(error => {
                     console.log(error);
                     setOperationStatus(ModalOperationStatus.ERROR);
-                    setErrorMessage(
-                        "No se ha podido actualizar el estado de la factura."
-                    );
+                    setErrorMessage("No se ha podido actualizar el estado del recibo.");
                 });
         } catch (error) {
             console.log(error);
@@ -126,15 +124,15 @@ const PrintInvoicesModal = ({
         handleClose();
     };
 
-    const modalHeader = "Imprimir facturas";
+    const modalHeader = "Imprimir recibos";
 
     const modalContentStart = (
         <Alert severity="warning" sx={{marginTop: 2}}>
             <AlertTitle>
                 A continuación procederá a imprimir{" "}
                 {invoices && invoices.length === 1
-                    ? "la factura seleccionada"
-                    : `las facturas seleccionadas (${invoices.length})`}
+                    ? "el recibo seleccionado"
+                    : `los recibos seleccionados (${invoices.length})`}
                 .
             </AlertTitle>
             ¿Ha revisado previamente si es necesario añadir otros importes, como
@@ -175,9 +173,7 @@ const PrintInvoicesModal = ({
                 onClose={onClose}
                 header={modalHeader}
                 body={
-                    <Alert severity="error">
-                        No se ha seleccionado ninguna factura.
-                    </Alert>
+                    <Alert severity="error">No se ha seleccionado ningún recibo.</Alert>
                 }
             />
         )

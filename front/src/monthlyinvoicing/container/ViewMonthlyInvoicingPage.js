@@ -71,7 +71,7 @@ const ViewMonthlyInvoicingPage = () => {
     };
 
     const successModalMessage = (
-        <Alert severity="success">Las facturas se han actualizado correctamente.</Alert>
+        <Alert severity="success">Los recibos se han actualizado correctamente.</Alert>
     );
 
     return (

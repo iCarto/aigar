@@ -35,7 +35,7 @@ const ListMonthlyInvoicesSidebar = ({
             disabled={buttonDisableRules?.isLoadMeasurementsButtonDisabled}
         />,
         <PrintInvoicesButton
-            buttonTitle="3. Imprimir facturas"
+            buttonTitle="3. Imprimir recibos"
             invoices={selectedInvoices}
             outputFilename={outputFilename}
             onDataUpdate={handleDataUpdate}

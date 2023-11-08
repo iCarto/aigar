@@ -51,7 +51,7 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
                 </strong>
                 ?
             </AlertTitle>
-            Ya no se seguirán creando facturas mensuales para este socio/a.
+            Ya no se seguirán creando recibos mensuales para este socio/a.
         </Alert>
     );
 

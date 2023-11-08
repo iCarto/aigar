@@ -18,7 +18,7 @@ const CreateInvoiceButton = ({onClick = null, disabled = false}) => {
             disabled={disabled}
             fullWidth
         >
-            Crear factura
+            Crear recibo
         </Button>
     );
 };

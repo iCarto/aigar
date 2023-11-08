@@ -32,7 +32,7 @@ const EditInvoiceSubpage = () => {
             .catch(error => {
                 console.log(error);
                 setErrorMessage(
-                    "Se ha producido un error y no se han podido obtener los datos de la factura"
+                    "Se ha producido un error y no se han podido obtener los datos del recibo"
                 );
             })
             .finally(() => {
@@ -55,7 +55,7 @@ const EditInvoiceSubpage = () => {
             .catch(error => {
                 console.log(error);
                 setErrorMessage(
-                    "Se ha producido un error y no se han podido almacenar los datos de la factura"
+                    "Se ha producido un error y no se han podido almacenar los datos del recibo"
                 );
             })
             .finally(() => {

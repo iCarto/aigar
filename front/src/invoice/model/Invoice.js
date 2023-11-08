@@ -17,7 +17,7 @@ class Invoices extends Array {
         if (invoices.length === 1) {
             return invoices[0];
         }
-        throw new Error("No hay facturas con ese identificador");
+        throw new Error("No hay recibos con ese identificador");
     }
 }
 

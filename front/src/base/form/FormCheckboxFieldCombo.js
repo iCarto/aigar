@@ -1,13 +1,13 @@
 import {useState} from "react";
-import {FormInputText} from ".";
+import {FormInputDecimal} from ".";
 import FormControl from "@mui/material/FormControl";
 import Checkbox from "@mui/material/Checkbox";
 
 const FormCheckboxFieldCombo = ({
     label,
     name,
-    value = "",
-    predefinedValue = "",
+    value = 0,
+    predefinedValue = 0,
     defaultChecked = false,
     disabled = false,
     errors = [],
@@ -25,7 +25,7 @@ const FormCheckboxFieldCombo = ({
             setvalueForInput(predefinedValue);
             onChange(name, predefinedValue);
         } else {
-            setvalueForInput("");
+            setvalueForInput(0);
             onChange(name, 0);
         }
     };
@@ -36,7 +36,7 @@ const FormCheckboxFieldCombo = ({
             margin="none"
             sx={{display: "flex", flexDirection: "row"}}
         >
-            <FormInputText
+            <FormInputDecimal
                 label={label}
                 name={name}
                 value={valueForInput}
@@ -48,7 +48,7 @@ const FormCheckboxFieldCombo = ({
                 checked={isChecked}
                 onChange={handleChange}
                 disabled={disabled}
-                sx={{marginX: 1, paddingX: 1.5}}
+                sx={{marginLeft: 1, paddingX: 1.5}}
             />
         </FormControl>
     );

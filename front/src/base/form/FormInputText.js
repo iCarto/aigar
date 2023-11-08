@@ -4,7 +4,7 @@ const FormInputText = ({
     label,
     name,
     field = null,
-    value = "",
+    value = "" || 0,
     onChange,
     readOnly = false,
     required = false,
@@ -20,7 +20,7 @@ const FormInputText = ({
             name={name}
             label={label}
             placeholder={placeholder}
-            value={fieldValue || ""}
+            value={fieldValue}
             disabled={readOnly}
             required={required}
             onChange={onChange}

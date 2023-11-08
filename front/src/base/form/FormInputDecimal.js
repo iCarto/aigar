@@ -3,8 +3,8 @@ import {FormInput} from ".";
 const FormInputDecimal = ({
     label,
     name,
-    field,
-    value = "",
+    field = null,
+    value = "" || 0,
     onChange,
     readOnly = false,
     required = false,
@@ -28,7 +28,7 @@ const FormInputDecimal = ({
             name={name}
             label={label}
             placeholder={placeholder}
-            value={fieldValue || ""}
+            value={fieldValue}
             type="number"
             step="0.01"
             disabled={readOnly}

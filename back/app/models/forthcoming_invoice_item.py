@@ -37,7 +37,12 @@ class ForthcomingInvoiceItem(models.Model):
     updated_at = models.DateTimeField(null=False, auto_now=True)
 
     item = models.CharField(
-        null=False, blank=False, max_length=256, verbose_name="concepto", help_text=""
+        null=False,
+        blank=False,
+        max_length=256,
+        choices=ForthcomingInvoiceItemName.choices,
+        verbose_name="concepto",
+        help_text="",
     )
 
     value = models.FloatField(

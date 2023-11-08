@@ -21,6 +21,7 @@ Llegamos a un panel con diversas opciones. El orden en que se haga esto es funda
 4. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente facturas para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.
 5. Exporte las facturas. Tendrán varios datos en blanco como el `caudal_actual`, ... rellénelo con los datos correctos
 6. Importe las facturas
+7. En caso de que haya cuotas de conexión o reconexión pendientes introduzcalas en `Conceptos a facturar en siguientes meses`
 
 Con esto la aplicación está lista para ser usada. Cierre el navegador y la aplicación.
 

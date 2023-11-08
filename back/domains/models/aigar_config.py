@@ -224,8 +224,8 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("400"),
-        verbose_name="Nuevo derecho - Humano (valor total en $)",
-        help_text="Nuevo derecho - Humano (valor total en $)",
+        verbose_name="Nuevo derecho - Comercial (valor total en $)",
+        help_text="Nuevo derecho - Comercial (valor total en $)",
         validators=[validators.MinValueValidator(0)],
     )
     comercial_nuevo_derecho_primera_cuota = models.DecimalField(
@@ -234,8 +234,8 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("150"),
-        verbose_name="Nuevo derecho - Humano (pago mínimo en $ / primera cuota)",
-        help_text="Nuevo derecho - Humano (pago mínimo en $ / primera cuota)",
+        verbose_name="Nuevo derecho - Comercial (pago mínimo en $ / primera cuota)",
+        help_text="Nuevo derecho - Comercial (pago mínimo en $ / primera cuota)",
         validators=[validators.MinValueValidator(0)],
     )
 

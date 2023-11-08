@@ -1,6 +1,13 @@
 import {localCurrencyFormatter, localNumberFormatter} from "../config/i18n";
 
 const NumberUtil = {
+    defaultEmpty: " - ",
+
+    isNumber(field) {
+        // http://stackoverflow.com/a/1830844/854308
+        return !isNaN(parseFloat(field)) && isFinite(field);
+    },
+
     formatFloat(value) {
         if (isNaN(value) || value === 0) {
             return value;
@@ -56,12 +63,8 @@ const NumberUtil = {
     },
 
     formatCurrency(value, showCurrencySymbol = true) {
-        if (!value) {
-            return "";
-        }
-        if (isNaN(value)) {
-            return value;
-        }
+        if (!this.isNumber(value)) return this.defaultEmpty;
+
         let formatter = showCurrencySymbol
             ? localCurrencyFormatter
             : localNumberFormatter;

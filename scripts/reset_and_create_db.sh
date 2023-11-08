@@ -75,7 +75,7 @@ else
             , ahorro
             , humano_cuota_variable_primer_tramo_cantidad, humano_cuota_variable_primer_tramo_coste, humano_cuota_variable_segundo_tramo_cantidad, humano_cuota_variable_segundo_tramo_coste, humano_cuota_variable_tercer_tramo_cantidad, humano_cuota_variable_tercer_tramo_coste, humano_cuota_variable_cuarto_tramo_cantidad, humano_cuota_variable_cuarto_tramo_coste
             , comercial_cuota_variable_primer_tramo_cantidad, comercial_cuota_variable_primer_tramo_coste, comercial_cuota_variable_segundo_tramo_cantidad, comercial_cuota_variable_segundo_tramo_coste, comercial_cuota_variable_tercer_tramo_cantidad, comercial_cuota_variable_tercer_tramo_coste, comercial_cuota_variable_cuarto_tramo_cantidad, comercial_cuota_variable_cuarto_tramo_coste
-            , nuevo_derecho_siguientes_cuotas_opcion1, nuevo_derecho_siguientes_cuotas_opcion2, nuevo_derecho_siguientes_cuotas_opcion3
+            , nuevo_derecho_siguientes_cuotas_opcion1, nuevo_derecho_siguientes_cuotas_opcion2, nuevo_derecho_siguientes_cuotas_opcion3, nuevo_derecho_siguientes_cuotas_opcion4, nuevo_derecho_siguientes_cuotas_opcion5, nuevo_derecho_siguientes_cuotas_opcion6
         )
     VALUES
         (
@@ -87,7 +87,7 @@ else
             , '0.25'
             , 14, 0, 20, '0.75', NULL, '2', NULL, '0'
             , 14, 0, 20, '0.75', NULL, '2', NULL, '0'
-            , '10', '25', '50'
+            , '10', '25', '50', '75', '100', '150'
         )
     ;
 

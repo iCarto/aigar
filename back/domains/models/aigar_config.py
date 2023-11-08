@@ -266,6 +266,33 @@ class AigarConfig(SingletonModel):
         help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
         validators=[validators.MinValueValidator(0)],
     )
+    nuevo_derecho_siguientes_cuotas_opcion4 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 4 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
+        validators=[validators.MinValueValidator(0)],
+    )
+    nuevo_derecho_siguientes_cuotas_opcion5 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 5 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
+        validators=[validators.MinValueValidator(0)],
+    )
+    nuevo_derecho_siguientes_cuotas_opcion6 = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Opción 6 de cuotas para nuevo derecho de conexión",
+        help_text="Valor a seleccionar en la interfaz como siguientes cuotas del nuevo derecho en $, descontando la primera",
+        validators=[validators.MinValueValidator(0)],
+    )
 
     humano_cuota_variable_primer_tramo_cantidad = models.DecimalField(
         max_digits=5,
@@ -432,6 +459,9 @@ class AigarConfig(SingletonModel):
             self.nuevo_derecho_siguientes_cuotas_opcion1,
             self.nuevo_derecho_siguientes_cuotas_opcion2,
             self.nuevo_derecho_siguientes_cuotas_opcion3,
+            self.nuevo_derecho_siguientes_cuotas_opcion4,
+            self.nuevo_derecho_siguientes_cuotas_opcion5,
+            self.nuevo_derecho_siguientes_cuotas_opcion6,
         ]
         options = [o for o in options if o]
         options.sort()

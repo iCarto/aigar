@@ -17,6 +17,9 @@ class AigarConfigSerializer(serializers.ModelSerializer):
             "nuevo_derecho_siguientes_cuotas_opcion1",
             "nuevo_derecho_siguientes_cuotas_opcion2",
             "nuevo_derecho_siguientes_cuotas_opcion3",
+            "nuevo_derecho_siguientes_cuotas_opcion4",
+            "nuevo_derecho_siguientes_cuotas_opcion5",
+            "nuevo_derecho_siguientes_cuotas_opcion6",
         )
 
     nuevo_derecho_siguientes_cuotas_opciones = serializers.ReadOnlyField()

@@ -23,8 +23,8 @@ const DocXPrintFileService = {
     async getInvoiceBarcode(invoiceNumber) {
         const barcode = await BarcodeService.generateBarcodeCode39(invoiceNumber);
         return {
-            width: 6.5,
-            height: 1.9,
+            width: 5.49,
+            height: 1.77,
             data: barcode,
             extension: ".png",
         };

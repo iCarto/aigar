@@ -31,6 +31,11 @@ const PrintInvoicesModal = ({
 
     const formatedInvoices = invoices.map(invoice => {
         const readingDay = getReadingDay(invoice.sector);
+
+        let descuento = NumberUtil.formatCurrency(invoice.descuento, false);
+        if (invoice.descuento) {
+            descuento = `- ${descuento}`;
+        }
         return {
             ...invoice,
             nombre_junta: communityName,
@@ -39,19 +44,19 @@ const PrintInvoicesModal = ({
             fecha_lectura: `${readingDay}/${invoice.mes}/${invoice.anho}`,
             due_date: DateUtil.format(invoice.due_date),
             mes: DateUtil.getMonthName(invoice.mes),
-            cuota_fija: NumberUtil.formatFloat(invoice.cuota_fija),
-            cuota_variable: NumberUtil.formatFloat(invoice.cuota_variable),
-            comision: NumberUtil.formatFloat(invoice.comision),
-            ahorro: NumberUtil.formatFloat(invoice.ahorro),
-            mora: NumberUtil.formatFloat(invoice.mora),
-            asamblea: NumberUtil.formatFloat(invoice.asamblea),
-            jornada_trabajo: NumberUtil.formatFloat(invoice.jornada_trabajo),
-            reconexion: NumberUtil.formatFloat(invoice.reconexion),
-            traspaso: NumberUtil.formatFloat(invoice.traspaso),
-            otros: NumberUtil.formatFloat(invoice.otros),
-            saldo_pendiente: NumberUtil.formatFloat(invoice.saldo_pendiente),
-            descuento: NumberUtil.formatFloat(invoice.descuento),
-            total: NumberUtil.formatFloat(invoice.total),
+            cuota_fija: NumberUtil.formatCurrency(invoice.cuota_fija, false),
+            cuota_variable: NumberUtil.formatCurrency(invoice.cuota_variable, false),
+            comision: NumberUtil.formatCurrency(invoice.comision, false),
+            ahorro: NumberUtil.formatCurrency(invoice.ahorro, false),
+            mora: NumberUtil.formatCurrency(invoice.mora, false),
+            asamblea: NumberUtil.formatCurrency(invoice.asamblea, false),
+            jornada_trabajo: NumberUtil.formatCurrency(invoice.jornada_trabajo, false),
+            reconexion: NumberUtil.formatCurrency(invoice.reconexion, false),
+            traspaso: NumberUtil.formatCurrency(invoice.traspaso, false),
+            otros: NumberUtil.formatCurrency(invoice.otros, false),
+            saldo_pendiente: NumberUtil.formatCurrency(invoice.saldo_pendiente, false),
+            descuento: descuento,
+            total: NumberUtil.formatCurrency(invoice.total, false),
         };
     });
 

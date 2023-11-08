@@ -27,4 +27,4 @@ Con esto la aplicación está lista para ser usada. Cierre el navegador y la apl
 
 La carpeta `aigar_data` debe ser guardada e "instalada" en el ordenador de la Junta de Agua.
 
-En la Junta de Agua trabaje de la forma normal, "Exportar socias" para proceder a realizar las lecturas del mes. Y luego "Iniciar facturación".
+En la Junta de Agua trabaje de la forma normal, "Exportar socias" para proceder a realizar las lecturas del mes. Y luego "Iniciar proceso".

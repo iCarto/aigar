@@ -52,7 +52,7 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
 
     /*
         Sabemos que el proceso de facturación ha terminado cuando:
-        * Y no hay ninguna factura nueva ni no cobrada (porque entonces estaríamos en el punto 1 o 2 del proceso, iniciar facturación o importar lecturas)
+        * Y no hay ninguna factura nueva ni no cobrada (porque entonces estaríamos en el punto 1 o 2 del proceso, iniciar proceso o importar lecturas)
         * PERO ADEMÁS no todas están pendientes de cobro (porque entonces significa que los pagos aún no se han actualizado)
     */
     const isMonthlyInvoicingDone = useMemo(() => {

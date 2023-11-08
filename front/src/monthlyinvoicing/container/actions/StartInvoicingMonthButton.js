@@ -21,7 +21,7 @@ const StartInvoicingMonthButton = ({invoicingMonth, disabled}) => {
                 disabled={disabled}
                 fullWidth
             >
-                1. Iniciar facturación
+                1. Iniciar proceso
             </Button>
             <StartInvoicingMonthModal
                 isOpen={isModalOpen}

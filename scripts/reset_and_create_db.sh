@@ -324,7 +324,7 @@ case "${1}" in
         crear_vacia
         ;;
     iniciar)
-        echo "Creando base de datos para Iniciar facturación"
+        echo "Creando base de datos para Iniciar proceso"
         crear_iniciar
         ;;
     importar)

@@ -381,10 +381,8 @@ class Invoice(models.Model):
 
     @property
     def due_date(self) -> datetime.date:
-        payment_due_date = aigar_config.get_config().payment_due_day
-        return next_month(
-            datetime.date(int(self.anho), int(self.mes), payment_due_date)
-        )
+        payment_due_day = aigar_config.get_config().payment_due_day
+        return next_month(datetime.date(int(self.anho), int(self.mes), payment_due_day))
 
     @property
     def monto(self) -> float:

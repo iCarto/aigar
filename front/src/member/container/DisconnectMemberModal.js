@@ -51,11 +51,11 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
                 </strong>
                 ?
             </AlertTitle>
-            Ya no se seguirán creando facturas mensuales para este/a socio/a.
+            Ya no se seguirán creando facturas mensuales para este socio/a.
         </Alert>
     );
 
-    const modalContentFinished = "Se ha desactivado al socio/a la socia del sistema.";
+    const modalContentFinished = "Se ha desactivado al socio/a del sistema.";
 
     return isOpen ? (
         <OperationWithConfirmationModal
@@ -68,7 +68,7 @@ const DisconnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}
             modalContentFinished={modalContentFinished}
             modalAcceptText="Desconectar"
             modalAcceptIcon={<FormatColorResetIcon />}
-            modalErrorText="Se ha producido un error y no se ha podido desconectar a la socia."
+            modalErrorText="Se ha producido un error y no se ha podido desconectar al socio/a."
         />
     ) : null;
 };

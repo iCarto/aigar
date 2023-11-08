@@ -231,7 +231,7 @@ class Invoice(models.Model):
         constraints = [
             models.UniqueConstraint(
                 name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",  # noqa: WPS323
-                violation_error_message="Una socia no puede tener más de dos facturas no anuladas en el mismo mes.",
+                violation_error_message="Un socio/a no puede tener más de dos facturas no anuladas en el mismo mes.",
                 fields=["mes_facturacion_id", "member_id"],
                 condition=~models.Q(estado=InvoiceStatus.ANULADA),
             )

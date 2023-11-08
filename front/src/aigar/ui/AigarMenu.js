@@ -8,7 +8,7 @@ const AigarMenu = () => {
             pathname: "inicio",
         },
         {
-            name: "Socios",
+            name: "Socios/as",
             to: "/socios",
             pathname: "socios",
         },

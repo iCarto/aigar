@@ -66,7 +66,7 @@ const ConnectMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =
             modalContentFinished={modalContentFinished}
             modalAcceptText="Conectar"
             modalAcceptIcon={<WaterDropIcon />}
-            modalErrorText="Se ha producido un error y no se ha podido conectar a la socia."
+            modalErrorText="Se ha producido un error y no se ha podido conectar al socio/a."
         />
     ) : null;
 };

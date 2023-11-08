@@ -9,7 +9,7 @@ from app.models.invoice import Invoice
 class InvoiceAdmin(ImportExportModelAdmin):
     resource_classes = [InvoiceResource]
     search_fields = ["=member__id", "member__name"]
-    search_help_text = "Busqueda por nombre o número de socia"
+    search_help_text = "Busqueda por nombre o número de socio/a"
     list_display = ("numero", "mes_facturacion_id", "member", "total", "estado")
     readonly_fields = ("mes_facturacion_id",)
     list_select_related = True

@@ -25,7 +25,7 @@ class ForthcomingInvoiceItem(models.Model):
         # constraints = [
         #     models.UniqueConstraint(
         #         name="%(app_label)s_%(class)s_unique_member_item",  # noqa: WPS323
-        #         violation_error_message="Ya existe el concepto para esa socia",
+        #         violation_error_message="Ya existe el concepto para esa socio/a",
         #         fields=["member", "item"],
         #     )
         # ]
@@ -54,9 +54,9 @@ class ForthcomingInvoiceItem(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        verbose_name="socia",
+        verbose_name="socio/a",
         help_text="",
     )
 
     def __str__(self):
-        return f"Número Socia: {self.member_id}. Concepto: {self.item}. Valor: {self.value}"
+        return f"Número Socio/a: {self.member_id}. Concepto: {self.item}. Valor: {self.value}"

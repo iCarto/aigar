@@ -17,7 +17,7 @@ const MemberDetail = ({member, isSummary = false}) => {
 
     const deletedMemberMessage = member?.isDeleted ? (
         <Grid item xs={12}>
-            <ErrorMessage message="Este socio se encuentra eliminado del sistema." />
+            <ErrorMessage message="Este socio/a se encuentra eliminado del sistema." />
         </Grid>
     ) : null;
 

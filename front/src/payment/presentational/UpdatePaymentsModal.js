@@ -31,7 +31,7 @@ const UpdatePaymentsModal = ({
             <AlertTitle>Antes de continuar, asegúrese de haber:</AlertTitle>
             <ul>
                 <li>Añadido socios/as nuevos/as</li>
-                <li>Modificado los/as socios/as pertinentes</li>
+                <li>Modificado los socios/as pertinentes</li>
                 <li>Guardado una copia de seguridad</li>
             </ul>
         </Alert>

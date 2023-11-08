@@ -41,7 +41,7 @@ const ExportMemberButton = ({disabled = false}) => {
 
     const button = (
         <Button onClick={handleClick} disabled={disabled} variant="contained" fullWidth>
-            4. Exportar socios
+            4. Exportar socios/as
         </Button>
     );
 

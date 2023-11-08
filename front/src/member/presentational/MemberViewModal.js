@@ -26,7 +26,7 @@ const MemberViewModal = ({id, isOpen, onClose}) => {
                 .catch(error => {
                     console.log(error);
                     setErrorMessage(
-                        "Se ha producido un error y no se han podido obtener los datos del socio"
+                        "Se ha producido un error y no se han podido obtener los datos del socio/a"
                     );
                     setIsLoading(false);
                 });

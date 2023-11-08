@@ -36,7 +36,7 @@ const ViewMemberSubpage = () => {
             .catch(error => {
                 console.log(error);
                 setError(
-                    "Se ha producido un error y no se han podido obtener los datos del/de la socio/a"
+                    "Se ha producido un error y no se han podido obtener los datos del socio/a"
                 );
             })
             .finally(() => {
@@ -80,7 +80,7 @@ const ViewMemberSubpage = () => {
                                     <ListMemberInvoices invoices={invoices} />
                                 ) : (
                                     <Alert severity="info">
-                                        Aún no se ha emitido ninguna factura para este/a
+                                        Aún no se ha emitido ninguna factura para este
                                         socio/a.
                                     </Alert>
                                 )}

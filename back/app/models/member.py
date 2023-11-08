@@ -64,22 +64,17 @@ class MemberManager(models.Manager["Member"]):
 
 
 class Member(models.Model):
-    # El número de socio es no editable por el usuario, y se calcula automáticamente.
-    # El número de socio es "único", no se reutilizan números ya usados. Pero se permite
-    # el "traspaso". Es decir dar un "número de socio" / "derecho de consumo" a otro
-    # usuario.
-
     class Meta(object):
-        verbose_name = "socio"
-        verbose_name_plural = "socios"
+        verbose_name = "socio/a"
+        verbose_name_plural = "socios/as"
         ordering = ("id",)
 
     objects: MemberManager = MemberManager()
 
     id = models.AutoField(
         primary_key=True,
-        verbose_name="Número Socio",
-        help_text="El Número de socio no puede estar vacío y no debe repetirse",
+        verbose_name="Número de socio/a",
+        help_text="El número de socio/a no puede estar vacío y no debe repetirse",
     )
 
     # No deberían darse nombres iguales, pero puede tener sentido permitirlo
@@ -101,7 +96,7 @@ class Member(models.Model):
         help_text="",
     )
 
-    # TODO: Deberíamos poder fijar un orden máximo igual al número de socios activos
+    # TODO: Deberíamos poder fijar un orden máximo igual al número de socias activos
     # TODO: #4228
     orden = RangedIntegerField(
         null=True,
@@ -152,7 +147,7 @@ class Member(models.Model):
         null=False,
         blank=False,
         choices=MemberStatus.choices,
-        verbose_name="tipo de socia",
+        verbose_name="tipo de socio/a",
         editable=False,
         default=MemberStatus.ACTIVE,
         help_text="",
@@ -189,7 +184,7 @@ class Member(models.Model):
             .first()
         )
         if not last_invoice:
-            # si no tiene factura anterior se trata de un nuevo socio, por tanto su consumo anterior es 0
+            # si no tiene factura anterior se trata de una nueva socia, por tanto su consumo anterior es 0
             return 0
 
         # si no tenemos caudal actual es porque las facturas todavía no tienen lecturas
@@ -204,7 +199,7 @@ class Member(models.Model):
             if current_status == MemberStatus.DELETED:
                 raise exceptions.ValidationError(
                     {
-                        exceptions.NON_FIELD_ERRORS: "No se puede modificar una socia eliminada"
+                        exceptions.NON_FIELD_ERRORS: "No se puede modificar un socio/a eliminado"
                     }
                 )
         if self.dui and not re.match(r"^\d{8}-\d$", self.dui):
@@ -214,7 +209,9 @@ class Member(models.Model):
 
         if self.orden is None and self.status != MemberStatus.DELETED:
             raise exceptions.ValidationError(
-                {"orden": "El campo orden sólo puede ser nulo para socias eliminadas'."}
+                {
+                    "orden": "El campo orden sólo puede ser nulo para un socio/a eliminado'."
+                }
             )
 
     @transaction.atomic

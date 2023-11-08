@@ -33,7 +33,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
         invoices = get_invoices_for_measurements(measurements)
 
         for measurement in measurements:
-            invoice = get_invoice_by_num_socio(invoices, measurement["member_id"])
+            invoice = get_invoice_by_member_id(invoices, measurement["member_id"])
             if invoice:
                 measurement["invoice"] = invoice.id
             else:
@@ -57,7 +57,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
         invoices = get_invoices_for_measurements(measurements)
         updated_invoices = []
         for measurement in measurements:
-            invoice = get_invoice_by_num_socio(invoices, measurement["member_id"])
+            invoice = get_invoice_by_member_id(invoices, measurement["member_id"])
             if invoice:
                 invoice.update_with_measurement(
                     measurement["caudal_actual"],
@@ -74,13 +74,13 @@ class MeasurementViewSet(viewsets.ModelViewSet):
 
 def get_invoices_for_measurements(measurements):
     invoicing_month = get_object_or_404(InvoicingMonth, is_open=True)
-    num_socios = [measurement["member_id"] for measurement in measurements]
+    member_id_set = [measurement["member_id"] for measurement in measurements]
     return Invoice.objects.prefetch_related("member").filter(
-        member__in=num_socios, mes_facturacion=invoicing_month
+        member__in=member_id_set, mes_facturacion=invoicing_month
     )
 
 
-def get_invoice_by_num_socio(invoices, member_id):
+def get_invoice_by_member_id(invoices, member_id):
     invoice = [invoice for invoice in invoices if member_id == invoice.member_id]
     if invoice:
         return invoice[0]

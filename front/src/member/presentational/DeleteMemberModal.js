@@ -47,7 +47,7 @@ const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =>
         </Alert>
     );
 
-    const modalContentFinished = "Se ha eliminado al/a la socio/a del sistema.";
+    const modalContentFinished = "Se ha eliminado al socio/a del sistema.";
 
     return isOpen ? (
         <OperationWithConfirmationModal
@@ -58,7 +58,7 @@ const DeleteMemberModal = ({member, isOpen = false, onClose, onUpdateStatus}) =>
             modalTitle="Eliminar socio/a"
             modalContentStart={modalContentStart}
             modalContentFinished={modalContentFinished}
-            modalErrorText="Se ha producido un error y no se ha podido eliminar el/la socio/a."
+            modalErrorText="Se ha producido un error y no se ha podido eliminar el socio/a."
         />
     ) : null;
 };

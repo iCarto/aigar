@@ -15,7 +15,7 @@ Llegamos a un panel con diversas opciones. El orden en que se haga esto es funda
 1. En `Comunidades` introducir las comunidades de la Junta de Agua. Los sectores serán creados automáticamente. Fíjese bien en los nombres de los sectores y anótelos para escribirlos exactamente igual en el catastro de usuarios.
 2. En `Configuración de AIGAR` introduzca todos los parámetros obligatorios y los opciones que desee.
 3. Cree un catastro de usuarios en formato hoja de cálculo. Compruebe que todo es correcto y .
-    1. Puede crear una hoja en blanco exportando los `Socios`
+    1. Puede crear una hoja en blanco exportando los `Socios/as`
     1. La columna estatus debe tener uno de los siguientes valores: `Activa`, `Inactiva`, `Eliminada`
     1. Compruebe que el nombre de los sectores es el que se usa en la aplicación
 4. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente facturas para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.

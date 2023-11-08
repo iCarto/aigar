@@ -31,7 +31,7 @@ def test_none_order_only_allowed_for_deleted():
     member.orden = None
     with pytest.raises(
         exceptions.ValidationError,
-        match="El campo orden sólo puede ser nulo para socias eliminadas",
+        match="El campo orden sólo puede ser nulo para un socio/a eliminado",
     ):
         member.save()
     member.status = MemberStatus.DELETED

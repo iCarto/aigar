@@ -43,7 +43,7 @@ const CreateMemberSubpage = () => {
         const newMember = {
             id: member.id,
             order: orderForNewMember,
-            name: "<<Nuevo socio>>",
+            name: "<<Nuevo socio/a>>",
         };
 
         const updatedMember = createMember({

@@ -108,6 +108,10 @@ def test_invalid_at_least_one_none():
         {"limit": 5, "cost": 0.75},
         {"limit": 10, "cost": 2},
         {"limit": 15, "cost": 3},
+        {"limit": 20, "cost": 4},
+        {"limit": 25, "cost": 5},
+        {"limit": 30, "cost": 6},
+        {"limit": 35, "cost": 7},
     ]
     tipo_uso = "humano"
     _set_stretches(tipo_uso, stretches, config)
@@ -150,13 +154,30 @@ def _set_unused_stretch(tipo_uso, config):
             {"limit": None, "cost": 0},
             {"limit": None, "cost": 0},
             {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
+            {"limit": None, "cost": 0},
         ],
         config,
     )
 
 
 def _set_stretches(tipo_uso, stretches, config):
-    for i, stretch in enumerate(("primer", "segundo", "tercer", "cuarto")):
+    for i, stretch in enumerate(
+        (
+            "primer",
+            "segundo",
+            "tercer",
+            "cuarto",
+            "quinto",
+            "sexto",
+            "septimo",
+            "octavo",
+        )
+    ):
+        if len(stretches) <= i:
+            break
         setattr(
             config,
             f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad",

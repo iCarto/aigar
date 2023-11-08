@@ -63,8 +63,6 @@ else
 
     PRAGMA foreign_keys = ON;
 
-    /* cuota_variable_cuarto_tramo_cantidad, cuota_variable_cuarto_tramo_coste */
-    /* comercial_cuota_variable_cuarto_tramo_cantidad, comercial_cuota_variable_cuarto_tramo_coste */
     INSERT INTO domains_aigarconfig
         (
             id, name, payment_csv, payment_due_day, payment_method
@@ -74,7 +72,9 @@ else
             , humano_cuota_fija, comercial_cuota_fija
             , ahorro
             , humano_cuota_variable_primer_tramo_cantidad, humano_cuota_variable_primer_tramo_coste, humano_cuota_variable_segundo_tramo_cantidad, humano_cuota_variable_segundo_tramo_coste, humano_cuota_variable_tercer_tramo_cantidad, humano_cuota_variable_tercer_tramo_coste, humano_cuota_variable_cuarto_tramo_cantidad, humano_cuota_variable_cuarto_tramo_coste
+            , humano_cuota_variable_quinto_tramo_cantidad, humano_cuota_variable_quinto_tramo_coste, humano_cuota_variable_sexto_tramo_cantidad, humano_cuota_variable_sexto_tramo_coste, humano_cuota_variable_septimo_tramo_cantidad, humano_cuota_variable_septimo_tramo_coste, humano_cuota_variable_octavo_tramo_cantidad, humano_cuota_variable_octavo_tramo_coste
             , comercial_cuota_variable_primer_tramo_cantidad, comercial_cuota_variable_primer_tramo_coste, comercial_cuota_variable_segundo_tramo_cantidad, comercial_cuota_variable_segundo_tramo_coste, comercial_cuota_variable_tercer_tramo_cantidad, comercial_cuota_variable_tercer_tramo_coste, comercial_cuota_variable_cuarto_tramo_cantidad, comercial_cuota_variable_cuarto_tramo_coste
+            , comercial_cuota_variable_quinto_tramo_cantidad, comercial_cuota_variable_quinto_tramo_coste, comercial_cuota_variable_sexto_tramo_cantidad, comercial_cuota_variable_sexto_tramo_coste, comercial_cuota_variable_septimo_tramo_cantidad, comercial_cuota_variable_septimo_tramo_coste, comercial_cuota_variable_octavo_tramo_cantidad, comercial_cuota_variable_octavo_tramo_coste
             , nuevo_derecho_siguientes_cuotas_opcion1, nuevo_derecho_siguientes_cuotas_opcion2, nuevo_derecho_siguientes_cuotas_opcion3, nuevo_derecho_siguientes_cuotas_opcion4, nuevo_derecho_siguientes_cuotas_opcion5, nuevo_derecho_siguientes_cuotas_opcion6
         )
     VALUES
@@ -86,7 +86,9 @@ else
             , '5.72', '5.72'
             , '0.25'
             , 14, 0, 20, '0.75', NULL, '2', NULL, '0'
+            , NULL, '0', NULL, '0', NULL, '0', NULL, '0'
             , 14, 0, 20, '0.75', NULL, '2', NULL, '0'
+            , NULL, '0', NULL, '0', NULL, '0', NULL, '0'
             , '10', '25', '50', '75', '100', '150'
         )
     ;

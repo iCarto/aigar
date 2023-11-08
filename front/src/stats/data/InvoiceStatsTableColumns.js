@@ -26,8 +26,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
     if (invoicingMonths.length > 0) {
         const recentMonths = invoicingMonths
             .sort((a, b) => b.localeCompare(a))
-            .slice(0, 6)
-            .reverse();
+            .slice(0, 6);
 
         const invoicingMonthsColumns = recentMonths.map(invoicingMonth => {
             return {

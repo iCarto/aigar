@@ -36,7 +36,7 @@ class MeasurementAdmin(admin.ModelAdmin):
     list_max_show_all = 10
     ordering = ("-invoice_id", "id")
 
-    @admin.display(description="Número de factura")
+    @admin.display(description="Número de recibo")
     def invoice_number(self, obj):
         return obj.invoice.numero
 
@@ -48,6 +48,6 @@ class PaymentAdmin(admin.ModelAdmin):
     list_max_show_all = 10
     ordering = ("-invoice_id", "id")
 
-    @admin.display(description="Número de factura")
+    @admin.display(description="Número de recibo")
     def invoice_number(self, obj):
         return obj.invoice.numero

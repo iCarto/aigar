@@ -37,7 +37,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payments: list[dict[str, Any]] = request.data
         payments_without_invoice = [m for m in payments if not m["invoice"]]
         logger.warning(
-            "No hay factura para la lecturas %s",  # noqa: WPS323
+            "No hay recibo para la lecturas %s",  # noqa: WPS323
             payments_without_invoice,
         )
         payments = [m for m in payments if m["invoice"]]

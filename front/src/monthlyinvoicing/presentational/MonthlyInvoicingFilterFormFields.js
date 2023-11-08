@@ -41,7 +41,7 @@ const MonthlyInvoicingFilterFormFields = ({onFieldChange, fields, domains}) => {
             </Grid>
             <Grid item xs>
                 <FormSelect
-                    label="Estado de la factura"
+                    label="Estado del recibo"
                     name="estado"
                     options={domains.invoiceStatus}
                     onChange={handleInputChange}

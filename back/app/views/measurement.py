@@ -38,7 +38,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
                 measurement["invoice"] = invoice.id
             else:
                 logger.warning(
-                    "No hay factura para la lectura %s", measurement  # noqa: WPS323
+                    "No hay recibo para la lectura %s", measurement  # noqa: WPS323
                 )
 
         measurements = [m for m in measurements if m["invoice"]]

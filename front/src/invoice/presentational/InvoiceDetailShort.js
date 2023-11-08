@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 const InvoiceDetailShort = ({invoice, payments = []}) => {
     const inactiveInvoiceMessage = !invoice?.is_active ? (
         <Grid item xs={12}>
-            <ErrorMessage message="La factura ha sido anulada." />
+            <ErrorMessage message="El recibo ha sido anulada." />
         </Grid>
     ) : null;
 

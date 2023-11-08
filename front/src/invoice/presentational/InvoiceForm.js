@@ -68,7 +68,7 @@ const InvoiceForm = ({
 
     return (
         <EntityFormLayout
-            formTitle={invoice.isNewInvoice ? "Crear factura" : "Modificar factura"}
+            formTitle={invoice.isNewInvoice ? "Crear recibo" : "Modificar recibo"}
             onSubmit={handleSubmit}
             isSaving={isSaving}
             error={error}

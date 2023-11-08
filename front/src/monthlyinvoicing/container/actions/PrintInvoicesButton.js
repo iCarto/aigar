@@ -30,7 +30,7 @@ const PrintInvoicesButton = ({
                 startIcon={showIcon ? <PrintIcon fontSize="small" /> : null}
                 title={
                     disabled
-                        ? "No se pueden imprimir las facturas ya que alguna no tiene el caudal actual registrado"
+                        ? "No se pueden imprimir los recibos ya que alguna no tiene el caudal actual registrado"
                         : null
                 }
                 fullWidth

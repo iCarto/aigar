@@ -74,14 +74,14 @@ const LoadMeasurementsStep3InvoicesTable = ({
 
     const errorsMessage = (
         <Typography>
-            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            Existen <strong>{totalInvoicesWithErrors}</strong> recibos con alertas que
             debería revisar.
         </Typography>
     );
 
     const measurementsWithoutInvoiceMessage = (
         <Typography fontWeight={700}>
-            Se han detectado lecturas para socios que no tienen factura:{" "}
+            Se han detectado lecturas para socios que no tienen recibo:{" "}
             {measurementsWithoutInvoice.join(", ")}
         </Typography>
     );
@@ -106,7 +106,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
                     />
                 </>
             ) : (
-                <Spinner message="Cargando facturas" />
+                <Spinner message="Cargando recibos" />
             )}
         </Box>
     );

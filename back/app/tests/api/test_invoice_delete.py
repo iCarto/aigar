@@ -70,7 +70,7 @@ def test_dont_modify_for_closed_months(_, api_client, create_invoicing_month):
     invoice.refresh_from_db()
     assert not invoice.mes_facturacion.is_open
     with pytest.raises(
-        exceptions.ValidationError, match="No se puede modificar una  factura en estado"
+        exceptions.ValidationError, match="No se puede modificar un recibo en estado"
     ):
         api_client.delete(f"/api/invoices/{invoice.pk}/")
 
@@ -85,7 +85,7 @@ def test_dont_modify_with_payments(api_client, create_invoicing_month):
     Payment.objects.create(invoice=invoice, fecha=fecha, monto=1)
     with pytest.raises(
         exceptions.ValidationError,
-        match="No se puede modificar una factura con pagos asociados",
+        match="No se puede modificar un recibo con pagos asociados",
     ):
         api_client.delete(f"/api/invoices/{invoice.pk}/")
 

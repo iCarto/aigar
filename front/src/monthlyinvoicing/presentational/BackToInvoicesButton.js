@@ -9,7 +9,7 @@ const BackToInvoicesButton = ({onClick}) => {
             startIcon={<ListIcon />}
             onClick={onClick}
         >
-            Volver al listado de facturas
+            Volver al listado de recibos
         </Button>
     );
 };

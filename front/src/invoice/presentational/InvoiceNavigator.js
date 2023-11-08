@@ -30,7 +30,7 @@ const InvoiceNavigator = ({navigatorIds, path}) => {
                     onClick={handleClickPreviousInvoice}
                     disabled={isPreviousButtonDisabled}
                 >
-                    &laquo; Factura anterior
+                    &laquo; Recibo anterior
                 </Button>
                 <Button
                     variant="text"
@@ -38,7 +38,7 @@ const InvoiceNavigator = ({navigatorIds, path}) => {
                     onClick={handleClickNextInvoice}
                     disabled={isNextButtonDisabled}
                 >
-                    Siguiente factura &raquo;
+                    Siguiente recibo &raquo;
                 </Button>
             </Box>
             <Divider />

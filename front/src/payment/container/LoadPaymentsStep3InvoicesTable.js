@@ -54,7 +54,7 @@ const LoadPaymentsStep3InvoicesTable = ({
 
         if (paymentsForInvoice.length !== 0) {
             if (paymentsForInvoice.length > 1) {
-                invoice.errors.push("La factura tiene varios pagos");
+                invoice.errors.push("El recibo tiene varios pagos");
                 return;
             }
             if (invoice.total > invoice.ontime_payment + invoice.late_payment) {
@@ -81,7 +81,7 @@ const LoadPaymentsStep3InvoicesTable = ({
 
     const errorsMessage = (
         <Typography>
-            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            Existen <strong>{totalInvoicesWithErrors}</strong> recibos con alertas que
             debería revisar.
         </Typography>
     );
@@ -103,7 +103,7 @@ const LoadPaymentsStep3InvoicesTable = ({
                     />
                 </>
             ) : (
-                <Spinner message="Cargando facturas" />
+                <Spinner message="Cargando recibos" />
             )}
         </Box>
     );

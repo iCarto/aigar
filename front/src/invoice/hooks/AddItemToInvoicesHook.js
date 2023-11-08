@@ -54,18 +54,18 @@ export const useItemToInvoicesHook = ({
             return (
                 <Stack>
                     <Typography>
-                        ¿Desea asignar {invoiceItemName} a las facturas seleccionadas?
+                        ¿Desea asignar {invoiceItemName} a los recibos seleccionadas?
                     </Typography>
                     <Typography variant="subtitle2" mt={2}>
-                        Solo se modificarán las facturas nuevas ({totalInvoicesToUpdate}
+                        Solo se modificarán los recibos nuevos ({totalInvoicesToUpdate}
                         ).
                     </Typography>
                 </Stack>
             );
         return (
             <Alert severity="error">
-                No se pueden modificar las facturas seleccionadas porque ya han sido
-                imprimidas.
+                No se pueden modificar los recibos seleccionados porque ya han sido
+                impresos.
             </Alert>
         );
     };

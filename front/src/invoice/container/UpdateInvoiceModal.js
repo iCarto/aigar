@@ -40,14 +40,14 @@ const UpdateInvoiceModal = ({isOpen = false, onClose, invoice}) => {
 
     const modalContentStart = (
         <p>
-            Esta factura ya ha sido emitida.
-            <br /> Si desea modificarla debe crear una nueva versión.
+            Este recibo ya ha sido emitido.
+            <br /> Si desea modificarlo debe crear una nueva versión.
         </p>
     );
 
     const modalContentFinished = (
         <Alert severity="success">
-            Se ha creado correctamente la nueva versión de la factura.
+            Se ha creado correctamente la nueva versión del recibo.
         </Alert>
     );
 
@@ -62,8 +62,8 @@ const UpdateInvoiceModal = ({isOpen = false, onClose, invoice}) => {
             modalContentFinished={modalContentFinished}
             modalAcceptText="Crear una nueva versión"
             modalAcceptIcon={<DescriptionIcon />}
-            spinnerMessage="Anulando factura anterior"
-            modalErrorText="Se ha producido un error y no se ha podido crear la nueva versión para la factura."
+            spinnerMessage="Anulando recibo anterior"
+            modalErrorText="Se ha producido un error y no se ha podido crear la nueva versión para el recibo."
         />
     ) : null;
 };

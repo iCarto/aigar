@@ -22,7 +22,7 @@ export function useLoadPaymentsTableColumns(onClickViewMember) {
             accessor: "sector",
         },
         {
-            Header: "Nº Factura",
+            Header: "Nº Recibo",
             accessor: "num_factura",
             Cell: EditableTextCellTable,
         },

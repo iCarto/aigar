@@ -24,7 +24,7 @@ export function useUpdatePaymentsTableColumns(
             width: 240,
         },
         {
-            Header: "Nº Factura",
+            Header: "Nº Recibo",
             accessor: "numero",
         },
         {
@@ -55,7 +55,7 @@ export function useUpdatePaymentsTableColumns(
                   className: "dollar",
               },
         {
-            Header: "Total factura",
+            Header: "Total recibo",
             accessor: "total",
             className: "dollar bold",
         },

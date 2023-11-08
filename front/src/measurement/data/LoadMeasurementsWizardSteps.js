@@ -18,9 +18,9 @@ export const loadMeasurementsSteps = [
     },
     {
         index: 3,
-        text: "Revisar facturas",
+        text: "Revisar recibos",
         icon: <DescriptionIcon />,
-        help: "Revise las facturas con los consumos aplicados.",
+        help: "Revise los recibos con los consumos aplicados.",
     },
     {
         index: 4,

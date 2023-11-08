@@ -22,7 +22,7 @@ export function useInvoicesPreviewTableColumns(
             width: 400,
         },
         {
-            Header: "Nº factura",
+            Header: "Nº recibo",
             accessor: "numero",
         },
     ];
@@ -59,7 +59,7 @@ export function useInvoicesPreviewTableColumns(
                 className: "dollar",
             },
             {
-                Header: "Total factura",
+                Header: "Total recibo",
                 accessor: "total",
                 className: "dollar bold",
             }
@@ -83,7 +83,7 @@ export function useInvoicesPreviewTableColumns(
                 className: "dollar",
             },
             {
-                Header: "Total factura",
+                Header: "Total recibo",
                 accessor: "total",
                 className: "dollar bold",
             },

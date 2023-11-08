@@ -14,7 +14,7 @@ const AigarMenu = () => {
         },
         // Ver: #4374
         // {
-        //     name: "Facturas",
+        //     name: "Recibos",
         //     to: "/facturas",
         //     pathname: "facturas",
         // },

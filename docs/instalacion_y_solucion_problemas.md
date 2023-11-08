@@ -7,7 +7,7 @@ La aplicación se como dos ficheros comprimidos en zip:
 -   **aammdd_aigar_data.zip**. Es un directorio que debemos descomprimir en la carpeta `Mis Documentos`. Por ejemplo en `C:\Usuarios\<Mi Usuario>\Mis Documentos\aigar_data`. Dentro de esta carpeta estarán los siguientes archivos:
     -   db.sqlite3. Es la base de datos de la aplicación. Para hacer copias de seguridad copie este fichero a USB externo.
     -   plantilla_recibo.docx. Es la plantilla usada para imprimir recibos. Puede ser modificada si se conoce bien la sintaxis.
-    -   logo.png. Es el logo de la Junta de Agua que se usará en las facturas impresas. El fichero que se proporciona por defecto debe ser substituido por el real de la Junta de Agua respetando el tamaño del fichero original: `191 x 191 px`
+    -   logo.png. Es el logo de la Junta de Agua que se usará en los recibos impresos. El fichero que se proporciona por defecto debe ser substituido por el real de la Junta de Agua respetando el tamaño del fichero original: `191 x 191 px`
 
 # Actualización de AIGAR (Escritorio)
 

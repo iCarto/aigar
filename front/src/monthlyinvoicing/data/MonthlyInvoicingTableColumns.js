@@ -28,7 +28,7 @@ export function useMonthlyInvoicingTableColumns() {
             id: "sector",
         },
         {
-            label: "Nº Factura",
+            label: "Nº Recibo",
             id: "numero",
             formatFunction: item => {
                 return <TextLink text={item.numero} to={`/facturas_mes/${item.id}`} />;

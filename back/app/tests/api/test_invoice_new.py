@@ -42,13 +42,13 @@ def test_invoice_can_be_created(api_client, create_invoicing_month):
 
 
 def test_not_two_invoices_for_a_member(api_client, create_invoicing_month):
-    """Una socia no puede tener dos facturas para el mismo mes."""
+    """Una socia no puede tener dos recibos para el mismo mes."""
     invoice = InvoiceFactory.create(
         estado=InvoiceStatus.NUEVA,
         member__status=MemberStatus.ACTIVE,
         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
-    # Una socia no puede tener más de dos facturas
+    # Una socia no puede tener más de dos recibos
     with pytest.raises(
         utils.IntegrityError,
         match="UNIQUE constraint failed: app_invoice.mes_facturacion_id, app_invoice.member_id",

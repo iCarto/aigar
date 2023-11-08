@@ -77,11 +77,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         invoice = self.get_object()
         if invoice.estado in NOT_MODIFICABLE_INVOICES:
             raise exceptions.ValidationError(
-                f"No se puede modificar una  factura en estado {invoice.estado}"
+                f"No se puede modificar un recibo en estado {invoice.estado}"
             )
         if invoice.payment_set.exists():
             raise exceptions.ValidationError(
-                "No se puede modificar una factura con pagos asociados"
+                "No se puede modificar un recibo con pagos asociados"
             )
         invoice.estado = InvoiceStatus.ANULADA
         invoice.save()

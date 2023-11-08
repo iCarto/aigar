@@ -37,7 +37,7 @@ const LoadPaymentsStep4Result = ({invoicingMonthId, payments}) => {
         return (
             <Stack>
                 <Alert severity="success" sx={{mb: 1}}>
-                    Las facturas se han actualizado correctamente.
+                    Los recibos se han actualizado correctamente.
                 </Alert>
                 <BackToInvoicesButton onClick={handleClickBack} />
             </Stack>
@@ -55,10 +55,10 @@ const LoadPaymentsStep4Result = ({invoicingMonthId, payments}) => {
                 result ? (
                     <SuccessMessage />
                 ) : (
-                    <ErrorMessage message="Se ha producido un error durante la actualización de las facturas y no se han podido guardar los datos." />
+                    <ErrorMessage message="Se ha producido un error durante la actualización de los recibos y no se han podido guardar los datos." />
                 )
             ) : (
-                <Spinner message="Actualizando facturas" />
+                <Spinner message="Actualizando recibos" />
             )}
         </Box>
     );

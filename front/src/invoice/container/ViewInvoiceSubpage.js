@@ -43,14 +43,14 @@ const ViewInvoiceSubpage = () => {
                     .catch(error => {
                         console.log(error);
                         setError(
-                            "Se ha producido un error y no se han podido obtener los pagos de esta factura"
+                            "Se ha producido un error y no se han podido obtener los pagos de este recibo"
                         );
                     });
             })
             .catch(error => {
                 console.log(error);
                 setError(
-                    "Se ha producido un error y no se han podido obtener los datos de la factura"
+                    "Se ha producido un error y no se han podido obtener los datos del recibo"
                 );
             });
     }, [idFactura, invoicesList]);

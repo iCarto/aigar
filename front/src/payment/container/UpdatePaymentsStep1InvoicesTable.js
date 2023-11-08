@@ -75,9 +75,9 @@ const UpdatePaymentsStep1InvoicesTable = ({
         );
 
         const errorMessages = {
-            multiplePayments: "La factura tiene varios pagos. ",
-            paymentsDoNotCoverTotal: "Los pagos no cubren el total de la factura.",
-            paymentsExceedTotal: "Los pagos superan el total de la factura.",
+            multiplePayments: "El recibo tiene varios pagos. ",
+            paymentsDoNotCoverTotal: "Los pagos no cubren el total del recibo.",
+            paymentsExceedTotal: "Los pagos superan el total del recibo.",
         };
 
         if (paymentsForInvoice.length) {
@@ -133,7 +133,7 @@ const UpdatePaymentsStep1InvoicesTable = ({
 
     const errorMessage = (
         <Typography>
-            Existen <strong>{totalInvoicesWithErrors}</strong> facturas con alertas que
+            Existen <strong>{totalInvoicesWithErrors}</strong> recibos con alertas que
             debería revisar.
         </Typography>
     );
@@ -165,7 +165,7 @@ const UpdatePaymentsStep1InvoicesTable = ({
                     {modal}
                 </>
             ) : (
-                <Spinner message="Cargando facturas" />
+                <Spinner message="Cargando recibos" />
             )}
         </Box>
     );

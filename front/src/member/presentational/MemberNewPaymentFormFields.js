@@ -106,7 +106,7 @@ const MemberNewPaymentFormFields = ({formData, onChange, aigarConfig}) => {
                         />
                     )}
                     <FormInputInteger
-                        label="Cuotas por pagar tras la factura inicial"
+                        label="Cuotas por pagar tras el recibo inicial"
                         value={paymentsToMake}
                         readOnly
                     />

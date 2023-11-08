@@ -225,13 +225,13 @@ _InvoiceManager = InvoiceManager.from_queryset(InvoiceQuerySet)
 
 class Invoice(models.Model):
     class Meta(object):
-        verbose_name = "factura"
-        verbose_name_plural = "facturas"
+        verbose_name = "recibo"
+        verbose_name_plural = "recibos"
         ordering = ("-mes_facturacion_id", "-version", "member_id")
         constraints = [
             models.UniqueConstraint(
                 name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",  # noqa: WPS323
-                violation_error_message="Un socio/a no puede tener más de dos facturas no anuladas en el mismo mes.",
+                violation_error_message="Un socio/a no puede tener más de dos recibos no anulados en el mismo mes.",
                 fields=["mes_facturacion_id", "member_id"],
                 condition=~models.Q(estado=InvoiceStatus.ANULADA),
             )
@@ -244,8 +244,8 @@ class Invoice(models.Model):
 
     id = models.AutoField(
         primary_key=True,
-        verbose_name="Id factura",
-        help_text="El Identificador de la factura no puede estar vacío y no debe repetirse",
+        verbose_name="Id recibo",
+        help_text="El Id del recibo no puede estar vacío y no debe repetirse",
     )
 
     version = models.PositiveSmallIntegerField(
@@ -321,7 +321,7 @@ class Invoice(models.Model):
         blank=False,
         default=0,
         verbose_name="Descuentos",
-        help_text="Si la factura tiene algún descuento especial introduzcalo",
+        help_text="Si el recibo tiene algún descuento especial introduzcalo",
     )
 
     otros = models.FloatField(
@@ -428,7 +428,7 @@ class Invoice(models.Model):
             self.caudal_anterior = 0
         elif caudal_anterior != int(self.caudal_anterior):
             logger.warning(
-                "Caudal anterior: %s distinto a Medida %s para factura %s",  # noqa:WPS323
+                "Caudal anterior: %s distinto a Medida %s para recibo %s",  # noqa:WPS323
                 self.caudal_anterior,
                 caudal_anterior,
                 self.id,

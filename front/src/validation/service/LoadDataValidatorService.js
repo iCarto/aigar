@@ -77,14 +77,14 @@ const LoadDataValidatorService = {
             paymentErrors.push({
                 type: "error",
                 field: "num_factura",
-                msg: "No existe la factura para este mes",
+                msg: "No existe recibo para este mes",
             });
         }
         if (invoice && (invoice.total == null || invoice.total === "")) {
             paymentErrors.push({
                 type: "error",
                 field: "num_factura",
-                msg: "No se ha indicado el caudal actual en esta factura",
+                msg: "No se ha indicado el caudal actual en este recibo",
             });
         }
         return paymentErrors;

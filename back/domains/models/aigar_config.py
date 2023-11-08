@@ -6,7 +6,7 @@
 * Hay csv bancario
 
 No permitimos configurar la "carpeta de la base de datos". Esta carpeta será donde se
-almacene la base de datos y otra información como los logos o la plantilla de facturas.
+almacene la base de datos y otra información como los logos o la plantilla de recibos.
 La configuramos como el MEDIA_ROOT para que se pueda servir la información fácilmente.
 
 En principio la ubicaremos en el directorio estándar para estas tareas en Windows
@@ -20,9 +20,9 @@ ordenador y le pasan también el zip de la aplicación.
 
 Logos. Tendremos uno génerico totalmente transparente del tamaño adecuado.
 
-# Conceptos de la factura y otros parámetros
+# Conceptos del recibo y otros parámetros
 
-Además de la tarifa por consumo de agua, la factura tiene una serie de conceptos como
+Además de la tarifa por consumo de agua, el recibo tiene una serie de conceptos como
 "Inasistencia a Asambleas" y requiere de parámetros cómo las cuotas del derecho de
 conexión.
 
@@ -75,7 +75,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         verbose_name="Nombre de la Junta de Agua",
-        help_text="Nombre de la Junta de Agua como desea que aparezca en las facturas",
+        help_text="Nombre de la Junta de Agua como desea que aparezca en los recibos",
         default="Junta de Agua",
         min_length=3,
     )

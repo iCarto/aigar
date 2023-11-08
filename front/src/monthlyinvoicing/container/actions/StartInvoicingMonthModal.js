@@ -58,14 +58,14 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
 
     const modalContentFinished = (
         <Alert severity="success">
-            Las facturas del mes de {DateUtil.getMonthName(invoicingMonth.mes)} -{" "}
+            Los recibos del mes de {DateUtil.getMonthName(invoicingMonth.mes)} -{" "}
             {invoicingMonth.anho} se han creado correctamente.
         </Alert>
     );
 
     const modalContentError = (
         <p>
-            Se ha producido un error y no se han podido crear las facturas.
+            Se ha producido un error y no se han podido crear los recibos.
             <br />
             {errorMessage ? <strong>{errorMessage.message}</strong> : null}
         </p>
@@ -82,7 +82,7 @@ const StartInvoicingMonthModal = ({invoicingMonth, isOpen = false, onClose}) => 
             modalContentFinished={modalContentFinished}
             modalAcceptText="Iniciar"
             modalAcceptIcon={<DescriptionIcon />}
-            spinnerMessage="Generando facturas"
+            spinnerMessage="Generando recibos"
             modalErrorText={modalContentError}
         />
     ) : null;

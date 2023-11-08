@@ -11,9 +11,9 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
 
     /*
         Botón 2. IMPORTAR LECTURAS deshabilitado cuando:
-        * No haya facturas para ese mes (que sería el caso de que has cambiado el selector de mes y no has iniciado la facturación)
-        * o cuando todas las facturas tengan un caudal_actual > 0. No usamos el consumo porque podría ser 0 por cualquier motivo
-        * o cuando ya se hayan impreso las facturas (es decir, que no todas las facturas son nuevas)
+        * No haya recibos para ese mes (que sería el caso de que has cambiado el selector de mes y no has iniciado la facturación)
+        * o cuando todas los recibos tengan un caudal_actual > 0. No usamos el consumo porque podría ser 0 por cualquier motivo
+        * o cuando ya se hayan impreso los recibos (es decir, que no todas los recibos son nuevos)
     */
     const isLoadMeasurementsButtonDisabled = useMemo(() => {
         return (
@@ -24,9 +24,9 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
     }, [invoices]);
 
     /*
-        Botón 3. IMPRIMIR FACTURAS deshabilitado cuando:
-        * No haya facturas para ese mes
-        * o alguna factura no tenga caudal_actual o es 0. Es decir no se ha importado la lectura para alguna.
+        Botón 3. IMPRIMIR RECIBOS deshabilitado cuando:
+        * No haya recibos para ese mes
+        * o algún recibo no tenga caudal_actual o es 0. Es decir no se ha importado la lectura para alguna.
     */
     const isPrintInvoicesButtonDisabled = useMemo(() => {
         return !invoices?.length || invoices?.some(invoice => !invoice.caudal_actual);
@@ -34,9 +34,9 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
 
     /*
         Botón 5. ACTUALIZAR PAGOS deshabilitado cuando:
-        * No haya facturas para ese mes
-        * o haya al menos una factura con estado = nueva
-        * o todas las facturas sean estado = (cobrada o no cobrada)
+        * No haya recibos para ese mes
+        * o haya al menos un recibo con estado = nueva
+        * o todas los recibos sean estado = (cobrada o no cobrada)
     */
     const isLoadPaymentsButtonDisabled = useMemo(() => {
         return (
@@ -52,7 +52,7 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
 
     /*
         Sabemos que el proceso de facturación ha terminado cuando:
-        * Y no hay ninguna factura nueva ni no cobrada (porque entonces estaríamos en el punto 1 o 2 del proceso, iniciar proceso o importar lecturas)
+        * Y no hay ningún recibo nueva ni no cobrada (porque entonces estaríamos en el punto 1 o 2 del proceso, iniciar proceso o importar lecturas)
         * PERO ADEMÁS no todas están pendientes de cobro (porque entonces significa que los pagos aún no se han actualizado)
     */
     const isMonthlyInvoicingDone = useMemo(() => {

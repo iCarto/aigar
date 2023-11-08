@@ -42,7 +42,7 @@ Otras aclaraciones
 * Nuevas socias. Como no trabajaron (porque aun no tenían casa en la comunidad o no
   quisieron entrar en el proyecto) tienen que pagar el `derecho de conexión` para
   incorporarse como `Activas`.
-* El `derecho de reconexión` es una cantidad pequeña, se cobra en la primera factura que
+* El `derecho de reconexión` es una cantidad pequeña, se cobra en el primer recibo que
   se emite y no es necesario pagarlo a plazos.
 * Sólo las `Activas` se exportan a a la aplicación móvil. El fontanero es quien revisa
   las acometidas y que no esté consumiendo agua una `Inactiva`

@@ -74,13 +74,13 @@ const ViewMemberSubpage = () => {
                                     containerStyle={{justifyContent: "center", my: 1}}
                                     label={false}
                                 >
-                                    Facturas
+                                    Recibos
                                 </SectionHeading>
                                 {invoices?.length ? (
                                     <ListMemberInvoices invoices={invoices} />
                                 ) : (
                                     <Alert severity="info">
-                                        Aún no se ha emitido ninguna factura para este
+                                        Aún no se ha emitido ningún recibo para este
                                         socio/a.
                                     </Alert>
                                 )}

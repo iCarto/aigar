@@ -165,7 +165,7 @@ const UpdatePaymentsWizard = () => {
         <Alert severity="warning">
             <AlertTitle>Antes de continuar, asegúrese de revisar:</AlertTitle>
             <ul>
-                <li>Los montos y números de las facturas</li>
+                <li>Los montos y números de los recibos</li>
                 <li>Los montos de los pagos realizados</li>
             </ul>
         </Alert>

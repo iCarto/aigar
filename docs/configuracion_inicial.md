@@ -18,9 +18,9 @@ Llegamos a un panel con diversas opciones. El orden en que se haga esto es funda
     1. Puede crear una hoja en blanco exportando los `Socios/as`
     1. La columna estatus debe tener uno de los siguientes valores: `Activa`, `Inactiva`, `Eliminada`
     1. Compruebe que el nombre de los sectores es el que se usa en la aplicación
-4. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente facturas para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.
-5. Exporte las facturas. Tendrán varios datos en blanco como el `caudal_actual`, ... rellénelo con los datos correctos
-6. Importe las facturas
+4. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente recibos para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.
+5. Exporte los recibos. Tendrán varios datos en blanco como el `caudal_actual`, ... rellénelo con los datos correctos
+6. Importe la hoja de cálculo con los recibos actualizados en la aplicación
 7. En caso de que haya cuotas de conexión o reconexión pendientes introduzcalas en `Conceptos a facturar en siguientes meses`
 
 Con esto la aplicación está lista para ser usada. Cierre el navegador y la aplicación.

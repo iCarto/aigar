@@ -33,9 +33,9 @@ export const useMarkInvoiceAsPaidHook = (service, selectedItems) => {
     );
 
     const modalMessages = {
-        confirmation: "¿Desea marcar estas facturas como pagadas?",
-        success: "Las facturas se han marcado como pagadas.",
-        title: "Marcar facturas como pagadas",
+        confirmation: "¿Desea marcar estos recibos como pagados?",
+        success: "Los recibos se han marcado como pagados.",
+        title: "Marcar recibos como pagados",
     };
 
     const modal = (

@@ -184,10 +184,10 @@ class Member(models.Model):
             .first()
         )
         if not last_invoice:
-            # si no tiene factura anterior se trata de una nueva socia, por tanto su consumo anterior es 0
+            # si no tiene recibo anterior se trata de una nueva socia, por tanto su consumo anterior es 0
             return 0
 
-        # si no tenemos caudal actual es porque las facturas todavía no tienen lecturas
+        # si no tenemos caudal actual es porque los recibos todavía no tienen lecturas
         # en ese caso, la lectura anterior la sacaremos del caudal_anterior porque ya está actualizado
         return last_invoice[0] or last_invoice[1]
 

@@ -38,8 +38,15 @@ const MemberNewPaymentFormFields = ({formData, onChange, aigarConfig}) => {
 
     const noFeesOptions = nextFeesOptions.every(option => !option);
 
-    const paymentsToMake =
-        (payment.maxPayment - payment.minPayment) / formData?.selected_fee_value?.value;
+    const getPaymentsToMake = () => {
+        const payments =
+            (payment.maxPayment - payment.minPayment) /
+            formData?.selected_fee_value?.value;
+        if (isNaN(payments)) return null;
+        else return payments;
+    };
+
+    const paymentsToMake = getPaymentsToMake();
 
     const handleChangeField = event => {
         const name = event.target.name;

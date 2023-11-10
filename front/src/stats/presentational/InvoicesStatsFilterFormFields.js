@@ -9,12 +9,14 @@ const InvoicesStatsFilterFormFields = ({onFieldChange, fields, domains}) => {
         onFieldChange({[name]: value});
     };
 
-    const monthsList = domains.invoicingMonths.map(month => {
-        return {
-            key: month.id_mes_facturacion,
-            value: `${DateUtil.getMonthName(month.mes)} - ${month.anho}`,
-        };
-    });
+    const monthsList = domains.invoicingMonths
+        .map(month => {
+            return {
+                key: month.id_mes_facturacion,
+                value: `${DateUtil.getMonthName(month.mes)} - ${month.anho}`,
+            };
+        })
+        .reverse();
 
     return (
         <>

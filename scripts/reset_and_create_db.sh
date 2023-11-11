@@ -251,18 +251,18 @@ crear_vacia() {
 crear_iniciar() {
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
-        delete from app_invoicingmonth where id_mes_facturacion = '202305';
-        update app_invoicingmonth set is_open=True where id_mes_facturacion = '202304';
+        delete from app_invoicingmonth where id_mes_facturacion = '202310';
+        update app_invoicingmonth set is_open=True where id_mes_facturacion = '202309';
         delete from
             app_invoice
         where
-            mes_facturacion_id = '202304'
+            mes_facturacion_id = '202309'
             and
             member_id IN (SELECT id FROM app_member WHERE status = 'Inactiva')
         ;
         update app_invoice set
             estado = 'pendiente_de_cobro'
-        where mes_facturacion_id = '202304' and estado = 'no_cobrada';
+        where mes_facturacion_id = '202309' and estado = 'no_cobrada';
 
     "
 }
@@ -283,11 +283,11 @@ crear_importar() {
             , estado = 'nueva'
             , ontime_payment = 0
             , late_payment = 0
-        where mes_facturacion_id = '202304';
+        where mes_facturacion_id = '202309';
         delete from app_payment where
-            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
         delete from app_measurement where
-            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
     "
 }
 
@@ -300,9 +300,9 @@ crear_imprimir() {
             estado = 'nueva'
             , ontime_payment = 0
             , late_payment = 0
-        where mes_facturacion_id = '202304';
+        where mes_facturacion_id = '202309';
         delete from app_payment where
-            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
     "
 }
 
@@ -314,9 +314,9 @@ crear_actualizar() {
             estado = 'pendiente_de_cobro'
             , ontime_payment = 0
             , late_payment = 0
-        where mes_facturacion_id = '202304';
+        where mes_facturacion_id = '202309';
         delete from app_payment where
-            invoice_id in (select id from app_invoice where mes_facturacion_id = '202304');
+            invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
     "
 }
 

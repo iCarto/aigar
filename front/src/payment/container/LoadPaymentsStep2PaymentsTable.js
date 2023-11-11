@@ -20,6 +20,7 @@ const LoadPaymentsStep2PaymentsTable = ({
     onValidateStep,
 }) => {
     const [invoices, setInvoices] = useState([]);
+    const [filteredPayments, setFilteredPayments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
     const [filter, setFilter] = useState({
@@ -32,14 +33,22 @@ const LoadPaymentsStep2PaymentsTable = ({
 
     useEffect(() => {
         setLoading(true);
-        InvoicingMonthService.getInvoicingMonthInvoices(invoicingMonthId).then(
-            invoices => {
+        InvoicingMonthService.getInvoicingMonthInvoices(invoicingMonthId)
+            .then(invoices => {
                 setInvoices(invoices);
                 reviewPayments(payments, invoices);
-                setLoading(false);
-            }
-        );
+            })
+            .finally(() => setLoading(false));
     }, [invoicingMonthId]);
+
+    useEffect(() => {
+        setFilteredPayments(filterMonthlyData(payments, filter));
+    }, [payments, filter]);
+
+    useEffect(() => {
+        if (loading) onValidateStep(false);
+        else onValidateStep(true);
+    }, [loading]);
 
     const findInvoiceForPayment = (payment, invoices) => {
         let invoiceForPayment = invoices.find(
@@ -74,9 +83,9 @@ const LoadPaymentsStep2PaymentsTable = ({
                     const member = await MemberService.getMember(memberId);
 
                     invoiceFieldsForPayment = {
-                        member_id: member?.id,
-                        member_name: member?.name,
-                        sector: member?.sector,
+                        member_id: member.id,
+                        member_name: member.name,
+                        sector: member.sector,
                     };
                 }
 
@@ -95,9 +104,9 @@ const LoadPaymentsStep2PaymentsTable = ({
         onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
     };
 
-    const handleUpdatePayment = (rowId, columnId, value) => {
+    const handleUpdatePayment = (row, columnId, value) => {
         const updatedPayments = payments.map((payment, index) => {
-            if (index === rowId) {
+            if (payment.id === row.original.id) {
                 const updatedPayment = createPayment({
                     ...payment,
                     [columnId]: value,
@@ -149,29 +158,20 @@ const LoadPaymentsStep2PaymentsTable = ({
         </Typography>
     );
 
-    if (loading) {
-        onValidateStep(false);
-        return <Spinner message="Verificando pagos" />;
-    }
-
-    if (payments.length) {
-        const filteredPayments = filterMonthlyData(payments, filter);
-
-        return (
-            <Grid>
-                {totalRegistersWithErrors ? (
-                    <ErrorMessage message={errorsMessage} />
-                ) : null}
-                <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
-                <LoadDataTable
-                    items={filteredPayments}
-                    columns={tableColumns}
-                    onUpdateData={handleUpdatePayment}
-                />
-                {modal}
-            </Grid>
-        );
-    }
+    return loading ? (
+        <Spinner message="Verificando pagos" />
+    ) : (
+        <Grid>
+            {totalRegistersWithErrors ? <ErrorMessage message={errorsMessage} /> : null}
+            <LoadDataTableFilter filter={filter} onChange={handleFilterChange} />
+            <LoadDataTable
+                items={filteredPayments}
+                columns={tableColumns}
+                onUpdateData={handleUpdatePayment}
+            />
+            {modal}
+        </Grid>
+    );
 };
 
 export default LoadPaymentsStep2PaymentsTable;

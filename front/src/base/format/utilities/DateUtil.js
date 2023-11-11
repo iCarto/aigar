@@ -18,7 +18,9 @@ const DateUtil = {
     },
 
     getDateString(year, month, day) {
-        return `${day}/0${month}/${year}`;
+        const monthString = month?.length === 1 ? `0${month}` : month;
+
+        if (month) return `${day}/${monthString}/${year}`;
     },
 
     // Transform to API format date YYYY-MM-DD from DD-MMM-YYYY or DD/MM/YYYY

@@ -1,4 +1,5 @@
 import {
+    EditableIntegerCellTable,
     EditableSelectCellTable,
     EditableTextCellTable,
     LinkAccessorCellTable,
@@ -38,7 +39,7 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
         {
             Header: "Lectura actual",
             accessor: "caudal_actual",
-            Cell: EditableTextCellTable,
+            Cell: EditableIntegerCellTable,
         },
         {
             Header: "Consumo",

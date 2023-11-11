@@ -8,12 +8,7 @@ const UpdatePaymentsWizardSteps = ({
     invoicingMonth,
     paymentType,
     onChangeInvoices,
-    onChangePayments,
 }) => {
-    const handleChangePayments = payments => {
-        onChangePayments(payments);
-    };
-
     const handleChangeInvoices = invoices => {
         onChangeInvoices(invoices);
     };
@@ -24,7 +19,6 @@ const UpdatePaymentsWizardSteps = ({
             payments={payments}
             invoices={invoices}
             onChangeInvoices={handleChangeInvoices}
-            onChangePayments={handleChangePayments}
             onValidateStep={onValidateStep}
             paymentType={paymentType}
         />,

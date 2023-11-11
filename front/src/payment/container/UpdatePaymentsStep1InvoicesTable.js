@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 
-import {createPayment} from "payment/model";
 import {createInvoice} from "invoice/model";
 import {useUpdatePaymentsTableColumns} from "payment/data";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
@@ -16,7 +15,6 @@ const UpdatePaymentsStep1InvoicesTable = ({
     payments,
     invoicingMonth,
     onChangeInvoices,
-    onChangePayments,
     onValidateStep,
     paymentType,
 }) => {
@@ -96,20 +94,9 @@ const UpdatePaymentsStep1InvoicesTable = ({
         }
     };
 
-    const handleUpdatePayment = (rowId, columnId, value) => {
-        const updatedPayments = payments.map(payment => {
-            if (payment.id === rowId) {
-                const updatedPayment = createPayment({
-                    ...payment,
-                    monto: parseFloat(value),
-                });
-                return updatedPayment;
-            }
-            return payment;
-        });
-
+    const handleUpdatePayment = (row, columnId, value) => {
         const updatedInvoices = invoices.map((invoice, index) => {
-            if (rowId === index) {
+            if (invoice.id === row.original.id) {
                 const updatedInvoice = createInvoice({
                     ...invoice,
                     [columnId]: value,
@@ -121,7 +108,6 @@ const UpdatePaymentsStep1InvoicesTable = ({
         });
 
         onChangeInvoices(updatedInvoices);
-        onChangePayments(updatedPayments);
     };
 
     const handleFilterChange = newFilter => {

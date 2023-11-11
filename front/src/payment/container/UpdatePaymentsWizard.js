@@ -37,7 +37,6 @@ const UpdatePaymentsWizard = () => {
 
     useEffect(() => {
         setPrefilledInvoices(prefillInvoices());
-        setPayments(createInvoicePayments());
         if (!urlMatchesSelectedMonth) setIsValidStep(false);
     }, [urlMatchesSelectedMonth]);
 
@@ -58,41 +57,40 @@ const UpdatePaymentsWizard = () => {
         });
     };
 
-    const createInvoicePayments = () => {
-        const invoicePayments = [];
+    const generatePaymentDates = () => {
         const paymentMonth = parseInt(selectedInvoicingMonth?.mes) + 1;
 
-        const latePaymentDate = DateUtil.getDateString(
-            selectedInvoicingMonth?.anho,
-            paymentMonth,
-            aigarConfig.payment_due_day + 1
-        );
+        const getDateString = day => {
+            return DateUtil.getDateString(
+                selectedInvoicingMonth?.anho,
+                paymentMonth,
+                day
+            );
+        };
 
-        const ontimePaymentDate = DateUtil.getDateString(
-            selectedInvoicingMonth?.anho,
-            paymentMonth,
-            "01"
-        );
+        const latePaymentDate = getDateString(aigarConfig.payment_due_day + 1);
+        const ontimePaymentDate = getDateString("01");
+
+        return {latePaymentDate, ontimePaymentDate};
+    };
+
+    const createInvoicePayments = invoices => {
+        const {latePaymentDate, ontimePaymentDate} = generatePaymentDates();
+        const invoicePayments = [];
 
         // If invoice already has a value for late or ontime payment, then those values should be taken for creating each corresponding payment. Else, the type of payment will be created taking the total invoice value as the payment amount (monto).
         const dateForNewInvoices =
             paymentType === "late" ? latePaymentDate : ontimePaymentDate;
 
-        invoicesToUpdate.map((invoice, index) => {
+        invoices.map(invoice => {
             if (!invoice.ontime_payment && !invoice.late_payment)
                 invoicePayments.push(
-                    createInvoicePayment(
-                        index,
-                        invoice,
-                        dateForNewInvoices,
-                        invoice.total
-                    )
+                    createInvoicePayment(invoice, dateForNewInvoices, invoice.total)
                 );
 
             if (invoice.ontime_payment)
                 invoicePayments.push(
                     createInvoicePayment(
-                        index,
                         invoice,
                         ontimePaymentDate,
                         invoice.ontime_payment
@@ -101,21 +99,15 @@ const UpdatePaymentsWizard = () => {
 
             if (invoice.late_payment)
                 invoicePayments.push(
-                    createInvoicePayment(
-                        index,
-                        invoice,
-                        latePaymentDate,
-                        invoice.late_payment
-                    )
+                    createInvoicePayment(invoice, latePaymentDate, invoice.late_payment)
                 );
         });
 
         return invoicePayments;
     };
 
-    const createInvoicePayment = (id, invoice, date, amount) => {
+    const createInvoicePayment = (invoice, date, amount) => {
         const payment = {
-            id: id,
             invoice: invoice.id,
             fecha: date,
             monto: amount,
@@ -128,12 +120,9 @@ const UpdatePaymentsWizard = () => {
         });
     };
 
-    const handleChangePayments = payments => {
-        setPayments(payments);
-    };
-
     const handleChangeInvoices = invoices => {
         setPrefilledInvoices(invoices);
+        setPayments(createInvoicePayments(invoices));
     };
 
     const handleChangeStep = currentStep => {
@@ -145,6 +134,7 @@ const UpdatePaymentsWizard = () => {
     };
 
     const navigateToNextStep = () => {
+        if (!payments.length) setPayments(createInvoicePayments(prefilledInvoices));
         setIsModalOpen(false);
         setCurrentStep(2);
     };
@@ -210,7 +200,6 @@ const UpdatePaymentsWizard = () => {
                     invoices={prefilledInvoices}
                     invoicingMonth={selectedInvoicingMonth}
                     currentStep={currentStep}
-                    onChangePayments={handleChangePayments}
                     onChangeInvoices={handleChangeInvoices}
                     onValidateStep={validateStep}
                 />

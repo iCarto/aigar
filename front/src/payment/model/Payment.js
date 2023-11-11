@@ -1,3 +1,4 @@
+import {v4 as uuidv4} from "uuid";
 import {DateUtil} from "base/format/utilities";
 
 class Payments extends Array {}
@@ -30,7 +31,7 @@ const createPayments = (data = []) => {
 };
 
 const createPayment = ({
-    id = null,
+    id = uuidv4(),
     invoice = null,
     sector = "",
     member_id = null,

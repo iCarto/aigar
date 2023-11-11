@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from "uuid";
+
 class Measurements extends Array {}
 
 const measurement_api_adapter = measurement => {
@@ -25,7 +27,7 @@ const createMeasurements = (data = []) => {
 };
 
 const createMeasurement = ({
-    id = null,
+    id = uuidv4(),
     invoice = null,
     sector = "",
     member_id = null,

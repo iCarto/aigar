@@ -22,7 +22,7 @@ const EditableDateCellTable = ({
 
     const handleChange = date => {
         setFormattedDate(date);
-        onUpdateData(row.index, id, DateUtil.parse(date));
+        onUpdateData(row, id, DateUtil.parse(date));
     };
 
     const handleCloseCalendar = () => {

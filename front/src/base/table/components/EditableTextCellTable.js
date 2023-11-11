@@ -18,7 +18,7 @@ const EditableTextCellTable = ({
 
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
-        onUpdateData(row.index, id, value);
+        onUpdateData(row, id, value);
         setReadOnly(true);
     };
 

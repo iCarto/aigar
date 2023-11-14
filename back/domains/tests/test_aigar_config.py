@@ -5,7 +5,7 @@ from django.core import exceptions
 
 from app.models.member import UseTypes
 from app.tests.factories import MemberFactory
-from domains.models.aigar_config import MAX_LIMIT_VALUE, AigarConfig
+from domains.models.aigar_config import MAX_LIMIT_VALUE, STRETCHES_IDS, AigarConfig
 
 
 pytestmark = pytest.mark.django_db
@@ -164,18 +164,7 @@ def _set_unused_stretch(tipo_uso, config):
 
 
 def _set_stretches(tipo_uso, stretches, config):
-    for i, stretch in enumerate(
-        (
-            "primer",
-            "segundo",
-            "tercer",
-            "cuarto",
-            "quinto",
-            "sexto",
-            "septimo",
-            "octavo",
-        )
-    ):
+    for i, stretch in enumerate(STRETCHES_IDS):
         if len(stretches) <= i:
             break
         setattr(

@@ -176,7 +176,7 @@ class Member(models.Model):
         Invoice.objects.member_updated(self)
 
     @property
-    def lectura_anterior(self):
+    def caudal_anterior(self):
         last_invoice = (
             Invoice.objects.filter(mes_facturacion__is_open=True)
             .values_list("caudal_actual", "caudal_anterior")

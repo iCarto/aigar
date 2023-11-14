@@ -53,6 +53,17 @@ Stretches = NewType("Stretches", list[dict[str, int | Decimal]])
 # en la cuota variable
 MAX_LIMIT_VALUE = 10000
 
+STRETCHES_IDS = (
+    "primer",
+    "segundo",
+    "tercer",
+    "cuarto",
+    "quinto",
+    "sexto",
+    "septimo",
+    "octavo",
+)
+
 
 class AigarConfig(SingletonModel):
     class Meta(object):
@@ -620,28 +631,31 @@ class AigarConfig(SingletonModel):
 
         return options
 
+    @property
+    def comercial_tramos(self) -> Stretches:
+        return self._get_stretches("comercial")
+
+    @property
+    def humano_tramos(self) -> Stretches:
+        return self._get_stretches("humano")
+
     def clean(self) -> None:
         self._validate_stretches(self._prepare_stretches("comercial"))
         self._validate_stretches(self._prepare_stretches("humano"))
 
     def get_stretches(self, member) -> Stretches:
         tipo_uso = getattr(member, "tipo_uso", "").lower()
+        return self._get_stretches(tipo_uso)
+
+    def _get_stretches(self, tipo_uso: str) -> Stretches:
         results = self._prepare_stretches(tipo_uso)
         results = [result for result in results if result["limit"]]
         return cast(Stretches, results)
 
     def _prepare_stretches(self, tipo_uso: str) -> Stretches:
         results = []
-        for stretch in (
-            "primer",
-            "segundo",
-            "tercer",
-            "cuarto",
-            "quinto",
-            "sexto",
-            "septimo",
-            "octavo",
-        ):
+
+        for stretch in STRETCHES_IDS:
             limit = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad")
             cost = getattr(self, f"{tipo_uso}_cuota_variable_{stretch}_tramo_coste")
             results.append({"cost": cost, "limit": limit})

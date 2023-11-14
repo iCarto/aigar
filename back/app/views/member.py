@@ -5,11 +5,7 @@ from rest_framework.serializers import BaseSerializer
 
 from app.models.member import Member
 from app.serializers.entity_status_serializer import MemberStatusSerializer
-from app.serializers.member import (
-    MemberExportSerializerV1,
-    MemberSerializer,
-    MemberCreateSerializer,
-)
+from app.serializers.member import MemberCreateSerializer, MemberSerializer
 
 
 class MemberViewSet(viewsets.ModelViewSet):
@@ -32,15 +28,4 @@ class MemberViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
-class MemberExportViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Member.objects.active().all()
-    serializer_class = MemberExportSerializerV1
-
-    def list(self, request):  # noqa: WPS612
-        return super().list(request)
-
-    def retrieve(self, request, pk=None):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

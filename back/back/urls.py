@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from app.urls import router
+from app.urls import urlpatterns as api_urls
 from app.views.invoice import InvoiceStatsView
 from domains import urls as domains_urls
 
@@ -18,7 +18,7 @@ urlpatterns = [
     # - all /static/... files served on /...
     # Django REST Framework urls
     path("api/invoices/stats/", InvoiceStatsView.as_view()),
-    path("api/", include(router.urls)),
+    path("api/", include(api_urls)),
     path("api/domains/", include(domains_urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # other views still work too

@@ -53,7 +53,9 @@ const InvoiceDetailShort = ({invoice, payments = []}) => {
                             return (
                                 <SectionFieldValue
                                     key={payment.id}
-                                    value={`${payment.fecha} - ${payment.monto} ${CURRENCY_SYMBOL}`}
+                                    value={`${DateUtil.toLocal(payment.fecha)} - ${
+                                        payment.monto
+                                    } ${CURRENCY_SYMBOL}`}
                                 />
                             );
                         })}

@@ -11,18 +11,16 @@ const EditableDateCellTable = ({
     column: {id},
     onUpdateData, // This is a custom function that we supplied to our table instance
 }) => {
-    const [formattedDate, setFormattedDate] = useState(
-        new Date(DateUtil.parse(initialValue))
-    );
+    const [formattedDate, setFormattedDate] = useState(initialValue);
     const [readOnly, setReadOnly] = useState(true);
 
     useEffect(() => {
-        setFormattedDate(new Date(DateUtil.parse(initialValue)));
+        setFormattedDate(initialValue);
     }, [initialValue]);
 
     const handleChange = date => {
         setFormattedDate(date);
-        onUpdateData(row, id, DateUtil.parse(date));
+        onUpdateData(row, id, date);
     };
 
     const handleCloseCalendar = () => {

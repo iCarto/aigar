@@ -119,7 +119,7 @@ const createInvoice = ({
         anho,
         mes,
         mes_facturacion,
-        due_date: DateUtil.parseISO(due_date),
+        due_date: DateUtil.fromValidISO(due_date),
         member,
         member_data,
         caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),

@@ -58,18 +58,13 @@ const UpdatePaymentsWizard = () => {
     };
 
     const generatePaymentDates = () => {
-        const paymentMonth = parseInt(selectedInvoicingMonth?.mes) + 1;
+        const month = parseInt(selectedInvoicingMonth?.mes) + 1;
+        const year = selectedInvoicingMonth?.anho;
+        const ontimeDay = 1;
+        const lateDay = aigarConfig.payment_due_day + 1;
 
-        const getDateString = day => {
-            return DateUtil.getDateString(
-                selectedInvoicingMonth?.anho,
-                paymentMonth,
-                day
-            );
-        };
-
-        const latePaymentDate = getDateString(aigarConfig.payment_due_day + 1);
-        const ontimePaymentDate = getDateString("01");
+        const latePaymentDate = DateUtil.fromYearMonthDay(year, month, lateDay);
+        const ontimePaymentDate = DateUtil.fromYearMonthDay(year, month, ontimeDay);
 
         return {latePaymentDate, ontimePaymentDate};
     };
@@ -78,7 +73,9 @@ const UpdatePaymentsWizard = () => {
         const {latePaymentDate, ontimePaymentDate} = generatePaymentDates();
         const invoicePayments = [];
 
-        // If invoice already has a value for late or ontime payment, then those values should be taken for creating each corresponding payment. Else, the type of payment will be created taking the total invoice value as the payment amount (monto).
+        // If invoice already has a value for late or ontime payment, then those values should
+        // be taken for creating each corresponding payment. Else, the type of payment will be
+        // created taking the total invoice value as the payment amount (monto).
         const dateForNewInvoices =
             paymentType === "late" ? latePaymentDate : ontimePaymentDate;
 

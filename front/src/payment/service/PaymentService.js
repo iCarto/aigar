@@ -1,4 +1,4 @@
-import {createPayment} from "payment/model";
+import {createPaymentFromBankCSV} from "payment/model";
 
 const PaymentService = {
     getPaymentsFromCSVContent: function (content) {
@@ -11,30 +11,15 @@ const PaymentService = {
                 if (paymentRead.length === 1) {
                     paymentRead = line.split(",");
                 }
-                if (paymentRead.length === 8) {
-                    // 8 columns = Tigo Money
-                    if (paymentRead[5] !== "TF") {
-                        // "TF" means "transacción fallida"
-                        payments.push(
-                            createPayment({
-                                num_factura: paymentRead[2],
-                                fecha: paymentRead[4],
-                                monto: paymentRead[3],
-                                errors: [],
-                            })
-                        );
-                    }
-                } else if (paymentRead.length === 5) {
-                    // 5 columns = Banco
-                    payments.push(
-                        createPayment({
-                            num_factura: paymentRead[0],
-                            fecha: paymentRead[1],
-                            monto: paymentRead[2],
-                            errors: [],
-                        })
-                    );
-                }
+
+                payments.push(
+                    createPaymentFromBankCSV({
+                        num_factura: paymentRead[0],
+                        fecha: paymentRead[1],
+                        monto: paymentRead[2],
+                        errors: [],
+                    })
+                );
             }
         }
         return Promise.resolve(payments);

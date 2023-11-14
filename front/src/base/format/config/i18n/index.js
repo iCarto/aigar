@@ -1,11 +1,5 @@
 //Date formats
 
-export const DATE_FORMATS = {
-    BANK_DATEFORMAT: "DD/MM/YYYY",
-    TIGO_DATEFORMAT: "YYYYMMDD",
-    API_DATEFORMAT: "YYYY-MM-DD",
-};
-
 // Number formats
 
 export const DECIMAL_SEPARATOR = ".";

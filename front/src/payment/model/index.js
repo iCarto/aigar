@@ -1,5 +1,6 @@
 export {
     default as createPayment,
+    createPaymentFromBankCSV,
     createPayments,
     payment_api_adapter,
     payments_api_adapter,

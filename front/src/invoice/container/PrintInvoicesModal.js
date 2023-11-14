@@ -41,8 +41,10 @@ const PrintInvoicesModal = ({
             nombre_junta: communityName,
             payment_method: paymentMethod,
             comunidad: sectorsLong[invoice.sector]?.long_name,
-            fecha_lectura: `${readingDay}/${invoice.mes}/${invoice.anho}`,
-            due_date: DateUtil.format(invoice.due_date),
+            fecha_lectura: DateUtil.toLocal(
+                DateUtil.fromYearMonthDay(invoice.anho, invoice.mes, readingDay)
+            ),
+            due_date: DateUtil.toLocal(invoice.due_date),
             mes: DateUtil.getMonthName(invoice.mes),
             cuota_fija: NumberUtil.formatCurrency(invoice.cuota_fija, false),
             cuota_variable: NumberUtil.formatCurrency(invoice.cuota_variable, false),

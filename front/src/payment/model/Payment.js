@@ -6,7 +6,7 @@ class Payments extends Array {}
 const payment_view_adapter = paymentOrg => {
     const payment = {
         ...paymentOrg,
-        fecha: DateUtil.parse(paymentOrg["fecha"]),
+        fecha: DateUtil.toISO(paymentOrg["fecha"]),
         monto: parseFloat(paymentOrg["monto"]),
     };
     delete payment["errors"];
@@ -18,7 +18,6 @@ const payment_view_adapter = paymentOrg => {
 };
 
 const payment_api_adapter = payment => {
-    payment["fecha"] = DateUtil.format(payment["fecha"]);
     return payment;
 };
 
@@ -28,6 +27,11 @@ const payments_api_adapter = payments => payments.map(payment_api_adapter);
 
 const createPayments = (data = []) => {
     return Payments.from(data, payment => createPayment(payment));
+};
+
+const createPaymentFromBankCSV = data => {
+    data["fecha"] = DateUtil.fromLocal(data["fecha"]);
+    return createPayment(data);
 };
 
 const createPayment = ({
@@ -47,7 +51,7 @@ const createPayment = ({
         member_id,
         member_name,
         sector,
-        fecha,
+        fecha: DateUtil.fromValidISO(fecha),
         monto,
         num_factura: num_factura !== "" ? num_factura.padStart(12, "0") : num_factura,
         errors,
@@ -58,6 +62,7 @@ const createPayment = ({
 
 export {
     createPayment as default,
+    createPaymentFromBankCSV,
     createPayments,
     payment_view_adapter,
     payments_view_adapter,

@@ -13,15 +13,16 @@ Introducir como usuario `admin` y como contraseña `admin`.
 Llegamos a un panel con diversas opciones. El orden en que se haga esto es fundamental y debe ser seguido el que aquí se menciona.
 
 1. En `Comunidades` introducir las comunidades de la Junta de Agua. Los sectores serán creados automáticamente. Fíjese bien en los nombres de los sectores y anótelos para escribirlos exactamente igual en el catastro de usuarios.
-2. En `Configuración de AIGAR` introduzca todos los parámetros obligatorios y los opciones que desee.
-3. Cree un catastro de usuarios en formato hoja de cálculo. Compruebe que todo es correcto y .
+2. Entre en cada una de las comunidades introducidas. Podrá introducir la fecha de lectura del medidor para cada sector.
+3. En `Configuración de AIGAR` introduzca todos los parámetros obligatorios y los opciones que desee.
+4. Cree un catastro de usuarios en formato hoja de cálculo. Compruebe que todo es correcto y .
     1. Puede crear una hoja en blanco exportando los `Socios/as`
     1. La columna estatus debe tener uno de los siguientes valores: `Activa`, `Inactiva`, `Eliminada`
     1. Compruebe que el nombre de los sectores es el que se usa en la aplicación
-4. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente recibos para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.
-5. Exporte los recibos. Tendrán varios datos en blanco como el `caudal_actual`, ... rellénelo con los datos correctos
-6. Importe la hoja de cálculo con los recibos actualizados en la aplicación
-7. En caso de que haya cuotas de conexión o reconexión pendientes introduzcalas en `Conceptos a facturar en siguientes meses`
+5. Cree un nuevo mes de facturación, correspondiente al mes anterior a aquel en que se quiera empezar a usar la aplicación. Esto generará automáticamente recibos para las socias activas. En caso de que haya socias con cuotas de derecho de conexión pendientes deben gestionarse a mano.
+6. Exporte los recibos. Tendrán varios datos en blanco como el `caudal_actual`, ... rellénelo con los datos correctos
+7. Importe la hoja de cálculo con los recibos actualizados en la aplicación
+8. En caso de que haya cuotas de conexión o reconexión pendientes introduzcalas en `Conceptos a facturar en siguientes meses`
 
 Con esto la aplicación está lista para ser usada. Cierre el navegador y la aplicación.
 

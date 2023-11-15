@@ -24,19 +24,12 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
                 member_name: r.name,
                 orden: r.orden,
                 sector: sector,
-                caudal_anterior: r.lectura_anterior,
-                caudal_actual: r.lectura,
-                // consumo_calculado: r.consumo_calculado,
-                // tarifa_calculada: r.tarifa_calculada,
+                caudal_anterior: r.caudal_anterior,
+                caudal_actual: r.caudal_actual,
                 medidor: r.medidor,
                 cambio_medidor: r.cambio_medidor,
-                // cuota_fija: r.cuota_fija,
-                // comision: r.comision,
-                // ahorro: r.ahorro,
+                member_id: r.id,
             };
-            if (r.id || r.num_socio) {
-                newRow.member_id = r.id || r.num_socio;
-            }
             return newRow;
         });
         dataFile.content = JSON.stringify(newContent);

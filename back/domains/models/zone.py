@@ -2,7 +2,7 @@
 
 Cada una de los espacios territoriales en las que se dividirá el ámbito de una Junta de
 Agua o de su Sistema. Especialmente a la hora de realizar los recorridos para la toma de
-datos de contadores.
+datos de medidores.
 
 Nos referimos por tanto a un sector dentro de una comunidad, o a una comunidad completa
 cuando no esté divida en sectores.
@@ -69,7 +69,7 @@ class Zone(models.Model):
         max_value=31,
         default=27,
         verbose_name="Día de lectura",
-        help_text="Día de lectura de los contadores",
+        help_text="Día de lectura de los medidores",
     )
 
     # TODO: valorar db_index

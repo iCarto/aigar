@@ -9,7 +9,7 @@ AIGAR está financiado por la AGENCIA ESPAÑOLA DE COOPERACIÓN INTERNACIONAL PA
 Este repositorio contiene la aplicación web (empaquetada para escritorio a través de Electron) de AIGAR. AIGAR permite a las Juntas Administradoras de los sistemas de Agua Potable y Saneamiento rurales (Juntas de agua) la gestión administrativa del sistema. Incluye la gestión del catastro de personas socias de la Junta de Agua, y todo el proceso de facturación con las siguientes funcionalidades:
 
 -   Consumo y Facturación
--   Importar lecturas de contadores
+-   Importar lecturas de medidores
 -   Importar registros de pago bancarios
 -   Catastro de personas socias
 -   Estadísticas de consumos, moras, ...
@@ -18,7 +18,7 @@ La aplicación en este momento está muy ligada a la forma de trabajo de ASCATLI
 
 Puedes descargar y probar la aplicación desde el [apartado de relases](https://gitlab.com/icarto/aigar/-/relases). Llega con descomprimir el zip y hacer doble click en el fichero `AIGAR.exe`. La aplicación contiene una base de datos vacía.
 
-La [aplicación de escritorio](https://gitlab.com/icarto/aigar) se complementa con [aigar-lecturas](https://gitlab.com/icarto/aigar-lecturas) una aplicación móvil para tomar en campo las lecturas de los contadores de agua de las viviendas. A pesar de empaquetarse como una aplicación de escritorio está concebida para poder ser desplegada en un servidor web de modo que pueda ser usada por usuarios con diferentes roles, una asociación de juntas de agua que de soporte a varias, ...
+La [aplicación de escritorio](https://gitlab.com/icarto/aigar) se complementa con [aigar-lecturas](https://gitlab.com/icarto/aigar-lecturas) una aplicación móvil para tomar en campo las lecturas de los medidores de agua de las viviendas. A pesar de empaquetarse como una aplicación de escritorio está concebida para poder ser desplegada en un servidor web de modo que pueda ser usada por usuarios con diferentes roles, una asociación de juntas de agua que de soporte a varias, ...
 
 Ambas aplicaciones son libres (licencia AGPL) y gratuitas.
 

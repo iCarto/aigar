@@ -35,6 +35,6 @@ router.register(
 )
 
 urlpatterns = [
+    path("members/export/", members_export, name="member-export"),
     path("", include(router.urls)),
-    path("members/export", members_export, name="member-export"),
 ]

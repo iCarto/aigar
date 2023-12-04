@@ -73,14 +73,14 @@ class InvoiceResource(RemoveEmptyRowsResource):
         fields = (
             "id",
             "num_socio",
-            "mes_facturacion",
             "member_name",
+            "mes_facturacion",
             "caudal_anterior",
             "caudal_actual",
             "ontime_payment",
             "late_payment",
-            "observaciones",
             "total",
+            "observaciones",
         )
         import_id_fields = ("num_socio",)
 

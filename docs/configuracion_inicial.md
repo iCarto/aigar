@@ -29,3 +29,22 @@ Con esto la aplicación está lista para ser usada. Cierre el navegador y la apl
 La carpeta `aigar_data` debe ser guardada e "instalada" en el ordenador de la Junta de Agua.
 
 En la Junta de Agua trabaje de la forma normal, "Exportar socias" para proceder a realizar las lecturas del mes. Y luego "Iniciar proceso".
+
+## Generar los recibos iniciales
+
+Los pasos (6) y (7) enumerados antes permiten generar en la aplicación unos recibos iniciales, para que la aplicación pueda ser usada.
+
+Los campos que se deben rellenar en la hoja de cálculo que se exporta/importa son los siguientes:
+
+-   `id`. Es un campo interno para identificar el recibo. No hay que modificarlo.
+-   `num_socio` y `member_name`. `Número de socio` y `Nombre del socio` para poder identificarlos en cada fila de la hoja de cálculo y rellenar el resto de datos. No hay que modificarlo.
+-   `mes_facturacion`. Un código del mes para el que se van a generar estos recibos iniciales. No hay que modificarlo.
+-   `caudal_anterior` y `caudal_actual`. Las lecturas de los contadores. Hay que introducir los valores adecuados.
+-   `ontime_payment` y `late_payment`. El pago de recibo que ha realizado el socio dentro del plazo o con mora respectivamente. Se usan para calcular si el próximo recibo debe tener mora. Hay que introducir los valores adecuados
+-   `total`. Es el coste total del recibo que haya calculado la Junta de Agua. Debe ser el valor final incluyendo todos los conceptos, cuota fija, cuota variable, comisiones, mora, inasistencia a asambleas, ... La aplicación mantendrá este valor total como el valor total del recibo. Y calculará automáticamente el resto de valores en función de como se haya configurado la aplicación:
+    -   `Cuota fija`. Le asignará el valor que se haya introducido en la aplicación.
+    -   `Cuota variable`. El valor que toque en función del consumo.
+    -   `Ahorro`. Le asignará el valor que se haya introducido en la aplicación.
+    -   `Comisión bancaria`. Le asignará el valor que se haya introducido en la aplicación.
+    -   `Otros` será igual a `Total` - `Cuota fija` - `Cuota variable` - `Ahorro` - `Comisión bancaria`
+-   `observaciones`. Por si se quiere añadir alguna nota. Puede quedar en blanco.

@@ -5,11 +5,10 @@ from app.models.forthcoming_invoice_item import ForthcomingInvoiceItem
 from app.models.measurement import Measurement
 from app.models.payment import Payment
 
+from .admin_app_ordering import get_app_list
 from .invoice_admin import InvoiceAdmin
 from .invoicingmonth_admin import InvoicingMonthAdmin
 from .member_admin import MemberAdmin
-
-from .admin_app_ordering import get_app_list
 
 
 admin.AdminSite.get_app_list = get_app_list

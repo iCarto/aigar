@@ -9,6 +9,11 @@ from .invoice_admin import InvoiceAdmin
 from .invoicingmonth_admin import InvoicingMonthAdmin
 from .member_admin import MemberAdmin
 
+from .admin_app_ordering import get_app_list
+
+
+admin.AdminSite.get_app_list = get_app_list
+
 
 admin.site.unregister(auth.models.User)
 admin.site.unregister((auth.models.Group))
@@ -23,31 +28,31 @@ admin.site.index_title = "Panel de configuración de AIGAR"
 admin.site.register(ForthcomingInvoiceItem)
 
 
-@admin.register(Measurement)
-class MeasurementAdmin(admin.ModelAdmin):
-    list_display = (
-        "invoice_number",
-        "caudal_anterior",
-        "caudal_actual",
-        "consumo",
-        "cambio_medidor",
-    )
-    list_select_related = True
-    list_max_show_all = 10
-    ordering = ("-invoice_id", "id")
+# @admin.register(Measurement)
+# class MeasurementAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "invoice_number",
+#         "caudal_anterior",
+#         "caudal_actual",
+#         "consumo",
+#         "cambio_medidor",
+#     )
+#     list_select_related = True
+#     list_max_show_all = 10
+#     ordering = ("-invoice_id", "id")
 
-    @admin.display(description="Número de recibo")
-    def invoice_number(self, obj):
-        return obj.invoice.numero
+#     @admin.display(description="Número de recibo")
+#     def invoice_number(self, obj):
+#         return obj.invoice.numero
 
 
-@admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ("invoice_number", "fecha", "monto")
-    list_select_related = True
-    list_max_show_all = 10
-    ordering = ("-invoice_id", "id")
+# @admin.register(Payment)
+# class PaymentAdmin(admin.ModelAdmin):
+#     list_display = ("invoice_number", "fecha", "monto")
+#     list_select_related = True
+#     list_max_show_all = 10
+#     ordering = ("-invoice_id", "id")
 
-    @admin.display(description="Número de recibo")
-    def invoice_number(self, obj):
-        return obj.invoice.numero
+#     @admin.display(description="Número de recibo")
+#     def invoice_number(self, obj):
+#         return obj.invoice.numero

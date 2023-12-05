@@ -27,8 +27,8 @@ const DateUtil = {
         return c;
     },
 
-    fromYearMonthDay(year, month, day) {
-        const date = new Date(Date.UTC(year, month, day));
+    fromYearMonthDay(year, monthIndex, day) {
+        const date = new Date(Date.UTC(year, monthIndex, day));
         return this.trimTime(date);
     },
 
@@ -50,10 +50,10 @@ const DateUtil = {
             return s;
         }
         if (moment.isMoment(s)) {
-            return this.fromYearMonthDay(s.year(), s.month() + 1, s.date());
+            return this.fromYearMonthDay(s.year(), s.month(), s.date());
         }
         const tokens = s.split("/");
-        return this.fromYearMonthDay(tokens[2], tokens[1], tokens[0]);
+        return this.fromYearMonthDay(tokens[2], tokens[1] - 1, tokens[0]);
     },
 
     fromValidISO(s) {
@@ -68,7 +68,7 @@ const DateUtil = {
             return s;
         }
         if (moment.isMoment(s)) {
-            return this.fromYearMonthDay(s.year(), s.month() + 1, s.date());
+            return this.fromYearMonthDay(s.year(), s.month(), s.date());
         }
         const tokens = s.split("-");
         return this.fromYearMonthDay(tokens[0], tokens[1] - 1, tokens[2]);

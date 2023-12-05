@@ -58,13 +58,23 @@ const UpdatePaymentsWizard = () => {
     };
 
     const generatePaymentDates = () => {
-        const month = parseInt(selectedInvoicingMonth?.mes) + 1;
+        const invoiceMonth = parseInt(selectedInvoicingMonth?.mes);
+        const paymentMonth = invoiceMonth + 1;
+        const paymentMonthIndex = paymentMonth - 1;
         const year = selectedInvoicingMonth?.anho;
         const ontimeDay = 1;
         const lateDay = aigarConfig.payment_due_day + 1;
 
-        const latePaymentDate = DateUtil.fromYearMonthDay(year, month, lateDay);
-        const ontimePaymentDate = DateUtil.fromYearMonthDay(year, month, ontimeDay);
+        const latePaymentDate = DateUtil.fromYearMonthDay(
+            year,
+            paymentMonthIndex,
+            lateDay
+        );
+        const ontimePaymentDate = DateUtil.fromYearMonthDay(
+            year,
+            paymentMonthIndex,
+            ontimeDay
+        );
 
         return {latePaymentDate, ontimePaymentDate};
     };

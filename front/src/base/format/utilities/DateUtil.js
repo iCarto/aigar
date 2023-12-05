@@ -28,7 +28,8 @@ const DateUtil = {
     },
 
     fromYearMonthDay(year, monthIndex, day) {
-        const date = new Date(Date.UTC(year, monthIndex, day));
+        // const date = new Date(Date.UTC(year, monthIndex, day));
+        const date = new Date(year, monthIndex, day);
         return this.trimTime(date);
     },
 

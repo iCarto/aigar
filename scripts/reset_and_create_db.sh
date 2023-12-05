@@ -48,18 +48,6 @@ else
 
     sqlite3 "${SQLITE_PATH}" "
 
-    /* https://stackoverflow.com/a/48016934/930271 */
-    PRAGMA writable_schema = ON;
-
-    UPDATE sqlite_master SET
-        sql = replace(sql, 'DEFERRABLE', 'ON DELETE CASCADE DEFERRABLE')
-    WHERE
-        type='table'
-        AND
-        name IN ('app_invoice', 'app_measurement', 'app_payment', 'app_forthcominginvoiceitem');
-
-    PRAGMA writable_schema = OFF;
-
 
     PRAGMA foreign_keys = ON;
 
@@ -240,9 +228,12 @@ fi
 crear_vacia() {
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
+        delete from app_measurement;
+        delete from app_payment;
+        delete from app_invoice;
         delete from app_invoicingmonth;
         delete from app_member;
-        delete from domains_aigarconfig;
+        /* delete from domains_aigarconfig; */
         delete from domains_zone;
         delete from domains_locality;
     "

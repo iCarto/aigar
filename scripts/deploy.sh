@@ -12,7 +12,7 @@ cp "${SQLITE_PATH}" "${SQLITE_PATH}".empty
 ./scripts/reset_and_create_db.sh
 
 bash ./scripts/util/build_web_deploy_file.sh
-cp dist/aigar-1.0.0.tar.gz desktop/gomi/
+cp dist/aigar-23.12.05.tar.gz desktop/gomi/
 
 cp tools/fixtures/gomi/electron.exe desktop/gomi
 

@@ -46,7 +46,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aigar"
-version = "1.0.0"
+version = "23.12.05"
 authors = [{ name = "iCarto", email = "info@icarto.es" }]
 readme = "README.md"
 classifiers = [

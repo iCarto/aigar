@@ -158,7 +158,7 @@ install_app() {
     DATE=$(date +%y%m%d)
     unzip_electron "${ELECTRON_URL}"
     # mv "${GOMI}/src" "${GOMI}/${DATE}_aigar/"
-    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install "${GOMI}/aigar-1.0.0.tar.gz"
+    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install "${GOMI}/aigar-23.12.05.tar.gz"
 
     # No deberíamos montar runserver_plus en en build para reducir el tamaño
     # y dependencias

@@ -50,6 +50,7 @@ const PrintInvoicesModal = ({
             cuota_variable: NumberUtil.formatCurrency(invoice.cuota_variable, false),
             comision: NumberUtil.formatCurrency(invoice.comision, false),
             ahorro: NumberUtil.formatCurrency(invoice.ahorro, false),
+            derecho: NumberUtil.formatCurrency(invoice.derecho, false),
             mora: NumberUtil.formatCurrency(invoice.mora, false),
             asamblea: NumberUtil.formatCurrency(invoice.asamblea, false),
             jornada_trabajo: NumberUtil.formatCurrency(invoice.jornada_trabajo, false),

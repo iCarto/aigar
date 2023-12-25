@@ -18,7 +18,7 @@ class MemberCreateSerializer(MemberSerializer):
 class MemberShortSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
-        fields = [
+        fields = (
             "id",
             "name",
             "tipo_uso",
@@ -26,7 +26,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
             "sector",
             "consumo_maximo",
             "consumo_reduccion_fija",
-        ]
+        )
 
     # sector_id does not launch subqueries
     sector = serializers.ReadOnlyField(source="sector_id")
@@ -35,7 +35,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
 class MemberExportSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Member
-        fields = [
+        fields = (
             "name",
             "id",
             "orden",
@@ -47,7 +47,7 @@ class MemberExportSerializer(serializers.ModelSerializer):
             "medidor",
             "cambio_medidor",
             "tipo_uso",
-        ]
+        )
 
     caudal_actual = serializers.ReadOnlyField(default=None)
     consumo = serializers.ReadOnlyField(default=None)

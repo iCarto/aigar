@@ -17,11 +17,11 @@ def test_api_can_not_change_status(api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
     invoice = InvoiceFactory.create(
-        mes_facturacion=invoicingmonth, estado=InvoiceStatus.NUEVA
+        mes_facturacion=invoicingmonth, estado=InvoiceStatus.NUEVA,
     )
 
     response = api_client.patch(
-        f"/api/invoices/{invoice.pk}/", {"estado": InvoiceStatus.COBRADA}
+        f"/api/invoices/{invoice.pk}/", {"estado": InvoiceStatus.COBRADA},
     )
 
     # El endpoint no devuelve error aunque el campo es ignorado por ser no editable
@@ -34,9 +34,9 @@ def test_update_invoice_status(api_client, create_invoicing_month):
     invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=False)
     invoices = [
         InvoiceFactory.create(
-            estado=InvoiceStatus.NUEVA, mes_facturacion=invoicing_month
+            estado=InvoiceStatus.NUEVA, mes_facturacion=invoicing_month,
         )
-        for i in range(0, 3)
+        for i in range(3)
     ]
 
     response = api_client.put(
@@ -48,7 +48,7 @@ def test_update_invoice_status(api_client, create_invoicing_month):
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT, response.json()
 
-    [i.refresh_from_db() for i in invoices]  # noqa: WPS428
+    [i.refresh_from_db() for i in invoices]
     assert all(i.estado == InvoiceStatus.PENDIENTE_DE_COBRO for i in invoices[:2])
     assert all(i.estado == InvoiceStatus.NUEVA for i in invoices[2:])
 
@@ -65,7 +65,7 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
     create_invoicing_month(anho="2019", mes="10", is_open=True)
     member_pk = old_invoice.member.pk
     api_client.put(
-        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE},
     )
     response = api_client.post("/api/invoicingmonths/", {"anho": "2019", "mes": "11"})
     assert response.status_code == 201, response.json()
@@ -78,14 +78,14 @@ def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
 
 def test_total_endpoint(api_client, create_invoicing_month):
     invoice = InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
 
     sanity_check = {key: getattr(invoice, key) for key in ("total", "asamblea")}
     assert sanity_check == {"total": 6.25, "asamblea": 0}, "Check arrange data is ok"
 
     response = api_client.put(
-        f"/api/invoices/{invoice.id}/total/", model_to_dict(invoice) | {"asamblea": 2}
+        f"/api/invoices/{invoice.id}/total/", model_to_dict(invoice) | {"asamblea": 2},
     )
     response_data = response.json()
     assert response.status_code == status.HTTP_200_OK, response_data

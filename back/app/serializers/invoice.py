@@ -7,10 +7,10 @@ from app.serializers.member import MemberShortSerializer
 
 class InvoiceValueSerializer(serializers.Serializer):
     pks = serializers.ListField(
-        child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1
+        child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1,
     )
     invoice_value = serializers.ChoiceField(
-        choices=InvoiceValue, allow_blank=False, required=True
+        choices=InvoiceValue, allow_blank=False, required=True,
     )
 
 
@@ -26,7 +26,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 class InvoiceStatsSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Invoice
-        fields = [
+        fields = (
             "mes_facturacion",
             "mes_abierto",
             "anho",
@@ -39,7 +39,7 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "deuda",
             "total",
             "member_data",
-        ]
+        )
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
     mes_abierto = serializers.ReadOnlyField(source="mes_facturacion__is_open")

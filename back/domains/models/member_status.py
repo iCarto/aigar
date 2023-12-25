@@ -56,6 +56,6 @@ from django.db import models
 
 
 class MemberStatus(models.TextChoices):
-    ACTIVE = "Activa", "Activa"  # noqa: WPS115
-    INACTIVE = "Inactiva", "Inactiva"  # noqa: WPS115
-    DELETED = "Eliminada", "Eliminada"  # noqa: WPS115
+    ACTIVE = "Activa", "Activa"
+    INACTIVE = "Inactiva", "Inactiva"
+    DELETED = "Eliminada", "Eliminada"

@@ -12,7 +12,7 @@ pytestmark = pytest.mark.django_db
 def test_names_must_be_processed_on_create():
     """`name` and `short_name` should be normalized when creating a Locality."""
     locality = factories.LocalityFactory.create(
-        name=" mi\r\ncomunidad\nde\tlargo   nombre ", short_name=" la\ncomunidad "
+        name=" mi\r\ncomunidad\nde\tlargo   nombre ", short_name=" la\ncomunidad ",
     )
     assert locality.name == "Mi comunidad de largo nombre"
     assert locality.short_name == "La comunidad"

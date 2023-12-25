@@ -1,3 +1,5 @@
+from types import MappingProxyType
+
 from django_filters import rest_framework as filters
 from rest_framework import serializers, viewsets
 
@@ -9,7 +11,7 @@ from app.serializers.member import MemberShortSerializer
 class Filter(filters.FilterSet):
     class Meta(object):
         model = Invoice
-        fields = {"id": ("in", "exact")}
+        fields = MappingProxyType({"id": ("in", "exact")})
 
 
 class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
@@ -24,7 +26,7 @@ class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
 
 class InvoicingMonthInvoicesViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoicingMonthInvoicesSerializer
-    filter_backends = [filters.DjangoFilterBackend]
+    filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = Filter
 
     def get_queryset(self):

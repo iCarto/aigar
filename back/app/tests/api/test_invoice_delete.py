@@ -45,7 +45,7 @@ def test_measurements_are_moved(api_client, create_invoicing_month):
         estado=InvoiceStatus.NUEVA,
     )
     measurement = Measurement.objects.create(
-        invoice=old_invoice, caudal_anterior=5, caudal_actual=10
+        invoice=old_invoice, caudal_anterior=5, caudal_actual=10,
     )
     response = api_client.delete(f"/api/invoices/{old_invoice.pk}/")
     assert response.status_code == status.HTTP_200_OK, response.json()
@@ -63,14 +63,14 @@ def test_dont_modify_for_closed_months(_, api_client, create_invoicing_month):
         estado=InvoiceStatus.NUEVA,
     )
     response = api_client.post(
-        "/api/invoicingmonths/", {"anho": "2019", "mes": "10", "is_open": True}
+        "/api/invoicingmonths/", {"anho": "2019", "mes": "10", "is_open": True},
     )
     assert response.status_code == 201, response.json()
 
     invoice.refresh_from_db()
     assert not invoice.mes_facturacion.is_open
     with pytest.raises(
-        exceptions.ValidationError, match="No se puede modificar un recibo en estado"
+        exceptions.ValidationError, match="No se puede modificar un recibo en estado",
     ):
         api_client.delete(f"/api/invoices/{invoice.pk}/")
 

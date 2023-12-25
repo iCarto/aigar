@@ -6,14 +6,13 @@ yyyy-06-30, ...
 
 import calendar
 import datetime
-from typing import Tuple
 
 from dateutil import rrule
 from dateutil.relativedelta import relativedelta
 
 
 def diff_month(d1, d2) -> int:
-    return abs((d1.year - d2.year) * 12 + d1.month - d2.month)  # noqa: WPS221
+    return abs((d1.year - d2.year) * 12 + d1.month - d2.month)
 
 
 def diff_month_include_upper(d1, d2) -> int:
@@ -47,15 +46,13 @@ def first_day_of_current_month():
 
 def quarter_range(
     d: datetime.date = ...,
-) -> Tuple[datetime.datetime, datetime.datetime]:
+) -> tuple[datetime.datetime, datetime.datetime]:
     """Returns the first and last date for the quarter d is within."""
     # https://stackoverflow.com/a/13766929/930271
     # https://github.com/adamjstewart/fiscalyear
     # https://stackoverflow.com/a/37708216/930271
-    if d:
-        this_date = datetime.datetime(d.year, d.month, d.day)
-    else:
-        this_date = now()
+
+    this_date = datetime.datetime(d.year, d.month, d.day) if d else now()
 
     year = this_date.year
     quarters = rrule.rrule(

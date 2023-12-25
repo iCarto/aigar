@@ -24,7 +24,7 @@ class ForthcomingInvoiceItem(models.Model):
         ordering = ("id",)
         # constraints = [
         #     models.UniqueConstraint(
-        #         name="%(app_label)s_%(class)s_unique_member_item",  # noqa: WPS323
+        #         name="%(app_label)s_%(class)s_unique_member_item",
         #         violation_error_message="Ya existe el concepto para esa socio/a",
         #         fields=["member", "item"],
         #     )
@@ -46,7 +46,7 @@ class ForthcomingInvoiceItem(models.Model):
     )
 
     value = models.FloatField(
-        null=False, blank=False, verbose_name="valor", help_text=""
+        null=False, blank=False, verbose_name="valor", help_text="",
     )
 
     member = models.ForeignKey(

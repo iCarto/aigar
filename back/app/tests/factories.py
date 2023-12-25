@@ -8,7 +8,7 @@ from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
 
 
-class MemberFactory(BaseFactory[Member]):  # type: ignore
+class MemberFactory(BaseFactory[Member]):
     name = factory.Faker("name")
     medidor = factory.Faker("numerify", text="######")
     orden = 0
@@ -25,7 +25,7 @@ class MemberFactory(BaseFactory[Member]):  # type: ignore
     selected_fee_value = None
 
 
-class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore
+class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):
     # class Meta(object):
     #     inline_args = ("anho", "mes")
 
@@ -35,7 +35,7 @@ class InvoicingMonthFactory(BaseFactory[InvoicingMonth]):  # type: ignore
     is_open = True
 
 
-class InvoiceFactory(BaseFactory[Invoice]):  # type: ignore
+class InvoiceFactory(BaseFactory[Invoice]):
     version = 1
     anho = factory.SelfAttribute("mes_facturacion.anho")
     mes = factory.SelfAttribute("mes_facturacion.mes")

@@ -9,15 +9,15 @@ from domains.models.member_status import MemberStatus
 from domains.tests.factories import ZoneFactory
 
 
-@pytest.fixture
+@pytest.fixture()
 def five_members_in_order() -> list[Member]:
-    members = [MemberFactory.create(orden=orden) for orden in range(0, 5)]
-    for orden in range(0, 5):
+    members = [MemberFactory.create(orden=orden) for orden in range(5)]
+    for orden in range(5):
         assert members[orden].orden == orden
     return members
 
 
-@pytest.fixture
+@pytest.fixture()
 def new_member_data() -> dict[str, Any]:
     return {
         "name": "foo",
@@ -31,15 +31,15 @@ def new_member_data() -> dict[str, Any]:
     }
 
 
-@pytest.fixture
+@pytest.fixture()
 def create_invoicing_month():
     """InvoicingMonth.create has too much logic."""
 
-    def _create_invoicing_month(  # noqa: WPS430
-        anho: str = "2019", mes: str = "09", is_open: bool = True
+    def _create_invoicing_month(
+        anho: str = "2019", mes: str = "09", is_open: bool = True,
     ):
         invoicing_month = InvoicingMonth(
-            anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes
+            anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes,
         )
         invoicing_month.save()
         return invoicing_month

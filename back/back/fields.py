@@ -4,6 +4,9 @@ from django.core import validators
 from django.db import models
 
 
+DEFAULT_MIN_LENGHT = 2
+
+
 class RangedIntegerField(models.IntegerField):
     # https://stackoverflow.com/questions/849142/
     def __init__(self, min_value=None, max_value=None, **kwargs):
@@ -53,7 +56,9 @@ class StrictCharField(models.CharField):
     description = "CharField with enforzed constraints"
     empty_strings_allowed = False
 
-    def __init__(self, apply: str = "", min_length: int = 2, *args, **kwargs):
+    def __init__(
+        self, apply: str = "", min_length: int = DEFAULT_MIN_LENGHT, *args, **kwargs
+    ):
         """StringCharField.
 
         Args:
@@ -75,7 +80,7 @@ class StrictCharField(models.CharField):
         # the default in future.
         if self.apply:
             kwargs["apply"] = self.apply
-        if self.min_length != 2:
+        if self.min_length != DEFAULT_MIN_LENGHT:
             kwargs["min_length"] = self.min_length
         return name, path, args, kwargs
 

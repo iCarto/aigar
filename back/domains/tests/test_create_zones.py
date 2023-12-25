@@ -60,10 +60,10 @@ def test_code_independent_from_location_order():
     It depends only in the alphabetical sort or the short_name
     """
     LocalityFactory.create(
-        name="B__", short_name="C__", number_of_sectors=1, with_zones=True
+        name="B__", short_name="C__", number_of_sectors=1, with_zones=True,
     )
     LocalityFactory.create(
-        name="Z__", short_name="A__", number_of_sectors=1, with_zones=True
+        name="Z__", short_name="A__", number_of_sectors=1, with_zones=True,
     )
 
     zones = Zone.objects.all()

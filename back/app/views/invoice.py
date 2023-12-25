@@ -24,10 +24,10 @@ class InvoiceFilter(filters.FilterSet):
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
-    filter_backends = [filters.DjangoFilterBackend]
+    filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = InvoiceFilter
     queryset = Invoice.objects.with_cancelled().select_related(
-        "member", "member__sector"
+        "member", "member__sector",
     )
 
     @action(detail=True, methods=["get"])
@@ -41,7 +41,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         serializer = InvoiceStatusSerializer(data=request.data)
         if serializer.is_valid():
             Invoice.objects.update_status(
-                serializer.validated_data["pks"], serializer.validated_data["status"]
+                serializer.validated_data["pks"], serializer.validated_data["status"],
             )
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -61,7 +61,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     def total(self, request, pk=None):
         instance = self.get_object()
 
-        def noop_save(*args, **kwargs):  # noqa: WPS430
+        def noop_save(*args, **kwargs):
             """Don't save the instance, just recalculate values and return then."""
 
         instance.save = noop_save
@@ -77,11 +77,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         invoice = self.get_object()
         if invoice.estado in NOT_MODIFICABLE_INVOICES:
             raise exceptions.ValidationError(
-                f"No se puede modificar un recibo en estado {invoice.estado}"
+                f"No se puede modificar un recibo en estado {invoice.estado}",
             )
         if invoice.payment_set.exists():
             raise exceptions.ValidationError(
-                "No se puede modificar un recibo con pagos asociados"
+                "No se puede modificar un recibo con pagos asociados",
             )
         invoice.estado = InvoiceStatus.ANULADA
         invoice.save()
@@ -89,7 +89,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
         # https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances
         invoice.pk = None
-        invoice._state.adding = True  # noqa: WPS437
+        invoice._state.adding = True
         invoice.version += 1
         invoice.estado = InvoiceStatus.NUEVA
         invoice.save()

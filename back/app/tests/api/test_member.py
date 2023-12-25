@@ -7,8 +7,8 @@ from app.models.forthcoming_invoice_item import (
     ForthcomingInvoiceItem,
     ForthcomingInvoiceItemName,
 )
-from app.models.invoice_status import InvoiceStatus
 from app.models.invoice import Invoice
+from app.models.invoice_status import InvoiceStatus
 from app.models.member import Member, UseTypes
 from app.tests.factories import InvoiceFactory, MemberFactory
 from domains.models.member_status import MemberStatus
@@ -33,7 +33,7 @@ def test_status_delete(api_client):
     member_pk = member.pk
     assert member.pk == 1
     response = api_client.put(
-        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED},
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     expected = Member.objects.get(pk=member_pk)
@@ -51,11 +51,11 @@ def test_delete_new_invoices_when_deleting_member(api_client, create_invoicing_m
         mes_facturacion=create_invoicing_month(mes="10"),
     )
     InvoiceFactory.create(
-        estado=InvoiceStatus.NUEVA, mes_facturacion=invoice10.mes_facturacion
+        estado=InvoiceStatus.NUEVA, mes_facturacion=invoice10.mes_facturacion,
     )
     member_pk = invoice10.member.pk
     response = api_client.put(
-        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.DELETED},
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert Member.objects.get(pk=member_pk).status == MemberStatus.DELETED
@@ -66,24 +66,24 @@ def test_create_reconnect_debt_when_activating_member(api_client):
     member = MemberFactory.create(status=MemberStatus.INACTIVE)
 
     response = api_client.put(
-        "/api/members/status/", {"pks": [member.pk], "status": MemberStatus.ACTIVE}
+        "/api/members/status/", {"pks": [member.pk], "status": MemberStatus.ACTIVE},
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert ForthcomingInvoiceItem.objects.filter(
-        member=member, item=ForthcomingInvoiceItemName.reconexion, value=10
+        member=member, item=ForthcomingInvoiceItemName.reconexion, value=10,
     ).exists()
 
 
 def test_not_create_reconnect_debt_when_creating_member(
-    api_client, new_member_data, create_invoicing_month
+    api_client, new_member_data, create_invoicing_month,
 ):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
     response = api_client.post("/api/members/", new_member_data)
     assert response.status_code == status.HTTP_201_CREATED
     assert not ForthcomingInvoiceItem.objects.filter(
-        item=ForthcomingInvoiceItemName.reconexion
+        item=ForthcomingInvoiceItemName.reconexion,
     ).exists()
 
 
@@ -99,7 +99,7 @@ def test_update_member_with_invoices(api_client, create_invoicing_month):
     invoice.save()
     assert invoice.total == pytest.approx(170.75)
     d = model_to_dict(
-        invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
+        invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"],
     ) | {"name": "foo bar", "consumo_maximo": 15}
     response = api_client.put(f"/api/members/{d['id']}/", d)
     assert response.status_code == 200
@@ -123,7 +123,7 @@ def test_api_can_not_change_status(api_client):
     member = MemberFactory.create(status=MemberStatus.ACTIVE)
 
     response = api_client.patch(
-        f"/api/members/{member.pk}/", {"estado": MemberStatus.INACTIVE}
+        f"/api/members/{member.pk}/", {"estado": MemberStatus.INACTIVE},
     )
 
     # El endpoint no devuelve error aunque el campo es ignorado por ser no editable

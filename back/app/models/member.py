@@ -12,8 +12,8 @@ from domains.models.zone import Zone
 
 
 class UseTypes(models.TextChoices):
-    HUMANO = "Humano", "Humano"  # noqa: WPS115
-    COMERCIAL = "Comercial", "Comercial"  # noqa: WPS115
+    HUMANO = "Humano", "Humano"
+    COMERCIAL = "Comercial", "Comercial"
 
 
 class MemberManager(models.Manager["Member"]):
@@ -96,8 +96,8 @@ class Member(models.Model):
         help_text="",
     )
 
-    # TODO: Deberíamos poder fijar un orden máximo igual al número de socias activos
-    # TODO: #4228
+    # TODO(fpuga): Deberíamos poder fijar un orden máximo igual al número de socias activos
+    # TODO(fpuga): #4228
     orden = RangedIntegerField(
         null=True,
         blank=True,

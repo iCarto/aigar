@@ -37,7 +37,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payments: list[dict[str, Any]] = request.data
         payments_without_invoice = [m for m in payments if not m["invoice"]]
         logger.warning(
-            "No hay recibo para la lecturas %s",  # noqa: WPS323
+            "No hay recibo para la lecturas %s",
             payments_without_invoice,
         )
         payments = [m for m in payments if m["invoice"]]
@@ -47,7 +47,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers,
         )
 
     @action(detail=False, methods=["post"])
@@ -56,7 +56,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         invoices = get_invoices_for_payments(payments)
         updated_invoices = get_updated_invoices(payments, invoices)
         serializer = InvoiceSerializer(
-            data=updated_invoices, many=True, context={"request": request}
+            data=updated_invoices, many=True, context={"request": request},
         )
         serializer.is_valid()
         return Response(serializer.data)
@@ -72,7 +72,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 def get_invoices_for_payments(payments) -> dict[int, Invoice]:
     invoice_ids = [payment["invoice"] for payment in payments]
     invoices = Invoice.objects.prefetch_related("member").filter(
-        id__in=invoice_ids, mes_facturacion__is_open=True
+        id__in=invoice_ids, mes_facturacion__is_open=True,
     )
     return {invoice.id: invoice for invoice in invoices}
 
@@ -83,7 +83,7 @@ def get_updated_invoices(payments, invoices):
         invoice = invoices.get(payment["invoice"])
         if invoice:
             invoice.update_with_payment(
-                datetime.date.fromisoformat(payment["fecha"]), payment["monto"]
+                datetime.date.fromisoformat(payment["fecha"]), payment["monto"],
             )
             updated_invoices.append(invoice)
     return updated_invoices

@@ -8,13 +8,12 @@ def get_app_list(self, request, app_label=None):
     app_dict = self._build_app_dict(request, app_label)
 
     if not app_dict:
-        return
-    NEW_ADMIN_ORDERING = []
+        return None
+    new_admin_ordering = []
     if app_label:
-        print(app_label)
         for ao in ADMIN_ORDERING:
             if ao[0] == app_label:
-                NEW_ADMIN_ORDERING.append(ao)
+                new_admin_ordering.append(ao)
                 break
 
     if not app_label:
@@ -27,10 +26,10 @@ def get_app_list(self, request, app_label=None):
         key=lambda x: [ao[0] for ao in ADMIN_ORDERING].index(x["app_label"]),
     )
 
-    for app, ao in zip(app_list, NEW_ADMIN_ORDERING or ADMIN_ORDERING):
+    for app, ao in zip(app_list, new_admin_ordering or ADMIN_ORDERING, strict=False):
         if app["app_label"] == ao[0]:
             for model in list(app["models"]):
-                if not model["object_name"] in ao[1]:
+                if model["object_name"] not in ao[1]:
                     app["models"].remove(model)
         app["models"].sort(key=lambda x: ao[1].index(x["object_name"]))
     return app_list

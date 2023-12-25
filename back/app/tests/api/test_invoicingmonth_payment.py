@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 
 def test_payment(api_client, create_invoicing_month):
     invoicing_month: InvoicingMonth = create_invoicing_month(
-        anho="2019", mes="09", is_open=True
+        anho="2019", mes="09", is_open=True,
     )
     invoice1 = InvoiceFactory.create(
         estado=InvoiceStatus.PENDIENTE_DE_COBRO,
@@ -29,7 +29,7 @@ def test_payment(api_client, create_invoicing_month):
     ]
 
     response = api_client.post(
-        f"/api/invoicingmonths/{invoicing_month.id_mes_facturacion}/payments/", payload
+        f"/api/invoicingmonths/{invoicing_month.id_mes_facturacion}/payments/", payload,
     )
     assert response.status_code == 201, response.content
     assert Payment.objects.count() == 2

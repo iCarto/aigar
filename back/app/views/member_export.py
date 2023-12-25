@@ -15,5 +15,5 @@ def members_export(_):
         {
             "members": MemberExportSerializer(members, many=True).data,
             "meta": AigarConfigSerializer(meta).data,
-        }
+        },
     )

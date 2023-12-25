@@ -15,7 +15,7 @@ admin.AdminSite.get_app_list = get_app_list
 
 
 admin.site.unregister(auth.models.User)
-admin.site.unregister((auth.models.Group))
+admin.site.unregister(auth.models.Group)
 
 es_formats.DATETIME_FORMAT = "d/m/Y H:i:s"
 

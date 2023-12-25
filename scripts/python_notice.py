@@ -19,7 +19,7 @@ def print_all_in_working_set():
     # print all the package of the virtualenv
     ws = pkg_resources.working_set
     for package_name in ws:
-        print(package_name)
+        print(package_name)  # noqa: T201
 
 
 def get_dependencies_with_semver_string(package, acc):
@@ -34,12 +34,7 @@ def get_dependencies_with_semver_string(package, acc):
 
 def get_packages_in_requirements(file):
     with pathlib.Path(file).open() as requirements_txt:
-        packages = [
-            requirement
-            for requirement in pkg_resources.parse_requirements(requirements_txt)
-        ]
-
-    return packages
+        return list(pkg_resources.parse_requirements(requirements_txt))
 
 
 def main(file):
@@ -50,7 +45,7 @@ def main(file):
     deps_keys = [p.key for p in deps]
     all_keys = [p.key for p in get_installed_distributions()]
     ignore = [p for p in all_keys if p not in deps_keys]
-    print(" ".join(ignore))
+    print(" ".join(ignore))  # noqa: T201
 
 
 if __name__ == "__main__":

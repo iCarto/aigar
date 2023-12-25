@@ -21,7 +21,7 @@ class MemberViewSet(viewsets.ModelViewSet):
         serializer = MemberStatusSerializer(data=request.data)
         if serializer.is_valid():
             Member.objects.update_status(
-                serializer.validated_data["pks"], serializer.validated_data["status"]
+                serializer.validated_data["pks"], serializer.validated_data["status"],
             )
             return Response(status=status.HTTP_204_NO_CONTENT)
 

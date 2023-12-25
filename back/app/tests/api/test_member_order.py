@@ -21,7 +21,7 @@ def test_create_member_first_order(api_client, new_member_data):
 
 
 def test_create_member_not_move_preceding_order(
-    api_client, five_members_in_order, new_member_data
+    api_client, five_members_in_order, new_member_data,
 ):
     response = api_client.post("/api/members/", new_member_data)
     assert response.status_code == 201, response.json()
@@ -34,7 +34,7 @@ def test_create_member_not_move_preceding_order(
 
 
 def test_create_member_move_subsequent_order(
-    api_client, five_members_in_order, new_member_data
+    api_client, five_members_in_order, new_member_data,
 ):
     response = api_client.post("/api/members/", new_member_data)
     assert response.status_code == 201, response.json()
@@ -46,7 +46,7 @@ def test_create_member_move_subsequent_order(
 
 def test_update_member_move_preceding_order(api_client, five_members_in_order):
     d = model_to_dict(
-        five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
+        five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"],
     ) | {"orden": 1}
     response = api_client.put(f"/api/members/{d['id']}/", d)
     assert response.status_code == 200, response.json()
@@ -58,7 +58,7 @@ def test_update_member_move_preceding_order(api_client, five_members_in_order):
 
 def test_update_member_move_subsequent_order(api_client, five_members_in_order):
     d = model_to_dict(
-        five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"]
+        five_members_in_order[3], exclude=["consumo_maximo", "consumo_reduccion_fija"],
     ) | {"orden": 4}
     response = api_client.put(f"/api/members/{d['id']}/", d)
     assert response.status_code == 200, response.json()

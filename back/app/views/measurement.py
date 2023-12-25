@@ -38,13 +38,13 @@ class MeasurementViewSet(viewsets.ModelViewSet):
                 measurement["invoice"] = invoice.id
             else:
                 logger.warning(
-                    "No hay recibo para la lectura %s", measurement  # noqa: WPS323
+                    "No hay recibo para la lectura %s", measurement,
                 )
 
         measurements = [m for m in measurements if m["invoice"]]
 
         serializer = MeasurementSerializer(
-            data=measurements, many=True, context={"request": request}
+            data=measurements, many=True, context={"request": request},
         )
         if serializer.is_valid():
             serializer.save()
@@ -66,7 +66,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
                 )
                 updated_invoices.append(invoice)
         serializer = InvoiceSerializer(
-            data=updated_invoices, many=True, context={"request": request}
+            data=updated_invoices, many=True, context={"request": request},
         )
         serializer.is_valid()
         return Response(serializer.data)
@@ -76,7 +76,7 @@ def get_invoices_for_measurements(measurements):
     invoicing_month = get_object_or_404(InvoicingMonth, is_open=True)
     member_id_set = [measurement["member_id"] for measurement in measurements]
     return Invoice.objects.prefetch_related("member").filter(
-        member__in=member_id_set, mes_facturacion=invoicing_month
+        member__in=member_id_set, mes_facturacion=invoicing_month,
     )
 
 

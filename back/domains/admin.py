@@ -45,7 +45,7 @@ class LocalityChangeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field_tmp in self.fields.values():
-            field: forms.Field = field_tmp  # type: ignore
+            field: forms.Field = field_tmp
             field.widget.attrs["style"] = "border:none;"
             field.help_text = ""
             field.disabled = True
@@ -88,7 +88,7 @@ class LocalityAdmin(admin.ModelAdmin):
 
 @admin.register(AigarConfig)
 class AigarConfigAdmin(SingletonModelAdmin):
-    fieldsets = [
+    fieldsets = (
         (None, {"fields": ["name"]}),
         (
             "Pagos",
@@ -196,4 +196,4 @@ class AigarConfigAdmin(SingletonModelAdmin):
                 ],
             },
         ),
-    ]
+    )

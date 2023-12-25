@@ -228,14 +228,14 @@ class Invoice(models.Model):
         verbose_name = "recibo"
         verbose_name_plural = "recibos"
         ordering = ("-mes_facturacion_id", "-version", "member_id")
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",  # noqa: WPS323
+                name="%(app_label)s_%(class)s_only_one_invoice_per_month_per_member",
                 violation_error_message="Un socio/a no puede tener más de dos recibos no anulados en el mismo mes.",
                 fields=["mes_facturacion_id", "member_id"],
                 condition=~models.Q(estado=InvoiceStatus.ANULADA),
-            )
-        ]
+            ),
+        )
 
     member_id: int
     mes_facturacion_id: int
@@ -426,7 +426,7 @@ class Invoice(models.Model):
             self.caudal_anterior = 0
         elif caudal_anterior != int(self.caudal_anterior):
             logger.warning(
-                "Caudal anterior: %s distinto a Medida %s para recibo %s",  # noqa:WPS323
+                "Caudal anterior: %s distinto a Medida %s para recibo %s",
                 self.caudal_anterior,
                 caudal_anterior,
                 self.id,
@@ -441,7 +441,7 @@ class Invoice(models.Model):
 
         self.cuota_variable = self.calculated_variable_fee()
 
-        # TODO Review if store invoice in decimal fields is a better option
+        # TODO(fpuga): Review if store invoice in decimal fields is a better option
         self.total = round(
             self.cuota_fija
             + self.cuota_variable

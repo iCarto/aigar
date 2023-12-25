@@ -75,7 +75,7 @@ def test_dont_create_invoices_for_closed_months(api_client, create_invoicing_mon
     )
 
     with pytest.raises(
-        exceptions.ValidationError, match="El mes no está abierto o no existe."
+        exceptions.ValidationError, match="El mes no está abierto o no existe.",
     ):
         api_client.post(
             "/api/invoices/",
@@ -97,7 +97,7 @@ def test_dont_create_for_not_existent_months(api_client, create_invoicing_month)
         member__status=MemberStatus.ACTIVE,
     )
     with pytest.raises(
-        exceptions.ValidationError, match="El mes no está abierto o no existe."
+        exceptions.ValidationError, match="El mes no está abierto o no existe.",
     ):
         api_client.post(
             "/api/invoices/",
@@ -157,7 +157,7 @@ def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_m
     )
     member_pk = old_invoice.member.pk
     api_client.put(
-        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE}
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE},
     )
     response = api_client.post(
         "/api/invoices/",
@@ -179,7 +179,7 @@ def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_m
 
 def test_new_invoice_for_derecho_conexion_is_created(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=100)
     invoice = Invoice.objects.get(member=member)
@@ -189,7 +189,7 @@ def test_new_invoice_for_derecho_conexion_is_created(create_invoicing_month):
 
 def test_derecho_conexion_humano(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=50)
     invoice = Invoice.objects.get(member=member)
@@ -197,7 +197,7 @@ def test_derecho_conexion_humano(create_invoicing_month):
     assert invoice.total == 100
     items = (
         ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member
+            item=ForthcomingInvoiceItemName.derecho, member=member,
         )
         .order_by("id")
         .values_list("value", flat=True)
@@ -208,7 +208,7 @@ def test_derecho_conexion_humano(create_invoicing_month):
 
 def test_derecho_conexion_comercial(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
     )
     member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL, selected_fee_value=50)
     invoice = Invoice.objects.get(member=member)
@@ -216,7 +216,7 @@ def test_derecho_conexion_comercial(create_invoicing_month):
     assert invoice.total == 150
     items = (
         ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member
+            item=ForthcomingInvoiceItemName.derecho, member=member,
         )
         .order_by("id")
         .values_list("value", flat=True)

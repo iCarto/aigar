@@ -49,7 +49,7 @@ class LocalityManager(models.Manager):
 
 class Locality(models.Model):
     class Meta(object):
-        ordering = ["short_name"]
+        ordering = ("short_name",)
         verbose_name_plural = "comunidades"
         verbose_name = "comunidad"
 
@@ -87,7 +87,7 @@ class Locality(models.Model):
         return self.short_name
 
     def clean(self) -> None:
-        all_localities = list(Locality.objects.exclude(id=self.id)) + [self]
+        all_localities = [*list(Locality.objects.exclude(id=self.id)), self]
 
         with_sectors = sum((loc.number_of_sectors or 0) > 0 for loc in all_localities)
         without_sectors = sum(loc.number_of_sectors == 0 for loc in all_localities)
@@ -103,8 +103,8 @@ class Locality(models.Model):
 
 def _all_zones(all_localities: list[Locality]) -> list[Locality]:
     return functools.reduce(
-        lambda acc, l: list(
-            itertools.chain(acc, [l] * l.number_of_sectors)  # noqa: WPS435
+        lambda acc, locality: list(
+            itertools.chain(acc, [locality] * locality.number_of_sectors)
         ),
         all_localities,
         [],

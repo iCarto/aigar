@@ -38,11 +38,11 @@ from back.fields import RangedIntegerField, StrictCharField
 
 class Zone(models.Model):
     class Meta(object):
-        ordering = ["name"]
+        ordering = ("name",)
         verbose_name_plural = "Sectores / Comunidades"
         verbose_name = "Sector / Comunidad"
 
-    if TYPE_CHECKING:  # noqa: CCE001 CCE002 WPS604
+    if TYPE_CHECKING:
         # https://stackoverflow.com/questions/75361847
         locality_id: str
 
@@ -72,7 +72,6 @@ class Zone(models.Model):
         help_text="Día de lectura de los medidores",
     )
 
-    # TODO: valorar db_index
     locality = models.ForeignKey(
         "Locality",
         on_delete=models.CASCADE,

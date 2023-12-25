@@ -5,14 +5,14 @@ from domains.models.locality import Locality
 from domains.models.zone import Zone, build_name as build_zone_name
 
 
-class LocalityFactory(BaseFactory[Locality]):  # type: ignore
+class LocalityFactory(BaseFactory[Locality]):
     name = factory.Faker("street_address")
     short_name = factory.LazyAttribute(lambda obj: (obj.name or "")[:13])
     number_of_sectors = 0
     with_zones = False
 
 
-class ZoneFactory(BaseFactory[Zone]):  # type: ignore
+class ZoneFactory(BaseFactory[Zone]):
     locality = factory.SubFactory(LocalityFactory)
     code = None
     name = factory.LazyAttribute(

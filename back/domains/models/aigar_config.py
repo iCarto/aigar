@@ -70,17 +70,17 @@ class AigarConfig(SingletonModel):
         verbose_name_plural = "Configuración de AIGAR"
         verbose_name = "Configuración de AIGAR"
         ordering = ("id",)
-        constraints = [
+        constraints = (
             models.CheckConstraint(
                 # Estaría bien que RangedIntegerField añadiera la constraint por si sóla
                 # https://adamj.eu/tech/2021/05/08/django-check-constraints-limit-range-integerfield/
                 # https://stackoverflow.com/questions/33772947/django-set-range-for-integer-model-field-as-constraint
                 # check=models.Q(payment_due_day__gte=1) & models.Q(payment_due_day__lte=28),
                 check=models.Q(payment_due_day__range=(1, 28)),
-                name="%(app_label)s_%(class)s_payment_due_day_range",  # noqa: WPS323
+                name="%(app_label)s_%(class)s_payment_due_day_range",
                 violation_error_message="El día límite de pago debe estar entre 1 y 28",
-            )
-        ]
+            ),
+        )
 
     name = StrictCharField(
         null=False,
@@ -677,7 +677,7 @@ class AigarConfig(SingletonModel):
                 {
                     exceptions.NON_FIELD_ERRORS: f"Debe dejar al menos un tramo con la cantidad en blanco: {stretches}"
                 }
-            )
+            ) from None
         foo = [
             result
             for result in (stretches[min_index_of_none:])
@@ -717,7 +717,7 @@ CONFIG = None
 
 
 def get_config() -> AigarConfig:
-    global CONFIG
+    global CONFIG  # noqa: PLW0603
     if not CONFIG:
         CONFIG = AigarConfig.get_solo()
     return CONFIG

@@ -9,8 +9,8 @@ from app.models.member import Member
 
 @admin.register(Member)
 class MemberAdmin(ImportExportModelAdmin):
-    resource_classes = [MemberResource]
-    search_fields = ["name"]
+    resource_classes = (MemberResource,)
+    search_fields = ("name",)
     search_help_text = "Busqueda por nombre"
     list_display = (
         "id",

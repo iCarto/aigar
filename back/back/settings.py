@@ -134,11 +134,10 @@ SQLITE_PATH = str(MEDIA_ROOT / "db.sqlite3")
 
 
 if DESKTOP:
-    from platformdirs import PlatformDirs  # noqa: WPS433
+    from platformdirs import PlatformDirs
 
     dirs = PlatformDirs(appname=appname, appauthor=False, ensure_exists=True)
     MEDIA_ROOT = os.path.join(dirs.user_documents_dir, appname)
-    print(MEDIA_ROOT)  # noqa: WPS421
     SQLITE_PATH = os.path.join(MEDIA_ROOT, "db.sqlite3")
 
 
@@ -203,11 +202,14 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://127.0.0.1:8000",
 # )
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = list(default_headers) + ["Content-Disposition", "Cache-Control"]
 CORS_EXPOSE_HEADERS = ["Content-Disposition", "Cache-Control"]
 
-
-CORS_ALLOW_HEADERS = list(default_headers) + ["x-bulk-operation"]
+CORS_ALLOW_HEADERS = [
+    *list(default_headers),
+    "x-bulk-operation",
+    "Content-Disposition",
+    "Cache-Control",
+]
 
 if not DEBUG and not DESKTOP:
     LOGGING = {
@@ -259,10 +261,10 @@ if not DEBUG and DESKTOP:
         "formatters": {
             "app": {
                 "format": (
-                    "%(asctime)s [%(levelname)-8s] "  # noqa: WPS323
-                    "(%(module)s.%(funcName)s) %(message)s"  # noqa: WPS32
+                    "%(asctime)s [%(levelname)-8s] "
+                    "(%(module)s.%(funcName)s) %(message)s"
                 ),
-                "datefmt": "%Y-%m-%d %H:%M:%S",  # noqa: WPS323
+                "datefmt": "%Y-%m-%d %H:%M:%S",
             }
         },
     }

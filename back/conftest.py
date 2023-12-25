@@ -11,6 +11,6 @@ def pytest_runtestloop(session):
         yield
 
 
-@pytest.fixture
+@pytest.fixture()
 def api_client():
     return APIClient()

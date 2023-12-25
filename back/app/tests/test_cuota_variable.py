@@ -22,7 +22,7 @@ def test_for_consumo_not0():
     consumo_final = 2
     result = calculate_variable_fee(tramos, consumo_final)
 
-    assert result == 2 * 1  # noqa: WPS345
+    assert result == 2 * 1
 
 
 def test_for_consumo_in_first_limit():
@@ -34,7 +34,7 @@ def test_for_consumo_in_first_limit():
     consumo_final = 14
     result = calculate_variable_fee(tramos, consumo_final)
 
-    assert result == 14 * 1  # noqa: WPS345
+    assert result == 14 * 1
 
 
 def test_for_consumo_in_second_limit():
@@ -46,7 +46,7 @@ def test_for_consumo_in_second_limit():
     consumo_final = 20
     result = calculate_variable_fee(tramos, consumo_final)
 
-    assert result == (14 * 1) + (6 * 0.75)  # noqa: WPS345
+    assert result == (14 * 1) + (6 * 0.75)
 
 
 def test_for_consumo_upper_that_second_limit():
@@ -58,4 +58,4 @@ def test_for_consumo_upper_that_second_limit():
     consumo_final = 25
     result = calculate_variable_fee(tramos, consumo_final)
 
-    assert result == (14 * 0) + (6 * 1) + (5 * 2)  # noqa: WPS345
+    assert result == (14 * 0) + (6 * 1) + (5 * 2)

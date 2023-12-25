@@ -39,26 +39,26 @@ class Measurement(models.Model):
     )
 
     caudal_anterior = models.PositiveIntegerField(
-        null=False, blank=False, verbose_name="Caudal anterior"
+        null=False, blank=False, verbose_name="Caudal anterior",
     )
 
     caudal_actual = models.PositiveIntegerField(
-        null=False, blank=False, verbose_name="Caudal actual"
+        null=False, blank=False, verbose_name="Caudal actual",
     )
 
     cambio_medidor = models.BooleanField(
-        blank=False, null=False, default=False, verbose_name="Cambio de medidor"
+        blank=False, null=False, default=False, verbose_name="Cambio de medidor",
     )
 
     medidor = models.CharField(
-        max_length=30, null=True, blank=True, verbose_name="Medidor"
+        max_length=30, null=True, blank=True, verbose_name="Medidor",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     invoice = models.ForeignKey(
-        "Invoice", null=False, blank=False, on_delete=models.CASCADE
+        "Invoice", null=False, blank=False, on_delete=models.CASCADE,
     )
 
     def __str__(self):
@@ -76,6 +76,6 @@ class Measurement(models.Model):
         if self.caudal_actual < self.caudal_anterior:
             raise exceptions.ValidationError(
                 {
-                    exceptions.NON_FIELD_ERRORS: "El caudal actual no puede ser menor al caudal anterior"
-                }
+                    exceptions.NON_FIELD_ERRORS: "El caudal actual no puede ser menor al caudal anterior",
+                },
             )

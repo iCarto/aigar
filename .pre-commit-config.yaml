@@ -47,7 +47,7 @@ repos:
           - id: shfmt
             name: shfmt
             entry: shfmt
-            args: [-l, -w, -i, "4", -bn, -sr, -ci]
+            args: [-l, -w]
             language: system
             types: [shell]
             verbose: true

@@ -2,25 +2,22 @@
 
 set -euo pipefail
 
-function show_help() {
-    echo "Ayuda"
-}
-
 usage() {
-    echo "Syntax: $(basename "${0}") [-f] [-b]"
+    echo "Syntax: $(basename "${0}") [-f] [-b] [-s]"
     echo "Options:"
     echo "-f | --front : Launches frontend"
     echo "-b | --back : Launches backend"
-    exit 1
+    echo "-s | --shell : Launches a shell"
 }
 
 die() {
-    printf '%s\n' "${1}" >&2
+    printf '\n%s\n' "${1}" >&2
     exit 1
 }
 
-if [[ "${#}" -gt 1 ]]; then
-    die "ERROR: Only one option can be given"
+if [[ "${#}" -ne 1 ]]; then
+    usage
+    die "ERROR: One, and only one option can be given"
 fi
 
 case "${1}" in

@@ -70,11 +70,6 @@ class InvoiceQuerySet(models.QuerySet["Invoice"]):
     def with_mora_por_retraso(self) -> Self:
         return self.annotate(mora_por_retraso=GreaterThan(models.F("late_payment"), 0))
 
-    def new_and_open(self) -> Self:
-        return self.filter(mes_facturacion__is_open=True).filter(
-            estado=InvoiceStatus.NUEVA
-        )
-
 
 class InvoiceManager(models.Manager["Invoice"]):
     def get_queryset(self) -> InvoiceQuerySet:
@@ -120,8 +115,21 @@ class InvoiceManager(models.Manager["Invoice"]):
         return InvoiceQuerySet(self.model, using=self._db)
 
     def member_updated(self, member):
-        last_invoice = self.filter(member=member).new_and_open().first()
+        last_invoice = (
+            self.filter(member=member)
+            .filter(mes_facturacion__is_open=True)
+            .filter(estado=InvoiceStatus.NUEVA)
+            .first()
+        )
         if last_invoice:
+            is_first_invoice = self.filter(member=member).count() == 1
+            is_connection_right_invoice = (
+                is_first_invoice and not last_invoice.caudal_anterior
+            )
+            # Cuando se crea un nuevo Member y se modifica nada más crearlo, modifica
+            # la factura inicial con sólo el derecho de conexión añadiendo más conceptos
+            if is_connection_right_invoice:
+                return
             last_invoice.update_for_member()
 
     def build_from(self, member, latest_invoice, new_invoicing_month) -> "Invoice":

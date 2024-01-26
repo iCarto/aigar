@@ -93,6 +93,26 @@ const DateUtil = {
         const BANK_DATEFORMAT = "DD/MM/YYYY";
         return moment(date, BANK_DATEFORMAT, true).isValid();
     },
+
+    /* Given a JavaScript Date, returns a new JavaScript Date object with the numbers
+       of months substracted
+    */
+    substractMonth(date, number) {
+        if (!(date instanceof Date)) {
+            throw new Error("Is not a date");
+        }
+        console.log(date);
+        const momentDate = moment(date);
+        console.log(momentDate);
+        momentDate.subtract(number, "months");
+        console.log(momentDate);
+        console.log(date);
+        return this.fromYearMonthDay(
+            momentDate.year(),
+            momentDate.month(),
+            momentDate.date()
+        );
+    },
 };
 
 export default DateUtil;

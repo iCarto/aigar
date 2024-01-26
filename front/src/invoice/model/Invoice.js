@@ -164,6 +164,19 @@ const createInvoice = ({
         get isNewInvoice() {
             return this.id === -1;
         },
+
+        /*
+            day is an integer that represents the day of a month 1 - 31 and returns
+            the readingDay in a string localized format
+        */
+        readingDay(day) {
+            return DateUtil.toLocal(
+                DateUtil.substractMonth(
+                    DateUtil.fromYearMonthDay(this.anho, this.mes, day),
+                    1
+                )
+            );
+        },
     };
 
     // objeto inmutable para llevarse bien con react.

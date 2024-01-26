@@ -8,6 +8,7 @@ usage() {
     echo "-f | --front : Launches frontend"
     echo "-b | --back : Launches backend"
     echo "-s | --shell : Launches a shell"
+    echo "--browser: Launchs a browser with timezone in El Salvador"
 }
 
 die() {
@@ -37,6 +38,9 @@ case "${1}" in
         ;;
     -s | --shell)
         (cd back && python manage.py shell_plus --ipython)
+        ;;
+    --browser)
+        (TZ='America/El_Salvador' google-chrome &)
         ;;
     *)
         die "ERROR: Unknown option: ${1}"

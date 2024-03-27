@@ -1,3 +1,23 @@
+# Proceso general de implantación
+
+Imaginando que estamos en Marzo de 2024.
+
+1. Revisión y diseño del catastro con las JA. Revisión de numeración y actualización de información disponible.
+2. Actualización de la información en campo. Sobre todo medidores y censo de personas que habitan en la comunidad. Esto se puede realizar con los formularios preparados para la aplicación QField, a la espera de valorar un desarrollo a medida.
+3. Recopilación:
+    1. Las lecturas de enero
+    2. Las lecturas, facturas y recibos (los que se tengan) de Febrero
+4. En la interfaz de gestión de AIGAR
+    1. Se rellena `Comunidades` y `Configuración de AIGAR`
+    2. Se importa el catastro de socias. Se pueden usar los datos de QField.
+    3. Se crea un nuevo `Mes de facturación`. Marzo de 2024
+    4. Se crea una hoja de cálculo con los datos del punto (3) y se importan en la aplicación. El caudal anterior será el de enero, el caudal actual el de febrero. El total lo que se haya emitido en la factura. Y `ontime_payment` y `late_payment` los datos que ya tengamos de la gente que haya pagado.
+5. En la aplicación AIGAR se comprueba que todo está correcto.
+6. A final de mes (26 de Marzo), se exportan las socias. En el fichero exportado, aparecerá como `caudal_anterior` lo que en la aplicación estamos visualizando cómo `caudal_actual` de las lecturas realizadas el 26 de Febrero.
+7. Cuando comienza el siguiente mes (1 de Abril), se importan o actualizan a mano los recibos (pagos) que no hayan sido todavía gestionados. Después se inicia un nuevo mes de facturación (Abril) y se importan las lecturas. Se hacen los cambios necesarios, se exportan las facturas y ya se puede operar de la forma normal.
+
+Se crea un nuevo mes de facturación (por ejemplo Marzo de 2024) 5. Dia de lecturas ( 26 de Marzo). 6. Facturación
+
 # Configuración inicial
 
 Antes de usar la aplicación por primera vez y después de instalarla debe ser configurada.

@@ -311,7 +311,7 @@ class AigarConfig(SingletonModel):
         null=True,
         blank=True,
         default=Decimal("14"),
-        verbose_name="Humano - Cuota Variable - primer tramo (m3)",
+        verbose_name="Primer tramo - m3",
         help_text="Primer tramo de consumo. De 0 a este valor incluído. Déjelo en blanco si todo el consumo tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -321,7 +321,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Humano - Cuota Variable - primer tramo ($)",
+        verbose_name="Primer tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo",
         validators=[validators.MinValueValidator(0)],
     )
@@ -331,7 +331,7 @@ class AigarConfig(SingletonModel):
         null=True,
         blank=True,
         default=Decimal("20"),
-        verbose_name="Humano - Cuota Variable - segundo tramo (m3)",
+        verbose_name="Segundo tramo - m3",
         help_text="El segundo tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -341,7 +341,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0.75"),
-        verbose_name="Humano - Cuota Variable - segundo tramo ($)",
+        verbose_name="Segundo tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -350,7 +350,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Humano - Cuota Variable - tercer tramo (m3)",
+        verbose_name="Tercer tramo - m3",
         help_text="El tercer tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -360,7 +360,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("2"),
-        verbose_name="Cuota Variable - Humano - tercer tramo ($)",
+        verbose_name="Tercer tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -369,7 +369,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Cuota Variable - Humano - cuarto tramo (m3)",
+        verbose_name="Cuarto tramo - m3",
         help_text="El cuarto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -379,7 +379,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Humano - Cuota Variable - cuarto tramo ($)",
+        verbose_name="Cuarto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -388,7 +388,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Cuota Variable - Humano - quinto tramo (m3)",
+        verbose_name="Quinto tramo - m3",
         help_text="El quinto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -398,7 +398,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Humano - Cuota Variable - quinto tramo ($)",
+        verbose_name="Quinto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -407,7 +407,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Cuota Variable - Humano - sexto tramo (m3)",
+        verbose_name="Sexto tramo - m3",
         help_text="El sexto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -417,7 +417,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Humano - Cuota Variable - sexto tramo ($)",
+        verbose_name="Sexto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -465,7 +465,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Comercial -Cuota Variable - primer tramo (m3)",
+        verbose_name="Primer tramo - m3",
         help_text="Primer tramo de consumo. De 0 a este valor incluído. Déjelo en blanco si todo el consumo tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -475,8 +475,8 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Comercial - Cuota Variable - primer tramo ($)",
-        help_text="Cuota Variable - Comercial - primer tramo ($)",
+        verbose_name="Primer tramo - $",
+        help_text="Primer tramo ($)",
         validators=[validators.MinValueValidator(0)],
     )
     comercial_cuota_variable_segundo_tramo_cantidad = models.DecimalField(
@@ -484,7 +484,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Comercial - Cuota Variable - segundo tramo (m3)",
+        verbose_name="Segundo tramo - m3",
         help_text="El segundo tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -494,7 +494,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Comercial - Cuota Variable - segundo tramo ($)",
+        verbose_name="Segundo tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -503,7 +503,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Comercial - Cuota Variable - tercer tramo (m3)",
+        verbose_name="Tercer tramo - m3",
         help_text="El tercer tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -513,7 +513,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Comercial Cuota Variable - tercer tramo ($)",
+        verbose_name="Tercer tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -522,7 +522,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Comercial - Cuota Variable - cuarto tramo (m3)",
+        verbose_name="Cuarto tramo - m3",
         help_text="El cuarto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -532,7 +532,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Comercial - Cuota Variable - cuarto tramo ($)",
+        verbose_name="Cuarto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -541,7 +541,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Cuota Variable - comercial - quinto tramo (m3)",
+        verbose_name="Quinto tramo - m3",
         help_text="El quinto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -551,7 +551,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="comercial - Cuota Variable - quinto tramo ($)",
+        verbose_name="Quinto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )
@@ -560,7 +560,7 @@ class AigarConfig(SingletonModel):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name="Cuota Variable - Comercial - sexto tramo (m3)",
+        verbose_name="Sexto tramo - m3",
         help_text="El sexto tramo va desde el final del tramo anterior hasta este valor (incluído). Déjelo en blanco si cualquier valor mayor al tramo anterior tiene el mismo coste",
         validators=[validators.MinValueValidator(0)],
     )
@@ -570,7 +570,7 @@ class AigarConfig(SingletonModel):
         null=False,
         blank=False,
         default=Decimal("0"),
-        verbose_name="Comercial - Cuota Variable - sexto tramo ($)",
+        verbose_name="Sexto tramo - $",
         help_text="Coste del consumo que esté dentro de este tramo. Déjelo a 0 si este tramo no aplica.",
         validators=[validators.MinValueValidator(0)],
     )

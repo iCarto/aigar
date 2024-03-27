@@ -169,6 +169,14 @@ class AigarConfigAdmin(SingletonModelAdmin):
                         "humano_cuota_variable_cuarto_tramo_cantidad",
                         "humano_cuota_variable_cuarto_tramo_coste",
                     ),
+                    (
+                        "humano_cuota_variable_quinto_tramo_cantidad",
+                        "humano_cuota_variable_quinto_tramo_coste",
+                    ),
+                    (
+                        "humano_cuota_variable_sexto_tramo_cantidad",
+                        "humano_cuota_variable_sexto_tramo_coste",
+                    ),
                 ],
             },
         ),
@@ -192,6 +200,14 @@ class AigarConfigAdmin(SingletonModelAdmin):
                     (
                         "comercial_cuota_variable_cuarto_tramo_cantidad",
                         "comercial_cuota_variable_cuarto_tramo_coste",
+                    ),
+                    (
+                        "comercial_cuota_variable_quinto_tramo_cantidad",
+                        "comercial_cuota_variable_quinto_tramo_coste",
+                    ),
+                    (
+                        "comercial_cuota_variable_sexto_tramo_cantidad",
+                        "comercial_cuota_variable_sexto_tramo_coste",
                     ),
                 ],
             },

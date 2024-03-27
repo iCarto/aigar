@@ -41,7 +41,7 @@ class RemoveEmptyRowsResource(resources.ModelResource):
             row for row in dataset if not all(value is None for value in row)
         ]
         return super().before_import(
-            filtered_dataset, using_transactions, dry_run, **kwargs,
+            filtered_dataset, using_transactions, dry_run, **kwargs
         )
 
 
@@ -50,9 +50,23 @@ class MemberResource(RemoveEmptyRowsResource):
         model = Member
         exclude = ("id", "sector", "created_at", "updated_at")
         import_id_fields = ("num_socio",)
+        export_order = (
+            "num_socio",
+            "name",
+            "dui",
+            "medidor",
+            "personas_acometida",
+            "sector_name",
+            "status",
+            "tipo_uso",
+            "orden",
+            "observaciones",
+            "consumo_maximo",
+            "consumo_reduccion_fija",
+        )
 
     num_socio = Field(
-        attribute="id", column_name="num_socio", widget=NotNullIntegerWidget(),
+        attribute="id", column_name="num_socio", widget=NotNullIntegerWidget()
     )
     orden = Field(attribute="orden", column_name="orden", widget=NotNullIntegerWidget())
     status = Field(
@@ -127,7 +141,7 @@ class InvoiceResource(RemoveEmptyRowsResource):
         if ontime_payment:
             Payment.objects.create(
                 fecha=next_month(
-                    datetime.date(int(instance.anho), int(instance.mes), 1),
+                    datetime.date(int(instance.anho), int(instance.mes), 1)
                 ),
                 monto=ontime_payment,
                 invoice=instance,
@@ -136,15 +150,15 @@ class InvoiceResource(RemoveEmptyRowsResource):
         if late_payment:
             Payment.objects.create(
                 fecha=next_month(
-                    datetime.date(int(instance.anho), int(instance.mes), 28),
+                    datetime.date(int(instance.anho), int(instance.mes), 28)
                 ),
                 monto=late_payment,
                 invoice=instance,
             )
 
     def after_import_row(self, row, row_result, **kwargs):
-        mes_facturacion_original = getattr(row_result.original, "mes_facturacion_id")
+        mes_facturacion_original = row_result.original.mes_facturacion_id
         if mes_facturacion_original != row["mes_facturacion"]:
             raise ValueError(
-                f"El mes de facturacion no coincide {mes_facturacion_original}:{row['mes_facturacion']}",
+                f"El mes de facturacion no coincide {mes_facturacion_original}:{row['mes_facturacion']}"
             )

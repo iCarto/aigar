@@ -54,22 +54,19 @@ def test_two_localities_without_zones():
     assert zones[1].name == "Com2"
 
 
-def test_code_independent_from_location_order():
-    """Zone's code is indepentend from the order that localities are created.
-
-    It depends only in the alphabetical sort or the short_name
-    """
+def test_code_dependent_from_location_order():
+    """Zone's code is dependent from the order that localities are created."""
     LocalityFactory.create(
-        name="B__", short_name="C__", number_of_sectors=1, with_zones=True,
+        name="B__", short_name="C__", number_of_sectors=1, with_zones=True
     )
     LocalityFactory.create(
-        name="Z__", short_name="A__", number_of_sectors=1, with_zones=True,
+        name="Z__", short_name="A__", number_of_sectors=1, with_zones=True
     )
 
     zones = Zone.objects.all()
     assert len(zones) == 2
-    assert zones[0].name == "1 - A__"
-    assert zones[1].name == "2 - C__"
+    assert zones[0].name == "1 - C__"
+    assert zones[1].name == "2 - A__"
 
 
 def test_multiple_localities_with_zones():

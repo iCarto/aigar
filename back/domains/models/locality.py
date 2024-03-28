@@ -3,10 +3,10 @@
 Nos referimos de este modo a las comunidades, o en sentido amplio al mayor nivel de
 agregación territorial que admitimos en la aplicación.
 
-Las comunidades podrán estar divididas en Zones (Sectores). A nivel usuaria sóla los
+Las comunidades podrán estar divididas en Zones (Sectores). A nivel usuaria sólo los
 sectores tienen relevancia. Las comunidades se emplean para que quien configura la app
 lo haga de una forma estructurada, así como para simplificar la configuración (por
-ejemplo automatizando la creación de los sectores), o para envitar errores (por ejemplo
+ejemplo automatizando la creación de los sectores), o para evitar errores (por ejemplo
 no teniendo que escribir el nombre varias veces a mano si hay varios sectores)
 """
 
@@ -36,8 +36,9 @@ class LocalityManager(models.Manager):
         # así que los recreo todos.
         # Si instance es None es que estoy borrando y también tengo que recrear todos.
         # En ambos casos implica perder el dato de reading_day.
+        # TODO(fpuga): #4369. Mantenemos el orden de inserción en lugar de alfabético
         if not instance or instance.number_of_sectors:
-            all_localities = list(Locality.objects.all())
+            all_localities = list(Locality.objects.order_by("id").all())
             Zone.objects.all().delete()
             for index, zone in enumerate(_all_zones(all_localities)):
                 Zone.objects.create(locality=zone, code=str(index + 1))
@@ -53,7 +54,9 @@ class Locality(models.Model):
         verbose_name_plural = "comunidades"
         verbose_name = "comunidad"
 
-    objects = LocalityManager()
+    objects: LocalityManager = LocalityManager()
+
+    id: int
 
     name = StrictCharField(
         null=False,

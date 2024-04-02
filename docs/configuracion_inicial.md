@@ -2,21 +2,34 @@
 
 Imaginando que estamos en Marzo de 2024.
 
-1. Revisión y diseño del catastro con las JA. Revisión de numeración y actualización de información disponible.
+1. Revisión y diseño del catastro con las JA. Revisión de número de socias, orden de visita y demás información.
 2. Actualización de la información en campo. Sobre todo medidores y censo de personas que habitan en la comunidad. Esto se puede realizar con los formularios preparados para la aplicación QField, a la espera de valorar un desarrollo a medida.
-3. Recopilación:
-    1. Las lecturas de enero
-    2. Las lecturas, facturas y recibos (los que se tengan) de Febrero
-4. En la interfaz de gestión de AIGAR
-    1. Se rellena `Comunidades` y `Configuración de AIGAR`
-    2. Se importa el catastro de socias. Se pueden usar los datos de QField.
-    3. Se crea un nuevo `Mes de facturación`. Marzo de 2024
-    4. Se crea una hoja de cálculo con los datos del punto (3) y se importan en la aplicación. El caudal anterior será el de enero, el caudal actual el de febrero. El total lo que se haya emitido en la factura. Y `ontime_payment` y `late_payment` los datos que ya tengamos de la gente que haya pagado.
-5. En la aplicación AIGAR se comprueba que todo está correcto.
-6. A final de mes (26 de Marzo), se exportan las socias. En el fichero exportado, aparecerá como `caudal_anterior` lo que en la aplicación estamos visualizando cómo `caudal_actual` de las lecturas realizadas el 26 de Febrero.
-7. Cuando comienza el siguiente mes (1 de Abril), se importan o actualizan a mano los recibos (pagos) que no hayan sido todavía gestionados. Después se inicia un nuevo mes de facturación (Abril) y se importan las lecturas. Se hacen los cambios necesarios, se exportan las facturas y ya se puede operar de la forma normal.
+3. En la interfaz de gestión de AIGAR
 
-Se crea un nuevo mes de facturación (por ejemplo Marzo de 2024) 5. Dia de lecturas ( 26 de Marzo). 6. Facturación
+    1. Se rellena `Comunidades` y `Configuración de AIGAR`. El pago se marca como manual (aunque luego se vaya a usar un csv)
+    2. Se importa el catastro de socias. Se pueden usar los datos de QField.
+
+4. Recopilación de información:
+
+    - Lecturas y Recibos de febrero. Que tiene el caudal anterior (enero), el caudal actual (febrero) y el coste (factura de febrero)
+    - Hay que tener en cuenta que los pagos son hasta el final de Marzo. Algunos se tendrán y otros no.
+
+5. En la interfaz de gestión de AIGAR
+
+    1. Se crea un nuevo `Mes de facturación`. Febrero de 2024
+    2. Se exportan los recibos y se rellena la hoja de cálculo con los datos recopilados en el paso (4)
+    3. Se importa la hoja de cálculo con los recibos actualizados
+
+6. En la aplicación
+
+    1. Exporto los socios. Para poder hacer las lecturas de medidores cuando toque (26 de Marzo)
+
+7. En la aplicación a 1/Abril se comienza con el flujo normal
+    1. Actualizolos pagos que faltan de febrero
+    2. En caso de que se va a usar CSV tras actualizar los pagos de Febrero se puede ir a la configuración y activar esa opción
+    3. Se crea un nuevo mes de facturación: Marzo de 2024
+    4. Se importan las lecturas que se tomaron el 26 de Marzo
+    5. Se imprimen las facturas
 
 # Configuración inicial
 

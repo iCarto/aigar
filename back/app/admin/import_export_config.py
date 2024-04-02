@@ -3,6 +3,11 @@ import datetime
 from import_export import resources, widgets
 from import_export.fields import Field
 
+from app.exceptions import (
+    BadInvoicingMonthImportError,
+    LessVolumeImportError,
+    NotNullOrLessThan0ImportError,
+)
 from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth
 from app.models.measurement import Measurement
@@ -13,11 +18,12 @@ from domains.models.member_status import MemberStatus
 from domains.models.zone import Zone
 
 
-class NotNullIntegerWidget(widgets.IntegerWidget):
+class NotNullOrLessThan0IntegerWidget(widgets.IntegerWidget):
     def clean(self, value, row=None, **kwargs):
         result = super().clean(value, row, **kwargs)
-        if not result:
-            raise ValueError("El campo no puede estar vacio")
+        if result is None or result < 0:
+            raise NotNullOrLessThan0ImportError(result)
+
         return result
 
 
@@ -66,9 +72,13 @@ class MemberResource(RemoveEmptyRowsResource):
         )
 
     num_socio = Field(
-        attribute="id", column_name="num_socio", widget=NotNullIntegerWidget()
+        attribute="id",
+        column_name="num_socio",
+        widget=NotNullOrLessThan0IntegerWidget(),
     )
-    orden = Field(attribute="orden", column_name="orden", widget=NotNullIntegerWidget())
+    orden = Field(
+        attribute="orden", column_name="orden", widget=NotNullOrLessThan0IntegerWidget()
+    )
     status = Field(
         attribute="status",
         column_name="status",
@@ -98,7 +108,9 @@ class InvoiceResource(RemoveEmptyRowsResource):
         )
         import_id_fields = ("num_socio",)
 
-    id = Field(attribute="id", column_name="id", widget=NotNullIntegerWidget())
+    id = Field(
+        attribute="id", column_name="id", widget=NotNullOrLessThan0IntegerWidget()
+    )
 
     num_socio = Field(
         column_name="num_socio",
@@ -120,12 +132,12 @@ class InvoiceResource(RemoveEmptyRowsResource):
         instance.ontime_payment = 0
         instance.late_payment = 0
         instance.save()
-        if instance.caudal_actual:
-            Measurement.objects.create(
-                caudal_anterior=instance.caudal_anterior,
-                caudal_actual=instance.caudal_actual,
-                invoice=instance,
-            )
+
+        Measurement.objects.create(
+            caudal_anterior=instance.caudal_anterior,
+            caudal_actual=instance.caudal_actual,
+            invoice=instance,
+        )
 
         instance.refresh_from_db()
         instance.otros = (
@@ -159,6 +171,11 @@ class InvoiceResource(RemoveEmptyRowsResource):
     def after_import_row(self, row, row_result, **kwargs):
         mes_facturacion_original = row_result.original.mes_facturacion_id
         if mes_facturacion_original != row["mes_facturacion"]:
-            raise ValueError(
-                f"El mes de facturacion no coincide {mes_facturacion_original}:{row['mes_facturacion']}"
+            raise BadInvoicingMonthImportError(
+                mes_facturacion_original, row["mes_facturacion"]
+            )
+
+        if row["caudal_actual"] < row["caudal_anterior"]:
+            raise LessVolumeImportError(
+                row["caudal_actual"], row["caudal_anterior"], row_result.original
             )

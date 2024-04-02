@@ -9,6 +9,7 @@ from app.exceptions import (
     NotNullOrLessThan0ImportError,
 )
 from app.models.invoice import Invoice
+from app.models.invoice_status import InvoiceStatus
 from app.models.invoicing_month import InvoicingMonth
 from app.models.measurement import Measurement
 from app.models.member import Member
@@ -129,6 +130,7 @@ class InvoiceResource(RemoveEmptyRowsResource):
         total = instance.total
         ontime_payment = instance.ontime_payment
         late_payment = instance.late_payment
+        instance.estado = InvoiceStatus.PENDIENTE_DE_COBRO
         instance.ontime_payment = 0
         instance.late_payment = 0
         instance.save()

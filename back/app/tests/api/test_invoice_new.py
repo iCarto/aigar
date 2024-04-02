@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from django.core import exceptions
 from django.db import utils
@@ -10,7 +12,7 @@ from app.models.forthcoming_invoice_item import (
 from app.models.invoice import Invoice
 from app.models.invoice_status import InvoiceStatus
 from app.models.member import UseTypes
-from app.tests.factories import InvoiceFactory, MemberFactory
+from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 from domains.models.member_status import MemberStatus
 
 
@@ -75,7 +77,7 @@ def test_dont_create_invoices_for_closed_months(api_client, create_invoicing_mon
     )
 
     with pytest.raises(
-        exceptions.ValidationError, match="El mes no está abierto o no existe.",
+        exceptions.ValidationError, match="El mes no está abierto o no existe."
     ):
         api_client.post(
             "/api/invoices/",
@@ -97,7 +99,7 @@ def test_dont_create_for_not_existent_months(api_client, create_invoicing_month)
         member__status=MemberStatus.ACTIVE,
     )
     with pytest.raises(
-        exceptions.ValidationError, match="El mes no está abierto o no existe.",
+        exceptions.ValidationError, match="El mes no está abierto o no existe."
     ):
         api_client.post(
             "/api/invoices/",
@@ -157,7 +159,7 @@ def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_m
     )
     member_pk = old_invoice.member.pk
     api_client.put(
-        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE},
+        "/api/members/status/", {"pks": [member_pk], "status": MemberStatus.ACTIVE}
     )
     response = api_client.post(
         "/api/invoices/",
@@ -179,7 +181,7 @@ def test_reconnection_is_included_in_new_invoices(api_client, create_invoicing_m
 
 def test_new_invoice_for_derecho_conexion_is_created(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
     )
     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=100)
     invoice = Invoice.objects.get(member=member)
@@ -189,7 +191,7 @@ def test_new_invoice_for_derecho_conexion_is_created(create_invoicing_month):
 
 def test_derecho_conexion_humano(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
     )
     member = MemberFactory.create(tipo_uso=UseTypes.HUMANO, selected_fee_value=50)
     invoice = Invoice.objects.get(member=member)
@@ -197,7 +199,7 @@ def test_derecho_conexion_humano(create_invoicing_month):
     assert invoice.total == 100
     items = (
         ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member,
+            item=ForthcomingInvoiceItemName.derecho, member=member
         )
         .order_by("id")
         .values_list("value", flat=True)
@@ -208,7 +210,7 @@ def test_derecho_conexion_humano(create_invoicing_month):
 
 def test_derecho_conexion_comercial(create_invoicing_month):
     InvoiceFactory.create(
-        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
+        mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)
     )
     member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL, selected_fee_value=50)
     invoice = Invoice.objects.get(member=member)
@@ -216,10 +218,34 @@ def test_derecho_conexion_comercial(create_invoicing_month):
     assert invoice.total == 150
     items = (
         ForthcomingInvoiceItem.objects.filter(
-            item=ForthcomingInvoiceItemName.derecho, member=member,
+            item=ForthcomingInvoiceItemName.derecho, member=member
         )
         .order_by("id")
         .values_list("value", flat=True)
     )
     assert len(items) == 5
     assert list(items) == [50, 50, 50, 50, 50]
+
+
+@patch("app.models.invoicing_month.any_payments_for", return_value=True)
+def test_caudal_actual_is_none_when_creating_month(_, api_client):
+    # Varias comprobaciones de en que estado está la app, se basan en si el caudal_actual
+    # es None. Este test nos protege de confundir 0 con None. La otra opción es que
+    # comprobemos directamente si existe una lectura asociada al recibo en lugar de
+    # fijarnos en el valor del caudal.
+    invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
+    invoicingmonth.save()
+    InvoiceFactory.create(
+        mes_facturacion=invoicingmonth,
+        estado=InvoiceStatus.COBRADA,
+        caudal_actual=10,
+        ontime_payment=0,
+        late_payment=1,
+        total=1,
+    )
+
+    api_client.post("/api/invoicingmonths/", {"anho": "2019", "mes": "10"})
+
+    invoice = Invoice.objects.get(anho="2019", mes="10", estado=InvoiceStatus.NUEVA)
+    assert invoice.caudal_anterior == 10
+    assert invoice.caudal_actual is None

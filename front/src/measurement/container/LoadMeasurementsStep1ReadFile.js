@@ -24,11 +24,11 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
                 member_name: r.name,
                 orden: r.orden,
                 sector: sector,
-                caudal_anterior: r.caudal_anterior || r.lectura_anterior,
-                caudal_actual: r.caudal_actual || r.lectura,
+                caudal_anterior: r.caudal_anterior,
+                caudal_actual: r.caudal_actual,
                 medidor: r.medidor,
                 cambio_medidor: r.cambio_medidor,
-                member_id: r.id || r.num_socio,
+                member_id: r.id,
             };
             return newRow;
         });

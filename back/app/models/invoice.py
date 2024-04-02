@@ -96,8 +96,8 @@ class InvoiceManager(models.Manager["Invoice"]):
                 }
             )
         kwargs["mes_facturacion_id"] = mes_facturacion_id
-        kwargs.setdefault("caudal_actual", 0)
-        kwargs.setdefault("caudal_anterior", 0)
+        caudal_anterior = kwargs.setdefault("caudal_anterior", 0)
+        kwargs.setdefault("caudal_actual", caudal_anterior)
 
         latest_invoice = Invoice.objects.filter(member=kwargs["member"]).first()
         if latest_invoice:
@@ -124,7 +124,7 @@ class InvoiceManager(models.Manager["Invoice"]):
         if last_invoice:
             is_first_invoice = self.filter(member=member).count() == 1
             is_connection_right_invoice = (
-                is_first_invoice and not last_invoice.caudal_anterior
+                is_first_invoice and not last_invoice.measurement_set.exists()
             )
             # Cuando se crea un nuevo Member y se modifica nada más crearlo, modifica
             # la factura inicial con sólo el derecho de conexión añadiendo más conceptos
@@ -247,6 +247,7 @@ class Invoice(models.Model):
 
     member_id: int
     mes_facturacion_id: int
+    measurement_set: models.QuerySet["Measurement"]
 
     objects: InvoiceManager = _InvoiceManager()
 

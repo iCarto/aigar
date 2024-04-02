@@ -122,7 +122,7 @@ const createInvoice = ({
         due_date: DateUtil.fromValidISO(due_date),
         member,
         member_data,
-        caudal_actual: NumberUtil.parseIntOrNull(caudal_actual),
+        caudal_actual: caudal_actual === null ? null : parseInt(caudal_actual),
         caudal_anterior: NumberUtil.parseIntOrNull(caudal_anterior),
         cuota_fija: NumberUtil.parseFloatOrNull(cuota_fija),
         comision: NumberUtil.parseFloatOrNull(comision),
@@ -155,7 +155,7 @@ const createInvoice = ({
         errors,
 
         get consumo() {
-            if (!this.caudal_actual) {
+            if (this.caudal_actual === null) {
                 return null;
             }
             return this.caudal_actual - this.caudal_anterior;
@@ -163,6 +163,10 @@ const createInvoice = ({
 
         get isNewInvoice() {
             return this.id === -1;
+        },
+
+        get hasMeasurement() {
+            return this.caudal_actual !== null;
         },
 
         /*

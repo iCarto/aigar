@@ -12,13 +12,13 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
     /*
         Botón 2. IMPORTAR LECTURAS deshabilitado cuando:
         * No haya recibos para ese mes (que sería el caso de que has cambiado el selector de mes y no has iniciado la facturación)
-        * o cuando todas los recibos tengan un caudal_actual > 0. No usamos el consumo porque podría ser 0 por cualquier motivo
+        * o cuando todas los recibos tengan una lectura asociada.
         * o cuando ya se hayan impreso los recibos (es decir, que no todas los recibos son nuevos)
     */
     const isLoadMeasurementsButtonDisabled = useMemo(() => {
         return (
             !invoices?.length ||
-            invoices?.every(invoice => invoice.caudal_actual) ||
+            invoices?.every(invoice => invoice.hasMeasurement) ||
             invoices?.some(invoice => invoice.estado !== ESTADOS_FACTURA.NUEVA)
         );
     }, [invoices]);
@@ -26,10 +26,10 @@ function useButtonDisablingLogic(invoices, invoicingMonths, selectedInvoicingMon
     /*
         Botón 3. IMPRIMIR RECIBOS deshabilitado cuando:
         * No haya recibos para ese mes
-        * o algún recibo no tenga caudal_actual o es 0. Es decir no se ha importado la lectura para alguna.
+        * o algún recibo no tenga una lectura asociada
     */
     const isPrintInvoicesButtonDisabled = useMemo(() => {
-        return !invoices?.length || invoices?.some(invoice => !invoice.caudal_actual);
+        return !invoices?.length || invoices?.some(invoice => !invoice.hasMeasurement);
     }, [invoices]);
 
     /*

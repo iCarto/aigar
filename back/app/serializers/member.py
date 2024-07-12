@@ -26,6 +26,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
             "sector",
             "consumo_maximo",
             "consumo_reduccion_fija",
+            "orden",
         )
 
     # sector_id does not launch subqueries

@@ -60,6 +60,9 @@ const PrintInvoicesModal = ({
             total: NumberUtil.formatCurrency(invoice.total, false),
         };
     });
+    // Queremos que la última factura que salga de la impresora sea la de la socia con
+    // número de orden = 1, de modo que quede arriba de todo en el taco al repartir.
+    formatedInvoices.sort((a, b) => b.member_data.orden - a.member_data.orden);
 
     const printInvoices = async () => {
         setOperationStatus(ModalOperationStatus.PROGRESS);

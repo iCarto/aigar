@@ -81,7 +81,7 @@ const LoadMeasurementsStep3InvoicesTable = ({
 
     const measurementsWithoutInvoiceMessage = (
         <Typography fontWeight={700}>
-            Se han detectado lecturas para socios que no tienen recibo:{" "}
+            Se han detectado lecturas para socios/as que no tienen recibo:{" "}
             {measurementsWithoutInvoice.join(", ")}
         </Typography>
     );

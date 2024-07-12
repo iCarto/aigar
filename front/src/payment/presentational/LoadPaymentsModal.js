@@ -21,7 +21,6 @@ const LoadPaymentsModal = ({isOpen = false, onClose, invoicingMonthId}) => {
         <Alert severity="warning">
             <AlertTitle>Antes de continuar, asegúrese de haber:</AlertTitle>
             <ul>
-                <li>Añadido socios/as nuevos</li>
                 <li>Modificado los socios/as pertinentes</li>
                 <li>Guardado una copia de seguridad</li>
             </ul>

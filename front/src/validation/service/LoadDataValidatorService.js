@@ -47,7 +47,7 @@ const LoadDataValidatorService = {
         return LoadDataValidatorService.validateFile(
             fileObject,
             new CSVFileValidator({
-                file: ["extension", "filename"],
+                file: ["extension"],
                 content: [
                     {
                         type: "columns",

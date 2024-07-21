@@ -27,7 +27,7 @@ case "${1}" in
         ;;
     -f | --front)
         # https://coderrocketfuel.com/article/stop-create-react-app-from-opening-a-browser-window-on-start
-        (cd front && BROWSER=none REACT_APP_API_BASE_URL=http://localhost:8000 npm run start)
+        (cd front && BROWSER=none REACT_APP_API_BASE_URL=http://localhost:8000 npm run dev)
         ;;
     -b | --back)
         # if ! command -v deactivate ; then
@@ -41,6 +41,9 @@ case "${1}" in
         ;;
     --browser)
         (TZ='America/El_Salvador' google-chrome &)
+        ;;
+    -t | --test)
+        (cd scripts && ./test.sh)
         ;;
     *)
         die "ERROR: Unknown option: ${1}"

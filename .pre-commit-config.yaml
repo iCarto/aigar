@@ -19,7 +19,7 @@ repos:
           - id: stylelint
             name: stylelint
             entry: npx stylelint
-            args: [--fix, --ignore-path, .ignore]
+            args: [--fix, --allow-empty-input, --ignore-path, .ignore]
             language: system
             types: [file]
             files: \.(vue|htm|html|css|sss|less|scss|sass|mak|mako|jinja2)$

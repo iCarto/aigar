@@ -5,6 +5,11 @@ module.exports = {
     extends: ["stylelint-config-standard", "stylelint-config-html"],
     rules: {
         "order/properties-alphabetical-order": true,
+        indentation: [4, {baseIndentLevel: 1}],
+        linebreaks: "unix",
+        "max-line-length": 88,
+        "no-empty-first-line": true,
+        "string-quotes": ["double", {avoidEscape: true}],
         "font-family-name-quotes": "always-unless-keyword",
         "function-url-quotes": "always",
         "selector-attribute-quotes": "always",
@@ -12,6 +17,7 @@ module.exports = {
         "no-descending-specificity": null,
 
         "function-calc-no-unspaced-operator": true,
+        "selector-pseudo-class-parentheses-space-inside": "never",
     },
 
     // https://stylelint.io/user-guide/configuration/#ignorefiles

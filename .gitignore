@@ -15,6 +15,7 @@ node_modules/
 
 ## Unit test / coverage reports
 .coverage
+front/coverage
 
 
 # IDEs and Vagrant

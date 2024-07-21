@@ -35,7 +35,7 @@ export function useMonthlyInvoicingTableColumns() {
             },
         },
         {
-            label: "Lectura",
+            label: "Consumo",
             id: "consumo",
             className: "cubic-metre",
         },

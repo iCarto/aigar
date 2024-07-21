@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import {AdapterMoment} from "@mui/x-date-pickers/AdapterMoment";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AigarRoutes} from "aigar/routes";
-import {theme} from "./Theme";
+import {theme} from "Theme";
 
 function App() {
     return (

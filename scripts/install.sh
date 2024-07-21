@@ -21,7 +21,9 @@ command -v deactivate && deactivate
 # Developer Experience Setup
 if ! pyenv versions | grep "${PYTHON_VERSION}" > /dev/null 2>&1; then
     pyenv update
-    pyenv install "${PYTHON_VERSION}"
+    # https://github.com/pyenv/pyenv/blob/master/plugins/python-build/README.md
+    # "--enable-shared"
+    env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install "${PYTHON_VERSION}"
 fi
 PYTHON_VERSION_BINARY_PATH="$(pyenv shell "${PYTHON_VERSION}" && pyenv which python)"
 

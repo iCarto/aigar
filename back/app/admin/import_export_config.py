@@ -53,7 +53,7 @@ class RemoveEmptyRowsResource(resources.ModelResource):
 
 
 class MemberResource(RemoveEmptyRowsResource):
-    class Meta(object):
+    class Meta:
         model = Member
         exclude = ("id", "sector", "created_at", "updated_at")
         import_id_fields = ("num_socio",)
@@ -93,7 +93,7 @@ class MemberResource(RemoveEmptyRowsResource):
 
 
 class InvoiceResource(RemoveEmptyRowsResource):
-    class Meta(object):
+    class Meta:
         model = Invoice
         fields = (
             "id",

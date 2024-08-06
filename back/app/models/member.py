@@ -64,7 +64,7 @@ class MemberManager(models.Manager["Member"]):
 
 
 class Member(models.Model):
-    class Meta(object):
+    class Meta:
         verbose_name = "socio/a"
         verbose_name_plural = "socios/as"
         ordering = ("id",)

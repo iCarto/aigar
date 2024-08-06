@@ -6,7 +6,7 @@ from app.serializers.payment import PaymentSerializer
 
 
 class InvoicingMonthListPaymentsSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Payment
         fields = "__all__"
 

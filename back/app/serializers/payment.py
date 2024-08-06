@@ -11,7 +11,7 @@ from app.models.payment import Payment
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Payment
         exclude = ("created_at", "updated_at")
         # list_serializer_class = PaymentListSerializer

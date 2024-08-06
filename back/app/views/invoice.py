@@ -17,7 +17,7 @@ from app.serializers.payment import PaymentSerializer
 
 
 class InvoiceFilter(filters.FilterSet):
-    class Meta(object):
+    class Meta:
         model = Invoice
         fields = ("member_id",)
 

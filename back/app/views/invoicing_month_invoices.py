@@ -9,13 +9,13 @@ from app.serializers.member import MemberShortSerializer
 
 
 class Filter(filters.FilterSet):
-    class Meta(object):
+    class Meta:
         model = Invoice
         fields = MappingProxyType({"id": ("in", "exact")})
 
 
 class InvoicingMonthInvoicesSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Invoice
         exclude = ("mes_facturacion", "observaciones", "created_at", "updated_at")
 

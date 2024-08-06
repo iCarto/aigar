@@ -5,13 +5,13 @@ from domains.models.zone import Zone
 
 
 class ZoneSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Zone
         fields = ("name", "long_name", "reading_day")
 
 
 class AigarConfigSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = AigarConfig()
         exclude = (
             "nuevo_derecho_siguientes_cuotas_opcion1",

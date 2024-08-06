@@ -97,7 +97,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
 
 
 class InvoicingMonth(models.Model):
-    class Meta(object):
+    class Meta:
         unique_together = (("anho", "mes"),)
         constraints = (
             models.UniqueConstraint(

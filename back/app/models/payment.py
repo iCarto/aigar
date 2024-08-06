@@ -23,7 +23,7 @@ class PaymentManager(models.Manager["Payment"]):
 
 
 class Payment(models.Model):
-    class Meta(object):
+    class Meta:
         verbose_name = "pago"
         verbose_name_plural = "pagos"
         ordering = ("id",)

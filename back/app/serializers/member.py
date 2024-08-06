@@ -4,7 +4,7 @@ from app.models.member import Member
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Member
         fields = "__all__"
 
@@ -16,7 +16,7 @@ class MemberCreateSerializer(MemberSerializer):
 
 
 class MemberShortSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Member
         fields = (
             "id",
@@ -34,7 +34,7 @@ class MemberShortSerializer(serializers.ModelSerializer):
 
 
 class MemberExportSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Member
         fields = (
             "name",

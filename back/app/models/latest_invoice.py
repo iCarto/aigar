@@ -5,7 +5,7 @@ from domains.models import aigar_config
 
 
 class LatestInvoice(Invoice):
-    class Meta(object):
+    class Meta:
         proxy = True
 
     def calculated_mora(self) -> Decimal:
@@ -14,7 +14,7 @@ class LatestInvoice(Invoice):
         return aigar_config.get_config().recargo_mora
 
 
-class NoLatestInvoice(object):
+class NoLatestInvoice:
     @property
     def deuda(self) -> float:
         return 0

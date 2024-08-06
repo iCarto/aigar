@@ -240,7 +240,7 @@ _InvoiceManager = InvoiceManager.from_queryset(InvoiceQuerySet)
 
 
 class Invoice(models.Model):
-    class Meta(object):
+    class Meta:
         verbose_name = "recibo"
         verbose_name_plural = "recibos"
         ordering = ("-mes_facturacion_id", "-version", "member_id")

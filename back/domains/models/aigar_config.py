@@ -65,7 +65,7 @@ STRETCHES_IDS = (
 
 
 class AigarConfig(SingletonModel):
-    class Meta(object):
+    class Meta:
         verbose_name_plural = "Configuración de AIGAR"
         verbose_name = "Configuración de AIGAR"
         ordering = ("id",)

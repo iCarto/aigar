@@ -15,7 +15,7 @@ class InvoiceValueSerializer(serializers.Serializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Invoice
         fields = "__all__"
 
@@ -24,7 +24,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceStatsSerializer(serializers.ModelSerializer):
-    class Meta(object):
+    class Meta:
         model = Invoice
         fields = (
             "mes_facturacion",

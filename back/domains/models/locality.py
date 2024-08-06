@@ -49,7 +49,7 @@ class LocalityManager(models.Manager):
 
 
 class Locality(models.Model):
-    class Meta(object):
+    class Meta:
         ordering = ("short_name",)
         verbose_name_plural = "comunidades"
         verbose_name = "comunidad"

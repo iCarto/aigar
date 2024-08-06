@@ -25,7 +25,7 @@ class MeasurementManager(models.Manager["Measurement"]):
 
 
 class Measurement(models.Model):
-    class Meta(object):
+    class Meta:
         verbose_name = "lectura"
         verbose_name_plural = "lecturas"
         ordering = ("id",)

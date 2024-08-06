@@ -31,13 +31,13 @@ class ZoneInline(admin.TabularInline):
 
 
 class LocalityAddForm(forms.ModelForm):
-    class Meta(object):
+    class Meta:
         model = Locality
         fields = "__all__"
 
 
 class LocalityChangeForm(forms.ModelForm):
-    class Meta(object):
+    class Meta:
         model = Locality
         fields = "__all__"
 

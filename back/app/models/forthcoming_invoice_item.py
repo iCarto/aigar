@@ -18,7 +18,7 @@ class ForthcomingInvoiceItemName(models.TextChoices):
 
 
 class ForthcomingInvoiceItem(models.Model):
-    class Meta(object):
+    class Meta:
         verbose_name = "concepto a facturar en siguientes meses"
         verbose_name_plural = "conceptos a facturar en siguientes meses"
         ordering = ("id",)

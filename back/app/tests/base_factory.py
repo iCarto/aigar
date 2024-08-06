@@ -24,7 +24,7 @@ class BaseFactoryMeta(FactoryMetaClass):
 class BaseFactory(
     Generic[T], factory.django.DjangoModelFactory, metaclass=BaseFactoryMeta
 ):
-    class Meta(object):
+    class Meta:
         abstract = True
 
     @classmethod

@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import environ
@@ -30,12 +29,12 @@ DESKTOP = env("DESKTOP")
 # https://stackoverflow.com/questions/54504142/
 # If in DEV is needed to access the app in a defined IP or URL fill .env with:
 # ALLOWED_HOSTS=.localhost,127.0.0.1,[::1],THE_IP_OR_URL
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", cast=[str])
 
 
-CSRF_COOKIE_SECURE = env("HTTPS")
-SESSION_COOKIE_SECURE = env("HTTPS")
-SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS")
+CSRF_COOKIE_SECURE = env("HTTPS", cast=bool)
+SESSION_COOKIE_SECURE = env("HTTPS", cast=bool)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = env("HTTPS", cast=bool)
 
 
 INSTALLED_APPS = [
@@ -49,7 +48,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_filters",
-    "django_extensions",
     "solo",
     "import_export",
     "back",
@@ -59,7 +57,7 @@ INSTALLED_APPS = [
 
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
-
+    INSTALLED_APPS.append("django_extensions")
 
 # In Sqitch database control changes mode we have to remove migrations for all used modules to avoid errors
 MIGRATION_MODULES = (
@@ -82,7 +80,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "back.spa.BackSPAMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",  # early, but after Gzip
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -90,6 +87,15 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(
+        5, "debug_toolbar.middleware.DebugToolbarMiddleware"
+    )  # early, but after Gzip
+
+if "log" in INSTALLED_APPS:
+    MIDDLEWARE.append("log.middleware.SaveRequest")
+
 
 ROOT_URLCONF = "back.urls"
 
@@ -126,6 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Configuration for using X-Forwarded-Host header behind a Proxy to resolve host url
+# USE_X_FORWARDED_HOST = True
 
 appname = "aigar_data"
 MEDIA_URL = "/media/"
@@ -137,8 +145,8 @@ if DESKTOP:
     from platformdirs import PlatformDirs
 
     dirs = PlatformDirs(appname=appname, appauthor=False, ensure_exists=True)
-    MEDIA_ROOT = os.path.join(dirs.user_documents_dir, appname)
-    SQLITE_PATH = os.path.join(MEDIA_ROOT, "db.sqlite3")
+    MEDIA_ROOT = Path(dirs.user_documents_dir) / appname
+    SQLITE_PATH = MEDIA_ROOT / "db.sqlite3"
 
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": SQLITE_PATH}}
@@ -157,16 +165,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = managepy_dir / "static"
-STATIC_URL = "/staticfiles/"
+STATIC_URL = "/static/"
 # Extra places for collectstatic to find static files.
 if not DESKTOP:
-    front_build = managepy_dir / ".." / "front" / "build"
-    STATICFILES_DIRS = (front_build,)
+    front_dist = managepy_dir / ".." / "front" / "dist"
+    STATICFILES_DIRS = (front_dist,)
 
-# Django SPA - simple setup for serving modern SPAs from Django
-# https://github.com/metakermit/django-spa
-STORAGES = {"staticfiles": {"BACKEND": "spa.storage.SPAStaticFilesStorage"}}
-
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "spa.storage.SPAStaticFilesStorage"},
+}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
@@ -181,10 +189,12 @@ REST_FRAMEWORK = {
     #     "rest_framework.permissions.IsAuthenticated",
     #     "rest_framework.permissions.DjangoModelPermissions",
     # ],
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 10,
-    # "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.OrderingFilter",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
@@ -249,7 +259,7 @@ if not DEBUG and DESKTOP:
             "file": {
                 "level": "WARNING",
                 "class": "logging.handlers.RotatingFileHandler",
-                "filename": os.path.join(MEDIA_ROOT, "aigar.log"),
+                "filename": MEDIA_ROOT / "aigar.log",
                 "formatter": "app",
                 "maxBytes": 1024 * 1024,  # 1 MB
                 "backupCount": 5,
@@ -271,10 +281,12 @@ if not DEBUG and DESKTOP:
 
 SOLO_CACHE_TIMEOUT = 3600  # 1 hour
 
-
-SHELL_PLUS_IMPORTS = ["from django.db import models"]
-SHELL_PLUS_PRINT_SQL = True
-SHELL_PLUS_PRINT_SQL_TRUNCATE = None
+if DEBUG:
+    SHELL_PLUS_IMPORTS = ["from django.db import models"]
+    SHELL_PLUS_PRINT_SQL = True
+    SHELL_PLUS_PRINT_SQL_TRUNCATE = None
+    # Werkzeug reloader type [auto, watchdog, or stat]
+    RUNSERVERPLUS_POLLER_RELOADER_TYPE = "stat"
 
 # django-import-export
 IMPORT_EXPORT_SKIP_ADMIN_LOG = True

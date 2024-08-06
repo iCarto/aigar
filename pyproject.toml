@@ -1,7 +1,4 @@
-# [tool.pyright]
-# executionEnvironments = [{ root = "back" }]
-
-[tool.basedpyright]
+[tool.pyright]
 typeCheckingMode = "basic"
 reportIncompatibleMethodOverride = false
 reportIncompatibleVariableOverride = false
@@ -20,7 +17,7 @@ markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 omit = ["manage.py"]
 
 [build-system]
-requires = ["setuptools==65.5.0"]
+requires = ["setuptools==72.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -32,7 +29,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Private :: Do Not Upload",
 ]
-requires-python = "==3.11.*"
+requires-python = "==3.12.*"
 dependencies = [
     "Django==4.2",
     "django-cors-headers==3.14.0",
@@ -65,6 +62,10 @@ dev = [
     "vulture==2.7",
     "django-stubs==4.2.5",
     "djangorestframework-stubs",
+    "ruff==0.5.6",
+    "ipython==8.12.0",
+    "pre-commit==3.2.2",
+    "Werkzeug==2.2.3",             # for runserver_plus
     # "aigar[test]",
 ]
 

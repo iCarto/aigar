@@ -4,21 +4,16 @@ this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
 source "${this_dir}"/../server/variables.ini
 
-crear_vacia() {
-    sqlite3 "${SQLITE_PATH}" "
-        PRAGMA foreign_keys = ON;
-        delete from app_measurement;
-        delete from app_payment;
-        delete from app_invoice;
-        delete from app_invoicingmonth;
-        delete from app_member;
-        delete from domains_zone;
-        delete from domains_locality;
-        delete from domains_aigarconfig;
-    "
+create_super_admin() {
+    DJANGO_SUPERUSER_PASSWORD="${DJANGO_SUPERUSER_PASSWORD}" python "${this_dir}/../back/manage.py" createsuperuser --no-input --username admin --email=admin@example.com
+}
+
+empty() {
+    create_super_admin
 }
 
 crear_iniciar() {
+    cp "${this_dir}/../tools/fixtures/_db.sqlite3" "${SQLITE_PATH}"
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
         delete from app_invoicingmonth where id_mes_facturacion = '202310';
@@ -33,48 +28,17 @@ crear_iniciar() {
         update app_invoice set
             estado = 'pendiente_de_cobro'
         where mes_facturacion_id = '202309' and estado = 'no_cobrada';
-
     "
-}
 
-crear_importar() {
+}
+measurements() {
+    payments
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
-
-        WITH mes(id) AS (
-            SELECT id_mes_facturacion AS id FROM app_invoicingmonth ORDER BY id_mes_facturacion DESC LIMIT 1
-        )
-        , invoices(id) AS (
-            SELECT app_invoice.id FROM app_invoice, mes WHERE mes_facturacion_id = mes.id
-        )
-        UPDATE app_invoice SET
-            estado = 'nueva'
-            , ontime_payment = 0
-            , late_payment = 0
-            , caudal_actual = null
-        FROM mes
-        WHERE mes_facturacion_id = mes.id;
-
-        WITH mes(id) AS (
-            SELECT id_mes_facturacion AS id FROM app_invoicingmonth ORDER BY id_mes_facturacion DESC LIMIT 1
-        )
-        , invoices(id) AS (
-            SELECT app_invoice.id FROM app_invoice, mes WHERE mes_facturacion_id = mes.id
-        )
-        DELETE FROM app_payment
-        WHERE invoice_id in (SELECT id FROM invoices);
-
-        WITH mes(id) AS (
-            SELECT id_mes_facturacion AS id FROM app_invoicingmonth ORDER BY id_mes_facturacion DESC LIMIT 1
-        )
-        , invoices(id) AS (
-            SELECT app_invoice.id FROM app_invoice, mes WHERE mes_facturacion_id = mes.id
-        )
-        DELETE FROM app_measurement
-        WHERE invoice_id in (SELECT id FROM invoices);
+        delete from app_measurement where invoice_id in (select id from app_invoice where mes_facturacion_id = '202405');
+        update app_invoice set estado = 'nueva', caudal_actual = null, total=null, cuota_variable=0  where mes_facturacion_id = '202405';
     "
 }
-
 crear_imprimir() {
     crear_iniciar
     sqlite3 "${SQLITE_PATH}" "
@@ -98,43 +62,55 @@ crear_imprimir() {
             invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
     "
 }
-
-crear_actualizar() {
-    crear_iniciar
+payments() {
+    cp tools/fixtures/aguamar/240705_db.sqlite3 "${SQLITE_PATH}"
     sqlite3 "${SQLITE_PATH}" "
         PRAGMA foreign_keys = ON;
-        update app_invoice set
-            estado = 'pendiente_de_cobro'
-            , ontime_payment = 0
-            , late_payment = 0
-        where mes_facturacion_id = '202309';
-        delete from app_payment where
-            invoice_id in (select id from app_invoice where mes_facturacion_id = '202309');
+
+        -- valorar borrar el último id en lugar de un mes
+        delete from app_measurement where invoice_id in (select id from app_invoice where mes_facturacion_id = '202406');
+        delete from app_payment where invoice_id in (select id from app_invoice where mes_facturacion_id = '202406');
+        delete from app_invoice where mes_facturacion_id = '202406';
+        delete from app_invoicingmonth where id_mes_facturacion = '202406';
+
+        update app_invoicingmonth set is_open = true where id_mes_facturacion = '202405';
+        delete from app_payment where invoice_id in (select id from app_invoice where mes_facturacion_id = '202405');
+
+
+        update app_measurement set invoice_id = 300 where id = 294;
+        delete from app_invoice where id = 417;
+
+        update app_invoice set estado = 'pendiente_de_cobro', ontime_payment = 0, late_payment = 0  where mes_facturacion_id = '202405';
+
+        update app_invoice set caudal_actual = 353 + 31 where anho = '2024' and mes = '05' and member_id = 6;
     "
 }
 
 case "${1}" in
-    vacia)
+    empty)
         echo "Creando base de datos vacia"
-        crear_vacia
+        empty
         ;;
     iniciar)
         echo "Creando base de datos para Iniciar proceso"
         crear_iniciar
         ;;
-    importar)
+    measurements)
         echo "Creando base de datos para Importar lecturas"
-        crear_importar
+        measurements
         ;;
     imprimir)
         echo "Creando base de datos para Imprimir facturas"
         crear_imprimir
         ;;
-    actualizar)
+    payments)
         echo "Creando base de datos para Actualizar pagos"
-        crear_actualizar
+        payments
         ;;
-    '') echo "" ;;
+    '')
+        echo ""
+        empty
+        ;;
     *)
         echo "Error. Parámetro no reconocido"
         exit 1

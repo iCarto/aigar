@@ -41,7 +41,9 @@ fi
 python -m pip install --upgrade pip
 python -m pip install --upgrade build
 
-pip install -r requirements-dev.txt
+# backend and dev dependencies
+pip install --editable '.[all]'
+
 npm install
 pre-commit clean
 pre-commit gc

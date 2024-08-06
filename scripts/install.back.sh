@@ -17,7 +17,3 @@ echo "* creating initial .env file"
 
 # create the media folder (only for development purposes)
 mkdir -p back/media
-
-pip install --editable '.[all]'
-
-# python manage.py compilemessages

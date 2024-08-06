@@ -1,7 +1,7 @@
 import datetime
 import logging
 from decimal import Decimal
-from typing import Any, Self, cast
+from typing import TYPE_CHECKING, Any, Self, cast
 
 from django.core import exceptions
 from django.db import models, transaction
@@ -16,6 +16,9 @@ from app.models.invoice_value import InvoiceValue
 from back.utils.dates import next_month
 from domains.models import aigar_config
 
+
+if TYPE_CHECKING:
+    from app.models.measurement import Measurement
 
 logger = logging.getLogger(__name__)
 
@@ -441,7 +444,10 @@ class Invoice(models.Model):
         return aigar_config.get_config().recargo_mora
 
     def update_with_measurement(
-        self, caudal_actual: int, caudal_anterior: int, cambio_medidor: bool
+        self,
+        caudal_actual: int,
+        caudal_anterior: int,
+        cambio_medidor: bool,  # noqa: FBT001
     ) -> None:
         self.caudal_actual = int(caudal_actual)
         if cambio_medidor:

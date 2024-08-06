@@ -22,8 +22,9 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
         invoicing_month_to_close = InvoicingMonth.objects.get(is_open=True)
 
         if not any_payments_for(invoicing_month_to_close):
+            msg = "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
             raise ValidationError(
-                "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
+                msg
             )
 
         Invoice.objects.update_state_for(invoicing_month_to_close)

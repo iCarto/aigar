@@ -28,5 +28,5 @@ class AigarConfigViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(["GET"])
-def invoice_status_view(request) -> Response:
+def invoice_status_view(request) -> Response:  # noqa: ARG001
     return Response(InvoiceStatus.choices)

@@ -1,4 +1,5 @@
 import datetime
+from typing import override
 
 from import_export import resources, widgets
 from import_export.fields import Field
@@ -29,6 +30,7 @@ class NotNullOrLessThan0IntegerWidget(widgets.IntegerWidget):
 
 
 class ChoicesWidget(widgets.CharWidget):
+    @override
     def __init__(self, choices: list[str], coerce_to_string=False, allow_blank=False):
         super().__init__(coerce_to_string, allow_blank)
         self.choices = choices
@@ -36,7 +38,8 @@ class ChoicesWidget(widgets.CharWidget):
     def clean(self, value, row=None, **kwargs):
         result = super().clean(value, row, **kwargs)
         if result not in self.choices:
-            raise ValueError(f"La opción '{result}' no es válida")
+            msg = f"La opción '{result}' no es válida"
+            raise ValueError(msg)
         return result
 
 
@@ -126,6 +129,7 @@ class InvoiceResource(RemoveEmptyRowsResource):
 
     member_name = Field(column_name="Nombre", attribute="member__name", readonly=True)
 
+    @override
     def after_save_instance(self, instance, using_transactions, dry_run):
         total = instance.total
         ontime_payment = instance.ontime_payment
@@ -170,6 +174,7 @@ class InvoiceResource(RemoveEmptyRowsResource):
                 invoice=instance,
             )
 
+    @override
     def after_import_row(self, row, row_result, **kwargs):
         mes_facturacion_original = row_result.original.mes_facturacion_id
         if mes_facturacion_original != row["mes_facturacion"]:

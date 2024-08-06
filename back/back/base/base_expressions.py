@@ -1,3 +1,5 @@
+from typing import override
+
 from django.db import models
 
 
@@ -5,6 +7,7 @@ class GroupConcat(models.Aggregate):
     function = "GROUP_CONCAT"
     template = "%(function)s(%(distinct)s%(expressions)s)"
 
+    @override
     def __init__(self, expression, distinct=False, **extra):
         super().__init__(
             expression,

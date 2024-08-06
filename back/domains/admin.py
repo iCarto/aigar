@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, override
 
 from django import forms
 from django.contrib import admin
@@ -20,12 +20,15 @@ class ZoneInline(admin.TabularInline):
     fields = ("name", "reading_day")
     readonly_fields = ("name",)
 
+    @override
     def has_add_permission(self, request, obj):
         return False
 
+    @override
     def has_change_permission(self, request, obj):
         return True
 
+    @override
     def has_delete_permission(self, request, obj):
         return False
 

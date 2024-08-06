@@ -1,3 +1,5 @@
+from typing import override
+
 from django.core import exceptions
 from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
@@ -31,7 +33,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     )
 
     @action(detail=True, methods=["get"])
-    def payments(self, request, pk=None):
+    def payments(self, request, pk=None):  # noqa: ARG002
         instance = self.get_object()
         serializer = PaymentSerializer(instance.payment_set.all(), many=True)
         return Response(serializer.data)
@@ -58,10 +60,10 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=["put"])
-    def total(self, request, pk=None):
+    def total(self, request, pk=None):  # noqa: ARG002
         instance = self.get_object()
 
-        def noop_save(*args, **kwargs):
+        def noop_save(*args, **kwargs):  # noqa: ARG001
             """Don't save the instance, just recalculate values and return then."""
 
         instance.save = noop_save
@@ -73,23 +75,22 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     # Override destroy method to set Invoice as inactive and return a new version of the same invoice
+    @override
     def destroy(self, request, *args, **kwargs):
         invoice = self.get_object()
         if invoice.estado in NOT_MODIFICABLE_INVOICES:
-            raise exceptions.ValidationError(
-                f"No se puede modificar un recibo en estado {invoice.estado}"
-            )
+            msg = f"No se puede modificar un recibo en estado {invoice.estado}"
+            raise exceptions.ValidationError(msg)
         if invoice.payment_set.exists():
-            raise exceptions.ValidationError(
-                "No se puede modificar un recibo con pagos asociados"
-            )
+            msg = "No se puede modificar un recibo con pagos asociados"
+            raise exceptions.ValidationError(msg)
         invoice.estado = InvoiceStatus.ANULADA
         invoice.save()
         measurements = list(invoice.measurement_set.all())
 
         # https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances
         invoice.pk = None
-        invoice._state.adding = True
+        invoice._state.adding = True  # noqa: SLF001
         invoice.version += 1
         invoice.estado = InvoiceStatus.NUEVA
         invoice.save()

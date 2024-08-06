@@ -4,7 +4,7 @@ ADMIN_ORDERING = (
 )
 
 
-def get_app_list(self, request, app_label=None):
+def get_app_list(self, request, app_label=None):  # noqa: C901 PLR0912
     app_dict = self._build_app_dict(request, app_label)
 
     if not app_dict:

@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from typing import Any, override
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -21,12 +21,15 @@ class MeasurementViewSet(viewsets.ModelViewSet):
     queryset = Measurement.objects.prefetch_related("invoice").all()
     serializer_class = MeasurementSerializer
 
+    @override
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     def update(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         measurements: list[dict[str, Any]] = request.data

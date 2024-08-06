@@ -1,4 +1,5 @@
 import unicodedata
+from typing import override
 
 from django.core import validators
 from django.db import models
@@ -100,6 +101,7 @@ class StrictCharField(models.CharField):
     def get_prep_value(self, value):
         return self._normalize(super().get_prep_value(value))
 
+    @override
     def get_db_prep_value(self, value, connection, prepared=False):
         return self._normalize(super().get_db_prep_value(value, connection, prepared))
 
@@ -132,5 +134,5 @@ class StrictCharField(models.CharField):
         return fn(stripped_control_chars)
 
 
-def noop(*args, **kwds):
+def noop(*args):
     return args[0] if args else None

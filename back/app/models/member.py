@@ -28,7 +28,7 @@ class MemberManager(models.Manager["Member"]):
     def active(self) -> models.QuerySet:
         return self.filter(status=MemberStatus.ACTIVE)
 
-    def update_order(self, new_order: int | None, old_order: int | None = None) -> None:
+    def update_order(self, new_order: int | None, old_order: int | None = None) -> None:  # noqa: PLR0912
         if old_order == new_order:
             return
 

@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Any
+from typing import Any, override
 
 from django.db import transaction
 from rest_framework import status, viewsets
@@ -20,18 +20,23 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.prefetch_related("invoice").all()
     serializer_class = PaymentSerializer
 
+    @override
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     def update(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @override
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         payments: list[dict[str, Any]] = request.data

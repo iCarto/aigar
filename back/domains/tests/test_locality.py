@@ -34,7 +34,7 @@ def test_names_must_be_processed_on_update():
 
 
 @pytest.mark.parametrize(
-    "kv,expectation",
+    ("kv", "expectation"),
     [
         ({"name": None}, pytest.raises(ValidationError)),
         ({"name": ""}, pytest.raises(ValidationError)),

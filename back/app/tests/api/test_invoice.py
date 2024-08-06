@@ -13,6 +13,12 @@ from domains.models.member_status import MemberStatus
 pytestmark = pytest.mark.django_db
 
 
+@pytest.fixture()
+def _mock_any_payments_for():
+    with patch("app.models.invoicing_month.any_payments_for", return_value=True):
+        yield
+
+
 def test_api_can_not_change_status(api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
@@ -53,8 +59,8 @@ def test_update_invoice_status(api_client, create_invoicing_month):
     assert all(i.estado == InvoiceStatus.NUEVA for i in invoices[2:])
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_invoice_with_reconnect_debt(_, api_client, create_invoicing_month):
+@pytest.mark.usefixtures("_mock_any_payments_for")
+def test_invoice_with_reconnect_debt(api_client, create_invoicing_month):
     old_invoice = InvoiceFactory.create(
         estado=InvoiceStatus.NO_COBRADA,
         total=100,

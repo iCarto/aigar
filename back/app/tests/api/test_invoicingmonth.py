@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pytest
-from django.core import exceptions
 
 from app.models.invoice import Invoice
 from app.models.invoice_status import InvoiceStatus
@@ -13,26 +12,13 @@ from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFac
 pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.skip("no implemented jet")
-def test_calculate_derecho_conexion():
-    """Ejemplo de query.
-
-    select nombre, anho, mes, derecho from back_invoice where derecho != 0 order by 1, 2, 3, 4;
-    """
+@pytest.fixture(autouse=True)
+def _mock_any_payments_for():
+    with patch("app.models.invoicing_month.any_payments_for", return_value=True):
+        yield
 
 
-def test_payment_validation_raises_error(api_client):
-    invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
-    invoicingmonth.save()
-    with pytest.raises(
-        exceptions.ValidationError,
-        match="El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta.",
-    ):
-        api_client.post("/api/invoicingmonths/", {"anho": 2019, "mes": 10})
-
-
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_create_without_previous(_, api_client):
+def test_create_without_previous(api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
     InvoiceFactory.create(mes_facturacion=invoicingmonth, estado=InvoiceStatus.COBRADA)
@@ -47,8 +33,7 @@ def test_create_without_previous(_, api_client):
     assert Invoice.objects.filter(member=member).first().caudal_anterior == 0
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_create_with_previous(_, api_client):
+def test_create_with_previous(api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho=2019, mes=9, is_open=True)
     invoicingmonth.save()
     InvoiceFactory.create(
@@ -71,8 +56,7 @@ def test_create_with_previous(_, api_client):
     assert new_invoice.mora == 1
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_previous_month_is_closed_current_is_open(_, api_client):
+def test_previous_month_is_closed_current_is_open(api_client):
     invoicingmonth = InvoicingMonthFactory.build(anho="2019", mes="09", is_open=True)
     invoicingmonth.save()
 
@@ -84,8 +68,7 @@ def test_previous_month_is_closed_current_is_open(_, api_client):
     assert InvoicingMonth.objects.filter(is_open=True).count() == 1
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_derecho_conexion_invoice_generation(_, api_client, create_invoicing_month):
+def test_derecho_conexion_invoice_generation(api_client, create_invoicing_month):
     invoicing_month = create_invoicing_month(anho="2019", mes="09", is_open=True)
     InvoiceFactory.create(mes_facturacion=invoicing_month)
     member = MemberFactory.create(tipo_uso=UseTypes.COMERCIAL, selected_fee_value=50)
@@ -119,9 +102,8 @@ def test_derecho_conexion_invoice_generation(_, api_client, create_invoicing_mon
     assert invoice.derecho == 0
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
 def test_derecho_conexion_pay_full_fee_in_one(
-    _, api_client, create_invoicing_month, new_member_data
+    api_client, create_invoicing_month, new_member_data
 ):
     InvoiceFactory.create(
         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True)

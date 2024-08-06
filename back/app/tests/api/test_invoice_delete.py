@@ -16,6 +16,12 @@ from app.tests.factories import InvoiceFactory
 pytestmark = pytest.mark.django_db
 
 
+@pytest.fixture()
+def _mock_any_payments_for():
+    with patch("app.models.invoicing_month.any_payments_for", return_value=True):
+        yield
+
+
 def test_new_invoices_can_be_deleted(api_client, create_invoicing_month):
     invoice = InvoiceFactory.create(
         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
@@ -56,8 +62,8 @@ def test_measurements_are_moved(api_client, create_invoicing_month):
     assert new_invoice.measurement_set.all()[0] == measurement
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_dont_modify_for_closed_months(_, api_client, create_invoicing_month):
+@pytest.mark.usefixtures("_mock_any_payments_for")
+def test_dont_modify_for_closed_months(api_client, create_invoicing_month):
     invoice = InvoiceFactory.create(
         mes_facturacion=create_invoicing_month(anho="2019", mes="09", is_open=True),
         estado=InvoiceStatus.NUEVA,
@@ -91,7 +97,7 @@ def test_dont_modify_with_payments(api_client, create_invoicing_month):
 
 
 @pytest.mark.parametrize(
-    "estado,expectation",
+    ("estado", "expectation"),
     [
         (InvoiceStatus.ANULADA, pytest.raises(exceptions.ValidationError)),
         (InvoiceStatus.COBRADA, pytest.raises(exceptions.ValidationError)),

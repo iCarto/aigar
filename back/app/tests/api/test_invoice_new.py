@@ -19,6 +19,12 @@ from domains.models.member_status import MemberStatus
 pytestmark = pytest.mark.django_db
 
 
+@pytest.fixture()
+def _mock_any_payments_for():
+    with patch("app.models.invoicing_month.any_payments_for", return_value=True):
+        yield
+
+
 def test_invoice_can_be_created(api_client, create_invoicing_month):
     """Una nueva factura puede ser creada a mano (nuevas socias y reconectadas)."""
     InvoiceFactory.create(
@@ -227,8 +233,8 @@ def test_derecho_conexion_comercial(create_invoicing_month):
     assert list(items) == [50, 50, 50, 50, 50]
 
 
-@patch("app.models.invoicing_month.any_payments_for", return_value=True)
-def test_caudal_actual_is_none_when_creating_month(_, api_client):
+@pytest.mark.usefixtures("_mock_any_payments_for")
+def test_caudal_actual_is_none_when_creating_month(api_client):
     # Varias comprobaciones de en que estado está la app, se basan en si el caudal_actual
     # es None. Este test nos protege de confundir 0 con None. La otra opción es que
     # comprobemos directamente si existe una lectura asociada al recibo en lugar de

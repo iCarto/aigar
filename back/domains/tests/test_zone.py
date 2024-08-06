@@ -39,7 +39,7 @@ def test_name_is_unique():
 
 
 @pytest.mark.parametrize(
-    "reading_day, expectation",
+    ("reading_day", "expectation"),
     [
         ({"reading_day": -1}, pytest.raises(ValidationError)),
         ({"reading_day": 32}, pytest.raises(ValidationError)),

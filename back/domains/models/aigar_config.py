@@ -716,9 +716,9 @@ class AigarConfig(SingletonModel):
 CONFIG = None
 
 
-def get_config() -> AigarConfig:
+def get_config(reload=False) -> AigarConfig:  # noqa: FBT002
     global CONFIG  # noqa: PLW0603
-    if not CONFIG:
+    if not CONFIG or reload:
         CONFIG = AigarConfig.get_solo()
     return CONFIG
 
@@ -737,6 +737,7 @@ def get_invoice_value(invoice_value: InvoiceValue, member=None) -> Decimal | int
     # https://stackoverflow.com/questions/60616802/how-to-type-hint-a-generic-numeric-type-in-python
     config = get_config()
     tipo_uso = getattr(member, "tipo_uso", "").lower()
-    if tipo_uso:
-        return getattr(config, f"{tipo_uso}_{invoice_value.value}")
+    tipo_uso_config_attr = f"{tipo_uso}_{invoice_value.value}"
+    if tipo_uso and hasattr(config, tipo_uso_config_attr):
+        return getattr(config, tipo_uso_config_attr)
     return getattr(config, invoice_value.value)

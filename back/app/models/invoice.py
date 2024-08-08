@@ -26,6 +26,14 @@ def _cuota_fija(member) -> Decimal:
     )
 
 
+def _comision(member) -> Decimal:
+    return cast(Decimal, aigar_config.get_invoice_value(InvoiceValue.COMISION, member))
+
+
+def _ahorro(member) -> Decimal:
+    return cast(Decimal, aigar_config.get_invoice_value(InvoiceValue.AHORRO, member))
+
+
 def _calculated_forthcomingitem(member, name: ForthcomingInvoiceItemName):
     # Al iterar por .all() en lugar de hacer un .filter no se lanzan nuevas queries
     for item in member.forthcominginvoiceitem_set.all():
@@ -415,12 +423,17 @@ class Invoice(models.Model):
     def consumo_final(self) -> int | None:
         if self.consumo is None:
             return None
+
+        consumo_tmp = self.consumo
         if self.member.consumo_maximo is not None:
             consumo_tmp = min(self.consumo, self.member.consumo_maximo)
-        else:
-            consumo_tmp = self.consumo
 
-        return consumo_tmp - (self.member.consumo_reduccion_fija or 0)
+        if self.member.consumo_reduccion_fija:
+            consumo_tmp = consumo_tmp - self.member.consumo_reduccion_fija
+            if consumo_tmp < 0:
+                consumo_tmp = 0
+
+        return consumo_tmp
 
     def calculated_mora(self) -> Decimal:
         if self.ontime_payment >= self.total_or0:
@@ -448,6 +461,10 @@ class Invoice(models.Model):
         if self.consumo is None or self.consumo_final is None:
             return
 
+        if self.member.consumo_reduccion_fija and self.consumo_final == 0:
+            self.cuota_fija = 0
+            self.comision = 0
+            self.ahorro = 0
         self.cuota_variable = self.calculated_variable_fee()
 
         # TODO(fpuga): Review if store invoice in decimal fields is a better option
@@ -470,6 +487,8 @@ class Invoice(models.Model):
 
     def update_for_member(self):
         self.cuota_fija = float(_cuota_fija(self.member))
+        self.comision = float(_comision(self.member))
+        self.ahorro = float(_ahorro(self.member))
         self.update_total()
         self.save()
 

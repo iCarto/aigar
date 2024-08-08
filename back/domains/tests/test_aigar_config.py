@@ -5,7 +5,8 @@ from django.core import exceptions
 
 from app.models.member import UseTypes
 from app.tests.factories import MemberFactory
-from domains.models.aigar_config import MAX_LIMIT_VALUE, STRETCHES_IDS, AigarConfig
+from domains.models.aigar_config import MAX_LIMIT_VALUE, AigarConfig
+from domains.tests.factories import _set_stretches, _set_unused_stretch
 
 
 pytestmark = pytest.mark.django_db
@@ -14,8 +15,7 @@ pytestmark = pytest.mark.django_db
 def test_valid_stretches():
     config = AigarConfig().get_solo()
 
-    config.comercial_cuota_variable_primer_tramo_cantidad = None
-    config.comercial_cuota_variable_primer_tramo_coste = Decimal("1")
+    _set_unused_stretch("comercial", config)
     stretches = [
         {"limit": 14, "cost": 0},
         {"limit": 20, "cost": 0.75},
@@ -144,36 +144,3 @@ def test_get_stretches_comercial():
         config.get_stretches(MemberFactory.create(tipo_uso=UseTypes.COMERCIAL))
         == stretches[:-1]
     )
-
-
-def _set_unused_stretch(tipo_uso, config):
-    _set_stretches(
-        tipo_uso,
-        [
-            {"limit": None, "cost": 1},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-            {"limit": None, "cost": 0},
-        ],
-        config,
-    )
-
-
-def _set_stretches(tipo_uso, stretches, config):
-    for i, stretch in enumerate(STRETCHES_IDS):
-        if len(stretches) <= i:
-            break
-        setattr(
-            config,
-            f"{tipo_uso}_cuota_variable_{stretch}_tramo_cantidad",
-            stretches[i]["limit"],
-        )
-        setattr(
-            config,
-            f"{tipo_uso}_cuota_variable_{stretch}_tramo_coste",
-            stretches[i]["cost"],
-        )

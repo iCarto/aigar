@@ -18,6 +18,13 @@ from domains.models.member_status import MemberStatus
 pytestmark = pytest.mark.django_db
 
 
+@pytest.fixture(autouse=True)
+def _set_aigar_config():
+    from domains.tests.factories import get_aigar_config
+
+    get_aigar_config()
+
+
 def test_delete_member_not_allowed(api_client):
     member = MemberFactory.create(status=MemberStatus.ACTIVE)
     member_pk = member.pk
@@ -88,7 +95,7 @@ def test_not_create_reconnect_debt_when_creating_member(
     ).exists()
 
 
-def test_update_member_with_invoices(api_client, create_invoicing_month):
+def test_update_member_consumo_maximo_with_invoices(api_client, create_invoicing_month):
     invoice = InvoiceFactory.create(
         estado=InvoiceStatus.NUEVA,
         mes_facturacion=create_invoicing_month(anho=2019, mes=9, is_open=True),
@@ -108,6 +115,29 @@ def test_update_member_with_invoices(api_client, create_invoicing_month):
     invoice.refresh_from_db()
     assert invoice.member.name == "foo bar"
     assert invoice.total == pytest.approx(7)
+
+
+def test_update_member_reduccion_fija_with_invoices(api_client, create_invoicing_month):
+    invoice = InvoiceFactory.create(
+        estado=InvoiceStatus.NUEVA,
+        mes_facturacion=create_invoicing_month(anho=2019, mes=9, is_open=True),
+        caudal_anterior=10,
+        caudal_actual=15,
+        member__tipo_uso=UseTypes.HUMANO,
+        member__consumo_reduccion_fija=10,
+    )
+    invoice.update_total()
+    invoice.save()
+    Measurement(caudal_anterior=10, caudal_actual=15, invoice=invoice).save()
+    assert invoice.total == pytest.approx(0)
+    d = model_to_dict(
+        invoice.member, exclude=["consumo_maximo", "consumo_reduccion_fija"]
+    ) | {"name": "foo bar", "consumo_reduccion_fija": 0}
+    response = api_client.put(f"/api/members/{d['id']}/", d)
+    assert response.status_code == 200
+    invoice.refresh_from_db()
+    assert invoice.member.name == "foo bar"
+    assert invoice.total == pytest.approx(5.72 + 0.28 + 0.25)
 
 
 def test_validate_dui(api_client):

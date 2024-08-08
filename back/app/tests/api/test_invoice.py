@@ -6,7 +6,7 @@ from rest_framework import status
 
 from app.models.invoice import Invoice
 from app.models.invoice_status import InvoiceStatus
-from app.tests.factories import InvoiceFactory, InvoicingMonthFactory
+from app.tests.factories import InvoiceFactory, InvoicingMonthFactory, MemberFactory
 from domains.models.member_status import MemberStatus
 
 
@@ -99,3 +99,49 @@ def test_total_endpoint(api_client, create_invoicing_month):
         "total": 6.25,
         "asamblea": 0,
     }, "DB Invoice has been modified"
+
+
+def test_invoice_total_zero_when_consumo_below_reduccion_fija(create_invoicing_month):
+    member = MemberFactory.create(consumo_reduccion_fija=20)
+    invoicing_month = create_invoicing_month(anho="2023", mes="05", is_open=True)
+    invoice = InvoiceFactory.create(
+        member=member,
+        mes_facturacion=invoicing_month,
+        caudal_anterior=100,
+        caudal_actual=115,
+        estado=InvoiceStatus.NUEVA,
+    )
+
+    invoice.update_total()
+    invoice.save()
+    invoice.refresh_from_db()
+
+    # Assert that the total is 0
+    assert invoice.total == 0, f"Expected total to be 0, but got {invoice.total}"
+
+
+def test_invoice_total_more_than_zero_when_consumo_above_reduccion_fija(
+    create_invoicing_month,
+):
+    member = MemberFactory.create(consumo_reduccion_fija=20)
+    invoicing_month = create_invoicing_month(anho="2023", mes="05", is_open=True)
+
+    # Create another invoice with caudal_anterior = 115 and caudal_actual = 140 (consumo = 25)
+    invoice = InvoiceFactory.create(
+        member=member,
+        mes_facturacion=invoicing_month,
+        caudal_anterior=115,
+        caudal_actual=140,
+        estado=InvoiceStatus.NUEVA,
+    )
+
+    # Update the invoice total
+    invoice.update_total()
+    invoice.save()
+
+    # Refresh the invoice from the database
+    invoice.refresh_from_db()
+
+    assert (
+        invoice.total > 0
+    ), f"Expected total to be greater than 0, but got {invoice.total}"

@@ -13,10 +13,10 @@ pytestmark = pytest.mark.django_db
 def test_names_must_be_processed_on_create():
     """`name` and `short_name` should be normalized when creating a Locality."""
     locality = factories.LocalityFactory.create(
-        name=" mi\r\ncomunidad\nde\tlargo   nombre ", short_name=" la\ncomunidad "
+        name=" mi\r\ncomunidad\nde\tlargo   nombre ", short_name=" la\ncomUnidad "
     )
     assert locality.name == "Mi comunidad de largo nombre"
-    assert locality.short_name == "La comunidad"
+    assert locality.short_name == "la comUnidad"
 
 
 @pytest.mark.skip("Por ahora no está permitido modificar comunidades existentes")
@@ -28,10 +28,10 @@ def test_names_must_be_processed_on_update():
     assert locality.pk == 1
 
     locality.name = " mi\r\ncomunidad\nde\tlargo   nombre "
-    locality.short_name = " la\ncomunidad "
+    locality.short_name = " la\ncomUnidad "
     locality.save()
     assert locality.name == "Mi comunidad de largo nombre"
-    assert locality.short_name == "La comunidad"
+    assert locality.short_name == "la comUnidad"
 
 
 @pytest.mark.parametrize(
@@ -52,7 +52,7 @@ def test_names_are_not_empty(kv, expectation):
 
 
 def test_short_name_max_length_is10():
-    locality = factories.LocalityFactory.create(short_name=" la comunidad")
+    locality = factories.LocalityFactory.create(short_name=" La comunidad")
     assert locality.short_name == "La comunidad"
     assert len("La comunidad") == 12
 

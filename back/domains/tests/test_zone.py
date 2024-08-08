@@ -12,22 +12,22 @@ pytestmark = pytest.mark.django_db
 
 def test_correct_name_for_locality_with_sector():
     zone = factories.ZoneFactory.create(
-        locality__name=" mi comunidad ", locality__short_name="comunidad", code="2"
+        locality__name=" mi comunidad ", locality__short_name="comUnidad", code="2"
     )
     assert zone.locality.name == "Mi comunidad"
-    assert zone.locality_id == "Comunidad"
-    assert zone.locality_short_name == "Comunidad"
-    assert zone.name == "2 - Comunidad"
+    assert zone.locality_id == "comUnidad"
+    assert zone.locality_short_name == "comUnidad"
+    assert zone.name == "2 - comUnidad"
 
 
 def test_correct_name_for_locality_without_sector():
     zone = factories.ZoneFactory.create(
-        locality__name=" mi comunidad ", locality__short_name="comunidad", code=None
+        locality__name=" mi comunidad ", locality__short_name="comUnidad", code=None
     )
     assert zone.locality.name == "Mi comunidad"
-    assert zone.locality_id == "Comunidad"
-    assert zone.locality_short_name == "Comunidad"
-    assert zone.name == "Comunidad"
+    assert zone.locality_id == "comUnidad"
+    assert zone.locality_short_name == "comUnidad"
+    assert zone.name == "comUnidad"
 
 
 def test_name_is_unique():

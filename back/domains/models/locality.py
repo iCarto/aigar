@@ -75,7 +75,6 @@ class Locality(models.Model):
         verbose_name="nombre corto",
         help_text="Nombre corto de la comunidad. Se usa en algunas partes de la aplicación (tablas, ...). Máximo 13 caracteres.",
         unique=True,
-        apply="capitalize",
         min_length=3,
     )
 

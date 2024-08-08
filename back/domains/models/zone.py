@@ -27,6 +27,7 @@ sectores, borrarlos, crear nuevos, ...
 Una de las ideas clave es no tener que hacer JOIN de múltiples tablas para obtener el
 valor de sector a representar en un Member.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

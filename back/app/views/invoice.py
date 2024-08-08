@@ -27,7 +27,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = InvoiceFilter
     queryset = Invoice.objects.with_cancelled().select_related(
-        "member", "member__sector",
+        "member", "member__sector"
     )
 
     @action(detail=True, methods=["get"])
@@ -41,7 +41,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         serializer = InvoiceStatusSerializer(data=request.data)
         if serializer.is_valid():
             Invoice.objects.update_status(
-                serializer.validated_data["pks"], serializer.validated_data["status"],
+                serializer.validated_data["pks"], serializer.validated_data["status"]
             )
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -77,11 +77,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         invoice = self.get_object()
         if invoice.estado in NOT_MODIFICABLE_INVOICES:
             raise exceptions.ValidationError(
-                f"No se puede modificar un recibo en estado {invoice.estado}",
+                f"No se puede modificar un recibo en estado {invoice.estado}"
             )
         if invoice.payment_set.exists():
             raise exceptions.ValidationError(
-                "No se puede modificar un recibo con pagos asociados",
+                "No se puede modificar un recibo con pagos asociados"
             )
         invoice.estado = InvoiceStatus.ANULADA
         invoice.save()

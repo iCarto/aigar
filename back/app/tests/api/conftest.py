@@ -36,10 +36,10 @@ def create_invoicing_month():
     """InvoicingMonth.create has too much logic."""
 
     def _create_invoicing_month(
-        anho: str = "2019", mes: str = "09", is_open: bool = True,
+        anho: str = "2019", mes: str = "09", is_open: bool = True
     ):
         invoicing_month = InvoicingMonth(
-            anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes,
+            anho=anho, mes=mes, is_open=is_open, id_mes_facturacion=anho + mes
         )
         invoicing_month.save()
         return invoicing_month

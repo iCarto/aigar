@@ -46,7 +46,7 @@ class ForthcomingInvoiceItem(models.Model):
     )
 
     value = models.FloatField(
-        null=False, blank=False, verbose_name="valor", help_text="",
+        null=False, blank=False, verbose_name="valor", help_text=""
     )
 
     member = models.ForeignKey(

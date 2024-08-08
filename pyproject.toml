@@ -1,4 +1,13 @@
-[tool.pyright]
+# [tool.pyright]
+# executionEnvironments = [{ root = "back" }]
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
+reportIncompatibleMethodOverride = false
+reportIncompatibleVariableOverride = false
+reportArgumentType = false
+# reportUnreachable = true
+# reportCallIssue = false
 executionEnvironments = [{ root = "back" }]
 
 [tool.pytest.ini_options]

@@ -23,7 +23,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
 
         if not any_payments_for(invoicing_month_to_close):
             raise ValidationError(
-                "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta.",
+                "El mes anterior no ha importado ningún pago. Revise si la facturación del mes que va a cerrar está correcta."
             )
 
         Invoice.objects.update_state_for(invoicing_month_to_close)
@@ -55,8 +55,8 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
         q = (
             Invoice.objects.filter(
                 mes_facturacion__in=models.expressions.Subquery(
-                    last_three_invoicing_months,
-                ),
+                    last_three_invoicing_months
+                )
             )
             .filter(member_id=models.expressions.OuterRef("member_id"))
             .distinct()
@@ -81,7 +81,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
             to_attr="filtered_invoices",
         )
         active_members = Member.objects.active().prefetch_related(
-            p, "forthcominginvoiceitem_set",
+            p, "forthcominginvoiceitem_set"
         )
 
         invoices_to_create = []
@@ -91,7 +91,7 @@ class InvoicingMonthManager(models.Manager["InvoicingMonth"]):
             else:
                 last_invoice = NoLatestInvoice()
             invoices_to_create.append(
-                Invoice.objects.build_from(member, last_invoice, new_invoicing_month),
+                Invoice.objects.build_from(member, last_invoice, new_invoicing_month)
             )
         Invoice.objects.bulk_create(invoices_to_create)
 

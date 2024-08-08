@@ -35,7 +35,6 @@ usuaria.
 https://forum.djangoproject.com/t/business-logic-constants-the-best-place-to-define-them/8136/3
 """
 
-
 from decimal import Decimal
 from typing import NewType, cast
 

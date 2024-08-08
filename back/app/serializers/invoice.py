@@ -7,10 +7,10 @@ from app.serializers.member import MemberShortSerializer
 
 class InvoiceValueSerializer(serializers.Serializer):
     pks = serializers.ListField(
-        child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1,
+        child=serializers.IntegerField(), allow_empty=False, required=True, min_length=1
     )
     invoice_value = serializers.ChoiceField(
-        choices=InvoiceValue, allow_blank=False, required=True,
+        choices=InvoiceValue, allow_blank=False, required=True
     )
 
 

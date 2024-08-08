@@ -17,7 +17,7 @@ class PaymentManager(models.Manager["Payment"]):
         return payment
 
     def filter_by_invoicingmonth(
-        self, invoicingmonth: str | InvoicingMonth,
+        self, invoicingmonth: str | InvoicingMonth
     ) -> models.QuerySet["Payment"]:
         return self.get_queryset().filter(invoice__mes_facturacion=invoicingmonth)
 
@@ -46,7 +46,7 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     invoice = models.ForeignKey(
-        "Invoice", null=False, blank=False, on_delete=models.CASCADE,
+        "Invoice", null=False, blank=False, on_delete=models.CASCADE
     )
 
     def __str__(self):

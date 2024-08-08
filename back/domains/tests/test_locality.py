@@ -3,6 +3,7 @@ from contextlib import nullcontext as does_not_raise
 import pytest
 from django.forms import ValidationError
 
+from domains.models.locality import Locality
 from domains.tests import factories
 
 
@@ -64,3 +65,13 @@ def test_names_min_length_is3():
         factories.LocalityFactory.create(short_name="AA")
     with pytest.raises(ValidationError):
         factories.LocalityFactory.create(name="AA")
+
+
+def test_default_ordering():
+    """Test that Locality model is ordered by id by default."""
+    factories.LocalityFactory.create(name="Locality 2", short_name="Loc 2")
+    factories.LocalityFactory.create(name="Locality 1", short_name="Loc 1")
+    factories.LocalityFactory.create(name="Locality 3", short_name="Loc 3")
+
+    localities = Locality.objects.all()
+    assert [locality.id for locality in localities] == [1, 2, 3]

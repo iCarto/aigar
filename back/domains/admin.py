@@ -58,7 +58,6 @@ class LocalityChangeForm(forms.ModelForm):
 @admin.register(Locality)
 class LocalityAdmin(admin.ModelAdmin):
     list_display = ("name", "short_name", "get_zones")
-    ordering = ("short_name",)
 
     def add_view(self, request, form_url="", extra_context=None):
         self.form = LocalityAddForm

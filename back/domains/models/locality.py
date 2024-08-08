@@ -36,7 +36,7 @@ class LocalityManager(models.Manager):
         # así que los recreo todos.
         # Si instance es None es que estoy borrando y también tengo que recrear todos.
         # En ambos casos implica perder el dato de reading_day.
-        # TODO(fpuga): #4369. Mantenemos el orden de inserción en lugar de alfabético
+        # TODO(fpuga): #4624. Mantenemos el orden de inserción en lugar de alfabético
         if not instance or instance.number_of_sectors:
             all_localities = list(Locality.objects.order_by("id").all())
             Zone.objects.all().delete()
@@ -50,7 +50,7 @@ class LocalityManager(models.Manager):
 
 class Locality(models.Model):
     class Meta:
-        ordering = ("short_name",)
+        ordering = ("id",)
         verbose_name_plural = "comunidades"
         verbose_name = "comunidad"
 

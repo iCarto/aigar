@@ -39,7 +39,7 @@ from back.fields import RangedIntegerField, StrictCharField
 
 class Zone(models.Model):
     class Meta:
-        ordering = ("name",)
+        ordering = ("id",)
         verbose_name_plural = "Sectores / Comunidades"
         verbose_name = "Sector / Comunidad"
 

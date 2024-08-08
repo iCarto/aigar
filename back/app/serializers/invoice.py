@@ -42,6 +42,6 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
         )
 
     member_data = MemberShortSerializer(source="member", many=False, read_only=True)
-    mes_abierto = serializers.ReadOnlyField(source="mes_facturacion__is_open")
+    mes_abierto = serializers.ReadOnlyField(source="mes_facturacion.is_open")
     mora_por_retraso = serializers.ReadOnlyField()
     mora_por_impago = serializers.ReadOnlyField()

@@ -1,9 +1,16 @@
 import "./InvoiceStatus.css";
 
+const ESTADOS_FACTURA_LABEL = {
+    nueva: "Nuevo",
+    pendiente_de_cobro: "Pendiente de cobro",
+    cobrada: "Cobrado",
+    no_cobrada: "No cobrado",
+    anulada: "Anulado",
+};
+
 const InvoiceStatusLabel = ({estado}) => {
     const getStatusName = estado => {
-        const result = estado.replace(/_/g, " ");
-        return result.charAt(0).toUpperCase() + result.slice(1);
+        return ESTADOS_FACTURA_LABEL[estado];
     };
 
     return estado ? (

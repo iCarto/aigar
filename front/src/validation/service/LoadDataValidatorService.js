@@ -120,7 +120,7 @@ const LoadDataValidatorService = {
             measurementErrors.push({
                 type: "error",
                 field: "caudal_actual",
-                msg: "El caudal actual es menor que el caudal actual",
+                msg: "La lectura anterior es menor que la lectura actual",
             });
         }
         return measurementErrors;

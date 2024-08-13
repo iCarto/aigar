@@ -1,12 +1,12 @@
 import {EditableIntegerCellTable, LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
-
+import {PreviewInvoiceAlertCellTable} from "payment/presentational/PreviewInvoiceAlertCellTable";
 export function useUpdatePaymentsTableColumns(
     onClickViewMember,
-    paymentType,
+    invoicesTableType,
     displayAlerts
 ) {
-    const isTimelyPayment = paymentType === "ontime";
+    const isTimelyPayment = invoicesTableType === "ontime";
 
     const tableColumns = [
         {
@@ -70,7 +70,7 @@ export function useUpdatePaymentsTableColumns(
         tableColumns.push({
             Header: "Alertas",
             accessor: "errors",
-            className: "text-danger small",
+            Cell: PreviewInvoiceAlertCellTable,
         });
 
     return {tableColumns};

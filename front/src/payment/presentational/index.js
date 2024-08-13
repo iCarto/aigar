@@ -4,3 +4,4 @@ export {PaymentTable} from "./PaymentTable";
 export {PaymentFilter} from "./PaymentFilter";
 export {ErrorSummary} from "./ErrorSummary";
 export {PreviewInvoiceAlertCellTable} from "./PreviewInvoiceAlertCellTable";
+export {PreviewInvoiceTableErrors} from "./PreviewInvoiceTableErrors";

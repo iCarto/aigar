@@ -2,6 +2,7 @@ import {LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
 import {PreviewInvoiceAlertCellTable} from "payment/presentational/PreviewInvoiceAlertCellTable";
 import {RemoveRowCellTable} from "payment/presentational/RemoveRowCellTable";
+
 export function useInvoicesPreviewTableColumns(
     onClickViewMember,
     invoicesTableType,

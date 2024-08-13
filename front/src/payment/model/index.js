@@ -7,9 +7,4 @@ export {
     payment_view_adapter,
     payments_view_adapter,
 } from "./Payment";
-export {
-    ErrorMessageType,
-    WarningMessageType,
-    createAlertMessage,
-    AlertType,
-} from "./AlertMessage";
+export {getTotalErrors, getTotalWarnings, createAlertMessage} from "./AlertMessage";

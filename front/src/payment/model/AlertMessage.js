@@ -40,4 +40,16 @@ const createAlertMessage = (type, message) => {
     }
 };
 
-export {AlertType, ErrorMessageType, WarningMessageType, createAlertMessage};
+const getTotalErrors = items => {
+    return items.filter(
+        item => item.errors.length !== 0 && item.errors[0].type === "error"
+    ).length;
+};
+
+const getTotalWarnings = items => {
+    return items.filter(
+        item => item.errors.length !== 0 && item.errors[0].type === "warning"
+    ).length;
+};
+
+export {createAlertMessage, getTotalErrors, getTotalWarnings};

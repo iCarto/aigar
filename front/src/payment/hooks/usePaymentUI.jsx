@@ -1,7 +1,6 @@
 import {useState} from "react";
 
-export const usePaymentUI = () => {
-    const [filter, setFilter] = useState({textSearch: "", showOnlyErrors: false});
+export const usePaymentUI = setFilter => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
 
@@ -20,7 +19,6 @@ export const usePaymentUI = () => {
     };
 
     return {
-        filter,
         handleFilterChange,
         isModalOpen,
         selectedMemberForModal,

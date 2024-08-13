@@ -35,11 +35,3 @@ body {
 .bold {
     font-weight: 600 !important;
 }
-
-.text-danger {
-    color: #d32f2f !important;
-}
-
-.small {
-    font-size: 85% !important;
-}

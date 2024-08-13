@@ -9,12 +9,13 @@ export const usePaymentData = (
     invoicingMonthId,
     payments,
     onChangePayments,
-    onValidateStep
+    onValidateStep,
+    setFilteredPayments,
+    filter
 ) => {
     const [invoices, setInvoices] = useState([]);
-    const [filteredPayments, setFilteredPayments] = useState([]);
+
     const [loading, setLoading] = useState(false);
-    const [filter, setFilter] = useState({textSearch: "", showOnlyErrors: false});
 
     const {filterMonthlyData} = useFilterMonthlyData();
 
@@ -109,7 +110,6 @@ export const usePaymentData = (
     const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
     return {
-        filteredPayments,
         loading,
         handleUpdatePayment,
         totalRegistersWithErrors,

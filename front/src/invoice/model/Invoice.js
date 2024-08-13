@@ -55,6 +55,7 @@ const invoice_view_adapter = invoice => {
     delete invoice["total_pagado"];
     delete invoice["is_active"];
     delete invoice["member_data"];
+    delete invoice["errors"];
     return invoice;
 };
 

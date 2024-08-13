@@ -4,7 +4,7 @@ import {SortedEditableTable} from "base/table/components";
 import {MemberViewModal} from "member/presentational";
 import Box from "@mui/material/Box";
 
-const InvoicesListPreview = ({invoices, invoicesTableType}) => {
+const InvoicesListPreview = ({invoices, invoicesTableType, removeRow = null}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
 
@@ -23,7 +23,8 @@ const InvoicesListPreview = ({invoices, invoicesTableType}) => {
     const {tableColumns} = useInvoicesPreviewTableColumns(
         handleClickViewMember,
         invoicesTableType,
-        isInvoicesWithErrors
+        isInvoicesWithErrors,
+        removeRow
     );
 
     const modal = (

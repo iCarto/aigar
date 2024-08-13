@@ -42,6 +42,7 @@ const LoadPaymentsWizardSteps = ({
         />,
         <LoadPaymentsStep4Result
             payments={payments}
+            invoices={invoices}
             invoicingMonthId={invoicingMonthId}
         />,
     ];

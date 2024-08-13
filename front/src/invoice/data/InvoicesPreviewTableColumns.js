@@ -1,10 +1,12 @@
 import {LinkAccessorCellTable} from "base/table/components";
 import {InvoiceStatusCellTable} from "invoice/presentational";
-
+import {PreviewInvoiceAlertCellTable} from "payment/presentational/PreviewInvoiceAlertCellTable";
+import {RemoveRowCellTable} from "payment/presentational/RemoveRowCellTable";
 export function useInvoicesPreviewTableColumns(
     onClickViewMember,
     invoicesTableType,
-    displayAlerts
+    displayAlerts,
+    removeRow = null
 ) {
     const tableColumns = [
         {
@@ -19,7 +21,7 @@ export function useInvoicesPreviewTableColumns(
         {
             Header: "Sector",
             accessor: "sector",
-            width: 400,
+            width: 250,
         },
         {
             Header: "Nº recibo",
@@ -98,7 +100,18 @@ export function useInvoicesPreviewTableColumns(
         tableColumns.push({
             Header: "Alertas",
             accessor: "errors",
+            Cell: PreviewInvoiceAlertCellTable,
+        });
+    if (invoicesTableType === "payments" && displayAlerts)
+        tableColumns.push({
+            Header: "Acciones",
+            accessor: "actions",
             className: "text-danger small",
+            width: 100,
+            Cell: RemoveRowCellTable,
+            getProps: () => ({
+                handleClick: removeRow,
+            }),
         });
     return {tableColumns};
 }

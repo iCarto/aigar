@@ -29,12 +29,12 @@ const LoadPaymentsWizard = () => {
 
     const handleChangePayments = payments => {
         console.log("handleChangePayments", payments);
-        setPayments(payments);
+        setPayments([...payments]);
     };
 
     const handleChangeInvoices = invoices => {
         console.log("handleChangeInvoices", invoices);
-        setInvoices(invoices);
+        setInvoices([...invoices]);
     };
 
     const handleChangeStep = currentStep => {

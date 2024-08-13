@@ -13,6 +13,7 @@ const measurement_view_adapter = measurementOrg => {
     // delete measurement["member_id"];
     delete measurement["member_name"];
     delete measurement["sector"];
+    delete measurement["caudal_anterior_org"];
     return measurement;
 };
 
@@ -33,17 +34,21 @@ const createMeasurement = ({
     member_id = null,
     member_name = "",
     caudal_anterior = null,
+    caudal_anterior_org = null,
     caudal_actual = null,
     cambio_medidor = false,
     medidor = "",
     errors = [],
 } = {}) => {
+    caudal_anterior_org =
+        caudal_anterior_org != null ? caudal_anterior_org : parseInt(caudal_anterior);
     const publicApi = {
         id,
         invoice,
         member_id,
         member_name,
         sector,
+        caudal_anterior_org,
         caudal_anterior: cambio_medidor === true ? 0 : parseInt(caudal_anterior),
         caudal_actual,
         consumo:

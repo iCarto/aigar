@@ -52,11 +52,17 @@ const LoadMeasurementsStep2MeasurementsTable = ({
     const handleUpdateMeasurement = (row, columnId, value) => {
         const updatedMeasurements = measurements.map((measurement, index) => {
             if (measurement.id === row.original.id) {
-                const updatedMeasurement = createMeasurement({
+                if (columnId === "cambio_medidor" && value === false) {
+                    return createMeasurement({
+                        ...measurement,
+                        caudal_anterior: measurement.caudal_anterior_org,
+                        [columnId]: value,
+                    });
+                }
+                return createMeasurement({
                     ...measurement,
                     [columnId]: value,
                 });
-                return updatedMeasurement;
             }
             return measurement;
         });

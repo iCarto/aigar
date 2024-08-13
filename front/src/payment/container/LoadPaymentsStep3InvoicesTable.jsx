@@ -67,24 +67,13 @@ const LoadPaymentsStep3InvoicesTable = ({
             );
             return;
         }
-        if (invoice.ontime_payment && invoice.late_payment) {
-            invoice.errors.push(
-                createAlertMessage("error", "El recibo tiene varios pagos")
-            );
-            return;
-        }
         if (
-            invoice.ontime_payment &&
-            invoice.ontime_payment != paymentsForInvoice[0].monto
-        ) {
-            invoice.errors.push(
-                createAlertMessage("error", "El recibo tiene varios pagos")
-            );
-            return;
-        }
-        if (
-            invoice.late_payment &&
-            invoice.late_payment != paymentsForInvoice[0].monto
+            (invoice.ontime_payment && invoice.late_payment) ||
+            (invoice.ontime_payment &&
+                invoice.ontime_payment != paymentsForInvoice[0].monto) ||
+            (invoice.late_payment &&
+                invoice.late_payment != paymentsForInvoice[0].monto) ||
+            paymentsForInvoice.length > 1
         ) {
             invoice.errors.push(
                 createAlertMessage("error", "El recibo tiene varios pagos")
@@ -92,11 +81,13 @@ const LoadPaymentsStep3InvoicesTable = ({
             return;
         }
 
-        if (paymentsForInvoice.length > 1) {
+        if (invoice.consumo > 30) {
             invoice.errors.push(
-                createAlertMessage("error", "El recibo tiene varios pagos")
+                createAlertMessage(
+                    "warning",
+                    "El consumo es superior a 30m3. Revise si se debería usar una tarifa de uso comercial"
+                )
             );
-            return;
         }
         if (invoice.total > invoice.ontime_payment + invoice.late_payment) {
             invoice.errors.push(

@@ -16,7 +16,8 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
 
     const adaptDataFileFromV1 = dataFile => {
         const content = JSON.parse(dataFile.content);
-        const newContent = content.map(r => {
+        const members = content.members || content;
+        const newContent = members.map(r => {
             const sector = sectors.find(element =>
                 element.key.startsWith(r.sector)
             ).key;
@@ -25,6 +26,7 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
                 orden: r.orden,
                 sector: sector,
                 caudal_anterior: r.caudal_anterior,
+                caudal_anterior_org: r.caudal_anterior_org,
                 caudal_actual: r.caudal_actual,
                 medidor: r.medidor,
                 cambio_medidor: r.cambio_medidor,

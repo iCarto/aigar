@@ -453,13 +453,13 @@ class Invoice(models.Model):
         if cambio_medidor:
             self.caudal_anterior = 0
         elif caudal_anterior != int(self.caudal_anterior):
+            # Mantenemos el caudal_anterior de la bd, no usamos el de la lectura.
             logger.warning(
                 "Caudal anterior: %s distinto a Medida %s para recibo %s",
                 self.caudal_anterior,
                 caudal_anterior,
                 self.id,
             )
-            self.caudal_anterior = int(caudal_anterior)
 
         self.update_total()
 

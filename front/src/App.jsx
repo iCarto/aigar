@@ -15,7 +15,7 @@ function App() {
                 adapterLocale={moment.locale("es")}
             >
                 <CssBaseline>
-                    <div className="App">
+                    <div className="App" role="application">
                         <AigarRoutes />
                     </div>
                 </CssBaseline>

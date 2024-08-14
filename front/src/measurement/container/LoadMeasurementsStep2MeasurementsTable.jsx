@@ -10,7 +10,7 @@ import {ErrorMessage} from "base/error/components";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
-const LoadMeasurementsStep2MeasurementsTable = ({
+export const LoadMeasurementsStep2MeasurementsTable = ({
     measurements,
     onChangeMeasurements,
     onValidateStep,
@@ -113,5 +113,3 @@ const LoadMeasurementsStep2MeasurementsTable = ({
         </Grid>
     );
 };
-
-export default LoadMeasurementsStep2MeasurementsTable;

@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 
-const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
+export const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
     const [result, setResult] = useState(null);
     const {setIsDataUpdated} = useMonthlyInvoicingList();
 
@@ -62,5 +62,3 @@ const LoadMeasurementsStep4Result = ({id_mes_facturacion, measurements}) => {
         </Box>
     );
 };
-
-export default LoadMeasurementsStep4Result;

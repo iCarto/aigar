@@ -9,7 +9,7 @@ import {Wizard} from "base/ui/wizard/components";
 import {Spinner} from "base/ui/other/components";
 import {ErrorMessage} from "base/error/components";
 
-const LoadMeasurementsWizard = () => {
+export const LoadMeasurementsWizard = () => {
     const [measurements, setMeasurements] = useState([]);
     const [invoices, setInvoices] = useState([]);
     const [isValidStep, setIsValidStep] = useState(true);
@@ -31,7 +31,6 @@ const LoadMeasurementsWizard = () => {
     };
 
     const handleChangeInvoices = invoices => {
-        console.log("handleChangeInvoices", invoices);
         setInvoices(invoices);
     };
 
@@ -68,5 +67,3 @@ const LoadMeasurementsWizard = () => {
         </Wizard>
     );
 };
-
-export default LoadMeasurementsWizard;

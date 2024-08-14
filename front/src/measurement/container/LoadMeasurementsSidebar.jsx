@@ -1,7 +1,5 @@
 import {ActionsSidebarMenu} from "base/ui/menu/components";
 
-const LoadMeasurementsSidebar = () => {
+export const LoadMeasurementsSidebar = () => {
     return <ActionsSidebarMenu showBackButton />;
 };
-
-export default LoadMeasurementsSidebar;

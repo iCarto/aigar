@@ -8,9 +8,8 @@ import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/ui/other/components";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
-const LoadMeasurementsStep3InvoicesTable = ({
+export const LoadMeasurementsStep3InvoicesTable = ({
     id_mes_facturacion,
     measurements,
     onChangeInvoices,
@@ -111,5 +110,3 @@ const LoadMeasurementsStep3InvoicesTable = ({
         </Box>
     );
 };
-
-export default LoadMeasurementsStep3InvoicesTable;

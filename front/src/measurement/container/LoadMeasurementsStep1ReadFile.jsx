@@ -5,7 +5,10 @@ import {LoadDataFileUploadArea} from "loaddata/presentational";
 import Grid from "@mui/material/Grid";
 import {useDomain} from "aigar/domain/provider";
 
-const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) => {
+export const LoadMeasurementsStep1ReadFile = ({
+    onValidateStep,
+    onChangeMeasurements,
+}) => {
     const [dataFiles, setDataFiles] = useState([]);
 
     const {sectors} = useDomain();
@@ -85,5 +88,3 @@ const LoadMeasurementsStep1ReadFile = ({onValidateStep, onChangeMeasurements}) =
         </Grid>
     );
 };
-
-export default LoadMeasurementsStep1ReadFile;

@@ -6,7 +6,7 @@ import {
     LoadMeasurementsStep4Result,
 } from ".";
 
-const LoadMeasurementsWizardSteps = ({
+export const LoadMeasurementsWizardSteps = ({
     currentStep,
     onValidateStep,
     measurements,
@@ -49,5 +49,3 @@ const LoadMeasurementsWizardSteps = ({
 
     return steps[currentStep - 1];
 };
-
-export default LoadMeasurementsWizardSteps;

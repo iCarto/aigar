@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth
 from app.models.measurement import Measurement
-from app.serializers.invoice import InvoiceSerializer
+from app.serializers.invoice import InvoicePreviewSerializer
 from app.serializers.measurement import MeasurementSerializer
 
 
@@ -66,7 +66,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
                     measurement["cambio_medidor"],
                 )
                 updated_invoices.append(invoice)
-        serializer = InvoiceSerializer(
+        serializer = InvoicePreviewSerializer(
             data=updated_invoices, many=True, context={"request": request}
         )
         serializer.is_valid()

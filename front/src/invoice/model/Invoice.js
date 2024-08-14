@@ -112,6 +112,8 @@ const createInvoice = ({
     member_id = -1,
     status = "",
     sector = "",
+    has_payments = false,
+    has_measurements = false,
     errors = [],
 } = {}) => {
     const publicApi = {
@@ -153,6 +155,8 @@ const createInvoice = ({
         member_id,
         status,
         sector,
+        has_payments,
+        has_measurements,
         errors,
 
         get consumo() {
@@ -168,6 +172,10 @@ const createInvoice = ({
 
         get hasMeasurement() {
             return this.caudal_actual !== null;
+        },
+
+        get member_name() {
+            return this.member_data?.name;
         },
 
         /*

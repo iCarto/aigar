@@ -1,82 +1,62 @@
 import {useEffect, useState} from "react";
-
 import {InvoicingMonthService} from "monthlyinvoicing/service";
-import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {InvoicesListPreview} from "invoice/presentational";
-import {LoadDataTableFilter} from "loaddata/presentational";
-import {ErrorMessage} from "base/error/components";
 import {Spinner} from "base/ui/other/components";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import {reviewMeasurements, reviewMeasurementsWithoutInvoice} from "measurement/data";
+import {ModalOperationStatus} from "base/ui/modal/config";
+import OperationWithConfirmationModal from "base/ui/modal/components/OperationWithConfirmationModal";
+import {useInvoicesPreviewTableColumns} from "invoice/data";
+import {ErrorMessage} from "base/error/components";
 
 export const LoadMeasurementsStep3InvoicesTable = ({
-    id_mes_facturacion,
     measurements,
+    invoices,
+    invoicingMonthId,
     onChangeInvoices,
     onValidateStep,
-    invoices,
 }) => {
-    const [filter, setFilter] = useState({
-        text: "",
-        showOnlyErrors: false,
-    });
+    const [modalStatus, setModalStatus] = useState(null);
+    const [selectedInvoice, setSelectedInvoice] = useState(null);
+
     const [measurementsWithoutInvoice, setMeasurementsWithoutInvoice] = useState([]);
-
-    const {filterMonthlyData} = useFilterMonthlyData();
-
-    const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
 
     useEffect(() => {
         onValidateStep(false);
         InvoicingMonthService.previewInvoicesWithMeasurements(measurements)
-            .then(invoices => {
-                reviewMeasurements(measurements, invoices);
-                onChangeInvoices(invoices);
+            .then(fetchedInvoices => {
+                setMeasurementsWithoutInvoice(
+                    reviewMeasurementsWithoutInvoice(measurements, fetchedInvoices)
+                );
+                reviewMeasurements(measurements, fetchedInvoices);
+                onChangeInvoices(fetchedInvoices);
                 onValidateStep(true);
             })
             .catch(error => {
                 console.log(error);
                 onValidateStep(false);
             });
-    }, [id_mes_facturacion, measurements]);
+    }, [invoicingMonthId, measurements]);
 
-    const reviewMeasurements = (measurements, invoices) => {
-        let measurementsWithoutInvoice = [];
-        measurements.forEach(measurement => {
-            const invoice = invoices.find(
-                invoice => invoice.member_id === measurement.member_id
-            );
-            if (invoice) {
-                if (invoice.caudal_anterior !== measurement.caudal_anterior) {
-                    invoice.errors.push(
-                        "No coincide la lectura anterior (" +
-                            invoice.caudal_anterior +
-                            ")"
-                    );
-                }
-            } else {
-                measurementsWithoutInvoice.push(measurement.member_id);
-            }
-        });
-        setMeasurementsWithoutInvoice(measurementsWithoutInvoice);
+    const removeRow = invoice => {
+        setSelectedInvoice(invoice);
+        setModalStatus(ModalOperationStatus.START);
     };
 
-    const handleFilterChange = newFilter => {
-        setFilter(prevState => ({...prevState, ...newFilter}));
+    const handleConfirmRemove = () => {
+        setModalStatus(ModalOperationStatus.PROGRESS);
+        const updatedInvoices = invoices.filter(
+            inv => inv.numero !== selectedInvoice.numero
+        );
+        onChangeInvoices(updatedInvoices);
+        setModalStatus(ModalOperationStatus.SUCCESS);
     };
 
-    const getTotalErrors = items => {
-        return items.filter(item => item.errors.length !== 0).length;
+    const handleCloseModal = () => {
+        setModalStatus(null);
+        setSelectedInvoice(null);
     };
-
-    const totalInvoicesWithErrors = getTotalErrors(invoices);
-
-    const errorsMessage = (
-        <Typography>
-            Existen <strong>{totalInvoicesWithErrors}</strong> recibos con alertas que
-            debería revisar.
-        </Typography>
-    );
 
     const measurementsWithoutInvoiceMessage = (
         <Typography fontWeight={700}>
@@ -89,19 +69,31 @@ export const LoadMeasurementsStep3InvoicesTable = ({
         <Box display="flex" flexDirection="column" justifyContent="space-around">
             {invoices.length ? (
                 <>
-                    {totalInvoicesWithErrors ? (
-                        <ErrorMessage message={errorsMessage} />
-                    ) : null}
                     {measurementsWithoutInvoice.length ? (
-                        <ErrorMessage message={measurementsWithoutInvoiceMessage} />
+                        <ErrorMessage
+                            message={measurementsWithoutInvoiceMessage}
+                            severity="warning"
+                        />
                     ) : null}
-                    <LoadDataTableFilter
-                        filter={filter}
-                        onChange={handleFilterChange}
-                    />
                     <InvoicesListPreview
-                        invoices={filteredInvoices}
-                        invoicesTableType="measurements"
+                        invoices={invoices}
+                        invoicesTableType="payments"
+                        useTableColumnsHook={useInvoicesPreviewTableColumns}
+                        onValidateStep={onValidateStep}
+                        removeRow={removeRow}
+                        onUpdateData={null}
+                    />
+                    <OperationWithConfirmationModal
+                        operationStatus={modalStatus}
+                        modalTitle="Eliminar pago"
+                        modalContentStart={`¿Está seguro que desea eliminar el pago del recibo ${selectedInvoice?.numero}?`}
+                        modalContentFinished="El pago ha sido eliminado correctamente."
+                        modalAcceptText="Eliminar"
+                        spinnerMessage="Eliminando pago..."
+                        modalErrorText="Ha ocurrido un error al eliminar el pago."
+                        onClose={handleCloseModal}
+                        onClickAccept={handleConfirmRemove}
+                        onClickFinished={handleCloseModal}
                     />
                 </>
             ) : (

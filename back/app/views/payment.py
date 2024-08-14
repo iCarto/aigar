@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from app.models.invoice import Invoice
 from app.models.payment import Payment
-from app.serializers.invoice import InvoiceSerializer
+from app.serializers.invoice import InvoicePreviewSerializer
 from app.serializers.payment import PaymentSerializer
 
 
@@ -57,7 +57,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payments = request.data
         invoices = get_invoices_for_payments(payments)
         updated_invoices = get_updated_invoices(payments, invoices)
-        serializer = InvoiceSerializer(
+        serializer = InvoicePreviewSerializer(
             data=updated_invoices, many=True, context={"request": request}
         )
         serializer.is_valid()

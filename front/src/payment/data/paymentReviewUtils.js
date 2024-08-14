@@ -32,11 +32,7 @@ const checkPayment = (payments, invoice) => {
         );
         return;
     }
-    if (
-        invoice.ontime_payment ||
-        invoice.late_payment ||
-        paymentsForInvoice.length > 1
-    ) {
+    if (invoice.has_payments || paymentsForInvoice.length > 1) {
         invoice.errors.push(
             createAlertMessage("error", "El recibo tiene varios pagos")
         );

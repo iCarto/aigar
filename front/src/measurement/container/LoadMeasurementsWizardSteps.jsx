@@ -35,7 +35,7 @@ export const LoadMeasurementsWizardSteps = ({
             onValidateStep={onValidateStep}
         />,
         <LoadMeasurementsStep3InvoicesTable
-            id_mes_facturacion={id_mes_facturacion}
+            invoicingMonthId={id_mes_facturacion}
             measurements={measurements}
             invoices={invoices}
             onChangeInvoices={handleChangeInvoices}

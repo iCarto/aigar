@@ -5,7 +5,15 @@ import {
     LinkAccessorCellTable,
 } from "base/table/components";
 
-export function useLoadMeasurementsTableColumns(onClickViewMember) {
+import {PreviewInvoiceAlertCellTable} from "payment/presentational/PreviewInvoiceAlertCellTable";
+import {RemoveRowCellTable} from "payment/presentational/RemoveRowCellTable";
+
+export function useLoadMeasurementsTableColumns(
+    onClickViewMember,
+    invoicesTableType,
+    displayAlerts,
+    removeRow = null
+) {
     const tableColumns = [
         {
             Header: "Socio/a",
@@ -47,6 +55,24 @@ export function useLoadMeasurementsTableColumns(onClickViewMember) {
             className: "cubic-metre bold",
         },
     ];
+    displayAlerts &&
+        tableColumns.push({
+            Header: "Alertas",
+            accessor: "errors",
+            Cell: PreviewInvoiceAlertCellTable,
+        });
+    displayAlerts &&
+        tableColumns.push({
+            Header: "Acciones",
+            accessor: "actions",
+            className: "text-danger small",
+            width: 100,
+            Cell: RemoveRowCellTable,
+            getProps: () => ({
+                handleClick: removeRow,
+                linkAccessor: null,
+            }),
+        });
 
     return {tableColumns};
 }

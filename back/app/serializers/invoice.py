@@ -23,6 +23,17 @@ class InvoiceSerializer(serializers.ModelSerializer):
     due_date = serializers.DateField(read_only=True)
 
 
+class InvoicePreviewSerializer(InvoiceSerializer):
+    has_payments = serializers.SerializerMethodField()
+    has_measurements = serializers.SerializerMethodField()
+
+    def get_has_payments(self, obj):
+        return obj.payment_set.exists()
+
+    def get_has_measurements(self, obj):
+        return obj.measurement_set.exists()
+
+
 class InvoiceStatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invoice

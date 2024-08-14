@@ -2,9 +2,9 @@ import {useState} from "react";
 import {UpdatePaymentsModal} from "payment/presentational";
 import {DropdownButton} from "base/ui/buttons/components";
 
-const UpdatePaymentsButton = ({
+export const UpdatePaymentsButton = ({
     invoicingMonthId,
-    invoicesLength = 0,
+    invoices,
     disabled = false,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +39,7 @@ const UpdatePaymentsButton = ({
 
             <UpdatePaymentsModal
                 invoicingMonthId={invoicingMonthId}
-                invoicesLength={invoicesLength}
+                invoices={invoices}
                 paymentType={paymentType}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
@@ -47,5 +47,3 @@ const UpdatePaymentsButton = ({
         </>
     );
 };
-
-export default UpdatePaymentsButton;

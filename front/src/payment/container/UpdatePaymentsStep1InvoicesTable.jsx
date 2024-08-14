@@ -4,7 +4,7 @@ import {useUpdatePaymentsTableColumns} from "payment/data";
 import {InvoicesListPreview} from "invoice/presentational";
 import {Spinner} from "base/ui/other/components";
 import Box from "@mui/material/Box";
-import {reviewInvoices} from "payment/data/paymentReviewUtils";
+import {reviewInvoices, clearErrors} from "payment/data/paymentReviewUtils";
 
 const UpdatePaymentsStep1InvoicesTable = ({
     invoices,
@@ -19,6 +19,7 @@ const UpdatePaymentsStep1InvoicesTable = ({
             onValidateStep(false);
         } else {
             onValidateStep(true);
+            clearErrors(invoices);
             reviewInvoices(payments, invoices);
         }
     }, [invoicingMonth, invoices, payments]);

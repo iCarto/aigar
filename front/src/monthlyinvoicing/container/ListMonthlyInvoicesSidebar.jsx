@@ -51,7 +51,7 @@ const ListMonthlyInvoicesSidebar = ({
         ) : (
             <UpdatePaymentsButton
                 invoicingMonthId={selectedInvoicingMonth.id_mes_facturacion}
-                invoicesLength={selectedInvoices.length}
+                invoices={selectedInvoices}
                 disabled={buttonDisableRules?.isLoadPaymentsButtonDisabled}
             />
         ),

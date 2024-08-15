@@ -1,7 +1,6 @@
-from typing import override
-
 from rest_framework import serializers, status, viewsets
 from rest_framework.response import Response
+from typing_extensions import override
 
 from app.models.payment import Payment
 from app.serializers.payment import PaymentSerializer

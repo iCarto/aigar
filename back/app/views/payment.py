@@ -1,11 +1,12 @@
 import datetime
 import logging
-from typing import Any, override
+from typing import Any
 
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from typing_extensions import override
 
 from app.models.invoice import Invoice
 from app.models.payment import Payment

@@ -1,11 +1,10 @@
-from typing import override
-
 from django.core import exceptions
 from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from typing_extensions import override
 
 from app.models.invoice import Invoice
 from app.models.invoice_status import NOT_MODIFICABLE_INVOICES, InvoiceStatus

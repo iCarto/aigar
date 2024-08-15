@@ -1,6 +1,5 @@
-from typing import override
-
 from django.db import models
+from typing_extensions import override
 
 
 class GroupConcat(models.Aggregate):

@@ -1,8 +1,8 @@
 import datetime
-from typing import override
 
 from import_export import resources, widgets
 from import_export.fields import Field
+from typing_extensions import override
 
 from app.exceptions import (
     BadInvoicingMonthImportError,

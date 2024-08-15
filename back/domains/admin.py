@@ -1,4 +1,4 @@
-from typing import Any, override
+from typing import Any
 
 from django import forms
 from django.contrib import admin
@@ -6,6 +6,7 @@ from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.html import format_html_join
 from solo.admin import SingletonModelAdmin
+from typing_extensions import override
 
 from domains.models import Locality, Zone
 from domains.models.aigar_config import AigarConfig

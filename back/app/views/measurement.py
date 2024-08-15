@@ -1,11 +1,12 @@
 import logging
-from typing import Any, override
+from typing import Any
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from typing_extensions import override
 
 from app.models.invoice import Invoice
 from app.models.invoicing_month import InvoicingMonth

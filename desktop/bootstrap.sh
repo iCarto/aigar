@@ -111,24 +111,6 @@ install_python() {
     done
 }
 
-install_python_2() {
-    cd "${PYTHON_FOLDER_LIN}"
-    echo 'wine '\''C:\Python37\python.exe'\'' "$@"' > /usr/bin/python
-    echo 'wine '\''C:\Python37\Scripts\easy_install.exe'\'' "$@"' > /usr/bin/easy_install
-    echo 'wine '\''C:\Python37\Scripts\pip.exe'\'' "$@"' > /usr/bin/pip
-    echo 'wine '\''C:\Python37\Scripts\pyinstaller.exe'\'' "$@"' > /usr/bin/pyinstaller
-    echo 'wine '\''C:\Python37\Scripts\pyupdater.exe'\'' "$@"' > /usr/bin/pyupdater
-    echo 'assoc .py=PythonScript' | wine cmd
-    echo 'ftype PythonScript=c:\Python37\python.exe "%1" %*' | wine cmd
-    while pgrep wineserver > /dev/null; do
-        echo "Waiting for wineserver"
-        sleep 1
-    done
-    chmod +x /usr/bin/python /usr/bin/easy_install /usr/bin/pip /usr/bin/pyinstaller /usr/bin/pyupdater
-    (pip install -U pip || true)
-    rm -rf /tmp/.wine-*
-}
-
 install_dll() {
     export W_WINDIR_UNIX="${W_DRIVE_C}/windows"
     export W_SYSTEM64_DLLS="${W_WINDIR_UNIX}/system32"
@@ -202,4 +184,3 @@ install_dll
 install_app
 # copy_license
 # prepare_empty_app
-# install_python_2

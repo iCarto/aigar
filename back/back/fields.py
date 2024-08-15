@@ -1,8 +1,8 @@
 import unicodedata
-from typing import override
 
 from django.core import validators
 from django.db import models
+from typing_extensions import override
 
 
 DEFAULT_MIN_LENGHT = 2

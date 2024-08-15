@@ -6,13 +6,11 @@ this_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
 source "${this_dir}"/../server/variables.ini
 
-./scripts/reset_and_create_db.sh vacia
+./scripts/reset_and_create_db.sh empty
 cp "${SQLITE_PATH}" "${SQLITE_PATH}".empty
 
-./scripts/reset_and_create_db.sh
-
 bash ./scripts/util/build_web_deploy_file.sh
-cp dist/aigar-24.4.2.tar.gz desktop/gomi/
+cp dist/aigar-24.8.14.tar.gz desktop/gomi/
 
 cp tools/fixtures/gomi/electron.exe desktop/gomi
 

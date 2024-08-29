@@ -1,67 +1,99 @@
-import {usePaymentData, usePaymentUI} from "../hooks";
-import {PaymentTable, PaymentFilter, ErrorSummary} from "../presentational";
-import {MemberViewModal} from "member/presentational";
+import {PaymentTable} from "../presentational";
+
 import {Spinner} from "base/ui/other/components";
-import Grid from "@mui/material/Grid";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+import Box from "@mui/material/Box";
+import OperationWithConfirmationModal from "base/ui/modal/components/OperationWithConfirmationModal";
+import {ModalOperationStatus} from "base/ui/modal/config";
+
+import {InvoicingMonthService} from "monthlyinvoicing/service";
+import {createPayment} from "payment/model";
+import {usePaymentData} from "payment/hooks";
 
 const LoadPaymentsStep2PaymentsTable = ({
     invoicingMonthId,
+    onValidateStep,
     payments,
     onChangePayments,
-    onValidateStep,
 }) => {
-    const [filteredPayments, setFilteredPayments] = useState([]);
-    const [filter, setFilter] = useState({textSearch: "", showOnlyErrors: false});
+    const [invoices, setInvoices] = useState([]);
 
-    const {loading, handleUpdatePayment, totalRegistersWithErrors} = usePaymentData(
-        invoicingMonthId,
-        payments,
-        onChangePayments,
-        onValidateStep,
-        setFilteredPayments,
-        filter
-    );
+    const [modalStatus, setModalStatus] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
 
-    const {
-        handleFilterChange,
-        isModalOpen,
-        selectedMemberForModal,
-        handleClickViewMember,
-        handleClickCancelViewMember,
-    } = usePaymentUI(setFilter);
+    const {reviewPayments} = usePaymentData(onChangePayments, onValidateStep);
 
-    if (loading) {
-        return <Spinner message="Verificando pagos" />;
-    }
-    if (totalRegistersWithErrors >= payments.length) {
-        return (
-            <ErrorSummary
-                totalErrors={totalRegistersWithErrors}
-                totalPayments={payments.length}
-                message="Todos los registros tienen errores. Compruebe que ha cargado el fichero correcto y vuelva a empezar."
-            />
-        );
-    }
+    useEffect(() => {
+        InvoicingMonthService.getInvoicingMonthInvoices(invoicingMonthId)
+            .then(fetchedInvoices => {
+                setInvoices(fetchedInvoices);
+                reviewPayments(payments, fetchedInvoices);
+            })
+            .catch(error => {
+                console.log(error);
+                onValidateStep(false);
+            });
+    }, [invoicingMonthId]);
+
+    const removeRow = item => {
+        setSelectedItem(item);
+        setModalStatus(ModalOperationStatus.START);
+    };
+
+    const handleConfirmRemove = () => {
+        setModalStatus(ModalOperationStatus.PROGRESS);
+        const updatedItems = payments.filter(item => item.id !== selectedItem.id);
+        // onChangePayments(updatedItems);
+        reviewPayments(updatedItems, invoices);
+        setModalStatus(ModalOperationStatus.SUCCESS);
+    };
+
+    const handleCloseModal = () => {
+        setModalStatus(null);
+        setSelectedItem(null);
+    };
+
+    const handleUpdatePayment = (row, columnId, value) => {
+        const updatedPayments = payments.map(payment => {
+            if (payment.id === row.original.id) {
+                return createPayment({...payment, [columnId]: value});
+            }
+            return payment;
+        });
+        reviewPayments(updatedPayments, invoices);
+    };
 
     return (
-        <Grid>
-            <ErrorSummary
-                totalErrors={totalRegistersWithErrors}
-                totalPayments={payments.length}
-            />
-            <PaymentFilter filter={filter} onChange={handleFilterChange} />
-            <PaymentTable
-                payments={filteredPayments}
-                onUpdatePayment={handleUpdatePayment}
-                onViewMember={handleClickViewMember}
-            />
-            <MemberViewModal
-                id={selectedMemberForModal}
-                isOpen={isModalOpen}
-                onClose={handleClickCancelViewMember}
-            />
-        </Grid>
+        <Box display="flex" flexDirection="column" justifyContent="space-around">
+            {payments.length ? (
+                <>
+                    <PaymentTable
+                        payments={payments}
+                        invoicingMonthId={invoicingMonthId}
+                        onChangePayments={onChangePayments}
+                        onValidateStep={onValidateStep}
+                        removeRow={removeRow}
+                        onUpdateData={handleUpdatePayment}
+                    />
+
+                    <OperationWithConfirmationModal
+                        operationStatus={modalStatus}
+                        modalTitle="Eliminar pago"
+                        modalContentStart={`¿Está seguro que desea eliminar el pago ${selectedItem?.num_factura}?`}
+                        modalContentFinished="El pago ha sido eliminado correctamente."
+                        modalAcceptText="Eliminar"
+                        spinnerMessage="Eliminando pago..."
+                        modalErrorText="Ha ocurrido un error al eliminar el pago."
+                        onClose={handleCloseModal}
+                        onClickAccept={handleConfirmRemove}
+                        onClickFinished={handleCloseModal}
+                    />
+                </>
+            ) : (
+                <Spinner message="Cargando pagos" />
+            )}
+        </Box>
     );
 };
 

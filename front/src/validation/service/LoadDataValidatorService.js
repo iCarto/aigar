@@ -1,6 +1,7 @@
 import CSVFileValidator from "validation/model/CSVFileValidator";
 import DataValidator from "validation/model/DataValidator";
 import JSONFileValidator from "validation/model/JSONFileValidator";
+import {createAlertMessage} from "payment/model";
 
 const LoadDataValidatorService = {
     validateFile(fileObject, validator) {
@@ -74,18 +75,22 @@ const LoadDataValidatorService = {
             })
         );
         if (!invoice || payment.num_factura !== invoice.numero) {
-            paymentErrors.push({
-                type: "error",
-                field: "num_factura",
-                msg: "No existe recibo para este mes",
-            });
+            paymentErrors.push(
+                createAlertMessage(
+                    "error",
+                    "No existe recibo para este mes",
+                    "num_factura"
+                )
+            );
         }
         if (invoice && (invoice.total == null || invoice.total === "")) {
-            paymentErrors.push({
-                type: "error",
-                field: "num_factura",
-                msg: "No se ha indicado el caudal actual en este recibo",
-            });
+            paymentErrors.push(
+                createAlertMessage(
+                    "error",
+                    "No se ha indicado el caudal actual en este recibo",
+                    "num_factura"
+                )
+            );
         }
         return paymentErrors;
     },

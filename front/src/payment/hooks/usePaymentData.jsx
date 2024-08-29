@@ -1,42 +1,10 @@
 import {useState, useEffect} from "react";
-import {InvoicingMonthService} from "monthlyinvoicing/service";
 import {MemberService} from "member/service";
 import {LoadDataValidatorService} from "validation/service";
-import {createPayment} from "payment/model";
-import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
+import {createAlertMessage, createPayment} from "payment/model";
+import {getTotalErrors} from "payment/model";
 
-export const usePaymentData = (
-    invoicingMonthId,
-    payments,
-    onChangePayments,
-    onValidateStep,
-    setFilteredPayments,
-    filter
-) => {
-    const [invoices, setInvoices] = useState([]);
-
-    const [loading, setLoading] = useState(false);
-
-    const {filterMonthlyData} = useFilterMonthlyData();
-
-    useEffect(() => {
-        setLoading(true);
-        InvoicingMonthService.getInvoicingMonthInvoices(invoicingMonthId)
-            .then(fetchedInvoices => {
-                setInvoices(fetchedInvoices);
-                reviewPayments(payments, fetchedInvoices);
-            })
-            .finally(() => setLoading(false));
-    }, [invoicingMonthId]);
-
-    useEffect(() => {
-        setFilteredPayments(filterMonthlyData(payments, filter));
-    }, [payments, filter]);
-
-    useEffect(() => {
-        onValidateStep(!loading);
-    }, [loading]);
-
+export const usePaymentData = (onChangePayments, onValidateStep) => {
     const findInvoiceForPayment = (payment, invoices) => {
         let invoiceForPayment = invoices.find(
             invoice => invoice.numero === payment.num_factura
@@ -52,6 +20,7 @@ export const usePaymentData = (
     };
 
     const reviewPayments = async (payments, invoices) => {
+        const numFacturaMap = new Map();
         const paymentsWithErrors = await Promise.all(
             payments?.map(async payment => {
                 const invoiceForPayment = findInvoiceForPayment(payment, invoices);
@@ -75,7 +44,7 @@ export const usePaymentData = (
                     };
                 }
 
-                return createPayment({
+                const newPayment = createPayment({
                     ...payment,
                     ...invoiceFieldsForPayment,
                     errors: LoadDataValidatorService.validatePaymentEntry(
@@ -83,35 +52,30 @@ export const usePaymentData = (
                         invoiceForPayment
                     ),
                 });
+                if (
+                    payments.find(
+                        element =>
+                            element.id != payment.id &&
+                            element.num_factura == payment.num_factura
+                    )
+                ) {
+                    newPayment.errors.unshift(
+                        createAlertMessage(
+                            "error",
+                            "Hay varios pagos para el mismo recibo en el fichero bancario"
+                        )
+                    );
+                }
+
+                return newPayment;
             })
         );
 
         onChangePayments(paymentsWithErrors);
-        onValidateStep(getPaymentsTotalErrors(paymentsWithErrors) === 0 && !loading);
+        onValidateStep(getTotalErrors(paymentsWithErrors) === 0);
     };
-
-    const handleUpdatePayment = (row, columnId, value) => {
-        const updatedPayments = payments.map(payment => {
-            if (payment.id === row.original.id) {
-                return createPayment({...payment, [columnId]: value});
-            }
-            return payment;
-        });
-        reviewPayments(updatedPayments, invoices);
-    };
-
-    const getPaymentsTotalErrors = payments => {
-        if (!payments) {
-            return 0;
-        }
-        return payments.filter(payment => payment.errors.length !== 0).length;
-    };
-
-    const totalRegistersWithErrors = getPaymentsTotalErrors(payments);
 
     return {
-        loading,
-        handleUpdatePayment,
-        totalRegistersWithErrors,
+        reviewPayments,
     };
 };

@@ -4,7 +4,14 @@ import {
     LinkAccessorCellTable,
 } from "base/table/components";
 
-export function useLoadPaymentsTableColumns(onClickViewMember) {
+import {PreviewInvoiceAlertCellTable} from "payment/presentational/PreviewInvoiceAlertCellTable";
+import {RemoveRowCellTable} from "payment/presentational/RemoveRowCellTable";
+
+export function useLoadPaymentsTableColumns(
+    onClickViewMember,
+    displayAlerts,
+    removeRow
+) {
     const tableColumns = [
         {
             Header: "Socio/a",
@@ -38,6 +45,25 @@ export function useLoadPaymentsTableColumns(onClickViewMember) {
             style: {textAlign: "right"},
         },
     ];
+
+    displayAlerts &&
+        tableColumns.push({
+            Header: "Alertas",
+            accessor: "errors",
+            Cell: PreviewInvoiceAlertCellTable,
+        });
+
+    if (displayAlerts)
+        tableColumns.push({
+            Header: "Acciones",
+            accessor: "actions",
+            className: "text-danger small",
+            width: 100,
+            Cell: RemoveRowCellTable,
+            getProps: () => ({
+                handleClick: removeRow,
+            }),
+        });
 
     return {tableColumns};
 }

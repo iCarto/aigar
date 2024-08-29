@@ -4,12 +4,13 @@ const AlertType = {
 };
 
 class AlertMessageType {
-    constructor(type, message) {
+    constructor(type, message, field) {
         if (!Object.values(AlertType).includes(type)) {
             throw new Error(`Invalid alert type: ${type}`);
         }
         this.type = type;
         this.message = message;
+        this.field = field;
     }
 
     toString() {
@@ -18,23 +19,23 @@ class AlertMessageType {
 }
 
 class ErrorMessageType extends AlertMessageType {
-    constructor(message) {
-        super(AlertType.ERROR, message);
+    constructor(message, field) {
+        super(AlertType.ERROR, message, field);
     }
 }
 
 class WarningMessageType extends AlertMessageType {
-    constructor(message) {
-        super(AlertType.WARNING, message);
+    constructor(message, field) {
+        super(AlertType.WARNING, message, field);
     }
 }
 
-const createAlertMessage = (type, message) => {
+const createAlertMessage = (type, message, field = null) => {
     switch (type) {
         case AlertType.ERROR:
-            return new ErrorMessageType(message);
+            return new ErrorMessageType(message, field);
         case AlertType.WARNING:
-            return new WarningMessageType(message);
+            return new WarningMessageType(message, field);
         default:
             throw new Error(`Invalid alert type: ${type}`);
     }

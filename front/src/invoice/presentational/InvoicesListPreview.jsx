@@ -6,6 +6,8 @@ import {LoadDataTableFilter} from "loaddata/presentational";
 import {ErrorSummary, PreviewInvoiceTableErrors} from "payment/presentational";
 import {useFilterMonthlyData} from "monthlyinvoicing/hooks";
 import {getTotalErrors} from "payment/model";
+import {usePaymentUI} from "payment/hooks";
+
 const InvoicesListPreview = ({
     invoices,
     invoicesTableType,
@@ -18,10 +20,14 @@ const InvoicesListPreview = ({
         text: "",
         showOnlyErrors: false,
     });
-    const {filterMonthlyData} = useFilterMonthlyData();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedMemberForModal, setSelectedMemberForModal] = useState(null);
+    const {
+        handleFilterChange,
+        isModalOpen,
+        selectedMemberForModal,
+        handleClickViewMember,
+        handleClickCancelViewMember,
+    } = usePaymentUI(setFilter);
 
     useEffect(() => {
         // https://stackoverflow.com/questions/62336340/
@@ -32,24 +38,8 @@ const InvoicesListPreview = ({
         }
     }, [invoices]);
 
+    const {filterMonthlyData} = useFilterMonthlyData();
     const filteredInvoices = invoices ? filterMonthlyData(invoices, filter) : [];
-
-    const handleFilterChange = newFilter => {
-        setFilter(prevFilter => ({
-            ...prevFilter,
-            ...newFilter,
-        }));
-    };
-
-    const handleClickViewMember = member_id => {
-        setIsModalOpen(true);
-        setSelectedMemberForModal(member_id);
-    };
-
-    const onClickCancelViewMember = () => {
-        setIsModalOpen(false);
-        setSelectedMemberForModal(null);
-    };
 
     const displayAlerts = invoices.some(invoice => invoice.errors.length);
 
@@ -64,7 +54,7 @@ const InvoicesListPreview = ({
         <MemberViewModal
             id={selectedMemberForModal}
             isOpen={isModalOpen}
-            onClose={onClickCancelViewMember}
+            onClose={handleClickCancelViewMember}
         />
     );
     if (!invoices.length) {

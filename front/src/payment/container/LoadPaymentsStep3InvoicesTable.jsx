@@ -13,11 +13,11 @@ import {
 import {useInvoicesPreviewTableColumns} from "invoice/data";
 
 const LoadPaymentsStep3InvoicesTable = ({
+    invoicingMonthId,
+    onValidateStep,
     payments,
     invoices,
-    invoicingMonthId,
     onChangeInvoices,
-    onValidateStep,
 }) => {
     const [modalStatus, setModalStatus] = useState(null);
     const [selectedInvoice, setSelectedInvoice] = useState(null);

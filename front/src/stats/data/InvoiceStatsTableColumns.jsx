@@ -28,7 +28,7 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
             .sort((a, b) => b.localeCompare(a))
             .slice(0, 6);
 
-        const invoicingMonthsColumns = recentMonths.map(invoicingMonth => {
+        const invoicingMonthsColumns = recentMonths.map((invoicingMonth, index) => {
             return {
                 label:
                     invoicingMonth.substring(4, 6) +
@@ -43,10 +43,10 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
                         />
                     );
                 },
-                id: selectedField,
                 className: unitClass,
                 style: {textAlign: "right"},
                 width: 10,
+                id: `invoices.${index}.${selectedField}`,
             };
         });
         tableColumns = [...tableColumns, ...invoicingMonthsColumns];

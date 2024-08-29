@@ -32,9 +32,19 @@ const checkPayment = (payments, invoice) => {
         );
         return;
     }
-    if (invoice.has_payments || paymentsForInvoice.length > 1) {
+    if (invoice.has_payments) {
         invoice.errors.push(
-            createAlertMessage("error", "El recibo tiene varios pagos")
+            createAlertMessage("error", "El recibo ya tenía un pago previo registrado")
+        );
+        return;
+    }
+
+    if (paymentsForInvoice.length > 1) {
+        invoice.errors.push(
+            createAlertMessage(
+                "error",
+                "Hay varios pagos para el mismo recibo en el fichero bancario"
+            )
         );
         return;
     }

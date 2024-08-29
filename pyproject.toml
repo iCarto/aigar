@@ -22,7 +22,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aigar"
-version = "24.8.14"
+version = "24.8.29"
 authors = [{ name = "iCarto", email = "info@icarto.es" }]
 readme = "README.md"
 classifiers = [
@@ -47,7 +47,11 @@ dependencies = [
 
 # https://stackoverflow.com/questions/75490231/
 [project.optional-dependencies]
-desktop = ["django-debug-toolbar==4.0.0", "django-extensions==3.2.1", "typing_extensions"]
+desktop = [
+    "django-debug-toolbar==4.0.0",
+    "django-extensions==3.2.1",
+    "typing_extensions",
+]
 test = [
     "pytest==7.4.0",
     "pytest-django==4.5.2",

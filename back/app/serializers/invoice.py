@@ -46,6 +46,7 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
             "mora",
             "mora_por_retraso",
             "mora_por_impago",
+            "mora_por_msg",
             "monto",
             "deuda",
             "total",
@@ -56,3 +57,13 @@ class InvoiceStatsSerializer(serializers.ModelSerializer):
     mes_abierto = serializers.ReadOnlyField(source="mes_facturacion.is_open")
     mora_por_retraso = serializers.ReadOnlyField()
     mora_por_impago = serializers.ReadOnlyField()
+    mora_por_msg = serializers.SerializerMethodField()
+
+    def get_mora_por_msg(self, obj):
+        if obj.mora_por_impago and obj.mora_por_retraso:
+            return "Impago y Retraso"
+        if obj.mora_por_impago:
+            return "Impago"
+        if obj.mora_por_retraso:
+            return "Retraso"
+        return ""

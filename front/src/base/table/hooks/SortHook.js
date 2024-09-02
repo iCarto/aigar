@@ -12,18 +12,30 @@ function useSort(initialAttributeValue, initialOrderValue) {
     const [order, setOrder] = useState(initialOrderValue);
 
     function sortFunction(a, b) {
+        const propA = getDescendantProp(a, attribute);
+        const propB = getDescendantProp(b, attribute);
+        if (
+            (typeof propA === "string" || propA instanceof String) &&
+            (typeof propB === "string" || propB instanceof String)
+        ) {
+            if (order === "asc") {
+                return propA.localeCompare(propB);
+            }
+            return propB.localeCompare(propA);
+        }
+
         if (order === "desc") {
-            if (getDescendantProp(a, attribute) > getDescendantProp(b, attribute)) {
+            if (propA > propB) {
                 return -1;
             }
-            if (getDescendantProp(b, attribute) < getDescendantProp(a, attribute)) {
+            if (propB < propA) {
                 return 1;
             }
         } else if (order === "asc") {
-            if (getDescendantProp(a, attribute) < getDescendantProp(b, attribute)) {
+            if (propA < propB) {
                 return -1;
             }
-            if (getDescendantProp(b, attribute) > getDescendantProp(a, attribute)) {
+            if (propB > propA) {
                 return 1;
             }
         }

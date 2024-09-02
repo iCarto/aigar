@@ -9,32 +9,30 @@ const InvoicesStatsBarChart = ({invoices, invoicingMonths, fields, selectedField
             const indexFound = datasetMoraPorRetrasoData.findIndex(
                 dataset => dataset.label === labelForInvoice
             );
+            const mora_por_retraso = invoice["mora_por_retraso"] ? 1 : 0;
+            const mora_por_impago = invoice["mora_por_impago"] ? 1 : 0;
             if (indexFound >= 0) {
-                datasetMoraPorRetrasoData[indexFound].value =
-                    datasetMoraPorRetrasoData[indexFound].value +
-                    invoice["mora_por_retraso"];
-                datasetMoraPorImpagoData[indexFound].value =
-                    datasetMoraPorImpagoData[indexFound].value +
-                    invoice["mora_por_impago"];
+                datasetMoraPorRetrasoData[indexFound].value += mora_por_retraso;
+                datasetMoraPorImpagoData[indexFound].value += mora_por_impago;
             } else {
                 datasetMoraPorRetrasoData.push({
                     label: labelForInvoice,
-                    value: invoice["mora_por_retraso"],
+                    value: mora_por_retraso,
                 });
                 datasetMoraPorImpagoData.push({
                     label: labelForInvoice,
-                    value: invoice["mora_por_impago"],
+                    value: mora_por_impago,
                 });
             }
         });
         return [
             {
-                label: "Mora por retraso ($)",
+                label: "Mora por retraso",
                 data: datasetMoraPorRetrasoData,
                 backgroundColor: "#7aafdd",
             },
             {
-                label: "Mora por impago ($)",
+                label: "Mora por impago",
                 data: datasetMoraPorImpagoData,
                 backgroundColor: "#1c71bc",
             },

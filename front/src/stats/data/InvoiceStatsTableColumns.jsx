@@ -6,6 +6,13 @@ const InvoicingMonthCellTable = ({invoicingMonth, field, member}) => {
     return value;
 };
 
+const MoraCellTable = ({invoicingMonth, field, member}) => {
+    const invoice = member.invoices.find(
+        invoice => invoice.mes_facturacion === invoicingMonth
+    );
+    return invoice?.mora_por_msg;
+};
+
 export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unitClass) {
     let tableColumns = [
         {
@@ -29,6 +36,27 @@ export function useInvoiceStatsTableColumns(invoicingMonths, selectedField, unit
             .slice(0, 6);
 
         const invoicingMonthsColumns = recentMonths.map((invoicingMonth, index) => {
+            if (selectedField === "mora") {
+                return {
+                    label:
+                        invoicingMonth.substring(4, 6) +
+                        "/" +
+                        invoicingMonth.substring(0, 4),
+                    formatFunction: member => {
+                        return (
+                            <MoraCellTable
+                                invoicingMonth={invoicingMonth}
+                                field={selectedField}
+                                member={member}
+                            />
+                        );
+                    },
+                    // className: unitClass,
+                    // style: {textAlign: "center"},
+                    width: 10,
+                    id: `invoices.${index}.mora_por_msg`,
+                };
+            }
             return {
                 label:
                     invoicingMonth.substring(4, 6) +

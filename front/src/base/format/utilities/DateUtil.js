@@ -3,14 +3,17 @@ import "moment/locale/es";
 
 const DateUtil = {
     getMonthName(monthNumber) {
-        moment.locale("es");
-        const month = moment.months(parseInt(monthNumber) - 1);
+        const month = Intl.DateTimeFormat("es", {month: "long"}).format(
+            new Date(2010, parseInt(monthNumber) - 1)
+        );
         return month.charAt(0).toLocaleUpperCase() + month.slice(1);
     },
 
     getShortMonthName(monthNumber) {
-        const month = moment.months(parseInt(monthNumber) - 1);
-        return (month.charAt(0).toLocaleUpperCase() + month.slice(1)).substring(0, 3);
+        const month = Intl.DateTimeFormat("es", {month: "short"}).format(
+            new Date(2010, parseInt(monthNumber) - 1)
+        );
+        return month.charAt(0).toLocaleUpperCase() + month.slice(1);
     },
 
     cloneDate(d) {

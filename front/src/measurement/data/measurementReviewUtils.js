@@ -1,10 +1,7 @@
 import {createAlertMessage} from "payment/model";
 
 const invoice_match_measurement = (invoice, measurement) => {
-    return (
-        invoice.member_id === measurement.member_id &&
-        invoice.member_name === measurement.member_name
-    );
+    return invoice.member_id === measurement.member_id;
 };
 
 export const reviewMeasurementsWithoutInvoice = (measurements, invoices) => {

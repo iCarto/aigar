@@ -41,6 +41,16 @@ const checkMeasurement = (measurements, invoice) => {
     }
     const measurement = measurementsForInvoice[0];
 
+    if (!measurement) {
+        invoice.errors.push(
+            createAlertMessage(
+                "error",
+                "El recibo no tiene lectura. Comprueba los nombres y números de socio/a"
+            )
+        );
+        return;
+    }
+
     if (
         invoice.caudal_anterior !== measurement.caudal_anterior &&
         !measurement.cambio_medidor

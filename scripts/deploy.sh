@@ -10,7 +10,7 @@ source "${this_dir}"/../server/variables.ini
 cp "${SQLITE_PATH}" "${SQLITE_PATH}".empty
 
 bash ./scripts/util/build_web_deploy_file.sh
-cp dist/aigar-24.9.9.tar.gz desktop/gomi/
+cp dist/aigar-25.3.3.tar.gz desktop/gomi/
 
 cp tools/fixtures/gomi/electron.exe desktop/gomi
 

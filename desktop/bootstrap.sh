@@ -12,6 +12,8 @@
 
 set -e
 
+VERSION=$(date +%y%m%d)
+
 export PYTHON_VERSION=3.11.3
 
 export W_DRIVE_C=/wine/drive_c
@@ -46,8 +48,8 @@ unzip_electron() {
     FILE="${GOMI}/$(basename "${URL}")"
     FOLDER="${FILE%.zip}"
     [[ -d "${FOLDER}" ]] || unzip "${FILE}" -d "${FOLDER}"
-    rm -rf "${GOMI}/$(date +%y%m%d)_aigar"
-    mv "${FOLDER}" "${GOMI}/$(date +%y%m%d)_aigar"
+    rm -rf "${GOMI}/${VERSION}_aigar"
+    mv "${FOLDER}" "${GOMI}/${VERSION}_aigar"
 }
 
 install_wine() {
@@ -136,11 +138,9 @@ install_app() {
     export WINEARCH=win64
     export WINEDEBUG=fixme-all
     export WINEPREFIX=/wine
-    local DATE
-    DATE=$(date +%y%m%d)
     unzip_electron "${ELECTRON_URL}"
-    # mv "${GOMI}/src" "${GOMI}/${DATE}_aigar/"
-    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install "${GOMI}/aigar-24.9.9.tar.gz"
+    # mv "${GOMI}/src" "${GOMI}/${VERSION}_aigar/"
+    wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install "${GOMI}/aigar-25.3.3.tar.gz"
 
     # No deberíamos montar runserver_plus en en build para reducir el tamaño
     # y dependencias
@@ -148,28 +148,26 @@ install_app() {
     wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install django-debug-toolbar
     wine "${PYTHON_FOLDER_WIN}\Scripts\pip.exe" install django-extensions
 
-    cp -R "${PYTHON_FOLDER_LIN}" "${GOMI}/${DATE}_aigar/"
+    cp -R "${PYTHON_FOLDER_LIN}" "${GOMI}/${VERSION}_aigar/"
 
-    rm "${GOMI}/${DATE}_aigar/electron.exe"
-    cp "${GOMI}/electron.exe" "${GOMI}/${DATE}_aigar/AIGAR.exe"
-    cp -R /vagrant/app "${GOMI}/${DATE}_aigar/resources/"
-    sed -i "s/\"version\":.*/\"version\": \"${DATE}\",/" "${GOMI}/${DATE}_aigar/resources/app/package.json"
-    mv "${GOMI}/.env" "${GOMI}/${DATE}_aigar/Python311/Lib/site-packages/aigar"
+    rm "${GOMI}/${VERSION}_aigar/electron.exe"
+    cp "${GOMI}/electron.exe" "${GOMI}/${VERSION}_aigar/AIGAR.exe"
+    cp -R /vagrant/app "${GOMI}/${VERSION}_aigar/resources/"
+    sed -i "s/\"version\":.*/\"version\": \"${VERSION}\",/" "${GOMI}/${VERSION}_aigar/resources/app/package.json"
+    mv "${GOMI}/.env" "${GOMI}/${VERSION}_aigar/Python311/Lib/site-packages/aigar"
 }
 
 copy_license() {
-    DATE=$(date +%y%m%d)
-    mv "${GOMI}/${DATE}_aigar/LICENSE" "${GOMI}/${DATE}_aigar/ELECTRON_LICENSE"
-    mv "${GOMI}/${DATE}_aigar/src/LICENSE" "${GOMI}/${DATE}_aigar/LICENSE"
-    mv "${GOMI}/${DATE}_aigar/src/README.md" "${GOMI}/${DATE}_aigar/README.md"
-    cp /vagrant/NOTICE "${GOMI}/${DATE}_aigar/"
+    mv "${GOMI}/${VERSION}_aigar/LICENSE" "${GOMI}/${VERSION}_aigar/ELECTRON_LICENSE"
+    mv "${GOMI}/${VERSION}_aigar/src/LICENSE" "${GOMI}/${VERSION}_aigar/LICENSE"
+    mv "${GOMI}/${VERSION}_aigar/src/README.md" "${GOMI}/${VERSION}_aigar/README.md"
+    cp /vagrant/NOTICE "${GOMI}/${VERSION}_aigar/"
 }
 
 prepare_empty_app() {
-    DATE=$(date +%y%m%d)
-    cp -r "${GOMI}/${DATE}_aigar/" "${GOMI}/${DATE}_aigar_empty/"
-    rm "${GOMI}/${DATE}_aigar/src/db.sqlite3.empty"
-    mv "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3.empty" "${GOMI}/${DATE}_aigar_empty/src/db.sqlite3"
+    cp -r "${GOMI}/${VERSION}_aigar/" "${GOMI}/${VERSION}_aigar_empty/"
+    rm "${GOMI}/${VERSION}_aigar/src/db.sqlite3.empty"
+    mv "${GOMI}/${VERSION}_aigar_empty/src/db.sqlite3.empty" "${GOMI}/${VERSION}_aigar_empty/src/db.sqlite3"
 }
 
 ELECTRON_URL=https://github.com/electron/electron/releases/download/v8.2.1/electron-v8.2.1-win32-x64.zip

@@ -11,7 +11,15 @@ export default defineConfig(({mode}) => {
         plugins: [
             react(),
             tsconfigPaths(),
-            nodePolyfills({include: ["stream", "util"]}),
+            nodePolyfills({
+                include: ["stream", "util", "buffer", "vm"],
+                globals: {
+                    Buffer: true, // can also be 'build', 'dev', or false
+                    global: true,
+                    process: true,
+                },
+                protocolImports: true,
+            }),
         ],
         server: {
             port: 3000,

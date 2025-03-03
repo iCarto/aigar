@@ -22,7 +22,7 @@ reset_django_migrations() {
     find "${SITE_PACKAGES}/django/contrib/contenttypes" -path "*/migrations/*.pyc" -delete
 }
 
-reset_django_migrations
+# reset_django_migrations
 
 # TODO: Revisar como hacer esto de forma adecuada (funciones?, script?)
 bash "${this_dir}/../server/drop_and_create_db.sh"
@@ -41,4 +41,6 @@ python "${this_dir}/../back/manage.py" migrate
 python "${this_dir}/../back/manage.py" collectstatic --no-input --clear --verbosity 0
 
 bash "${this_dir}/move_db_state_to.sh" "${1}"
-# python "${this_dir}/../back/manage.py" create_medianodes
+
+# Aplicar migraciones pendientes tras copiar bd de fixtures
+python "${this_dir}/../back/manage.py" migrate

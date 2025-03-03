@@ -17,6 +17,7 @@ export DISABLE_ESLINT_PLUGIN=true
 cd front && npm install && REACT_APP_API_BASE_URL='' npm run build && cd ..
 ./scripts/install.link_back_front.sh
 
-cd back && python manage.py collectstatic --no-input --clear && cd ..
+echo "Running collectstatic"
+cd back && python manage.py collectstatic --no-input --clear --verbosity 0 && cd ..
 
 python -m build --sdist

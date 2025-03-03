@@ -39,5 +39,5 @@ tools/fixtures
 back/static
 back/aigar_data/db.sqlite3
 back/back/front_build
-back/**/migrations/0*.py
+# back/**/migrations/0*.py
 .aider*

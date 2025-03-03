@@ -29,19 +29,12 @@ bash "${this_dir}/../server/drop_and_create_db.sh"
 
 bash "${this_dir}"/install.link_back_front.sh
 
-if [[ "${DATABASE_CONTROL_CHANGES_MODE}" == "sqitch" ]]; then
-    (
-        cd "${this_dir}/../db" || exit
-        sqitch deploy
-    )
-else
-    # Crea las migraciones. migrations/__ini__.py debe existir para que se cree la
-    # migración inicial de una app o debe invocarse la app de forma concreta
-    # python manage.py makemigrations users
-    python "${this_dir}/../back/manage.py" makemigrations
-    # Ejecuta las migraciones contra la bd
-    python "${this_dir}/../back/manage.py" migrate
-fi
+# Crea las migraciones. migrations/__ini__.py debe existir para que se cree la
+# migración inicial de una app o debe invocarse la app de forma concreta
+# python manage.py makemigrations users
+python "${this_dir}/../back/manage.py" makemigrations
+# Ejecuta las migraciones contra la bd
+python "${this_dir}/../back/manage.py" migrate
 
 # In install.sh static folders are created
 # At this point static assets are collected

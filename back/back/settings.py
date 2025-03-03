@@ -59,22 +59,6 @@ if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     INSTALLED_APPS.append("django_extensions")
 
-# In Sqitch database control changes mode we have to remove migrations for all used modules to avoid errors
-MIGRATION_MODULES = (
-    {
-        "admin": None,
-        "contenttypes": None,
-        "auth": None,
-        "sessions": None,
-        "back": None,
-        "domains": None,
-        "app": None,
-    }
-    if env("DATABASE_CONTROL_CHANGES_MODE") == "sqitch"
-    else {}
-)
-
-
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",

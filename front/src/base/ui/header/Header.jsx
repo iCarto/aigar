@@ -12,7 +12,7 @@ const Header = ({hero = null, menu = null}) => {
             <Toolbar disableGutters>
                 <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
                     <img
-                        src={process.env.PUBLIC_URL + APP_LOGO_URL}
+                        src={APP_LOGO_URL}
                         alt={`Logo de ${APP_NAME}`}
                         style={{
                             height: "40px",

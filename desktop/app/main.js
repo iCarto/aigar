@@ -1,10 +1,10 @@
 "use strict";
 
-const {BrowserWindow, Menu, app} = require("electron");
+const {BrowserWindow, Menu, app, Notification} = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow, splashWindow, pythonServerProcess;
+let mainWindow, splashWindow, errorWindow, pythonServerProcess;
 
 const log = function log(msg) {
     console.log(msg);
@@ -72,39 +72,72 @@ function createWindow(mainAddr) {
 //   }
 // });
 
+function runMigrations(callback) {
+    const spawn = require("child_process").spawn;
+    const migrateProcess = spawn("./Python311/python.exe", [
+        "./Python311/Lib/site-packages/aigar/manage.py",
+        "migrate",
+    ]);
+
+    migrateProcess.stdout.on("data", data => {
+        log(`stdout: ${data}`);
+    });
+
+    migrateProcess.stderr.on("data", data => {
+        log(`stderr: ${data}`);
+    });
+
+    migrateProcess.on("close", code => {
+        if (code !== 0) {
+            log(`Migration process exited with code ${code}`);
+            showError();
+            splashWindow.close();
+        } else {
+            callback();
+        }
+    });
+}
+
 app.on("ready", function () {
     // log(app.getPath('userData'));
     Menu.setApplicationMenu(null);
 
     showSplash();
     log("on ready");
-    var spawn = require("child_process").spawn;
-    if (process.platform !== "linux") {
-        log("not linux");
-        pythonServerProcess = spawn("./Python311/python.exe", [
-            "./Python311/Lib/site-packages/aigar/manage.py",
-            "runserver",
-            "--noreload",
-            "--nothreading",
-        ]);
-    } else {
-        log("is linux");
-        pythonServerProcess = spawn("./Python311/python.exe", [
-            "./Python311/Lib/site-packages/aigar/manage.py",
-            "runserver",
-            "--noreload",
-            "--nothreading",
-        ]);
-    }
 
-    // TODO. Esto está hecho para esperar a que se lance el servidor Python.
-    // Sería mejor que fuera una especie de callback que creara la ventana justo
-    // después de que el servidor arrancase
-    setTimeout(function () {
-        var mainAddr = "http://localhost:8000";
-        createWindow(mainAddr);
-    }, 4000);
+    runMigrations(() => {
+        var spawn = require("child_process").spawn;
+        pythonServerProcess = spawn("./Python311/python.exe", [
+            "./Python311/Lib/site-packages/aigar/manage.py",
+            "runserver",
+            "--noreload",
+            "--nothreading",
+        ]);
+
+        // TODO. Esto está hecho para esperar a que se lance el servidor Python.
+        // Sería mejor que fuera una especie de callback que creara la ventana justo
+        // después de que el servidor arrancase
+        setTimeout(function () {
+            var mainAddr = "http://localhost:8000";
+            createWindow(mainAddr);
+        }, 4000);
+    });
 });
+
+function showError() {
+    errorWindow = new BrowserWindow({
+        useContentSize: true,
+        width: 450,
+        height: 450,
+        center: true,
+        // frame: false,
+        // type: "splash",
+    });
+    errorWindow.on("closed", function () {
+        splashWindow = null;
+    });
+    errorWindow.loadURL("file://" + __dirname + "/migrations-error.html");
+}
 
 function showSplash() {
     splashWindow = new BrowserWindow({

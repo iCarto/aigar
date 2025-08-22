@@ -1,28 +1,26 @@
-AIGAR: Aplicación Innovadora para la Gestión de Agua Rural
+# AIGAR: Aplicación Innovadora para la Gestión de Agua Rural
 
-AIGAR es una aplicación desarrollada por [iCarto](https://icarto.es/) en colaboración con [Ingeniería Sin Fronteras Cataluña](https://esf-cat.org/) y [ACUA](http://acua.org.sv/).
+La Aplicación Innovadora para la Gestión de Agua Rural (AIGAR) es una aplicación desarrollada por [iCarto](https://icarto.es/) en colaboración con [Ingeniería Sin Fronteras Cataluña](https://esf-cat.org/), [ACUA](http://acua.org.sv/) y ASAPS. AIGAR ha sido financiada a través de diferentes proyectos con el apoyo de la AGENCIA ESPAÑOLA DE COOPERACIÓN INTERNACIONAL PARA EL DESARROLLO ([AECID](https://www.aecid.es)) y la [Xunta de Galicia](https://cooperacion.xunta.gal/es).
 
-AIGAR está financiado por la AGENCIA ESPAÑOLA DE COOPERACIÓN INTERNACIONAL PARA EL DESARROLLO, [AECID](https://www.aecid.es), a través del proyecto “Aplicación de soluciones integrales e innovadoras para la sostenibilidad y buena gestión de los sistemas comunitarios de agua en El Salvador”, presentado a la convocatoria de Acciones de Cooperación Para el Desarrollo correspondiente al año 2018 para la Realización de Proyectos de Innovación para el Desarrollo.
+AIGAR es una herramienta diseñada a medida para mejorar la competencia administrativa y organizativa de las Juntas Administradoras de los sistemas de Agua Potable y Saneamiento rurales (Juntas de agua).
 
-![splash](desktop/app/splash.png)
+Está compuesta por dos aplicaciones libres (licencia AGPL) y gratuitas:
 
-Este repositorio contiene la aplicación web (empaquetada para escritorio a través de Electron) de AIGAR. AIGAR permite a las Juntas Administradoras de los sistemas de Agua Potable y Saneamiento rurales (Juntas de agua) la gestión administrativa del sistema. Incluye la gestión del catastro de personas socias de la Junta de Agua, y todo el proceso de facturación con las siguientes funcionalidades:
+-   **AIGAR-Lecturas**: Aplicación móvil que permite la recolección de los datos de consumo de agua de los socios y socias del sistema de agua.
+-   **AIGAR-Escritorio**: Aplicación web que permite la gestión administrativa del sistema de agua. Incluye la gestión del catastro de personas socias del sistema y todo el proceso de facturación.
 
--   Consumo y Facturación
--   Importar lecturas de medidores
--   Importar registros de pago bancarios
--   Catastro de personas socias
--   Estadísticas de consumos, moras, ...
+Este repositorio contiene **AIGAR-Escritorio**. Se trata de una aplicación web (empaquetada para escritorio a través de Electron). Las funcionalidades actuales son:
 
-La aplicación en este momento está muy ligada a la forma de trabajo de ASCATLI, la Junta de Agua que se ha escogido como piloto para este proyecto. El sistema de agua que administra ASCATLI tiene alrededor de 250 socias y comprende las comunidades de Tihuapa Norte y Tlacuxtli, en el municipio del Puerto de la Libertad en El Salvador.
+-   Introducción de parámetros para la configuración de un SAPS.
+-   Facturación paso a paso.
+-   Importar lecturas de contadores.
+-   Actualizar registros de pagos.
+-   Catastro de personas socias.
+-   Estadísticas de montos de facturación, consumos y moras.
 
-Puedes descargar y probar la aplicación desde el [apartado de relases](https://gitlab.com/icarto/aigar/-/relases). Llega con descomprimir el zip y hacer doble click en el fichero `AIGAR.exe`. La aplicación contiene una base de datos vacía.
+Para más información puedes consultar la [página web de AIGAR](https://icarto.github.io/aigar-web/) o puedes escribir a iCarto,  ACUA o ASAPS para consultar la metodología de implementación, buenas prácticas, posibles problemas o lo que necesites.
 
-La [aplicación de escritorio](https://gitlab.com/icarto/aigar) se complementa con [aigar-lecturas](https://gitlab.com/icarto/aigar-lecturas) una aplicación móvil para tomar en campo las lecturas de los medidores de agua de las viviendas. A pesar de empaquetarse como una aplicación de escritorio está concebida para poder ser desplegada en un servidor web de modo que pueda ser usada por usuarios con diferentes roles, una asociación de juntas de agua que de soporte a varias, ...
-
-Ambas aplicaciones son libres (licencia AGPL) y gratuitas.
-
-Si eres una ONG y estás planteándote usar algo similar en tu proyecto puedes escribir a [iCarto](https://icarto.es/contacta/), [ISF-Cataluña](https://esf-cat.org/es/contacta/) o [ACUA](http://acua.org.sv/index.php/contactenos) para hablar sobre la identificación del proyecto, buenas prácticas, posibles problemas o lo que necesites.
+![splash](docs/splash_sin_logos.png)
 
 # Capturas
 

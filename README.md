@@ -6,8 +6,10 @@ AIGAR es una herramienta diseñada a medida para mejorar la competencia administ
 
 Está compuesta por dos aplicaciones libres (licencia AGPL) y gratuitas:
 
--   **AIGAR-Lecturas**: Aplicación móvil que permite la recolección de los datos de consumo de agua de los socios y socias del sistema de agua.
--   **AIGAR-Escritorio**: Aplicación web que permite la gestión administrativa del sistema de agua. Incluye la gestión del catastro de personas socias del sistema y todo el proceso de facturación.
+-   **AIGAR-Lecturas**: Aplicación móvil que permite la recolección de los datos de consumo de agua de los socios y socias del sistema de agua. [Repositorio](https://github.com/iCarto/aigar-lecturas).
+-   **AIGAR-Escritorio**: Aplicación web que permite la gestión administrativa del sistema de agua. Incluye la gestión del catastro de personas socias del sistema y todo el proceso de facturación. [Repositorio](https://github.com/iCarto/aigar).
+
+![splash](docs/splash_sin_logos.png)
 
 Este repositorio contiene **AIGAR-Escritorio**. Se trata de una aplicación web (empaquetada para escritorio a través de Electron). Las funcionalidades actuales son:
 
@@ -19,8 +21,6 @@ Este repositorio contiene **AIGAR-Escritorio**. Se trata de una aplicación web 
 -   Estadísticas de montos de facturación, consumos y moras.
 
 Para más información puedes consultar la [página web de AIGAR](https://icarto.github.io/aigar-web/) o puedes escribir a iCarto,  ACUA o ASAPS para consultar la metodología de implementación, buenas prácticas, posibles problemas o lo que necesites.
-
-![splash](docs/splash_sin_logos.png)
 
 # Capturas
 
